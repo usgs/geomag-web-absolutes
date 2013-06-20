@@ -32,10 +32,13 @@ module.exports = function (grunt) {
 			scripts: {
 				files: ['<%= app.dev %>/htdocs/js/{,*/}*.js'],
 				tasks: ['jshint:scripts', 'mocha_phantomjs'],
+				options: {
+					livereload: LIVE_RELOAD_PORT
+				}
 			},
 			scss: {
 				files: ['<%= app.dev %>/htdocs/css/{,*/}*.scss'],
-				tasks: ['compass:dev'],
+				tasks: ['compass:dev']
 			},
 			tests: {
 				files: ['<%= app.test %>/*.html', '<%= app.test %>/{,*/}*.js'],
@@ -48,7 +51,6 @@ module.exports = function (grunt) {
 				files: [
 					'<%= app.dev %>/htdocs/{,*/}*.html',
 					'<%= app.dev %>/htdocs/css/{,*/}*.css',
-					'<%= app.dev %>/htdocs/js/{,*/}*.js',
 					'<%= app.dev %>/htdocs/img/{,*/}*.{png,jpg,jpeg,gif}',
 					'.tmp/css/{,*/}*.css'
 				]
@@ -131,7 +133,7 @@ module.exports = function (grunt) {
 				path: 'http://localhost:<%= connect.options.port %>'
 			},
 			test: {
-				path: 'http://localhost:%<%= connect.dev.options.port %>'
+				path: 'http://localhost:<%= connect.test.options.port %>'
 			}
 		},
 		clean: {
@@ -140,8 +142,10 @@ module.exports = function (grunt) {
 		}
 	});
 
-	grunt.registerTask('build', [
+	grunt.registerTask('test', [
 		'clean:dist',
+		'connect:test',
+		'mocha_phantomjs'
 	]);
 
 	grunt.registerTask('default', [
