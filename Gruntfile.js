@@ -30,18 +30,18 @@ module.exports = function (grunt) {
 		bower: bowerConfig,
 		watch: {
 			scripts: {
-				files: ['<%= app.dev %>/htdocs/js/{,*/}*.js'],
+				files: ['<%= app.dev %>/htdocs/js/**/*.js'],
 				tasks: ['jshint:scripts', 'mocha_phantomjs'],
 				options: {
 					livereload: LIVE_RELOAD_PORT
 				}
 			},
 			scss: {
-				files: ['<%= app.dev %>/htdocs/css/{,*/}*.scss'],
+				files: ['<%= app.dev %>/htdocs/css/**/*.scss'],
 				tasks: ['compass:dev']
 			},
 			tests: {
-				files: ['<%= app.test %>/*.html', '<%= app.test %>/{,*/}*.js'],
+				files: ['<%= app.test %>/*.html', '<%= app.test %>/**/*.js'],
 				tasks: ['jshint:tests', 'mocha_phantomjs']
 			},
 			livereload: {
@@ -49,10 +49,10 @@ module.exports = function (grunt) {
 					livereload: LIVE_RELOAD_PORT
 				},
 				files: [
-					'<%= app.dev %>/htdocs/{,*/}*.html',
-					'<%= app.dev %>/htdocs/css/{,*/}*.css',
-					'<%= app.dev %>/htdocs/img/{,*/}*.{png,jpg,jpeg,gif}',
-					'.tmp/css/{,*/}*.css'
+					'<%= app.dev %>/htdocs/**/*.html',
+					'<%= app.dev %>/htdocs/css/**/*.css',
+					'<%= app.dev %>/htdocs/img/**/*.{png,jpg,jpeg,gif}',
+					'.tmp/css/**/*.css'
 				]
 			}
 		},
@@ -107,8 +107,8 @@ module.exports = function (grunt) {
 				jshintrc: '.jshintrc'
 			},
 			gruntfile: ['Gruntfile.js'],
-			scripts: ['<%= app.dev %>/htdocs/js/{,*/}*.js'],
-			tests: ['<%= app.test %>/spec/{,*/}*.js']
+			scripts: ['<%= app.dev %>/htdocs/js/**/*.js'],
+			tests: ['<%= app.test %>/spec/**/*.js']
 		},
 		compass: {
 			dev: {
