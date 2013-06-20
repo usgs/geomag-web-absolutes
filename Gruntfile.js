@@ -144,17 +144,14 @@ module.exports = function (grunt) {
 		'clean:dist',
 	]);
 
-	grunt.registerTask('develop', [
+	grunt.registerTask('default', [
 		'clean:dist',
+		'compass:dev',
 		'connect:dev',
 		'connect:test',
 		'open:server',
+		'open:test',
 		'watch'
 	]);
 
-	grunt.registerTask('default', [
-		'jshint'/*,
-		'test',
-		'build'*/
-	]);
 };
