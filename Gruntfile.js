@@ -54,6 +54,10 @@ module.exports = function (grunt) {
 					'<%= app.dev %>/htdocs/img/**/*.{png,jpg,jpeg,gif}',
 					'.tmp/css/**/*.css'
 				]
+			},
+			gruntfile: {
+				files: ['Gruntfile.js'],
+				tasks: ['jshint:gruntfile']
 			}
 		},
 		connect: {
@@ -140,6 +144,11 @@ module.exports = function (grunt) {
 			dist: ['<%= app.dist %>/*'],
 			dev: ['<%= app.tmp %>', '.sass-cache']
 		}
+	});
+
+	grunt.event.on('watch', function (action, filepath) {
+		// Only lint the file that actually changed
+		grunt.config(['jshint', 'scripts'], filepath);
 	});
 
 	grunt.registerTask('test', [
