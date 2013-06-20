@@ -1,4 +1,15 @@
-window.addEventListener('DomContentLoaded', function () {
+require.config({
+	baseUrl: 'js',
+	paths: {
+	},
+	shim: {
+	}
+});
+
+require([
+	'Greeter'
+], function (Greeter) {
 	'use strict';
-	console.log('Hello World!');
+	var g = new Greeter();
+	console.log(g.sayHello());
 });
