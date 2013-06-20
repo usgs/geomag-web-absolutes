@@ -1,21 +1,26 @@
 {
-	"name": "geomag-baseline-calculator",
-	"version": "0.0.0",
-	"description": "Web application for computing geomagnetic baseline values",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/usgs/geomag-baseline-calculator.git",
-	},
-	"keywords": [
-		"usgs",
-		"geomag",
-		"geomagnetism"
-	],
-	"dependencies": {
-	},
-	"devDependencies": {
-	},
-	"engines": {
-		"node": ">=0.8.0"
-	}
+  "name": "geomag-baseline-calculator",
+  "version": "0.0.0",
+  "description": "Web application for computing geomagnetic baseline values",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/usgs/geomag-baseline-calculator.git"
+  },
+  "keywords": [
+    "usgs",
+    "geomag",
+    "geomagnetism"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.0",
+    "matchdep": "~0.1.2",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-contrib-compass": "~0.2.0",
+    "grunt-contrib-clean": "~0.4.1"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  }
 }
