@@ -2,7 +2,8 @@
   "name": "geomag-baseline-calculator",
   "version": "0.0.0",
   "dependencies": {
-    "html5shiv-dist": "~3.6.2"
+    "html5shiv-dist": "~3.6.2",
+    "requirejs": "~2.1.6"
   },
   "devDependencies": {}
 }
