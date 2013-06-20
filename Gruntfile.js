@@ -31,7 +31,7 @@ module.exports = function (grunt) {
 		watch: {
 			scripts: {
 				files: ['<%= app.dev %>/htdocs/js/**/*.js'],
-				tasks: ['jshint:scripts', 'mocha_phantomjs'],
+				tasks: ['concurrent:scripts'],
 				options: {
 					livereload: LIVE_RELOAD_PORT
 				}
@@ -42,7 +42,7 @@ module.exports = function (grunt) {
 			},
 			tests: {
 				files: ['<%= app.test %>/*.html', '<%= app.test %>/**/*.js'],
-				tasks: ['jshint:tests', 'mocha_phantomjs']
+				tasks: ['concurrent:tests']
 			},
 			livereload: {
 				options: {
@@ -59,6 +59,10 @@ module.exports = function (grunt) {
 				files: ['Gruntfile.js'],
 				tasks: ['jshint:gruntfile']
 			}
+		},
+		concurrent: {
+			scripts: ['jshint:scripts', 'mocha_phantomjs'],
+			tests: ['jshint:tests', 'mocha_phantomjs']
 		},
 		connect: {
 			options: {
