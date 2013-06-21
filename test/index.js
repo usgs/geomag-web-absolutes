@@ -21,7 +21,8 @@ require([
 	mocha.setup('bdd');
 
 	require([
-		'spec/GreeterTest'
+		'spec/GreeterTest',
+		'spec/EventsTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			mochaPhantomJS.run();
