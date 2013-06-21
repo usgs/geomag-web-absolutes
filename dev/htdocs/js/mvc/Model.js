@@ -83,6 +83,24 @@ define([
 		return null;
 	};
 
+	/**
+	 * Get model id attribute.
+	 *
+	 * @return model id attribute.
+	 */
+	Model.prototype.getId = function() {
+		return this.get('id');
+	};
+
+	/**
+	 * Set model id attribute.
+	 *
+	 * @param id {String|Number} the model id to set.
+	 */
+	Model.prototype.setId = function(id) {
+		this.set({'id':id});
+	};
+
 
 	return Model;
 });
