@@ -22,7 +22,8 @@ require([
 
 	require([
 		'spec/GreeterTest',
-		'spec/EventsTest'
+		'spec/EventsTest',
+		'spec/ModelTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			mochaPhantomJS.run();
