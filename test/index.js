@@ -23,7 +23,8 @@ require([
 	require([
 		'spec/GreeterTest',
 		'spec/EventsTest',
-		'spec/ModelTest'
+		'spec/ModelTest',
+		'spec/ObservatoryTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			mochaPhantomJS.run();
