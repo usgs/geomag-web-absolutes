@@ -2,9 +2,14 @@
 
 var LIVE_RELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({port: LIVE_RELOAD_PORT});
+var gateway = require('gateway');
 
 var mountFolder = function (connect, dir) {
 	return connect.static(require('path').resolve(dir));
+};
+
+var mountPHP = function (dir, options) {
+	return gateway(require('path').resolve(dir), options);
 };
 
 module.exports = function (grunt) {
@@ -78,6 +83,7 @@ module.exports = function (grunt) {
 							lrSnippet,
 							mountFolder(connect, '.tmp'),
 							mountFolder(connect, options.components),
+							mountPHP(options.base),
 							mountFolder(connect, options.base)
 						];
 					}
