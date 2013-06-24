@@ -95,9 +95,12 @@ define(
 		 *
 		 * @param {Object…} a variable number of objects to append to the collection.
 		 */
-		Collection.prototype.push = function() {
+		Collection.prototype.add = function() {
+			// append items to collection
 			this._data.push.apply(this._data, arguments);
+			// reset id cache
 			this._ids = null;
+			// trigger add event
 			this.trigger('add', Array.prototype.slice.call(arguments, 0));
 		};
 

@@ -44,21 +44,21 @@ define([
 				    model2 = new Model({'id': 'test2'}),
 				    collection = new Collection();
 
-				collection.push(model, model2);
+				collection.add(model, model2);
 				expect(collection.get('test')).to.equal(model);
 				expect(collection.get('test2')).to.equal(model2);
 			});
 		});
 
 
-		describe('push()', function () {
+		describe('add()', function () {
 			it('triggers "add" event when called', function () {
 				var model = new Model({'id': 'test'}),
 				    collection = new Collection(),
 				    listener = new TestClass();
 
 				collection.on('add', listener.callback, listener);
-				collection.push(model);
+				collection.add(model);
 
 				expect(listener.callbackCount).to.equal(1);
 				expect(listener.callbackData).to.deep.equal([model]);
@@ -70,7 +70,7 @@ define([
 				    model3 = new Model({'id': 'test3'}),
 				    collection = new Collection();
 
-				collection.push(model, model2, model3);
+				collection.add(model, model2, model3);
 				expect(collection.data().length).to.equal(3);
 			});
 
@@ -84,7 +84,7 @@ define([
 				    listener = new TestClass();
 
 				collection.on('remove', listener.callback, listener);
-				collection.push(model);
+				collection.add(model);
 				collection.remove(model);
 
 				expect(listener.callbackCount).to.equal(1);
@@ -96,7 +96,7 @@ define([
 				    model2 = new Model({'id': 'test2'}),
 				    collection = new Collection();
 
-				collection.push(model);
+				collection.add(model);
 
 				expect(function() {
 					collection.remove(model2);
@@ -112,7 +112,7 @@ define([
 				    listener = new TestClass();
 
 				collection.on('select', listener.callback, listener);
-				collection.push(model);
+				collection.add(model);
 				collection.select(model);
 
 				expect(listener.callbackCount).to.equal(1);
@@ -124,7 +124,7 @@ define([
 				    model2 = new Model({'id': 'test2'}),
 				    collection = new Collection();
 
-				collection.push(model);
+				collection.add(model);
 
 				expect(function() {
 					collection.select(model2);
@@ -137,7 +137,7 @@ define([
 				    collection = new Collection(),
 				    listener = new TestClass();
 
-				collection.push(model, model2);
+				collection.add(model, model2);
 				collection.select(model);
 
 				collection.on('deselect', listener.callback, listener);
@@ -157,7 +157,7 @@ define([
 				    listener = new TestClass();
 
 				collection.on('deselect', listener.callback, listener);
-				collection.push(model);
+				collection.add(model);
 				collection.select(model);
 				collection.deselect();
 
@@ -171,7 +171,7 @@ define([
 				    listener = new TestClass();
 
 				collection.on('deselect', listener.callback, listener);
-				collection.push(model);
+				collection.add(model);
 				collection.deselect();
 
 				expect(listener.callbackCount).to.equal(0);
@@ -186,7 +186,7 @@ define([
 				    model2 = new Model({'id': 'test2', 'value': 2.1}),
 				    collection = new Collection();
 
-				collection.push(model, model2);
+				collection.add(model, model2);
 				expect(collection.data()).to.deep.equal([model, model2]);
 				collection.sort(function(a, b) {
 					// sort descending
