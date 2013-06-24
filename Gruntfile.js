@@ -2,9 +2,14 @@
 
 var LIVE_RELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({port: LIVE_RELOAD_PORT});
+var gateway = require('gateway');
 
 var mountFolder = function (connect, dir) {
 	return connect.static(require('path').resolve(dir));
+};
+
+var mountPHP = function (dir, options) {
+	return gateway(require('path').resolve(dir), options);
 };
 
 module.exports = function (grunt) {
@@ -31,7 +36,7 @@ module.exports = function (grunt) {
 		watch: {
 			scripts: {
 				files: ['<%= app.dev %>/htdocs/js/**/*.js'],
-				tasks: ['jshint:scripts', 'mocha_phantomjs'],
+				tasks: ['concurrent:scripts'],
 				options: {
 					livereload: LIVE_RELOAD_PORT
 				}
@@ -42,7 +47,7 @@ module.exports = function (grunt) {
 			},
 			tests: {
 				files: ['<%= app.test %>/*.html', '<%= app.test %>/**/*.js'],
-				tasks: ['jshint:tests', 'mocha_phantomjs']
+				tasks: ['concurrent:tests']
 			},
 			livereload: {
 				options: {
@@ -54,7 +59,15 @@ module.exports = function (grunt) {
 					'<%= app.dev %>/htdocs/img/**/*.{png,jpg,jpeg,gif}',
 					'.tmp/css/**/*.css'
 				]
+			},
+			gruntfile: {
+				files: ['Gruntfile.js'],
+				tasks: ['jshint:gruntfile']
 			}
+		},
+		concurrent: {
+			scripts: ['jshint:scripts', 'mocha_phantomjs'],
+			tests: ['jshint:tests', 'mocha_phantomjs']
 		},
 		connect: {
 			options: {
@@ -70,6 +83,7 @@ module.exports = function (grunt) {
 							lrSnippet,
 							mountFolder(connect, '.tmp'),
 							mountFolder(connect, options.components),
+							mountPHP(options.base),
 							mountFolder(connect, options.base)
 						];
 					}
@@ -140,6 +154,11 @@ module.exports = function (grunt) {
 			dist: ['<%= app.dist %>/*'],
 			dev: ['<%= app.tmp %>', '.sass-cache']
 		}
+	});
+
+	grunt.event.on('watch', function (action, filepath) {
+		// Only lint the file that actually changed
+		grunt.config(['jshint', 'scripts'], filepath);
 	});
 
 	grunt.registerTask('test', [
