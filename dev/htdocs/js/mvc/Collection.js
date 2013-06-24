@@ -62,7 +62,11 @@ define(
 				// build up ids first time through
 				this._ids = {};
 				for (var i=0; i<this._data.length; i++) {
-					this._ids[this._data[i].get('id')] = i;
+					var id = this._data[i].id;
+					if (this._ids.hasOwnProperty(id)) {
+						throw 'model with duplicate id "' + id + '" found in collection';
+					}
+					this._ids[id] = i;
 				}
 			}
 			return this._ids;
@@ -184,7 +188,7 @@ define(
 				this.deselect();
 			}
 
-			if (obj === this.get(obj.get('id'))) {
+			if (obj === this.get(obj.id)) {
 				// make sure it's part of this collection…
 				this._selected = obj;
 				this.trigger('select', this._selected);

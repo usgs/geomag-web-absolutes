@@ -48,6 +48,17 @@ define([
 				expect(collection.get('test')).to.equal(model);
 				expect(collection.get('test2')).to.equal(model2);
 			});
+
+			it('throws exception when duplicate ids found', function () {
+				var model = new Model({'id': 'test'}),
+				    model2 = new Model({'id': 'test'}),
+				    collection = new Collection();
+
+				collection.add(model, model2);
+				expect(function() {
+					collection.get('test');
+				}).to.throw(/duplicate/);
+			});
 		});
 
 
