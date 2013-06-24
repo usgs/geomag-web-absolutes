@@ -43,12 +43,14 @@ define(
 		 * Sorts the data.
 		 *
 		 * Sorts the wrapped array, and clears the id cache.
+		 * Triggers "sort" event, no arguments.
 		 *
 		 * @param method {Function} sort function.
 		 */
 		Collection.prototype.sort = function(method) {
 			this._data.sort(method);
 			this._ids = null;
+			this.trigger('sort');
 		};
 
 		/**
@@ -94,6 +96,7 @@ define(
 		 * Add objects to the collection.
 		 *
 		 * Calls wrapped array.push, and clears the id cache.
+		 * Triggers "add" event, with 1 argument: array of all added items.
 		 *
 		 * @param {Object…} a variable number of objects to append to the collection.
 		 */
@@ -111,6 +114,7 @@ define(
 		 *
 		 * This method calls array.splice and remove each item from array.
 		 * Reset is faster than repeated calls to this method.
+		 * Triggers "remove" event, with 1 argument: array of all removed items.
 		 *
 		 * @param o {Object…} a variable number of objects to remove.
 		 */
@@ -145,6 +149,7 @@ define(
 
 		/**
 		 * Replace the wrapped array with a new one.
+		 * Triggers "reset" event, with 1 argument: new data array.
 		 */
 		Collection.prototype.reset = function(data) {
 			// check for existing selection
@@ -186,6 +191,9 @@ define(
 		/**
 		 * Select an object in the collection.
 		 *
+		 * If there is an existing selection, deselect is called first.
+		 * Triggers "select" event, with 1 argument: selected item.
+		 *
 		 * @param obj {Object} object in the collection to select.
 		 * @throws exception if obj not in collection.
 		 */
@@ -204,7 +212,11 @@ define(
 		};
 
 		/**
-		 * Deselect current selection.
+		 * Deselect current selection, if any.
+		 *
+		 * Triggers "deselect" event, with 1 argument: previously selected item.
+		 * NOTE: the selected item is cleared before deselect is called, so
+		 * getSelected() will return null during event handling.
 		 */
 		Collection.prototype.deselect = function() {
 			if (this._selected !== null) {
