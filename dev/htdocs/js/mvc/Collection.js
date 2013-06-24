@@ -107,28 +107,40 @@ define(
 		};
 
 		/**
-		 * Remove one object from the collection.
+		 * Remove object(s) from the collection.
 		 *
-		 * This method calls array.splice and removes one item from array.
-		 * Reset would be faster if modifying large chunks of the array.
+		 * This method calls array.splice and remove each item from array.
+		 * Reset is faster than repeated calls to this method.
 		 *
-		 * @param o {Object} object to remove.
+		 * @param o {Object…} a variable number of objects to remove.
 		 */
-		Collection.prototype.remove = function(o) {
-			var ids = this.getIds();
-
-			if (ids.hasOwnProperty(o.get('id'))) {
+		Collection.prototype.remove = function() {
+			var ids = this.getIds(),
+			    i;
+			// select indexes to be removed
+			var indexes = [];
+			for (i=0; i<arguments.length; i++) {
+				var o = arguments[i];
+				// clear current selection if being removed
 				if (o === this._selected) {
 					this.deselect();
 				}
-
-				// remove from array
-				this._data.splice(ids[o.id], 1);
-				this._ids = null;
-				this.trigger('remove', o);
-			} else {
-				throw 'removing object not in collection';
+				// add to list to be removed
+				if (ids.hasOwnProperty(o.id)) {
+					indexes.push(ids[o.id]);
+				} else {
+					throw 'removing object not in collection';
+				}
 			}
+			// remove in descending index order
+			indexes.sort(function(a,b) { return a-b; });
+			for (i=indexes.length-1; i>=0; i--) {
+				this._data.splice(indexes[i]);
+			}
+			// reset id cache
+			this._ids = null;
+			// trigger remove event
+			this.trigger('remove', Array.prototype.slice.call(arguments, 0));
 		};
 
 		/**

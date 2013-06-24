@@ -99,7 +99,7 @@ define([
 				collection.remove(model);
 
 				expect(listener.callbackCount).to.equal(1);
-				expect(listener.callbackData).to.equal(model);
+				expect(listener.callbackData).to.deep.equal([model]);
 			});
 
 			it('throws exception when model not in collection', function() {
@@ -112,6 +112,19 @@ define([
 				expect(function() {
 					collection.remove(model2);
 				}).to.throw(/not in collection/);
+			});
+
+			it('supports a variable number of arguments', function () {
+				var model = new Model({'id': 'test'}),
+				    model2 = new Model({'id': 'test2'}),
+				    model3 = new Model({'id': 'test3'}),
+				    collection = new Collection();
+
+				collection.add(model, model2, model3);
+				expect(collection.data().length).to.equal(3);
+				collection.remove(model2, model3);
+				expect(collection.data().length).to.equal(1);
+				expect(collection.get('test')).to.deep.equal(model);
 			});
 		});
 
