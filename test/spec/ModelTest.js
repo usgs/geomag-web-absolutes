@@ -67,25 +67,6 @@ define([
 			});
 		});
 
-		describe('getId()', function () {
-			it('gets the "id" model attribute', function () {
-				var m = new Model({'id': 'testid'});
-				expect(m.getId()).to.equal('testid');
-			});
-		});
-
-		describe('setId()', function () {
-			it('sets the "id" model attribute', function () {
-				var m = new Model();
-				// null by default
-				expect(m.getId()).to.equal(null);
-				// set id
-				m.setId('testid');
-				// get id that was set
-				expect(m.getId()).to.equal('testid');
-			});
-		});
-
 	});
 
 });
