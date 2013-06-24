@@ -18,6 +18,11 @@ define([
 		this._model = Util.extend({}, data);
 		// model is source of events
 		Events.call(this);
+
+		// track id at top level
+		if (data && data.hasOwnProperty('id')) {
+			this.id = data.id;
+		}
 	};
 
 	// model is a source of events
@@ -46,6 +51,11 @@ define([
 
 		// persist changes
 		this._model = Util.extend(this._model, data);
+
+		// if id is changing, update the model id
+		if (data && data.hasOwnProperty('id')) {
+			this.id = data.id;
+		}
 
 		if (options && options.hasOwnProperty('silent') && options.silent) {
 			// don't trigger any events

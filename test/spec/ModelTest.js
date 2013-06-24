@@ -65,6 +65,15 @@ define([
 				expect(listener.callbackCount).to.equal(1);
 				expect(listener.callbackData.mykey).to.equal('myvalue');
 			});
+
+			it('updates model object id properly when id is updated', function () {
+				var m = new Model({'id': 'testid'});
+
+				// constructor set's id property
+				expect(m.id).to.equal('testid');
+				m.set({'id': 'testid_other'});
+				expect(m.id).to.equal('testid_other');
+			});
 		});
 
 	});
