@@ -19,7 +19,6 @@ define(
 		var Collection = function(data) {
 			// add event handling to collection
 			Events.call(this);
-
 			// the wrapped array
 			this._data = data || [];
 			// index of object ids in the data array, built lazily by getIds
@@ -71,7 +70,6 @@ define(
 			}
 			return this._ids;
 		};
-
 
 		/**
 		 * Get an object in the collection by ID.
@@ -142,16 +140,12 @@ define(
 			if (this._selected !== null) {
 				selectedId = this._selected.id;
 			}
-
-
 			// free array and id cache
 			this.destroy();
 			// set new array
 			this._data = data;
 			// notify listeners
 			this.trigger('reset', data);
-
-
 			// reselect if there was a previous selection
 			if (selectedId !== null) {
 				var selected = this.get(selectedId);
@@ -162,12 +156,12 @@ define(
 		};
 
 		/**
-		 * Free the array and id cache.  Also calls deselect.
+		 * Free the array and id cache.  Calls deselect before clearing data.
 		 */
 		Collection.prototype.destroy = function() {
+			this.deselect();
 			this._data = null;
 			this._ids = null;
-			this.deselect();
 		};
 
 		/**
