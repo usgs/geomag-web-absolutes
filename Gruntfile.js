@@ -19,7 +19,7 @@ module.exports = function (grunt) {
 
 	// App configuration, used throughout
 	var appConfig = {
-		dev: 'dev',
+		dev: 'src',
 		dist: 'dist',
 		test: 'test',
 		tmp: '.tmp'
@@ -67,16 +67,23 @@ module.exports = function (grunt) {
 		},
 		concurrent: {
 			scripts: ['jshint:scripts', 'mocha_phantomjs'],
-			tests: ['jshint:tests', 'mocha_phantomjs']
+			tests: ['jshint:tests', 'mocha_phantomjs'],
+			dist: [
+				'requirejs:dist',
+				'cssmin:dist',
+				'htmlmin:dist',
+				'uglify',
+				'copy'
+			]
 		},
 		connect: {
 			options: {
-				port: 8080,
 				hostname: 'localhost'
 			},
 			dev: {
 				options: {
 					base: '<%= app.dev %>/htdocs',
+					port: 8080,
 					components: bowerConfig.directory,
 					middleware: function (connect, options) {
 						return [
@@ -92,8 +99,11 @@ module.exports = function (grunt) {
 			dist: {
 				options: {
 					base: '<%= app.dist %>/htdocs',
+					port: 8081,
+					keepalive: true,
 					middleware: function (connect, options) {
 						return [
+							mountPHP(options.base),
 							mountFolder(connect, options.base)
 						];
 					}
@@ -142,16 +152,123 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+		requirejs: {
+			dist: {
+				options: {
+					name: 'index',
+					baseUrl: appConfig.dev + '/htdocs/js',
+					out: appConfig.dist + '/htdocs/js/index.js',
+					optimize: 'uglify2',
+					mainConfigFile: appConfig.dev + '/htdocs/js/index.js',
+					useStrict: true,
+					wrap: true,
+					uglify2: {
+						report: 'gzip',
+						mangle: true,
+						compress: true,
+						preserveComments: 'some'
+					}
+				}
+			}
+		},
+		cssmin: {
+			dist: {
+				files: {
+					'<%= app.dist %>/htdocs/css/index.css': [
+						'<%= app.dev %>/htdocs/css/**/*.css',
+						'.tmp/css/**/*.css'
+					]
+				}
+			}
+		},
+		htmlmin: {
+			dist: {
+				options: {
+					collapseWhitespace: true
+				},
+				files: [{
+					expand: true,
+					cwd: '<%= app.dev %>',
+					src: '**/*.html',
+					dest: '<%= app.dist %>'
+				}]
+			}
+		},
+		uglify: {
+			options: {
+				mangle: true,
+				compress: true,
+				report: 'gzip'
+			},
+			dist: {
+				files: {
+					'<%= app.dist %>/htdocs/lib/requirejs/require.js':
+							['<%= bower.directory %>/requirejs/require.js'],
+					'<%= app.dist %>/htdocs/lib/html5shiv/html5shiv.js':
+							['<%= bower.directory %>/html5shiv-dist/html5shiv.js']
+				}
+			}
+		},
+		copy: {
+			app: {
+				expand: true,
+				cwd: '<%= app.dev %>/htdocs',
+				dest: '<%= app.dist %>/htdocs',
+				src: [
+					'img/**/*.{png,gif,jpg,jpeg}',
+					'**/*.php'
+				]
+			},
+			conf: {
+				expand: true,
+				cwd: '<%= app.dev %>/conf',
+				dest: '<%= app.dist/conf',
+				src: [
+					'**/*',
+					'!**/*.orig'
+				]
+			},
+			lib: {
+				expand: true,
+				cwd: '<%= app.dev  %>/lib',
+				dest: '<%= app.dist %>/lib',
+				src: [
+					'**/*'
+				]
+			}
+		},
+		replace: {
+			dist: {
+				src: [
+					'<%= app.dist %>/htdocs/index.html',
+					'<%= app.dist %>/**/*.php'
+				],
+				overwrite: true,
+				replacements: [
+					{
+						from: 'requirejs/require.js',
+						to: 'lib/requirejs/require.js'
+					},
+					{
+						from: 'html5shiv-dist/html5shiv.js',
+						to: 'lib/html5shiv/html5shiv.js'
+					}
+				]
+			}
+		},
 		open: {
 			server: {
-				path: 'http://localhost:<%= connect.options.port %>'
+				path: 'http://localhost:<%= connect.dev.options.port %>'
 			},
 			test: {
 				path: 'http://localhost:<%= connect.test.options.port %>'
+			},
+			dist: {
+				path: 'http://localhost:<%= connect.dist.options.port %>'
 			}
 		},
 		clean: {
-			dist: ['<%= app.dist %>/*'],
+			dist: ['<%= app.dist %>'],
 			dev: ['<%= app.tmp %>', '.sass-cache']
 		}
 	});
@@ -165,6 +282,15 @@ module.exports = function (grunt) {
 		'clean:dist',
 		'connect:test',
 		'mocha_phantomjs'
+	]);
+
+	grunt.registerTask('build', [
+		'clean:dist',
+		'compass',
+		'concurrent:dist',
+		'replace',
+		'open:dist',
+		'connect:dist'
 	]);
 
 	grunt.registerTask('default', [
