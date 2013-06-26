@@ -13,7 +13,6 @@ define([
 	/** Define default attributes. */
 	var DEFAULTS = {
 		'id': null,
-		'reading_id': null,
 		'type': null,
 		'time': null,
 		'angle': null
