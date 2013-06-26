@@ -42,6 +42,22 @@ define([
 	Observatory.prototype = Object.create(Model.prototype);
 
 
+	/**
+	 * Get the default pier for this observatory.
+	 *
+	 * @return {Pier} the default pier, or null if no default is specified.
+	 */
+	Observatory.prototype.getDefaultPier = function () {
+		var piers = this.get('piers'),
+		    default_pier_id = this.get('default_pier_id');
+		if (piers !== null && default_pier_id !== null) {
+			return piers.get(default_pier_id);
+		} else {
+			return null;
+		}
+	};
+
+
 	// return constructor from closure
 	return Observatory;
 });
