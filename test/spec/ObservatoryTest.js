@@ -13,7 +13,7 @@ define([
 	describe('Unit tests for the "Observatory" class', function () {
 
 		describe('constructor()', function () {
-			it('has a null id by default', function () {
+			it('id attribute matches test data', function () {
 				var observatory = new Observatory(ObservatoryFeed.observatories[0]);
 				expect(observatory.get('id')).to.equal('example_obs_001');
 			});
