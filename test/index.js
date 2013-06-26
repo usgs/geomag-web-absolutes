@@ -26,7 +26,8 @@ require([
 		'spec/ModelTest',
 		'spec/ObservatoryTest',
 		'spec/CollectionTest',
-		'spec/MarkTest'
+		'spec/MarkTest',
+		'spec/MeasurementTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			mochaPhantomJS.run();
