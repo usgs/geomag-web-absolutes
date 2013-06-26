@@ -20,9 +20,9 @@ define([
 
 	/**
 		* Constructor.
-	 	*
-	 	* @param  options {Object} observatory attributes.
-	 	*/
+		*
+		* @param  options {Object} observatory attributes.
+		*/
 	var Mark = function (options) {
 		// Call parent constructor
 		Model.call(this, Util.extend({}, DEFAULTS, options));
