@@ -15,8 +15,16 @@ define([
 		'id': null,
 		'code': null,
 		'name': null,
+		'location': null,
+		'latitude': null,
+		'longitude': null,
+		'geomagnetic_latitude': null,
+		'geomagnetic_longitude': null,
+		'elevation': null,
+		'orientation': null,
+		'instruments': null,
 		'piers': null,
-		'equipment': null
+		'default_pier_id': null
 	};
 
 
