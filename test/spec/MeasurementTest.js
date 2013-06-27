@@ -12,14 +12,21 @@ define([
 	describe('Unit tests for the "Measurement" class', function () {
 
 		describe('constructor()', function () {
-			it('has a null id by default', function () {
+			it('works when no values are given', function () {
 				var measurement = new Measurement();
-				expect(measurement.get('id')).to.equal(null);
+        expect(measurement instanceof Measurement );
 			});
 		});
-		describe('constructor(id, reading_id, type, time, angle)', function () {
-			it('test contructor values', function () {
-				var measurement = new Measurement({'id':1, 'reading_id':1, 'type':'west_up', 'time':1372193224820, 'angle':0.0});
+		describe('constructor(options)', function () {
+			it('works when passed a test object', function () {
+				var testObject = {
+						id: 1,
+						reading_id: 1,
+						type: 'west_up',
+						time: 1372193224820,
+						angle: 0.0
+				};
+				var measurement = new Measurement(testObject);
 				expect(measurement.get('id')).to.equal(1);
 				expect(measurement.get('reading_id')).to.equal(1);
 				expect(measurement.get('type')).to.equal('west_up');
