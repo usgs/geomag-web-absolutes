@@ -82,6 +82,39 @@ define([
 				expect(calc.magneticSouthMeridian(
 						westDown, westUp, eastDown, eastUp)).to.equal(expected);
 			});
+			
+			it('computes correctly with data from BDT20131651602.bns', function () {
+				var westDown = 270.3533,  // 270 21.2
+				    westUp = 90.4750,     //  90 28.5
+				    eastDown = 90.5050,   //  90 30.3
+				    eastUp = 270.3833,    // 270 23.0
+				    expected = 180.42915; // 180.4292
+
+				expect(calc.magneticSouthMeridian(
+						westDown, westUp, eastDown, eastUp)).to.equal(expected);
+			});
+			
+			it('computes correctly with data from CMO20131651602.bns', function () {
+				var westDown = 272.3111, // 272 18 40
+				    westUp = 92.1722,    //  92 10 20
+				    eastDown = 92.1181,  //  92 07 05
+				    eastUp = 272.4400,   // 272 26 24
+				    expected = 182.26035;// 182.2603
+
+				expect(calc.magneticSouthMeridian(
+						westDown, westUp, eastDown, eastUp)).to.equal(expected);
+			});
+			
+			it('computes correctly with data from FRN20130311611.bns', function () {
+				var westDown = 103.1508, // 103 09 03
+				    westUp = 283.0369,   // 283 02 13
+				    eastDown = 283.1375, // 283 08 15
+				    eastUp = 103.0728,   // 103 04 22
+				    expected = 193.0995; // 193.0995
+
+				expect(calc.magneticSouthMeridian(
+						westDown, westUp, eastDown, eastUp)).to.equal(expected);
+			});
 
 		}); // END :: magneticSouthMeridian
 
