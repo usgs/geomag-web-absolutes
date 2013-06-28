@@ -5,7 +5,7 @@ define([
 	'mvc/Model',
 	'mvc/Util',
 	'mvc/Collection'
-], function(
+], function (
 	Model,
 	Util,
 	Collection
@@ -25,7 +25,7 @@ define([
 		'marks': null
 	};
 
-  
+
 	/**
 	 * Constructor.
 	 *
@@ -34,13 +34,12 @@ define([
 	var Pier = function (options) {
 		// Call parent constructor
 		Model.call(this, Util.extend({}, DEFAULTS, options));
-
 	};
 
 	// Pier extends Model
 	Pier.prototype = Object.create(Model.prototype);
 
-	
+
 	/**
 	 * Get the default mark for the pier.
 	 *
