@@ -42,7 +42,7 @@ define([
 		},
 
 		/**
-		 * Magnetic Azimuth Mark
+		 * Magnetic Azimuth of the Mark
 		 *
 		 * @param meanMark {Number} Decimal degrees
 		 * @param magneticSouthMeridian {Number} Decimal degrees
@@ -75,7 +75,14 @@ define([
 		 * @return {Number} Decimal degrees
 		 */
 		magneticDeclination: function (magneticSouthMeridian, geographicMeridian) {
-			return (magneticSouthMeridian - geographicMeridian);
+			var magneticDecl = magneticSouthMeridian - geographicMeridian;
+			while (magneticDecl >= 180.0) {
+				magneticDecl -= 180.0;
+			}
+			while (magneticDecl < 0) {
+				magneticDecl += 180.0;
+			}
+			return (magneticDecl);
 		},
 
 		/**
