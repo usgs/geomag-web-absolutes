@@ -118,7 +118,7 @@ define([
 		 * @return {Number} nT
 		 */
 		correctedF: function (fmean, pierCorrection) {
-			return (fmean - pierCorrection);
+			return (fmean + pierCorrection);
 		},
 
 
