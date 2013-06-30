@@ -133,7 +133,7 @@ define([
 		 * @return {Number} Decimal degrees
 		 */
 		inclination: function (southDown, southUp, northDown, northUp) {
-			return this._mean(southDown, southUp, northDown, northUp);
+			return ((southDown + northUp) - (southUp + northDown) + 360.0) / 4.0
 		},
 
 		/**
