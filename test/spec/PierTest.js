@@ -28,10 +28,6 @@ define([
 				'default_mark_id': null
 		};
 
-		var mark1 = {'test1': 'a'},
-			mark2 = {'test2': 'b'},
-			mark3 = {'test3': 'c'};
-
 
 		describe('Unit tests for the "Pier" class', function () {
 
@@ -40,27 +36,12 @@ define([
 								var myPier1 = new Pier({'name': 'testname'});
 								expect(myPier1.get('name')).to.equal('testname');
 						});
-						
+
 						it('calls Model constructor', function () {
 								var myPier2 = new Pier(TEST_PIER_DATA);
 								expect(myPier2.get('id')).to.equal('example_pier_001');
 						});
 
-						it('the constructor makes a collection', function () {
-								var mark_list = [mark1, mark2, mark3];
-								var myPier3 = new Pier({'marks': mark_list});
-								expect(myPier3.marks.data().length).to.equal(3);
-						});
-
-						it('the collection modifies the model', function () {
-								var mark_list = [mark1, mark2];
-								var myPier = new Pier({'marks': mark_list});
-								expect(myPier.marks.data().length).to.equal(2);
-
-								myPier.marks.add(mark3);
-								expect(myPier.marks.data().length).to.equal(3); // check collection
-								expect(myPier.get('marks').length).to.equal(3); // check model
-						});
 				});
 
 				describe('getDefaultMark()', function () {
