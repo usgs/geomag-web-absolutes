@@ -185,62 +185,6 @@ define([
 		},
 
 
-		/**
-		 * Mean H
-		 *
-		 * @param h1 {Number} First H value
-		 * @param h2 {Number} Second H value
-		 * @param h3 {Number} Third H value
-		 * @param h4 {Number} Fourth H value
-		 *
-		 * @return {Number} Average H value in nT
-		 */
-		meanH: function (h1, h2, h3, h4) {
-			return this._mean(h1, h2, h3, h4);
-		},
-
-		/**
-		 * Mean E
-		 *
-		 * @param h1 {Number} First E value
-		 * @param h2 {Number} Second E value
-		 * @param h3 {Number} Third E value
-		 * @param h4 {Number} Fourth E value
-		 *
-		 * @return {Number} Average E value in nT
-		 */
-		meanE: function (e1, e2, e3, e4) {
-			return this._mean(e1, e2, e3, e4);
-		},
-
-		/**
-		 * Mean Z
-		 *
-		 * @param h1 {Number} First Z value
-		 * @param h2 {Number} Second Z value
-		 * @param h3 {Number} Third Z value
-		 * @param h4 {Number} Fourth Z value
-		 *
-		 * @return {Number} Average Z value in nT
-		 */
-		meanZ: function (z1, z2, z3, z4) {
-			return this._mean(z1, z2, z3, z4);
-		},
-
-		/**
-		 * Mean F
-		 *
-		 * @param h1 {Number} First F value
-		 * @param h2 {Number} Second F value
-		 * @param h3 {Number} Third F value
-		 * @param h4 {Number} Fourth F value
-		 *
-		 * @return {Number} Average F value in nT
-		 */
-		meanF: function (f1, f2, f3, f4) {
-			return this._mean(f1, f2, f3, f4);
-		},
-
 		scaleValue: function (absoluteH) {
 			return (SCALE_VALUE_COEFFIFIENT / absoluteH);
 		},
