@@ -28,6 +28,7 @@ require([
 		'spec/CollectionTest',
 		'spec/MarkTest',
 		'spec/MeasurementTest'
+		'spec/PierTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			mochaPhantomJS.run();
