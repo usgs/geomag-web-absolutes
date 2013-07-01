@@ -15,6 +15,7 @@ define([
 	var DEFAULTS = {
 		'name': null,
 		'begin': null,
+		'end': null,
 		'azimuth': null
 	};
 
