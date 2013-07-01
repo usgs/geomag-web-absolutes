@@ -6,7 +6,7 @@ define([
 	'use strict';
 
 	var NaN = parseFloat('notanumber'),
-	    SCALE_VALUE_COEFFIFIENT = 3437.7468;
+	    SCALE_VALUE_COEFFIFIENT = 3437.7468/60.0;
 
 	var BaselineCalculator = function () {
 	};
@@ -184,7 +184,13 @@ define([
 			return (northDown - southUp - 180.0);
 		},
 
-
+		/**
+		 * Scale Value
+		 *
+		 * @param absoluteH {Number} nT
+		 *
+		 * @return {Number} Degrees/nT
+		 */
 		scaleValue: function (absoluteH) {
 			return (SCALE_VALUE_COEFFIFIENT / absoluteH);
 		},
@@ -193,10 +199,10 @@ define([
 		/**
 		 * Computed E
 		 *
-		 * @param meanE {Number} Decimal minutes
+		 * @param meanE {Number} nT
 		 * @param scaleValue {Number}
 		 *
-		 * @return {Number} Decimal minutes
+		 * @return {Number} Decimal degrees
 		 */
 		computedE: function (meanE, scaleValue) {
 			return (meanE * scaleValue);
