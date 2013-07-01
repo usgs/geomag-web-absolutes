@@ -25,10 +25,13 @@ define([
 				expect(mark).to.be.an.instanceOf(Mark);
 			});
 
-			it('works when passed an obect', function () {
+			it('works when passed an object', function () {
 					var mark = new Mark(testObect);
 					expect(mark.get('name')).to.equal(testObect.name);
 			});
+
 		});
+
 	});
+
 });
