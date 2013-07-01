@@ -18,10 +18,10 @@ define([
 		'angle': null
 	};
 	/**
-	 * Constructor.
-	 *
-	 * @param  options {Object} observatory attributes.
-	*/
+		* Constructor.
+		*
+		* @param  options {Object} observatory attributes.
+		*/
 	var Measurement	 = function (options) {
 		// Call parent constructor
 		Model.call(this, Util.extend({}, DEFAULTS, options));
