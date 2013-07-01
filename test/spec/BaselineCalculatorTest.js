@@ -119,53 +119,6 @@ define([
 
 		}); // END :: magneticSouthMeridian
 
-		describe('meanMark()', function () {
-
-			it('computes correctly', function () {
-				var markDown1 = 1.0,
-				    markUp1 = 2.0,
-				    markDown2 = 3.0,
-				    markUp2 = 4.0,
-				    expected = 2.5;
-
-				expect(calc.meanMark(
-						markDown1, markUp1, markDown2, markUp2)).to.equal(expected);
-			});
-
-			it('computes correctly with data from BDT20131651602.bns', function () {
-				var markDown1 = 190.5000,	// 190 30
-				    markUp1 = 10.5000,		// 10 30
-				    markDown2 = 190.5000,	// 190 30
-				    markUp2 = 10.5000,		// 10 30
-				    expected = 100.50000;	// 100.5000
-
-				expect(Math.abs(calc.meanMark(
-						markDown1, markUp1, markDown2, markUp2) - expected) < EPSILON);
-			});
-
-			it('computes correctly with data from CMO20131651602.bns', function () {
-				var markDown1 = 190.5247,	// 190 31 29
-				    markUp1 = 10.5256,		// 10 31 32
-				    markDown2 = 190.5242,	// 190 31 27
-				    markUp2 = 10.5250,		// 10 31 30
-				    expected = 100.52488;	// 100.5249
-
-				expect(Math.abs(calc.meanMark(
-						markDown1, markUp1, markDown2, markUp2) - expected) < EPSILON);
-			});
-
-			it('computes correctly with data from FRN20130311611.bns', function () {
-				var markDown1 = 16.5036,	// 16 30 13
-				    markUp1 = 196.5064,		// 196 30 23
-				    markDown2 = 16.5044,	// 16 30 16
-				    markUp2 = 196.5069,		// 196 30 25
-				    expected = 106.50533;	// 106.5053
-
-				expect(Math.abs(calc.meanMark(
-						markDown1, markUp1, markDown2, markUp2) - expected) < EPSILON);
-			});
-
-		}); // END :: meanMark
 
 		describe('magneticAzimuthMark()', function () {
 
