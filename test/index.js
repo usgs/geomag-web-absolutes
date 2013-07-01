@@ -31,7 +31,8 @@ require([
 		'spec/MarkTest',
 		'spec/MeasurementTest',
 		'spec/PierTest',
-		'spec/BaselineCalculatorTest'
+		'spec/BaselineCalculatorTest',
+		'spec/EquipmentTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();

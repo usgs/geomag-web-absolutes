@@ -18,7 +18,9 @@ define([
 	};
 
 	var Equipment = function (attributes) {
-		Model.apply(this, [Util.extend({}, DEFAULTS, attributes)]);
+		Model.call(this, Util.extend({}, DEFAULTS, attributes));
 	};
 	Equipment.prototype = Object.create(Model.prototype);
+
+	return Equipment;
 });
