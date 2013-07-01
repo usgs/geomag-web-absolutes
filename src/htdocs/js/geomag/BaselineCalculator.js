@@ -265,10 +265,10 @@ define([
 		 * @param magneticDeclination {Number} Decimal degrees
 		 * @param computedE {Number} Decimal minutes
 		 *
-		 * @return {Number} Decimal minutes
+		 * @return {Number} Decimal degrees
 		 */
 		baselineD: function (magneticDeclination, computedE) {
-			return ((magneticDeclination * 60.0) - computedE);
+			return (((magneticDeclination * 60.0) - computedE) * 60.0);
 		},
 
 		/**
