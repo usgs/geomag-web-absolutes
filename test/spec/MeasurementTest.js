@@ -11,24 +11,20 @@ define([
 
 	describe('Unit tests for the "Measurement" class', function () {
 		var testObject = {
-				id: 1,
-				reading_id: 1,
-				type: 'west_up',
-				time: 1372193224820,
-				angle: 0.0
+			'id': 1,
+			'type': 'west_up',
+			'time': 1372193224820,
+			'angle': 0.0
 		};
 		describe('constructor()', function () {
 			it('evaluates to instanceof "Measurement"', function () {
 				var measurement = new Measurement();
-        expect(measurement instanceof Measurement );
+				expect(measurement).to.be.an.instanceOf(Measurement);
 			});
 
-
 			it('works when passed a test object', function () {
-
 				var measurement = new Measurement(testObject);
 				expect(measurement.get('id')).to.equal(testObject.id);
-				expect(measurement.get('reading_id')).to.equal(testObject.reading_id);
 				expect(measurement.get('type')).to.equal(testObject.type);
 				expect(measurement.get('time')).to.equal(testObject.time);
 				expect(measurement.get('angle')).to.equal(testObject.angle);
