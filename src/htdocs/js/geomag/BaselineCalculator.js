@@ -241,53 +241,10 @@ define([
 			return this._mean(f1, f2, f3, f4);
 		},
 
-		/**
-		 * Absolute D
-		 *
-		 * @param magneticDeclination {Number} Decimal degrees
-		 *
-		 * @return {Number} Decimal minutes
-		 */
-		absoluteD: function (magneticDeclination) {
-			return (magneticDeclination * 60);
-		},
-
-		/**
-		 * Absolute H
-		 *
-		 * @param horizontalComponent {Number} nT
-		 *
-		 * @return {Number} nT
-		 */
-		absoluteH: function (horizontalComponent) {
-			return horizontalComponent;
-		},
-
-		/**
-		 * Absolute Z
-		 *
-		 * @param verticalComponent {Number} nT
-		 *
-		 * @return {Number} nT
-		 */
-		absoluteZ: function (verticalComponent) {
-			return verticalComponent;
-		},
-
 		scaleValue: function (absoluteH) {
 			return (SCALE_VALUE_COEFFIFIENT / absoluteH);
 		},
 
-		/**
-		 * Computed H
-		 *
-		 * @param meanH {Number} nT
-		 *
-		 * @return {Number} nT
-		 */
-		computedH: function (meanH) {
-			return meanH;
-		},
 
 		/**
 		 * Computed E
@@ -299,28 +256,6 @@ define([
 		 */
 		computedE: function (meanE, scaleValue) {
 			return (meanE * scaleValue);
-		},
-
-		/**
-		 * Computed Z
-		 *
-		 * @param meanZ {Number} nT
-		 *
-		 * @return {Number} nT
-		 */
-		computedZ: function (meanZ) {
-			return meanZ;
-		},
-
-		/**
-		 * Computed F
-		 *
-		 * @param meanF {Number} nT
-		 *
-		 * @return {Number} nT
-		 */
-		computedF: function (meanF) {
-			return meanF;
 		},
 
 
