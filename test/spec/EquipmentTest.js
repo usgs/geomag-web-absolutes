@@ -1,30 +1,30 @@
 /* global define, describe, it */
 define([
 	'chai',
-	'geomag/Equipment'
+	'geomag/Instrument'
 ], function (
 	chai,
-	Equipment
+	Instrument
 ) {
 	'use strict';
 	var expect = chai.expect;
 
-	describe('Equipment Unit Tests', function () {
+	describe('Instrument Unit Tests', function () {
 		var now = new Date();
 		var nextWeek = new Date(now.getTime() + (86400000*7));
 		var equipmentAttrs = {
 			'id': 123,
-			'name': 'Test Equipment',
+			'name': 'Test Instrument',
 			'type': 'Theodolite',
 			'serial_number': 'Abc123Xyz',
 			'begin': now,
 			'end': nextWeek
 		};
 
-		describe('Equipment()', function () {
+		describe('Instrument()', function () {
 
 			it('should accept complete attributes object', function () {
-				var e = new Equipment(equipmentAttrs);
+				var e = new Instrument(equipmentAttrs);
 				expect(e.get('id')).to.equal(equipmentAttrs.id);
 				expect(e.get('name')).to.equal(equipmentAttrs.name);
 				expect(e.get('type')).to.equal(equipmentAttrs.type);
@@ -33,7 +33,7 @@ define([
 				expect(e.get('end')).to.equal(equipmentAttrs.end);
 			});
 
-		}); // END :: Equipment()
+		}); // END :: Instrument()
 
-	}); // END :: Equipment Unit Tests
+	}); // END :: Instrument Unit Tests
 });

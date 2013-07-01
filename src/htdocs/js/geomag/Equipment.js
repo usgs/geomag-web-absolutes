@@ -17,10 +17,10 @@ define([
 		'end': null
 	};
 
-	var Equipment = function (attributes) {
+	var Instrument = function (attributes) {
 		Model.call(this, Util.extend({}, DEFAULTS, attributes));
 	};
-	Equipment.prototype = Object.create(Model.prototype);
+	Instrument.prototype = Object.create(Model.prototype);
 
-	return Equipment;
+	return Instrument;
 });
