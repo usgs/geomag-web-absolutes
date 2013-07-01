@@ -24,7 +24,7 @@ define([
 				expect(o).to.be.an.instanceOf(Model);
 			});
 
-		});
+		}); // END :: Constructor
 
 	}); // END :: Observation Unit Tests
 
