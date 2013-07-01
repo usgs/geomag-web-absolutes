@@ -807,7 +807,7 @@ define([
 			it('computes correctly', function () {
 				var magneticDeclination = 1.0,
 				    computedE = 50.0,
-				    expected = 10.0;
+				    expected = 600.0;
 
 				expect(calc.baselineD(
 						magneticDeclination, computedE)).to.equal(expected);
