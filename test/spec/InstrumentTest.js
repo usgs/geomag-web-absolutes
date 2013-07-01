@@ -1,39 +1,30 @@
 /* global define, describe, it */
 define([
 	'chai',
-	'geomag/Instrument'
+	'geomag/Instrument',
+	'mvc/Model'
 ], function (
 	chai,
-	Instrument
+	Instrument,
+	Model
 ) {
 	'use strict';
 	var expect = chai.expect;
 
 	describe('Instrument Unit Tests', function () {
-		var now = new Date();
-		var nextWeek = new Date(now.getTime() + (86400000*7));
-		var equipmentAttrs = {
-			'id': 123,
-			'name': 'Test Instrument',
-			'type': 'Theodolite',
-			'serial_number': 'Abc123Xyz',
-			'begin': now,
-			'end': nextWeek
-		};
 
-		describe('Instrument()', function () {
+		describe('Constructor', function () {
+			var i = new Instrument();
 
-			it('should accept complete attributes object', function () {
-				var e = new Instrument(equipmentAttrs);
-				expect(e.get('id')).to.equal(equipmentAttrs.id);
-				expect(e.get('name')).to.equal(equipmentAttrs.name);
-				expect(e.get('type')).to.equal(equipmentAttrs.type);
-				expect(e.get('serial_number')).to.equal(equipmentAttrs.serial_number);
-				expect(e.get('begin')).to.equal(equipmentAttrs.begin);
-				expect(e.get('end')).to.equal(equipmentAttrs.end);
+			it('should be an instance of an Instrument', function () {
+				expect(i).to.be.an.instanceOf(Instrument);
 			});
 
-		}); // END :: Instrument()
+			it('should be an instance of a Model', function () {
+				expect(i).to.be.an.instanceOf(Model);
+			});
+
+		}); // END :: Constructor
 
 	}); // END :: Instrument Unit Tests
 });
