@@ -33,6 +33,7 @@ define([
 	describe('Unit tests for the "Pier" class', function () {
 
 		describe('constructor()', function () {
+
 			it('is an instance of Model', function () {
 				var myPier = new Pier(TEST_PIER_DATA);
 				expect(myPier).to.be.instanceOf(Model);
@@ -46,6 +47,7 @@ define([
 		});
 
 		describe('getDefaultMark()', function () {
+
 			it('returns the default mark when specified', function () {
 				var myPier = new Pier(Util.extend({}, TEST_PIER_DATA,
 						{'default_mark_id': 'test_mark_1'}));
@@ -56,7 +58,7 @@ define([
 			it('returns null when no default specified', function () {
 				var myPier = new Pier(TEST_PIER_DATA);
 				var defaultMark = myPier.getDefaultMark();
-				//expect(defaultMark).to.equal(null);
+
 				/* jshint expr : true */
 				expect(defaultMark).to.be.null;
 				/* jshint expr : false */

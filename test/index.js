@@ -27,7 +27,7 @@ require([
 		'spec/ObservatoryTest',
 		'spec/CollectionTest',
 		'spec/MarkTest',
-		'spec/MeasurementTest'
+		'spec/MeasurementTest',
 		'spec/PierTest'
 	], function () {
 		if (window.mochaPhantomJS) {

@@ -45,12 +45,14 @@ define([
 	 */
 	Pier.prototype.getDefaultMark = function () {
 		var marks = this.get('marks'),
-			default_mark_id = this.get('default_mark_id');
+		    default_mark_id = this.get('default_mark_id');
+
 		if (marks !== null && default_mark_id !== null) {
 			return marks.get(default_mark_id);
 		} else {
 			return null;
 		}
+
 	};
 
 
