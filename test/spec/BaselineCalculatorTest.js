@@ -777,39 +777,6 @@ define([
 		}); // END :: meanF
 
 
-		describe('absoluteD()', function () {
-
-			it('computes correctly', function () {
-				var magneticDeclination = 1.0,
-				    expected = 60.0;
-
-				expect(calc.absoluteD(magneticDeclination)).to.equal(expected);
-			});
-
-		}); // END :: absoluteD
-
-		describe('absoluteH()', function () {
-
-			it('computes correctly', function () {
-				var horizontalCompnent = 1.0,
-				    expected = 1.0;
-
-				expect(calc.absoluteH(horizontalCompnent)).to.equal(expected);
-			});
-
-		}); // END :: absoluteH
-
-		describe('absoluteZ()', function () {
-
-			it('computes correctly', function () {
-				var verticalComponent = 1.0,
-				    expected = 1.0;
-
-				expect(calc.absoluteZ(verticalComponent)).to.equal(expected);
-			});
-
-		}); // END :: absoluteZ
-
 		describe('scaleValue()', function () {
 
 			it('computes correctly', function () {
@@ -822,17 +789,6 @@ define([
 		}); // END :: scaleValue
 
 
-		describe('computedH()', function () {
-
-			it('computes correctly', function () {
-				var absoluteH = 1.0,
-				    expected = 1.0;
-
-				expect(calc.computedH(absoluteH)).to.equal(expected);
-			});
-
-		}); // END :: computedH
-
 		describe('computedE()', function () {
 
 			it('computes correctly', function () {
@@ -844,28 +800,6 @@ define([
 			});
 
 		}); // END :: computedE
-
-		describe('computedZ()', function () {
-
-			it('computes correctly', function () {
-				var absoluteZ = 1.0,
-				    expected = 1.0;
-
-				expect(calc.computedZ(absoluteZ)).to.equal(expected);
-			});
-
-		}); // END :: computedZ
-
-		describe('computedF()', function () {
-
-			it('computes correctly', function () {
-				var absoluteF = 1.0,
-				    expected = 1.0;
-
-				expect(calc.computedF(absoluteF)).to.equal(expected);
-			});
-
-		}); // END :: computedF
 
 
 		describe('baselineD()', function () {
