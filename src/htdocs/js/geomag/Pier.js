@@ -10,11 +10,12 @@ define([
 	'use strict';
 
 
-	/** Define default attributes. */
+	/** Define default attributes */
 	var DEFAULTS = {
 		'id': null,
-		'pier_name': null,
+		'name': null,
 		'begin': null,
+		'end': null,
 		'correction': null,
 		'default_mark_id': null,
 		'default_electronics_id': null,
@@ -50,7 +51,7 @@ define([
 		} else {
 			return null;
 		}
-	 };
+	};
 
 
 	// return constructor from closure
