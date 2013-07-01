@@ -28,20 +28,6 @@ define([
 		},
 
 		/**
-		 * Mean Mark
-		 *
-		 * @param markDown1 {Number} Decimal degrees
-		 * @param markUp1 {Number} Decimal degrees
-		 * @param markDown2 {Number} Decimal degrees
-		 * @param markUp2 {Number} Decimal degrees
-		 *
-		 * @return {Number} Decimal degrees
-		 */
-		meanMark: function (markDown1, markUp1, markDown2, markUp2) {
-			return this._mean(markDown1, markUp1, markDown2, markUp2);
-		},
-
-		/**
 		 * Magnetic Azimuth of the Mark
 		 *
 		 * @param meanMark {Number} Decimal degrees
