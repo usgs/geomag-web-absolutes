@@ -295,7 +295,7 @@ define([
 			it('computes correctly', function () {
 				var westUp = 1.0,
 				    eastDown = 2.0,
-				    expected = -60.0;
+				    expected = -1.0;
 
 				expect(calc.w(westUp, eastDown)).to.equal(expected);
 			});
@@ -303,25 +303,25 @@ define([
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var westUp = 90.4750,		// 90 28.5
 				    eastDown = 90.5050,	// 90 30.3
-				    expected = -1.80;		// -1.80
+				    expected = -1.80/60.0;		// -1.80
 
-				expect(calc.w(westUp, eastDown) - expected < 0.00001);
+				expect(calc.w(westUp, eastDown) - expected).to.be.below(0.00001);
 			});
 
 			it('computes correctly with data from CMO20131651602.bns', function () {
 				var westUp = 92.1722,		// 92 10 20
 				    eastDown = 92.1181,	// 92 07 05
-				    expected = 3.246;		// 3.25
+				    expected = 3.246/60.0;		// 3.25
 
-				expect(calc.w(westUp, eastDown) - expected < 0.00001);
+				expect(calc.w(westUp, eastDown) - expected).to.be.below(0.00001);
 			});
 
 			it('computes correctly with data from FRN20130311611.bns', function () {
 				var westUp = 283.0369,		// 283 02 13
 				    eastDown = 283.1375,	// 283 08 15
-				    expected = -6.036;		// -6.03
+				    expected = -6.036/60.0;		// -6.03
 
-				expect(calc.w(westUp, eastDown) - expected < 0.00001);
+				expect(calc.w(westUp, eastDown) - expected).to.be.below(0.00001);
 			});
 
 		}); // END :: w
@@ -331,7 +331,7 @@ define([
 			it('computes correctly', function () {
 				var eastUp = 1.0,
 				    westDown = 2.0,
-				    expected = -60.0;
+				    expected = -1.0;
 
 				expect(calc.w(eastUp, westDown)).to.equal(expected);
 			});
@@ -339,25 +339,25 @@ define([
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var eastUp = 270.3833,		// 270 23.0
 				    westDown = 270.3533,	// 270 21.2
-				    expected = 1.800;			// 1.80
+				    expected = 1.800/60.0;			// 1.80
 
-				expect(calc.w(eastUp, westDown) - expected < 0.00001);
+				expect(calc.w(eastUp, westDown) - expected).to.be.below(0.00001);
 			});
 
 			it('computes correctly with data from CMO20131651602.bns', function () {
 				var eastUp = 272.4400,		// 272 26 24
 				    westDown = 272.3111,	// 272 18 40
-				    expected = 7.734;			// 7.73
+				    expected = 7.734/60.0;			// 7.73
 
-				expect(calc.w(eastUp, westDown) - expected < 0.00001);
+				expect(calc.w(eastUp, westDown) - expected).to.be.below(0.00001);
 			});
 
 			it('computes correctly with data from FRN20130311611.bns', function () {
 				var eastUp = 103.0728,		// 103 04 22
 				    westDown = 103.1508,	// 103 09 03
-				    expected = -4.680;		// -4.68
+				    expected = -4.680/60.0;		// -4.68
 
-				expect(calc.w(eastUp, westDown) - expected < 0.00001);
+				expect(calc.w(eastUp, westDown) - expected).to.be.below(0.00001);
 			});
 
 		}); // END :: e
@@ -532,7 +532,7 @@ define([
 			it('computes correctly', function () {
 				var southDown = 182.0,
 				    northUp = 1.0,
-				    expected = 60.0;
+				    expected = 1.0;
 
 				expect(calc.s(southDown, northUp)).to.equal(expected);
 			});
@@ -540,25 +540,25 @@ define([
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var southDown = 246.6650,	// 246 39.9
 				    northUp = 66.6467,		// 66 38.8
-				    expected = 1.098;			// 1.10
+				    expected = 1.098/60.0;			// 1.10
 
-				expect(calc.s(southDown, northUp) - expected < 0.00001);
+				expect(calc.s(southDown, northUp) - expected).to.be.below(0.00001);
 			});
 
 			it('computes correctly with data from CMO20131651602.bns', function () {
 				var southDown = 257.2544,	// 257 15 16
 				    northUp = 77.2500,		// 77 15 00
-				    expected = 0.264;			// 0.27
+				    expected = 0.264/60.0;			// 0.27
 
-				expect(calc.s(southDown, northUp) - expected < 0.00001);
+				expect(calc.s(southDown, northUp) - expected).to.be.below(0.00001);
 			});
 
 			it('computes correctly with data from FRN20130311611.bns', function () {
 				var southDown = 241.1031,	// 241 06 11
 				    northUp = 61.0925,		// 61 05 33
-				    expected = 0.636;			// 0.63
+				    expected = 0.636/60.0;			// 0.63
 
-				expect(calc.s(southDown, northUp) - expected < 0.00001);
+				expect(calc.s(southDown, northUp) - expected).to.be.below(0.00001);
 			});
 
 		}); // END :: s
@@ -568,7 +568,7 @@ define([
 			it('computes correctly', function () {
 				var northDown = 182.0,
 				    southUp = 1.0,
-				    expected = 60.0;
+				    expected = 1.0;
 
 				expect(calc.n(northDown, southUp)).to.equal(expected);
 			});
@@ -576,25 +576,25 @@ define([
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var northDown = 293.4067,	// 293 24.4
 				    southUp = 113.3967,		// 113 23.8
-				    expected = 0.60;			// 0.60
+				    expected = 0.60/60.0;			// 0.60
 
-				expect(calc.n(northDown, southUp) - expected < 0.00001);
+				expect(calc.n(northDown, southUp) - expected).to.be.below(0.00001);
 			});
 
 			it('computes correctly with data from CMO20131651602.bns', function () {
 				var northDown = 282.6764,	// 282 40 35
 				    southUp = 102.6742,		// 102 40 27
-				    expected = 0.132;			// 0.13
+				    expected = 0.132/60.0;			// 0.13
 
-				expect(calc.n(northDown, southUp) - expected < 0.00001);
+				expect(calc.n(northDown, southUp) - expected).to.be.below(0.00001);
 			});
 
 			it('computes correctly with data from FRN20130311611.bns', function () {
 				var northDown = 298.8911,	// 298 53 28
 				    southUp = 118.8819,		// 118 52 55
-				    expected = 0.552;			// 0.55
+				    expected = 0.552/60.0;			// 0.55
 
-				expect(calc.n(northDown, southUp) - expected < 0.00001);
+				expect(calc.n(northDown, southUp) - expected).to.be.below(0.00001);
 			});
 
 		}); // END :: n
