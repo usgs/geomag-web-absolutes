@@ -42,7 +42,7 @@ define([
 	 *
 	 * @return {Mark} the default mark, or null if no default is specified.
 	 */
-	Pier.prototype.getDefaultMark = funtion () {
+	Pier.prototype.getDefaultMark = function () {
 		var marks = this.get('marks'),
 			default_mark_id = this.get('default_mark_id');
 		if (marks !== null && default_mark_id !== null) {
