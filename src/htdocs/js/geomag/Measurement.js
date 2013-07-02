@@ -30,18 +30,18 @@ define([
 	// Observatory extends Model
 	Measurement.prototype = Object.create(Model.prototype);
 
-	Measurement.FIRSTMARKUP = 'FIRSTMARKUP';
-	Measurement.FIRSTMARKDOWN = 'FIRSTMARKDOWN';
-	Measurement.WESTDOWN = 'WESTDOWN';
-	Measurement.EASTDOWN = 'EASTDOWN';
-	Measurement.WESTUP = 'WESTUP';
-	Measurement.EASTUP = 'EASTUP';
-	Measurement.SECONDMARKUP = 'SECONDMARKUP';
-	Measurement.SECONDMARKDOWN = 'SECONDMARKDOWN';
-	Measurement.SOUTHDOWN = 'SOUTHDOWN';
-	Measurement.NORTHUP = 'NORTHUP';
-	Measurement.SOUTHUP = 'SOUTHUP';
-	Measurement.NORTHDOWN = 'NORTHDOWN';
+	Measurement.FIRST_MARK_UP = 'first_mark_up';
+	Measurement.FIRST_MARK_DOWN = 'first_mark_down';
+	Measurement.WEST_DOWN = 'west_down';
+	Measurement.EAST_DOWN = 'east_down';
+	Measurement.WEST_UP = 'west_up';
+	Measurement.EAST_UP = 'east_up';
+	Measurement.SECOND_MARK_UP = 'second_mark_up';
+	Measurement.SECOND_MARK_DOWN = 'second_mark_down';
+	Measurement.SOUTH_DOWN = 'south_down';
+	Measurement.NORTH_UP = 'north_up';
+	Measurement.SOUTH_UP = 'south_up';
+	Measurement.NORTH_DOWN = 'north_down';
 
 	// return constructor from closure
 	return Measurement;

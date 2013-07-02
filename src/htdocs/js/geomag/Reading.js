@@ -44,20 +44,22 @@ define([
 	/**
 	 * Get the Measurements for this reading.
 	 *
-	 * @return a key:array of type:measurements
+	 * @return a key:array of type:[measurements]
 	 */
 	Reading.prototype.getMeasurements = function () {
 		var measurements = this.get('measurements');
 		var r = {};
 		if( measurements !== null ) {
-			var data = measurements.data();
-			var m;
+			var data = measurements.data(),
+			    m,
+			    type;
 			for( var i = 0; i < data.length; i++ ) {
 				m=data[i];
-				if( !r.hasOwnProperty(m.type)) {
-					r[m.type] =[];
+				type = m.get('type');
+				if( !r.hasOwnProperty(type)) {
+					r[type] =[];
 				}
-				r[m.type].push(m);
+				r[type].push(m);
 			}
 		}
 		return r;

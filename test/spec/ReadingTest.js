@@ -6,11 +6,39 @@ define([
 	'chai',
 	'geomag/Reading',
 	'mvc/Model',
-	'mvc/Collection'
-], function (chai, Reading, Model, Collection ) {
+	'mvc/Collection',
+	'geomag/Measurement'
+], function (chai, Reading, Model, Collection, Measurement ) {
 	'use strict';
 	var expect = chai.expect;
 
+
+	var meas1 = new Measurement({'id': 1,'type': Measurement.FIRST_MARK_UP,
+	                     'time': null,'angle':10.113});
+	var meas2 = new Measurement({'id': 2,'type': Measurement.FIRST_MARK_DOWN,
+	                     'time': null,'angle':190.105});
+	var meas3 = new Measurement({'id': 3,'type': Measurement.WEST_DOWN,
+	                     'time': null,'angle':287});
+	var meas4 = new Measurement({'id': 4,'type': Measurement.EAST_DOWN,
+	                     'time': null,'angle':99});
+	var meas5 = new Measurement({'id': 5,'type': Measurement.WEST_UP,
+	                     'time': null,'angle':101});
+	var meas6 = new Measurement({'id': 6,'type': Measurement.EAST_UP,
+	                     'time': null,'angle':286});
+	var meas7 = new Measurement({'id': 7,'type': Measurement.SECOND_MARK_UP,
+	                     'time': null,'angle':10.113});
+	var meas8 = new Measurement({'id': 8,'type': Measurement.SECOND_MARK_DOWN,
+	                     'time': null,'angle':190.105});
+	var meas9 = new Measurement({'id': 9,'type': Measurement.SOUTH_DOWN,
+	                     'time': null,'angle':238});
+	var measA = new Measurement({'id': 10,'type': Measurement.NORTH_UP,
+	                     'time': null,'angle':58});
+	var measB = new Measurement({'id': 11,'type': Measurement.SOUTH_UP,
+	                     'time': null,'angle':118});
+	var measC = new Measurement({'id': 12,'type': Measurement.NORTH_DOWN,
+	                     'time': null,'angle':297});
+	var testmeasure = new Measurement({'id': 14,'type': Measurement.NORTH_DOWN,
+	                     'time': 10,'angle':297});
 
 	var TESTOBJECT = {
 		'id': 1,
@@ -24,38 +52,25 @@ define([
 		'vertical_intensity_valid': true,
 		'observer': 'Eddie',
 		'annotation': 'This is a test',
-		'measurements': new Collection([
-			{'id': 1,'type': 'FIRSTMARKUP','time': null,'angle':10.113},
-			{'id': 2,'type': 'FIRSTMARKDOWN','time': null,'angle':190.105},
-			{'id': 3,'type': 'WESTDOWN','time': null,'angle':287},
-			{'id': 4,'type': 'EASTDOWN','time': null,'angle':99},
-			{'id': 5,'type': 'WESTUP','time': null,'angle':101},
-			{'id': 6,'type': 'EASTUP','time': null,'angle':286},
-			{'id': 7,'type': 'SECONDMARKUP','time': null,'angle':10.113},
-			{'id': 8,'type': 'SECONDMARKDOWN','time': null,'angle':190.105},
-			{'id': 9,'type': 'SOUTHDOWN','time': null,'angle':238},
-			{'id': 10,'type': 'NORTHUP','time': null,'angle':58},
-			{'id': 11,'type': 'SOUTHUP','time': null,'angle':118},
-			{'id': 12,'type': 'NORTHDOWN','time': null,'angle':297}
+		'measurements': new Collection([meas1,meas2,meas3,meas4,meas5,meas6,meas7,
+			                              meas8,meas9,measA,measB,measC
 			]),
 		'timeseries':null
 	};
 	var TESTMEASUREMENTS = {
-		FIRSTMARKUP:[{'id':1,'type':'FIRSTMARKUP','time':null,'angle':10.113}],
-		FIRSTMARKDOWN:[{'id':2,'type':'FIRSTMARKDOWN','time':null,'angle':190.105}],
-		WESTDOWN:[{'id':3,'type':'WESTDOWN','time':null,'angle':287}],
-		EASTDOWN:[{'id':4,'type':'EASTDOWN','time':null,'angle':99}],
-		WESTUP:[{'id':5,'type':'WESTUP','time':null,'angle':101}],
-		EASTUP:[{'id':6,'type':'EASTUP','time':null,'angle':286}],
-		SECONDMARKUP:[{'id':7,'type':'SECONDMARKUP','time':null,'angle':10.113}],
-		SECONDMARKDOWN:[{'id':8,'type':'SECONDMARKDOWN','time':null,
-																										'angle':190.105}],
-		SOUTHDOWN:[{'id':9,'type':'SOUTHDOWN','time':null,'angle':238}],
-		NORTHUP:[{'id':10,'type':'NORTHUP','time':null,'angle':58}],
-		SOUTHUP:[{'id':11,'type':'SOUTHUP','time':null,'angle':118}],
-		NORTHDOWN:[{'id':12,'type':'NORTHDOWN','time':null,'angle':297}]
+		first_mark_up:[meas1],
+		first_mark_down:[meas2],
+		west_down:[meas3],
+		east_down:[meas4],
+		west_up:[meas5],
+		east_up:[meas6],
+		second_mark_up:[meas7],
+		second_mark_down:[meas8],
+		south_down:[meas9],
+		north_up:[measA],
+		south_up:[measB],
+		north_down:[measC]
 	};
-	var testmeasure = {'id': 14,'type': 'NORTHDOWN','time': 10,'angle':297};
 
 
 	describe('Unit tests for the "Reading" class', function () {
