@@ -16,8 +16,10 @@ require.config({
 });
 
 require([
-	'mocha',
+	'mocha'
 ], function (mocha) {
+	'use strict';
+
 	mocha.setup('bdd');
 
 	require([
@@ -28,10 +30,11 @@ require([
 		'spec/CollectionTest',
 		'spec/MarkTest',
 		'spec/MeasurementTest',
-		'spec/PierTest'
+		'spec/PierTest',
+		'spec/BaselineCalculatorTest'
 	], function () {
 		if (window.mochaPhantomJS) {
-			mochaPhantomJS.run();
+			window.mochaPhantomJS.run();
 		} else {
 			mocha.run();
 		}
