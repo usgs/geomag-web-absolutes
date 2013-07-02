@@ -234,13 +234,13 @@ define([
 		/**
 		 * D
 		 *
-		 * @param baselineD {Number} Decimal minutes
+		 * @param baselineD {Number} Decimal degrees
 		 * @param scaleValue {Number}
 		 *
 		 * @return {Number} nT
 		 */
 		d: function (baselineD, scaleValue) {
-			return (baselineD / scaleValue);
+			return (baselineD * 60.0 / scaleValue);
 		},
 
 		// --------------------------------------------------------------
