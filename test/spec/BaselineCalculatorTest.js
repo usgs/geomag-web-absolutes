@@ -714,9 +714,36 @@ define([
 			it('computes correctly', function () {
 				var baselineD = 10.0,
 				    scaleValue = 10.0,
-				    expected = 1.0;
+				    expected = 60.0;
 
 				expect(calc.d(baselineD, scaleValue)).to.equal(expected);
+			});
+
+			it('computes correctly with data from BDT20131651602.bns', function () {
+				var baselineD = 9.494931709,	// 569.69 converted to degrees
+						scaleValue = 0.164946633,		// 0.1649
+				    expected = 3453.819528;		// 3453.78
+
+				expect(Math.abs(calc.d(baselineD,
+						scaleValue) - expected)).to.be.below(EPSILON);
+			});
+
+			it('computes correctly with data from CMO20131651602.bns', function () {
+				var baselineD = 19.51971422,	// 1171.18 converted to degrees
+						scaleValue = 0.274863402,		// 0.2749
+				    expected = 4260.963249;		// 4260.95
+
+				expect(Math.abs(calc.d(baselineD,
+						scaleValue) - expected)).to.be.below(EPSILON);
+			});
+
+			it('computes correctly with data from FRN20130311611.bns', function () {
+				var baselineD = 14.10349684,	// 846.21 converted to degrees
+						scaleValue = 0.146384584,		// 0.1464
+				    expected = 5780.730377;		// 5780.73
+
+				expect(Math.abs(calc.d(baselineD,
+						scaleValue) - expected)).to.be.below(EPSILON);
 			});
 
 		});
