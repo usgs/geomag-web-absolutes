@@ -30,6 +30,19 @@ define([
 	// Observatory extends Model
 	Measurement.prototype = Object.create(Model.prototype);
 
+	Measurement.FIRSTMARKUP = 'FIRSTMARKUP';
+	Measurement.FIRSTMARKDOWN = 'FIRSTMARKDOWN';
+	Measurement.WESTDOWN = 'WESTDOWN';
+	Measurement.EASTDOWN = 'EASTDOWN';
+	Measurement.WESTUP = 'WESTUP';
+	Measurement.EASTUP = 'EASTUP';
+	Measurement.SECONDMARKUP = 'SECONDMARKUP';
+	Measurement.SECONDMARKDOWN = 'SECONDMARKDOWN';
+	Measurement.SOUTHDOWN = 'SOUTHDOWN';
+	Measurement.NORTHUP = 'NORTHUP';
+	Measurement.SOUTHUP = 'SOUTHUP';
+	Measurement.NORTHDOWN = 'NORTHDOWN';
+
 	// return constructor from closure
 	return Measurement;
 });

@@ -2,7 +2,6 @@
 
 define([
 	'mvc/Model',
-	'mvc/Collection',
 	'mvc/Util'
 ], function(
 	Model,
@@ -28,7 +27,6 @@ define([
 		'timeseries':null
 	};
 
-
 	/**
 	 * Constructor.
 	 *
@@ -39,8 +37,31 @@ define([
 		Model.call(this, Util.extend({}, DEFAULTS, options));
 	};
 
+
 	// Reading extends Model
 	Reading.prototype = Object.create(Model.prototype);
+
+	/**
+	 * Get the Measurements for this reading.
+	 *
+	 * @return a key:array of type:measurements
+	 */
+	Reading.prototype.getMeasurements = function () {
+		var measurements = this.get('measurements');
+		var r = {};
+		if( measurements !== null ) {
+			var data = measurements.data();
+			var m;
+			for( var i = 0; i < data.length; i++ ) {
+				m=data[i];
+				if( !r.hasOwnProperty(m.type)) {
+					r[m.type] =[];
+				}
+				r[m.type].push(m);
+			}
+		}
+		return r;
+	};
 
 	// return constructor from closure
 	return Reading;
