@@ -218,7 +218,7 @@ define([
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var magneticSouthMeridian = 180.42915,	// 180.4292
 				    geographicMeridian = -188.6383,
-				    expected = 9.06745;								// 9.0675
+				    expected = 9.06745;									// 9.0675
 
 				expect(Math.abs(calc.magneticDeclination(magneticSouthMeridian,
 						geographicMeridian) - expected)).to.be.below(EPSILON);
@@ -255,18 +255,18 @@ define([
 			});
 
 			it('computes correctly with data from BDT20131651602.bns', function () {
-				var westUp = 90.4750,		// 90 28.5
-				    eastDown = 90.5050,	// 90 30.3
-				    expected = -1.80/60.0;		// -1.80
+				var westUp = 90.4750,			// 90 28.5
+				    eastDown = 90.5050,		// 90 30.3
+				    expected = -0.0300;		// -1.80 converted to degrees
 
 				expect(Math.abs(calc.w(westUp,
 						eastDown) - expected)).to.be.below(EPSILON);
 			});
 
 			it('computes correctly with data from CMO20131651602.bns', function () {
-				var westUp = 92.1722,		// 92 10 20
-				    eastDown = 92.1181,	// 92 07 05
-				    expected = 3.246/60.0;		// 3.25
+				var westUp = 92.1722,			// 92 10 20
+				    eastDown = 92.1181,		// 92 07 05
+				    expected = 0.0541;		// 3.25 converted to degrees
 
 				expect(Math.abs(calc.w(westUp,
 						eastDown) - expected)).to.be.below(EPSILON);
@@ -275,7 +275,7 @@ define([
 			it('computes correctly with data from FRN20130311611.bns', function () {
 				var westUp = 283.0369,		// 283 02 13
 				    eastDown = 283.1375,	// 283 08 15
-				    expected = -6.036/60.0;		// -6.03
+				    expected = -0.1006;		// -6.03 converted to degrees
 
 				expect(Math.abs(calc.w(westUp,
 						eastDown) - expected)).to.be.below(EPSILON);
@@ -296,7 +296,7 @@ define([
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var eastUp = 270.3833,		// 270 23.0
 				    westDown = 270.3533,	// 270 21.2
-				    expected = 1.800/60.0;			// 1.80
+				    expected = 0.0300;		// 1.80 converted to degrees
 
 				expect(Math.abs(calc.w(eastUp,
 						westDown) - expected)).to.be.below(EPSILON);
@@ -305,7 +305,7 @@ define([
 			it('computes correctly with data from CMO20131651602.bns', function () {
 				var eastUp = 272.4400,		// 272 26 24
 				    westDown = 272.3111,	// 272 18 40
-				    expected = 7.734/60.0;			// 7.73
+				    expected = 0.1289;		// 7.73 converted to degrees
 
 				expect(Math.abs(calc.w(eastUp,
 						westDown) - expected)).to.be.below(EPSILON);
@@ -314,7 +314,7 @@ define([
 			it('computes correctly with data from FRN20130311611.bns', function () {
 				var eastUp = 103.0728,		// 103 04 22
 				    westDown = 103.1508,	// 103 09 03
-				    expected = -4.680/60.0;		// -4.68
+				    expected = -0.078;		// -4.68 converted to degrees
 
 				expect(Math.abs(calc.w(eastUp,
 						westDown) - expected)).to.be.below(EPSILON);
@@ -424,7 +424,7 @@ define([
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var correctedF = 52535.51,	// 52535.51
 				    inclination = 66.62708,	// 66.6271
-				    expected = 20841.57668;		// 20841.57
+				    expected = 20841.57668;	// 20841.57
 
 				expect(Math.abs(calc.horizontalComponent(
 						correctedF, inclination) - expected)).to.be.below(EPSILON);
@@ -433,7 +433,7 @@ define([
 			it('computes correctly with data from CMO20131651602.bns', function () {
 				var correctedF = 56839.52,	// 56839.52
 				    inclination = 77.28845,	// 77.2885
-				    expected = 12507.13017;		// 12507.11
+				    expected = 12507.13017;	// 12507.11
 
 				expect(Math.abs(calc.horizontalComponent(
 						correctedF, inclination) - expected)).to.be.below(EPSILON);
@@ -442,7 +442,7 @@ define([
 			it('computes correctly with data from FRN20130311611.bns', function () {
 				var correctedF = 48602.08,	// 48602.08
 				    inclination = 61.10565,	// 61.1056
-				    expected = 23484.3331;		// 23484.35
+				    expected = 23484.3331;	// 23484.35
 
 				expect(Math.abs(calc.horizontalComponent(
 						correctedF, inclination) - expected)).to.be.below(EPSILON);
@@ -464,7 +464,7 @@ define([
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var correctedF = 52535.51,	// 52535.51
 				    inclination = 66.62708,	// 66.6271
-				    expected = 48224.56316;		// 48224.56
+				    expected = 48224.56316;	// 48224.56
 
 				expect(Math.abs(calc.verticalComponent(
 						correctedF, inclination) - expected)).to.be.below(EPSILON);
@@ -473,7 +473,7 @@ define([
 			it('computes correctly with data from CMO20131651602.bns', function () {
 				var correctedF = 56839.52,	// 56839.52
 				    inclination = 77.28845,	// 77.2885
-				    expected = 55446.39509;		// 55446.40
+				    expected = 55446.39509;	// 55446.40
 
 				expect(Math.abs(calc.verticalComponent(
 						correctedF, inclination) - expected)).to.be.below(EPSILON);
@@ -503,7 +503,7 @@ define([
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var southDown = 246.6650,	// 246 39.9
 				    northUp = 66.6467,		// 66 38.8
-				    expected = 1.098/60.0;			// 1.10
+				    expected = 0.0183;		// 1.10 converted to degrees
 
 				expect(Math.abs(calc.s(
 						southDown, northUp) - expected)).to.be.below(EPSILON);
@@ -512,7 +512,7 @@ define([
 			it('computes correctly with data from CMO20131651602.bns', function () {
 				var southDown = 257.2544,	// 257 15 16
 				    northUp = 77.2500,		// 77 15 00
-				    expected = 0.264/60.0;			// 0.27
+				    expected = 0.0044;		// 0.27 converted to degrees
 
 				expect(Math.abs(calc.s(
 						southDown, northUp) - expected)).to.be.below(EPSILON);
@@ -521,7 +521,7 @@ define([
 			it('computes correctly with data from FRN20130311611.bns', function () {
 				var southDown = 241.1031,	// 241 06 11
 				    northUp = 61.0925,		// 61 05 33
-				    expected = 0.636/60.0;			// 0.63
+				    expected = 0.0106;		// 0.63 converted to degrees
 
 				expect(Math.abs(calc.s(
 						southDown, northUp) - expected)).to.be.below(EPSILON);
@@ -542,7 +542,7 @@ define([
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var northDown = 293.4067,	// 293 24.4
 				    southUp = 113.3967,		// 113 23.8
-				    expected = 0.60/60.0;			// 0.60
+				    expected = 0.0100;		// 0.60 converted to degrees
 
 				expect(Math.abs(calc.n(
 						northDown, southUp) - expected)).to.be.below(EPSILON);
@@ -551,7 +551,7 @@ define([
 			it('computes correctly with data from CMO20131651602.bns', function () {
 				var northDown = 282.6764,	// 282 40 35
 				    southUp = 102.6742,		// 102 40 27
-				    expected = 0.132/60.0;			// 0.13
+				    expected = 0.0022;		// 0.13 converted to degrees
 
 				expect(Math.abs(calc.n(
 						northDown, southUp) - expected)).to.be.below(EPSILON);
@@ -560,7 +560,7 @@ define([
 			it('computes correctly with data from FRN20130311611.bns', function () {
 				var northDown = 298.8911,	// 298 53 28
 				    southUp = 118.8819,		// 118 52 55
-				    expected = 0.552/60.0;			// 0.55
+				    expected = 0.0092;		// 0.55 converted to degrees
 
 				expect(Math.abs(calc.n(
 						northDown, southUp) - expected)).to.be.below(EPSILON);
@@ -618,7 +618,7 @@ define([
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var meanE = -155.48,					// -155.48
 				    scaleValue = 0.164946633,	// 0.1649
-				    expected = -0.427431709;	// -25.65 / 60.0
+				    expected = -0.427431709;	// -25.65 converted to degrees
 
 				expect(Math.abs(calc.computedE(
 						meanE, scaleValue) - expected)).to.be.below(EPSILON);
@@ -627,7 +627,7 @@ define([
 			it('computes correctly with data from CMO20131651602.bns', function () {
 				var meanE = -48.66,						// -48.66
 				    scaleValue = 0.274863402,	// 0.2749
-				    expected = -0.222914219;	// -13.37 / 60.0
+				    expected = -0.222914219;	// -13.37 converted to degrees
 
 				expect(Math.abs(calc.computedE(
 						meanE, scaleValue) - expected)).to.be.below(EPSILON);
@@ -636,7 +636,7 @@ define([
 			it('computes correctly with data from FRN20130311611.bns', function () {
 				var meanE = -311.22,					// -311.22
 				    scaleValue = 0.146384584,	// 0.1464
-				    expected = -0.759296836;	// -45.56 / 60.0
+				    expected = -0.759296836;	// -45.56 converted to degrees
 
 				expect(Math.abs(calc.computedE(
 						meanE, scaleValue) - expected)).to.be.below(EPSILON);
@@ -658,8 +658,8 @@ define([
 
 			it('computes correctly with data from BDT20131651602.bns', function () {
 				var magneticDeclination = 9.0675,	// 9.0675
-				    computedE = -0.427431709,			// -25.65 in degrees now
-				    expected = 9.494931709;				// 569.69
+				    computedE = -0.427431709,			// -25.65 converted to degrees
+				    expected = 9.494931709;				// 569.69 converted to degrees
 
 				expect(Math.abs(calc.baselineD(
 						magneticDeclination, computedE) - expected)).to.be.below(EPSILON);
@@ -667,8 +667,8 @@ define([
 
 			it('computes correctly with data from CMO20131651602.bns', function () {
 				var magneticDeclination = 19.2968,	// 19.2968
-				    computedE = -0.222914219,				// -13.37 in degrees now
-				    expected = 19.51971422;					// 1171.18
+				    computedE = -0.222914219,				// -13.37 converted to degrees
+				    expected = 19.51971422;					// 1171.18 converted to degrees
 
 				expect(Math.abs(calc.baselineD(
 						magneticDeclination, computedE) - expected)).to.be.below(EPSILON);
@@ -676,8 +676,8 @@ define([
 
 			it('computes correctly with data from FRN20130311611.bns', function () {
 				var magneticDeclination = 13.3442,	// 13.3442
-				    computedE = -0.759296836,				// -45.56 in degrees now
-				    expected = 14.10349684;					// 846.21
+				    computedE = -0.759296836,				// -45.56 converted to degrees
+				    expected = 14.10349684;					// 846.21 converted to degrees
 
 				expect(Math.abs(calc.baselineD(
 						magneticDeclination, computedE) - expected)).to.be.below(EPSILON);
