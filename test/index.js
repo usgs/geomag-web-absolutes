@@ -36,7 +36,8 @@ require([
 		'spec/ObservationTest',
 		'spec/UserTest',
 		'spec/UserRoleTest',
-		'spec/ReadingTest'
+		'spec/ReadingTest',
+		'spec/TimeSeriesTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();
