@@ -33,7 +33,6 @@ require([
 		'spec/PierTest',
 		'spec/BaselineCalculatorTest',
 		'spec/InstrumentTest'
->>>>>>> Test the renamed Instrument instead.
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();
