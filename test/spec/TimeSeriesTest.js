@@ -22,51 +22,65 @@ define([
 
 	describe('Unit tests for the "TimeSeries" class', function () {
 
-		describe('getChannelHValue()', function () {
-			it('returns "h" value for correct index', function () {
-				var timeSeries = new TimeSeries(DATA);
-				expect(timeSeries.getChannelHValue(1372718591178)).to.equal(1);
-			});
 
-			it('returns null when the timeseries value does not exist', function () {
+		describe('getChannelHValue()', function () {
+			it('returns "h" value for the given index', function () {
 				var timeSeries = new TimeSeries(DATA);
-				expect(timeSeries.getChannelHValue(9999999999999)).to.equal(null);
+				expect(timeSeries.getChannelHValue(0)).to.equal(1);
 			});
 		});
 
 		describe('getChannelEValue()', function () {
-			it('returns "e" value for correct index', function () {
+			it('returns "e" value for the given index', function () {
 				var timeSeries = new TimeSeries(DATA);
-				expect(timeSeries.getChannelEValue(1372718591178)).to.equal(11);
-			});
-
-			it('returns null when the timeseries value does not exist', function () {
-				var timeSeries = new TimeSeries(DATA);
-				expect(timeSeries.getChannelEValue(9999999999999)).to.equal(null);
+				expect(timeSeries.getChannelEValue(0)).to.equal(11);
 			});
 		});
 
 		describe('getChannelZValue()', function () {
-			it('returns "z" value for correct index', function () {
+			it('returns "z" value for the given index', function () {
 				var timeSeries = new TimeSeries(DATA);
-				expect(timeSeries.getChannelZValue(1372718591178)).to.equal(111);
-			});
-
-			it('returns null when the timeseries value does not exist', function () {
-				var timeSeries = new TimeSeries(DATA);
-				expect(timeSeries.getChannelZValue(9999999999999)).to.equal(null);
+				expect(timeSeries.getChannelZValue(0)).to.equal(111);
 			});
 		});
 
 		describe('getChannelFValue()', function () {
-			it('returns "f" value for correct index', function () {
+			it('returns "f" value for the given index', function () {
 				var timeSeries = new TimeSeries(DATA);
-				expect(timeSeries.getChannelFValue(1372718591178)).to.equal(1111);
+				expect(timeSeries.getChannelFValue(0)).to.equal(1111);
+			});
+		});
+
+
+		describe('getChannelValueByTime()', function () {
+			it('returns "h" value for correct time and channel slice', function () {
+				var timeSeries = new TimeSeries(DATA);
+				expect(timeSeries.getChannelValueByTime(1372718591178, 'h')).to.equal(1);
 			});
 
-			it('returns null when the timeseries value does not exist', function () {
+			it('returns "e" value for correct time and channel slice', function () {
 				var timeSeries = new TimeSeries(DATA);
-				expect(timeSeries.getChannelFValue(9999999999999)).to.equal(null);
+				expect(timeSeries.getChannelValueByTime(1372718591178, 'e')).to.equal(11);
+			});
+
+			it('returns "z" value for correct time and channel slice', function () {
+				var timeSeries = new TimeSeries(DATA);
+				expect(timeSeries.getChannelValueByTime(1372718591178, 'z')).to.equal(111);
+			});
+
+			it('returns "f" value for correct time and channel slice', function () {
+				var timeSeries = new TimeSeries(DATA);
+				expect(timeSeries.getChannelValueByTime(1372718591178, 'f')).to.equal(1111);
+			});
+
+			it('returns null when the time value does not exist in the times series', function () {
+				var timeSeries = new TimeSeries(DATA);
+				expect(timeSeries.getChannelValueByTime(9999999999999, 'h')).to.equal(null);
+			});
+
+			it('returns null when the channel value does not exist in the time series', function () {
+				var timeSeries = new TimeSeries(DATA);
+				expect(timeSeries.getChannelValueByTime(1372718591178, 'q')).to.equal(null);
 			});
 		});
 

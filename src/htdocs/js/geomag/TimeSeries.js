@@ -14,72 +14,80 @@ define([
 		'f': null
 	};
 
-	var cache = {};
+	var _buildCache = function(time){
 
-  var _buildCache = function(time){
+		var cache = {};
 		// cache the array index for times existing in the timeseries
 		if (time !== null) {
 			for (var i = 0, len = time.length; i < len; i++) {
 				cache[time[i]] = i;
 			}
 		}
-  };
+
+		return cache;
+	};
 
 	var TimeSeries = function(options) {
+
 		// Call parent constructor
 		Model.call(this, Util.extend({}, DEFAULTS, options));
 
-		_buildCache(this.get('time'));
+		// build cache object
+		this.cache = _buildCache(this.get('time'));
 	};
 
 	TimeSeries.prototype = Object.create(Model.prototype);
 
-  TimeSeries.prototype.getChannelHValue = function(time){
+	TimeSeries.prototype.getChannelValueByTime = function(time, channel) {
 
-		var index = cache[time];
+		var index = this.cache[time];
 
 		if (typeof(index) === 'undefined') {
 			return null;
 		}
+
+		if (channel === 'h') {
+
+			return this.getChannelHValue(index);
+
+		} else if (channel === 'e') {
+
+			return this.getChannelEValue(index);
+
+		} else if (channel === 'z') {
+
+			return this.getChannelZValue(index);
+
+		} else if (channel === 'f') {
+
+			return this.getChannelFValue(index);
+
+		} else {
+
+			return null;
+
+		}
+	};
+
+	TimeSeries.prototype.getChannelHValue = function(index){
 
 		return this.get('h')[index];
-  };
+	};
 
-  TimeSeries.prototype.getChannelEValue = function(time){
-
-		var index = cache[time];
-
-		if (typeof(index) === 'undefined') {
-			return null;
-		}
+	TimeSeries.prototype.getChannelEValue = function(index){
 
 		return this.get('e')[index];
+	};
 
-  };
-
-  TimeSeries.prototype.getChannelZValue = function(time){
-
-		var index = cache[time];
-
-		if (typeof(index) === 'undefined') {
-			return null;
-		}
+	TimeSeries.prototype.getChannelZValue = function(index){
 
 		return this.get('z')[index];
+	};
 
-  };
-
-  TimeSeries.prototype.getChannelFValue = function(time){
-
-		var index = cache[time];
-
-		if (typeof(index) === 'undefined') {
-			return null;
-		}
+	TimeSeries.prototype.getChannelFValue = function(index){
 
 		return this.get('f')[index];
-
-  };
+	};
 
 
 	return TimeSeries;
