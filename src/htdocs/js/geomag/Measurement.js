@@ -3,12 +3,11 @@
 define([
 	'mvc/Model',
 	'mvc/Util'
-], function(
+], function (
 	Model,
 	Util
 ) {
 	'use strict';
-
 
 	/** Define default attributes. */
 	var DEFAULTS = {
@@ -17,11 +16,12 @@ define([
 		'time': null,
 		'angle': null
 	};
+
 	/**
-		* Constructor.
-		*
-		* @param  options {Object} observatory attributes.
-		*/
+	 * Constructor.
+	 *
+	 * @param  options {Object} observatory attributes.
+	 */
 	var Measurement	 = function (options) {
 		// Call parent constructor
 		Model.call(this, Util.extend({}, DEFAULTS, options));

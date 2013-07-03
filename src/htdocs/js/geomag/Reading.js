@@ -3,12 +3,11 @@
 define([
 	'mvc/Model',
 	'mvc/Util'
-], function(
+], function (
 	Model,
 	Util
 ) {
 	'use strict';
-
 
 	/** Define default attributes. */
 	var DEFAULTS = {
@@ -24,7 +23,7 @@ define([
 		'observer': null,
 		'annotation': null,
 		'measurements': null,
-		'timeseries':null
+		'timeseries': null
 	};
 
 	/**
@@ -37,7 +36,6 @@ define([
 		Model.call(this, Util.extend({}, DEFAULTS, options));
 	};
 
-
 	// Reading extends Model
 	Reading.prototype = Object.create(Model.prototype);
 
@@ -47,21 +45,26 @@ define([
 	 * @return a key:array of type:[measurements]
 	 */
 	Reading.prototype.getMeasurements = function () {
-		var measurements = this.get('measurements');
-		var r = {};
-		if( measurements !== null ) {
-			var data = measurements.data(),
-			    m,
-			    type;
-			for( var i = 0; i < data.length; i++ ) {
-				m=data[i];
+		var measurements = this.get('measurements'),
+		    r = {},
+		    data,
+		    m,
+		    type,
+		    i;
+
+		if (measurements !== null) {
+			data = measurements.data();
+
+			for (i = 0; i < data.length; i++) {
+				m = data[i];
 				type = m.get('type');
-				if( !r.hasOwnProperty(type)) {
-					r[type] =[];
+				if (!r.hasOwnProperty(type)) {
+					r[type] = [];
 				}
 				r[type].push(m);
 			}
 		}
+
 		return r;
 	};
 
