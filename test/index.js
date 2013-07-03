@@ -32,7 +32,8 @@ require([
 		'spec/MeasurementTest',
 		'spec/PierTest',
 		'spec/BaselineCalculatorTest',
-		'spec/InstrumentTest'
+		'spec/InstrumentTest',
+		'spec/ObservationTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();
