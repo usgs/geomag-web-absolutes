@@ -9,5 +9,7 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
+; Don't want to trim whitespace on files that use markdown
 [*.md]
 trim_trailing_whitespace = false
+trim_trailing_whitespace_on_save = false

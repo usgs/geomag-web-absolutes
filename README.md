@@ -19,8 +19,10 @@ This projects takes advantage of several tools including:
 1. You will need a terminal tool for Windows. I used [Git Bash][] to test these steps, but [Cygwin][] should work fine too.
 1. Fork into your github user account.
 1. Clone from fork (update for your fork)
-        git clone git@github.com:jmfee-usgs/geomag-baseline-calculator.git geomag-baseline-calculator
-        cd geomag-baseline-calculator
+```git
+git clone git@github.com:jmfee-usgs/geomag-baseline-calculator.git geomag-baseline-calculator
+cd geomag-baseline-calculator
+```
 1. Add upstream remote for primary
         git remote add upstream git@github.com:usgs/geomag-baseline-calculator.git
 1. Install the newest release of [Node][] for Windows, using an executable.
