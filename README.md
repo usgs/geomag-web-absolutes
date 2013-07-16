@@ -47,20 +47,20 @@ You will need to have the following tools installed in order to run this project
 [Dependency install details for Windows and Mac](readme_dependency_install.md)
 
 ### More Dependencies ###
-1. Install some packages from your terminal
-   ```git config --global url."https://".insteadOf git://```  
-   Bower:  
+Install some packages from your terminal
+
+```git config --global url."https://".insteadOf git://```  
+
+1. Use npm to install bower, grunt-cli and PHP  
    ```npm install -g bower```  
-   ```bower install```  
-   Sass (Syntactically Awesome Stylesheets):  
-   ```gem install sass```  
-   Compass:  
-   ```gem install compass```  
-   PHP:  
-   ```npm install php```  
-   Grunt:  
    ```npm install -g grunt-cli```  
-   Package dependencies:  
+   ```npm install php```  
+
+2. Use gem to install sass and compass  
+   ```gem install sass```  
+   ```gem install compass```  
+
+3. Use npm to get any missing dependencies  
    ```npm install```  
 
 ### Begin Developing ###
