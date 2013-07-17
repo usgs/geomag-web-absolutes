@@ -9,10 +9,10 @@ Getting Started
 
 ### Fork the project repository ###
 
-1. Fork the project into your github user account.
+1. Fork the project into your GitHub user account.
   1. Sign in to GitHub.
   2. Go to `https://github.com/usgs/geomag-baseline-calculator`.
-  2. Click the Fork button near the top right of the page.  
+  2. Click the **Fork** button near the top right of the page.  
 
 1. Make sure you [Add an SSH Key to GitHub](readme_dependency_install.md) for the
    computer you're working on into your GitHub account.
@@ -48,10 +48,10 @@ You will need to have the following tools installed in order to run this project
 [Dependency install details for Windows and Mac](readme_dependency_install.md)
 
 ### Secondary Dependencies ###
-Install some packages from your terminal
+Make sure you are in your `geomag-baseline-calculator` project directory.
+Install these packages from your terminal.
 
-1. Make sure you are in your `geomag-baseline-calculator` project directory.  
-   Use Node to install bower  
+1. Use Node to install bower  
    ```npm install -g bower```  
    ```bower install```  
 
@@ -59,15 +59,17 @@ Install some packages from your terminal
    ```npm install -g grunt-cli```  
    ```npm install php```  
 
-2. Use gem to install sass and compass  
+2. Use Ruby to install sass and compass  
    ```gem install sass```  
    ```gem install compass```  
 
-3. Use npm to get any missing dependencies  
+3. Use Node to get any missing dependencies  
    ```npm install```  
 
 ### Begin Developing ###
-Enter development mode: `grunt`
+Enter development mode: `grunt`  
+If grunt runs with no errors or warnings, and a test web page opens in your
+default web browser then you are ready to begin development.
 
 ---
 Files:  

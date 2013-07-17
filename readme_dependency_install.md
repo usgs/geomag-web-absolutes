@@ -16,6 +16,7 @@ Readme dependencies
   7. Click **Add SSH key**. Give it a meaningful title.
   8. Copy your SSH Key into the Key, and click **Add key**.
 
+---
 ### Windows ###
 
 1. You will need a terminal tool for Windows. I used [Git Bash][] to test these
