@@ -51,10 +51,11 @@ You will need to have the following tools installed in order to run this project
 Install some packages from your terminal
 
 1. Make sure you are in your `geomag-baseline-calculator` project directory.  
+   Use Node to install bower  
    ```npm install -g bower```  
    ```bower install```  
 
-1. Use npm to install bower, grunt-cli and PHP  
+1. Use Node to install grunt-cli and PHP  
    ```npm install -g grunt-cli```  
    ```npm install php```  
 
