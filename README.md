@@ -37,22 +37,24 @@ Getting Started
 You will need to have the following tools installed in order to run this project:
 
 1. Node
+  1. Bower
+  1. Grunt
+  1. PHP
 1. Ruby
-1. Bower
-1. Sass
-1. Compass
-1. PHP
-1. Grunt
+  1. Sass
+  1. Compass
+
 
 [Dependency install details for Windows and Mac](readme_dependency_install.md)
 
-### More Dependencies ###
+### Secondary Dependencies ###
 Install some packages from your terminal
 
-```git config --global url."https://".insteadOf git://```  
+1. Make sure you are in your `geomag-baseline-calculator` project directory.
+   ```npm install -g bower```  
+   ```bower install```  
 
 1. Use npm to install bower, grunt-cli and PHP  
-   ```npm install -g bower```  
    ```npm install -g grunt-cli```  
    ```npm install php```  
 

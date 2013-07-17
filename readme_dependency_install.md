@@ -50,6 +50,7 @@ Readme dependencies
 
 1. Close and re-open your terminal so that your new PATH is loaded.  
    Make sure to navigate back to your `geomag-baseline-calculator` project directory.
+   ```git config --global url."https://".insteadOf git://```  
 
 [Git Bash]: http://git-scm.com/download/win
 [Cygwin]: http://cygwin.com/install.html
