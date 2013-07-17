@@ -50,7 +50,7 @@ You will need to have the following tools installed in order to run this project
 ### Secondary Dependencies ###
 Install some packages from your terminal
 
-1. Make sure you are in your `geomag-baseline-calculator` project directory.
+1. Make sure you are in your `geomag-baseline-calculator` project directory.  
    ```npm install -g bower```  
    ```bower install```  
 

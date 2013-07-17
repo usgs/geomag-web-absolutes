@@ -71,10 +71,13 @@ Readme dependencies
 ```brew install git```  
 ```brew install ruby```  
 
-6. Update paths as needed in your `~/.bash_profile`:  
+4. Update paths as needed in your `~/.bash_profile`:  
 ```# brew installed binaries```  
 ```export PATH=$PATH:/usr/local/bin```  
 ```# npm installed binaries```  
 ```export PATH=$PATH:/usr/local/share/npm/bin```  
 ```# gem installed binaries```  
 ```export PATH=$PATH:/usr/local/opt/ruby/bin```  
+
+5. Close and re-open your terminal so that your new PATH is loaded.  
+   Make sure to navigate back to your `geomag-baseline-calculator` project directory.
