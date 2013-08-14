@@ -572,7 +572,7 @@ define([
 		describe('scaleValue()', function () {
 
 			it('computes correctly', function () {
-				var absoluteH = BaselineCalculator.SCALE_VALUE_COEFFIFIENT,
+				var absoluteH = BaselineCalculator.SCALE_VALUE_COEFFICIENT,
 				    expected = 1.0;
 
 				expect(calc.scaleValue(absoluteH)).to.equal(expected);

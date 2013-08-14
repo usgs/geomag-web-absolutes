@@ -5,8 +5,12 @@ define([
 ) {
 	'use strict';
 
+	var getScaleValueCoefficient = function () {
+		return 3437.7468;
+	};
+
 	var NaN = parseFloat('notanumber'),
-	    SCALE_VALUE_COEFFIFIENT = 3437.7468;
+	    SCALE_VALUE_COEFFICIENT = getScaleValueCoefficient();
 
 	var BaselineCalculator = function () {
 	};
@@ -178,7 +182,7 @@ define([
 		 * @return {Number} No units
 		 */
 		scaleValue: function (absoluteH) {
-			return (SCALE_VALUE_COEFFIFIENT / absoluteH);
+			return (SCALE_VALUE_COEFFICIENT / absoluteH);
 		},
 
 
@@ -292,7 +296,7 @@ define([
 
 
 	// Expose some static values
-	BaselineCalculator.SCALE_VALUE_COEFFIFIENT = SCALE_VALUE_COEFFIFIENT;
+	BaselineCalculator.SCALE_VALUE_COEFFICIENT = SCALE_VALUE_COEFFICIENT;
 
 	return BaselineCalculator;
 });
