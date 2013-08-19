@@ -26,6 +26,7 @@ require([
 		'spec/GreeterTest',
 		'spec/mvc/EventsTest',
 		'spec/mvc/ModelTest',
+		'spec/mvc/ViewTest',
 		'spec/mvc/CollectionTest',
 		'spec/ObservatoryTest',
 		'spec/MarkTest',
