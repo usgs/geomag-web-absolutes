@@ -24,10 +24,10 @@ require([
 
 	require([
 		'spec/GreeterTest',
-		'spec/EventsTest',
-		'spec/ModelTest',
+		'spec/mvc/EventsTest',
+		'spec/mvc/ModelTest',
+		'spec/mvc/CollectionTest',
 		'spec/ObservatoryTest',
-		'spec/CollectionTest',
 		'spec/MarkTest',
 		'spec/MeasurementTest',
 		'spec/PierTest',
