@@ -82,8 +82,8 @@ CREATE TABLE [reading] (
 CONSTRAINT reading_uniq UNIQUE (observation_id, set_number) ON CONFLICT ABORT,
 FOREIGN KEY(observation_id) REFERENCES observation(id),
 FOREIGN KEY(mark_id) REFERENCES mark(id),
-FOREIGN KEY(electronics_id) REFERENCES instruments(id),
-FOREIGN KEY(theodolite_id) REFERENCES instruments(id)
+FOREIGN KEY(electronics_id) REFERENCES instrument(id),
+FOREIGN KEY(theodolite_id) REFERENCES instrument(id)
 );
 
 CREATE TABLE [measurement] (
