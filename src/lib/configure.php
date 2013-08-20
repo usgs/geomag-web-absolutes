@@ -23,7 +23,7 @@
 		 * @return {String}
 		 *      The configured value for the requested option.
 		 */
-		function configure ($option, $default='', $comment='', $secure=false,
+		function configure ($option, $default=null, $comment='', $secure=false,
 				$unknown=false) {
 			// check if windows
 			static $isWindows = null;
@@ -42,17 +42,18 @@
 			}
 
 			// Make sure we have good values for I/O.
-			if ($default == null) { $default = '<none>'; }
-			$help = ($comment !== null && $comment != '') ? $comment : $option;
+			$help = ($comment !== null && $comment !== '') ? $comment : $option;
 
 			// Prompt for and read the configuration option value
-			printf("%s [%s]: ", $help, $default);
+			printf("%s [%s]: ", $help, ($default === null ? '<none>' : $default));
 			if ($secure && !$isWindows) {system('stty -echo');}
 			$value = trim(fgets(STDIN));
 			if ($secure && !$isWindows) {system('stty echo'); print "\n";}
 
 			// Check the input
-			if ($value == '' && $default != '<none>') { $value = $default; }
+			if ($value === '' && $default !== null) {
+				$value = $default;
+			}
 
 			// Always return the value
 			return $value;
