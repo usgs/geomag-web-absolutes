@@ -47,13 +47,3 @@ file_put_contents($APACHE_CONFIG_FILE, '
 ');
 
 
-// setup database
-
-$dbpath = $CONFIG['DATA_DIR'] . DIRECTORY_SEPARATOR . $CONFIG['SQLITE_DB'];
-if (!file_exists($dbpath)) {
-	$dbtemplate = implode(DIRECTORY_SEPARATOR,
-			array($LIB_DIR, "sql", "sqlite", "testdata.db"));
-
-	echo 'Creating sqlite database in ' . $dbpath . "\n";
-	copy($dbtemplate, $dbpath);
-}
