@@ -4,4 +4,6 @@ dist
 .tmp
 .sass-cache
 bower_components
-geomag-baseline-calculator.sublime-workspace
+geomag-baseline-calculator.sublime-workspace'
+src/conf/config.ini
+src/conf/httpd.conf
