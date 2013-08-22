@@ -43,7 +43,7 @@
 			// Prompt for and read the configuration option value
 			printf("%s [%s]: ", $help, ($default === null ? '<none>' : $default));
 			if ($secure && !$isWindows) {system('stty -echo');}
-			$value = trim(readline());
+			$value = trim(fgets(STDIN));
 			if ($secure && !$isWindows) {system('stty echo'); print "\n";}
 
 			// Check the input
@@ -70,7 +70,7 @@
 		print "   [2] Interactively re-configure using current configuration as defaults.\n";
 		print "   [3] Interactively re-configure using default configuration as defaults.\n";
 		print 'Enter the number corresponding to the action you would like to take: ';
-		$configure_action = trim(readline());
+		$configure_action = trim(fgets(STDIN));
 		print "\n";
 	}
 
