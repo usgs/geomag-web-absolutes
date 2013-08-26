@@ -12,13 +12,32 @@ $MOUNT_PATH = $CONFIG['MOUNT_PATH'];
 
 
 $dburl = 'sqlite:' . $DATA_DIR . DIRECTORY_SEPARATOR . $CONFIG['SQLITE_DB'];
-$dbschema = '../lib/sql/sqlite/create_tables.sql';
+$dbschema = $DATA_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 
+		DIRECTORY_SEPARATOR . 'sql' . DIRECTORY_SEPARATOR . 'sqlite' . 
+		DIRECTORY_SEPARATOR . 'create_tables.sql';
 
+// PHP Classes
+include_once $DATA_DIR . DIRECTORY_SEPARATOR .'lib' . DIRECTORY_SEPARATOR . 
+		'classes' . DIRECTORY_SEPARATOR . 'Instrument.class.php';
+include_once $DATA_DIR . DIRECTORY_SEPARATOR .'lib' . DIRECTORY_SEPARATOR . 
+		'classes' . DIRECTORY_SEPARATOR .  'Mark.class.php';
+include_once $DATA_DIR . DIRECTORY_SEPARATOR .'lib' . DIRECTORY_SEPARATOR . 
+		'classes' . DIRECTORY_SEPARATOR . 'Observatory.class.php';
+include_once $DATA_DIR . DIRECTORY_SEPARATOR .'lib' . DIRECTORY_SEPARATOR . 
+		'classes' . DIRECTORY_SEPARATOR . 'Observation.class.php';
+include_once $DATA_DIR . DIRECTORY_SEPARATOR .'lib' . DIRECTORY_SEPARATOR . 
+		'classes' . DIRECTORY_SEPARATOR . 'ObservatoryDetail.class.php';
+include_once $DATA_DIR . DIRECTORY_SEPARATOR .'lib' . DIRECTORY_SEPARATOR . 
+		'classes' . DIRECTORY_SEPARATOR . 'ObservatoryFactory.class.php';
+include_once $DATA_DIR . DIRECTORY_SEPARATOR .'lib' . DIRECTORY_SEPARATOR . 
+		'classes' . DIRECTORY_SEPARATOR . 'Pier.class.php';
 
 // connect to database
 $DB = new PDO($dburl);
 // use php exceptions for query problems
 $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$OBSERVATORY_FACTORY = new ObservatoryFactory($DB);
 
 // verify database has schema
 try {
@@ -27,4 +46,4 @@ try {
 	// database doesn't have schema, load
 	$DB->exec(file_get_contents($dbschema));
 }
-
+?>
