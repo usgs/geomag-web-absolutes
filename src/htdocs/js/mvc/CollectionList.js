@@ -74,6 +74,12 @@ define([
 
 		// render first time
 		this.render();
+
+		// apply existing selection
+		var selected = this.collection.getSelected();
+		if (selected !== null) {
+			this._onSelect(selected);
+		}
 	};
 
 	/**
