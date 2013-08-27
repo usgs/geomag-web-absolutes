@@ -17,7 +17,8 @@ define([
 		format: function(model) {
 			return model.id;
 		},
-		clickToSelect: true
+		clickToSelect: true,
+		clickToDeselect: true
 	};
 
 
@@ -37,6 +38,9 @@ define([
 	 * @param options.clickToSelect {Boolean} default true.  When user clicks on
 	 *                              a list item, select the corresponding model
 	 *                              in the collection.
+	 * @param options.clickToDeselect {Boolean} default true.  When user clicks on
+	 *                                a selected list item, deselect the
+	 *                                corresponding model in the collection.
 	 */
 	var CollectionList = function(options) {
 		options = Util.extend({}, DEFAULTS, options);
@@ -108,7 +112,17 @@ define([
 		var item = Util.getParentNode(e.target, 'LI', this.el);
 		if (item !== null) {
 			var index = parseInt(item.getAttribute('id').replace(this.prefix, ''), 10);
-			this.collection.select(this.collection.data()[index]);
+			var toselect = this.collection.data()[index];
+
+			if (this.options.clickToDeselect) {
+				var selected = this.collection.getSelected();
+				if (selected === toselect) {
+					this.collection.deselect();
+					return;
+				}
+			}
+
+			this.collection.select(toselect);
 		}
 	};
 
