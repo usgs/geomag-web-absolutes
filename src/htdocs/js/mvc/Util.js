@@ -1,5 +1,4 @@
 /*global define*/
-
 define([], function () {
 	'use strict';
 
@@ -298,6 +297,20 @@ define([], function () {
 				}
 			}
 			return false;
+		},
+
+		/**
+		 * Bind a function so it is always called with a specific context.
+		 *
+		 * @param  func {Function} the function being bound to a specific context.
+		 * @param  context {Object} the context that will be "this" when the
+		 *                 returnned function is called.
+		 * @return {Function} with "this" bound to context.
+		 */
+		'bind': function(func, context) {
+			return function() {
+				func.apply(context, arguments);
+			};
 		}
 
 	};
