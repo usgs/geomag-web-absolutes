@@ -55,8 +55,7 @@ define([
 	/**
 	 * Initialize the list.
 	 *
-	 * @param  {[type]} options [description]
-	 * @return {[type]}         [description]
+	 * @param options {Object} same as constructor.
 	 */
 	CollectionList.prototype.initialize = function(options) {
 		this.options = options;
@@ -67,6 +66,8 @@ define([
 
 		// when collection updates, update view
 		this.collection.on('reset', this.render, this);
+		this.collection.on('add', this.render, this);
+		this.collection.on('remove', this.render, this);
 		this.collection.on('select', this._onSelect, this);
 		this.collection.on('deselect', this._onDeselect, this);
 
