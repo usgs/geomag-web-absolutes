@@ -5,8 +5,6 @@ class ObservatoryFactory {
 	private $db;
 
 	// the object's class name, database table and ID parameter
-	const SUMMARY_OBJECT_CLASS = 'Observatory';
-	const DETAIL_OBJECT_CLASS = 'ObservatoryDetail';
 	const TABLE = 'observatory';
 	const OBJECT_ID = 'ID';
 	const SORT = 'name';
@@ -15,46 +13,46 @@ class ObservatoryFactory {
 	//		- assumes an integer ID as the first parameter
 	//		- in order as they appear in the object's constructor
 	var $VALUES = array(
-		array (
-			'name' => 'code',
-			'type' => PDO::PARAM_STR
-		),
-		array (
-			'name' => 'name',
-			'type' => PDO::PARAM_STR
-		),
-		array (
-			'name' => 'default_pier_id',
-			'type' => PDO::PARAM_INT
-		),
-		array (
-			'name' => 'location',
-			'type' => PDO::PARAM_STR
-		),
-		array (
-			'name' => 'latitude',
-			'type' => PDO::PARAM_INT
-		),
-		array (
-			'name' => 'longitude',
-			'type' => PDO::PARAM_INT
-		),
-		array (
-			'name' => 'geomagnetic_latitude',
-			'type' => PDO::PARAM_INT
-		),
-		array (
-			'name' => 'geomagnetic_longitude',
-			'type' => PDO::PARAM_INT
-		),
-		array (
-			'name' => 'elevation',
-			'type' => PDO::PARAM_INT
-		),
-		array (
-			'name' => 'orientation',
-			'type' => PDO::PARAM_STR
-		)
+			array(
+					'name' => 'code',
+					'type' => PDO::PARAM_STR
+			),
+			array(
+					'name' => 'name',
+					'type' => PDO::PARAM_STR
+			),
+			array(
+					'name' => 'default_pier_id',
+					'type' => PDO::PARAM_INT
+			),
+			array(
+					'name' => 'location',
+					'type' => PDO::PARAM_STR
+			),
+			array(
+					'name' => 'latitude',
+					'type' => PDO::PARAM_INT
+			),
+			array(
+					'name' => 'longitude',
+					'type' => PDO::PARAM_INT
+			),
+			array(
+					'name' => 'geomagnetic_latitude',
+					'type' => PDO::PARAM_INT
+			),
+			array(
+					'name' => 'geomagnetic_longitude',
+					'type' => PDO::PARAM_INT
+			),
+			array(
+					'name' => 'elevation',
+					'type' => PDO::PARAM_INT
+			),
+			array(
+					'name' => 'orientation',
+					'type' => PDO::PARAM_STR
+			)
 	);
 	
 	/**
@@ -66,11 +64,9 @@ class ObservatoryFactory {
 	 * @return {String}
 	 *		A comma sepparated list of every object parameter
 	 */
-	private function getNames($prefix = '') {
-		$callback = create_function(
-				'$str',
-				'return "' . $prefix . '".$str["name"];'
-		);
+	private function getNames ($prefix = '') {
+		$callback = create_function('$str',
+				'return "' . $prefix . '".$str["name"];');
 		return implode(', ', array_map($callback, $this->VALUES));
 	}
 		
@@ -94,9 +90,7 @@ class ObservatoryFactory {
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
 	public function getObservatories () {
-	
 		$objects = array();
-
 		$statement = $this->db->prepare(
 				'SELECT ' .
 				   self::OBJECT_ID . ', ' .
@@ -107,13 +101,13 @@ class ObservatoryFactory {
 				   self::SORT . ' asc'
 		);
 		if ($statement->execute()) {
-			$reflect = new ReflectionClass(self::SUMMARY_OBJECT_CLASS);
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-				$vars = array($row['ID']);
+				$vars = array('id' => $row['ID']);
 				foreach ($this -> VALUES as $value) {
-					$vars[] = $row[$value['name']];
+					$vars[$this->toCamelCase($value['name'])] = 
+							$row[$value['name']];
 				}
-				$objects[] = $reflect -> newInstanceArgs($vars);
+				$objects[] = Observatory::fromArray($vars);
 			}
 		} else {
 			$this->triggerError($statement);
@@ -136,9 +130,7 @@ class ObservatoryFactory {
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
 	public function getObservatory ($id) {
-	
 		$observatory = null;
-
 		$statement = $this->db->prepare(
 				'SELECT ' .
 				   self::OBJECT_ID . ', ' .
@@ -151,21 +143,21 @@ class ObservatoryFactory {
 		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 
 		if ($statement->execute()) {
-			$reflect = new ReflectionClass(self::DETAIL_OBJECT_CLASS);
 			$row = $statement->fetch(PDO::FETCH_ASSOC);
 			if($row) {
 				$instruments = $this->getInstruments($id);
 				$observations = $this->getObservations($id);
 				$piers = $this->getPiers($id);
 
-				$vars = array($id);
+				$vars = array('id' => $id);
 				foreach ($this -> VALUES as $value) {
-					$vars[] = $row[$value['name']];
+					$vars[$this->toCamelCase($value['name'])] = 
+							$row[$value['name']];
 				}
-				$vars[] = $instruments;
-				$vars[] = $observations;
-				$vars[] = $piers;
-				$observatory = $reflect -> newInstanceArgs($vars);
+				$observatory = ObservatoryDetail::fromArray($vars);
+				$observatory->instruments = $instruments;
+				$observatory->observations = $observations;
+				$observatory->piers = $piers;
 			}
 		} else {
 			$this->triggerError($statement);
@@ -188,7 +180,6 @@ class ObservatoryFactory {
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
 	private function getInstruments ($id) {
-	
 		$instruments = array();
 		$statement = $this->db->prepare(
 				'SELECT * FROM instrument WHERE observatory_id = :id');
@@ -200,7 +191,7 @@ class ObservatoryFactory {
 						$row['observatory_id'], $row['serial_number'], 
 						$row['begin'], $row['end'], $row['name'], 
 						$row['type']);
-				$instruments[$row['ID']] = $instrument;
+				$instruments[] = $instrument;
 			}
 		} else {
 			$this->triggerError($statement);
@@ -222,8 +213,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	private function getObservations ($id) {
-	
+	public function getObservations ($id) {
 		$observations = array();
 		$statement = $this->db->prepare(
 				'SELECT * FROM observation  WHERE observatory_id = :id');
@@ -233,8 +223,12 @@ class ObservatoryFactory {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$observation = new Observation($row['ID'], 
 						$row['observatory_id'], $row['begin'], $row['end'], 
+						$row['reviewer_user_id'], $row['mark_id'], 
+						$row['electronics_id'], $row['theodolite_id'], 
+						$row['pier_temperature'], $row['elect_temperature'], 
+						$row['flux_temperature'], $row['proton_temperature'], 
 						$row['annotation']);
-				$observations[$row['ID']] = $observation;
+				$observations[] = $observation;
 			}
 		} else {
 			$this->triggerError($statement);
@@ -255,8 +249,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	private function getPiers ($id) {
-	
+	public function getPiers ($id) {
 		$piers = array();
 		$statement = $this->db->prepare(
 				'SELECT * FROM pier  WHERE observatory_id = :id');
@@ -270,7 +263,7 @@ class ObservatoryFactory {
 						$row['correction'], $row['default_mark_id'], 
 						$row['default_electronics_id'], 
 						$row['default_theodolite_id'], $marks);
-				$piers[$row['ID']] = $pier;
+				$piers[] = $pier;
 			}
 		} else {
 			$this->triggerError($statement);
@@ -291,8 +284,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	private function getMarks ($id) {
-	
+	public function getMarks ($id) {
 		$marks = array();
 		$statement = $this->db->prepare(
 				'SELECT * FROM mark WHERE pier_id = :id');
@@ -313,6 +305,12 @@ class ObservatoryFactory {
 		return $marks;
 	}
 	
+	private function toCamelCase ($string) {
+		$str = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
+        $str[0] = strtolower($str[0]);
+	    return $str;
+	}
+
 	private function triggerError (&$statement) {
 		$error = $statement->errorInfo();
 		$statement->closeCursor();
@@ -326,3 +324,4 @@ class ObservatoryFactory {
 	}
 }
 ?>
+

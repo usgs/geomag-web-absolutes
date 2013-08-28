@@ -19,7 +19,7 @@
 		}
 	}
 
-	include_once '../../conf/config.inc.php';
+	include_once '../../../src/conf/config.inc.php';
 
 	try {
 		// ----- Tests ----- //
@@ -35,12 +35,12 @@
 		notify('Get observations', $observatory->observations != null, true);
 		notify('Get piers', count($observatory->piers) > 0, true);
 		notify('Get marks', count(reset($observatory->piers)->marks) > 0, true);
-		
+
 		// Get a non-existent observatory
 		$observatory = $OBSERVATORY_FACTORY->getObservatory(-1);
 		notify('Get single observatory', null, $observatory);
-		
 	} catch (Exception $e) {
 		print $e->getMessage() . "\n";
 	}
 ?>
+

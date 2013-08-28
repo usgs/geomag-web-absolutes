@@ -13,8 +13,8 @@ class Mark {
 	public $end;
 	public $azimuth;
 	
-	public function __construct($id=null, $pierId=null, $name=null, 
-			                    $begin=null, $end=null, $azimuth=null) { 
+	public function __construct ($id=null, $pierId=null, $name=null, 
+				                 $begin=null, $end=null, $azimuth=null) { 
 		$this->id = $id;
 		$this->pierId = $pierId;
 		$this->name = $name;
@@ -23,21 +23,16 @@ class Mark {
 		$this->azimuth = $azimuth;
 	}
 	
-	public static function fromArray(&$p) {
-		
-		return new Mark ($p['id'], $p['pierId'], $p['name'], $p['begin'], 
-				         $p['end'], $p['azimuth']);
+	public static function fromArray (&$p) {
+		return new Mark($p['id'], $p['pierId'], $p['name'], $p['begin'], 
+					    $p['end'], $p['azimuth']);
 	}
 	
-	public function toArray() {
-		return array ('id' => $this->id, 
-				      'pierId' => $this->pierId,
-				      'name' => $this->name, 'begin' => $this->begin, 
-				      'end' => $this->end, 'azimuth' => $this->azimuth); 
+	public function toArray () {
+		return array('id' => $this->id, 
+					 'pierId' => $this->pierId,
+					 'name' => $this->name, 'begin' => $this->begin, 
+					 'end' => $this->end, 'azimuth' => $this->azimuth); 
 	}
-	
-	
 }
-
-
 ?>
