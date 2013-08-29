@@ -38,7 +38,8 @@ require([
 		'spec/UserTest',
 		'spec/UserRoleTest',
 		'spec/ReadingTest',
-		'spec/TimeSeriesTest'
+		'spec/TimeSeriesTest',
+		'spec/DeclinationViewTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();
