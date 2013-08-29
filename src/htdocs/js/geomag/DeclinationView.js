@@ -26,6 +26,7 @@ define([
 	DeclinationView.prototype.initialize = function (options) {
 		this._options = options;
 
+		// view template
 		this.el.innerHTML = [
 			'<dl>',
 				'<dt>Magnetic South Meridian</dt>',
@@ -50,6 +51,20 @@ define([
 				'<dd class="correctedF"></dd>',
 			'</dl>'
 		].join('');
+
+		// save references to elements that will be updated during render
+		this._magneticSouthMeridian = this.el.querySelector(
+				'.magneticSouthMeridian');
+		this._meanMark = this.el.querySelector('.meanMark');
+		this._magneticAzimuthOfMark = this.el.querySelector(
+				'.magneticAzimuthOfMark');
+		this._trueAzimuthOfMark = this.el.querySelector('.trueAzimuthOfMark');
+		this._magneticDeclination = this.el.querySelector('.magneticDeclination');
+		this._westUpMinusEastDown = this.el.querySelector('.westUpMinusEastDown');
+		this._eastUpMinusWestDown = this.el.querySelector('.eastUpMinusWestDown');
+		this._fMean = this.el.querySelector('.fMean');
+		this._pierCorrection = this.el.querySelector('.pierCorrection');
+		this._correctedF = this.el.querySelector('.correctedF');
 	};
 
 	// return constructor
