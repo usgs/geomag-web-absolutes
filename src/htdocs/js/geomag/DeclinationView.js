@@ -9,7 +9,8 @@ define([
 	'use strict';
 
 	var DEFAULT_OPTIONS = {
-		'baselineCalculator': null
+		'baselineCalculator': null,
+		'reading': null
 	};
 
 	var DeclinationView = function (options) {
@@ -65,6 +66,12 @@ define([
 		this._fMean = this.el.querySelector('.fMean');
 		this._pierCorrection = this.el.querySelector('.pierCorrection');
 		this._correctedF = this.el.querySelector('.correctedF');
+
+		// when reading changes render view
+		this._options.reading.on('change', this.render, this);
+
+		// render current reading
+		this.render();
 	};
 
 	// return constructor
