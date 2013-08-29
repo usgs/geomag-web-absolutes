@@ -8,7 +8,7 @@ header('Content-Type: application/json');
 try {
 	// 09/04/12 -- EMM: This exception is for testing client-side error handling.
 	//                  Remove it for production.
-    // throw new Exception('foo');
+	// throw new Exception('foo');
 
 	echo str_replace('\"', '"', json_encode($OBSERVATORY_FACTORY->
 			getObservatories()));
