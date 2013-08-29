@@ -44,7 +44,7 @@ define([
 
 		// view template
 		this.el.innerHTML = [
-			'<dl>',
+			'<dl class="tabular">',
 				'<dt>Magnetic South Meridian</dt>',
 				'<dd class="magneticSouthMeridian"></dd>',
 				'<dt>Mean Mark</dt>',
@@ -55,9 +55,17 @@ define([
 				'<dd class="trueAzimuthOfMark"></dd>',
 				'<dt>Magnetic Declination</dt>',
 				'<dd class="magneticDeclination"></dd>',
-				'<dt>(WU - ED) * 60</dt>',
+				'<dt>',
+					'(<abbr title="West Up">WU</abbr> - ',
+					'<abbr title="East Down">ED</abbr>)',
+					' * 60',
+				'</dt>',
 				'<dd class="westUpMinusEastDown"></dd>',
-				'<dt>(EU - WD) * 60</dt>',
+				'<dt>',
+					'(<abbr title="East Up">EU</abbr> - ',
+					'<abbr title="West Down">WD</abbr>)',
+					' * 60',
+				'</dt>',
 				'<dd class="eastUpMinusWestDown"></dd>',
 				'<dt>F mean</dt>',
 				'<dd class="fMean"></dd>',
