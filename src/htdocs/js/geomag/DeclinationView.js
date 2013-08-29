@@ -8,11 +8,22 @@ define([
 ){
 	'use strict';
 
+	// default options
 	var DEFAULT_OPTIONS = {
 		'baselineCalculator': null,
 		'reading': null
 	};
 
+	/**
+	 * Construct a new DeclinationView.
+	 *
+	 * @param option {Object}
+	 *        view options.
+	 * @param option.baselineCalculator {geomag.ObservationBaselineCalculator}
+	 *        the calculator to use.
+	 * @param option.reading {geomag.Reading}
+	 *        the reading to display.
+	 */
 	var DeclinationView = function (options) {
 		options = Util.extend({}, DEFAULT_OPTIONS, options);
 
@@ -24,6 +35,10 @@ define([
 	DeclinationView.prototype = Object.create(View.prototype);
 
 
+	/**
+	 * Initialize view, and call render.
+	 * @param options {Object} same as constructor.
+	 */
 	DeclinationView.prototype.initialize = function (options) {
 		this._options = options;
 
@@ -73,6 +88,31 @@ define([
 		// render current reading
 		this.render();
 	};
+
+	/**
+	 * Update view based on current reading values.
+	 */
+	DeclinationView.prototype.render = function () {
+		var calculator = this._options.baselineCalculator,
+		    reading = this._options.reading;
+
+		this._magneticSouthMeridian.innerHTML =
+				calculator.magneticSouthMeridian(reading);
+		this._meanMark.innerHTML = calculator.meanMark(reading);
+		this._magneticAzimuthOfMark.innerHTML =
+				calculator.magneticAzimuthMark(reading);
+		this._trueAzimuthOfMark.innerHTML = calculator.trueAzimuthOfMark(reading);
+		this._magneticDeclination.innerHTML =
+				calculator.magneticDeclination(reading);
+		this._westUpMinusEastDown.innerHTML =
+				calculator.westUpMinusEastDown(reading);
+		this._eastUpMinusWestDown.innerHTML =
+				calculator.eastUpMinusWestDown(reading);
+		this._fMean.innerHTML = calculator.fMean(reading);
+		this._pierCorrection.innerHTML = calculator.pierCorrection(reading);
+		this._correctedF.innerHTML = calculator.correctedF(reading);
+	};
+
 
 	// return constructor
 	return DeclinationView;
