@@ -174,15 +174,16 @@ define([
 		urlEncode: function (obj) {
 			var data = [];
 			for (var key in obj) {
-				var value = obj[key];
+				var encodedKey = encodeURIComponent(key),
+				    value = obj[key];
+
 				if (value instanceof Array) {
 					// Add each value in array seperately
-					for (var i=0, len=value.length; i<len; i++) {
-						data.push(encodeURIComponent(key) + '=' +
-								encodeURIComponent(value[i]));
+					for (var i = 0, len = value.length; i < len; i++) {
+						data.push(encodedKey + '=' + encodeURIComponent(value[i]));
 					}
 				} else {
-					data.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+					data.push(encodedKey + '=' + encodeURIComponent(value));
 				}
 			}
 			return data.join('&');
