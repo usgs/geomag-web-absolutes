@@ -1,4 +1,5 @@
 /*global define*/
+/*global window*/
 define([
 	'mvc/Util'
 ], function(
