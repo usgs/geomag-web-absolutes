@@ -2,7 +2,7 @@
 /*global window*/
 define([
 	'mvc/Util'
-], function(
+], function (
 	Util
 ) {
 	'use strict';
@@ -43,7 +43,7 @@ define([
 		 * @param options.callbackName {String} optional
 		 * @param options.callbackParameter {String} default is 'callback'
 		 */
-		jsonp: function(options) {
+		jsonp: function (options) {
 			options = Util.extend({}, DEFAULT_JSONP_OPTIONS, options);
 
 			var url = options.url,
@@ -78,7 +78,7 @@ define([
 			};
 
 			// called after error loading script
-			var onError = function() {
+			var onError = function () {
 				onLoad();
 				// call error callback
 				if (options.error !== null) {
@@ -109,7 +109,7 @@ define([
 		 *                        when options.data is null.  Content-type header
 		 *                        must also be specified.  Default is null.
 		 */
-		ajax: function(options) {
+		ajax: function (options) {
 			options = Util.extend({}, DEFAULT_AJAX_OPTIONS, options);
 
 			var url = options.url;
@@ -132,7 +132,7 @@ define([
 			var xhr = new XMLHttpRequest();
 
 			// setup callback
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						if (options.success !== null) {
@@ -171,7 +171,7 @@ define([
 		 * @param obj {Object} object to encode.
 		 * @return {String} url encoded object.
 		 */
-		urlEncode: function(obj) {
+		urlEncode: function (obj) {
 			var data = [];
 			for (var key in obj) {
 				var value = obj[key];
@@ -193,7 +193,7 @@ define([
 		 *
 		 * @return a unique callback name.
 		 */
-		getCallbackName: function() {
+		getCallbackName: function () {
 			return '_xhr_callback_' + new Date().getTime();
 		}
 
