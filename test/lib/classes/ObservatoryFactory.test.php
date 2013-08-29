@@ -7,7 +7,7 @@
 
 	if (!function_exists('notify')) {
 		function notify ($testName, $expectation, $actual) {
-			$passed = ($expectation === $actual);
+			$passed = ($expectation == $actual);
 
 			printf("[%s] Running test '%s' %s\n",
 				$passed ? 'Passed' : 'Failed',
@@ -31,14 +31,14 @@
 		// Get a single observatory
 		$observatory = $OBSERVATORY_FACTORY->getObservatory(1);
 		notify('Get single observatory', 1, $observatory->id);
-		notify('Get instruments', count($observatory->instruments) > 0, true);
-		notify('Get observations', $observatory->observations != null, true);
-		notify('Get piers', count($observatory->piers) > 0, true);
-		notify('Get marks', count(reset($observatory->piers)->marks) > 0, true);
+		notify('Get instruments', true, count($observatory->instruments) > 0);
+		notify('Get observations', true, $observatory->observations != null);
+		notify('Get piers', true, count($observatory->piers) > 0);
+		notify('Get marks', true, count(reset($observatory->piers)->marks) > 0);
 
 		// Get a non-existent observatory
 		$observatory = $OBSERVATORY_FACTORY->getObservatory(-1);
-		notify('Get single observatory', null, $observatory);
+		notify('Get non-exsitent single observatory', null, $observatory);
 	} catch (Exception $e) {
 		print $e->getMessage() . "\n";
 	}

@@ -12,11 +12,12 @@ $MOUNT_PATH = $CONFIG['MOUNT_PATH'];
 
 
 $dburl = 'sqlite:' . $DATA_DIR . DIRECTORY_SEPARATOR . $CONFIG['SQLITE_DB'];
-$dbschema = $DATA_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 
-		'sql' . DIRECTORY_SEPARATOR . 'sqlite' . DIRECTORY_SEPARATOR . 
+$dbschema = $DATA_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR .
+		'sql' . DIRECTORY_SEPARATOR . 'sqlite' . DIRECTORY_SEPARATOR .
 		'create_tables.sql';
 
-include_once 'lib.inc.php';
+include_once $APP_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR .
+		'lib.inc.php';
 
 // connect to database
 $DB = new PDO($dburl);
