@@ -5,7 +5,7 @@ define([
 ], function (
 	Util,
 	View
-){
+) {
 	'use strict';
 
 	// default options
