@@ -24,7 +24,6 @@ define([
 		'success': null,
 		'error': null,
 		'method': 'GET',
-		'async': true,
 		'headers': null,
 		'data': null,
 		'rawdata': null
@@ -101,7 +100,6 @@ define([
 		 * @param options.success {Function} called with data loaded by script.
 		 * @param options.error {Function} optional, called when script fails to load.
 		 * @param options.method {String} request method, default is 'GET'.
-		 * @param options.async {Boolean} request asynchronously, default is true.
 		 * @param options.headers {Object} request header name as key, value as value.
 		 * @param options.data {Object} request data, sent using content type
 		 *                     'application/x-www-form-urlencoded'.
@@ -152,7 +150,7 @@ define([
 			};
 
 			// open request
-			xhr.open(options.method, url, options.async);
+			xhr.open(options.method, url, true);
 
 			// send headers
 			if (options.headers !== null) {
