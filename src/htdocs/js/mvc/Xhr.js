@@ -112,7 +112,7 @@ define([
 		 *                        must also be specified.  Default is null.
 		 */
 		ajax: function (options) {
-			var url, postdata, xhr, data, contentType;
+			var url, postdata, queryString, xhr, h;
 
 			options = Util.extend({}, DEFAULT_AJAX_OPTIONS, options);
 			url = options.url;
@@ -129,6 +129,7 @@ define([
 					if (options.headers === null) {
 						options.headers = {};
 					}
+					// set request content type
 					options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 				}
 			}
@@ -137,11 +138,13 @@ define([
 
 			// setup callback
 			xhr.onreadystatechange = function () {
+				var data, contentType;
+
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						if (options.success !== null) {
-							var data = xhr.response,
-							    contentType = xhr.getResponseHeader('Content-Type');
+							data = xhr.response;
+							contentType = xhr.getResponseHeader('Content-Type');
 							if (contentType.indexOf('json') !== -1) {
 								data = JSON.parse(data);
 							}
@@ -160,7 +163,7 @@ define([
 
 			// send headers
 			if (options.headers !== null) {
-				for (var h in options.headers) {
+				for (h in options.headers) {
 					xhr.setRequestHeader(h, options.headers[h]);
 				}
 			}
