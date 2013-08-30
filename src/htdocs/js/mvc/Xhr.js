@@ -7,9 +7,10 @@ define([
 ) {
 	'use strict';
 
+	var DEFAULT_JSONP_OPTIONS, DEFAULT_AJAX_OPTIONS, Xhr;
 
 	// defaults for jsonp method
-	var DEFAULT_JSONP_OPTIONS = {
+	DEFAULT_JSONP_OPTIONS = {
 		'url': null,
 		'success': null,
 		'error': null,
@@ -19,7 +20,7 @@ define([
 	};
 
 	// defaults for ajax method
-	var DEFAULT_AJAX_OPTIONS = {
+	DEFAULT_AJAX_OPTIONS = {
 		'url': null,
 		'success': null,
 		'error': null,
@@ -30,7 +31,7 @@ define([
 	};
 
 
-	var Xhr = {
+	Xhr = {
 
 		/**
 		 * Make a JSONP request.
@@ -43,16 +44,19 @@ define([
 		 * @param options.callbackParameter {String} default is 'callback'
 		 */
 		jsonp: function (options) {
+			var url, data, callback, script, onLoad, onError;
+
 			options = Util.extend({}, DEFAULT_JSONP_OPTIONS, options);
+			url = options.url;
+			data = Util.extend({}, options.data);
+			callback = options.callbackName || this.getCallbackName();
 
-			var url = options.url,
-			    data = Util.extend({}, options.data),
-			    callback = options.callbackName || this.getCallbackName();
-
+			// add data and callback to url
 			data[options.callbackParameter] = callback;
 			url += (url.indexOf('?') === -1 ? '?' : '&') + this.urlEncode(data);
 
-			var script = document.createElement('script');
+			// create script element for jsonp request
+			script = document.createElement('script');
 			script.src = url;
 			script.async = true;
 
@@ -62,7 +66,7 @@ define([
 			};
 
 			// called after successful load, or by error handler
-			var onLoad = function () {
+			onLoad = function () {
 				// remove event handlers
 				Util.removeEvent(script, 'load', onLoad);
 				Util.removeEvent(script, 'error', onError);
@@ -77,7 +81,7 @@ define([
 			};
 
 			// called after error loading script
-			var onError = function () {
+			onError = function () {
 				onLoad();
 				// call error callback
 				if (options.error !== null) {
@@ -108,12 +112,14 @@ define([
 		 *                        must also be specified.  Default is null.
 		 */
 		ajax: function (options) {
-			options = Util.extend({}, DEFAULT_AJAX_OPTIONS, options);
+			var url, postdata, xhr, data, contentType;
 
-			var url = options.url;
-			var postdata = options.rawdata;
+			options = Util.extend({}, DEFAULT_AJAX_OPTIONS, options);
+			url = options.url;
+			postdata = options.rawdata;
+
 			if (options.data !== null) {
-				var queryString = this.urlEncode(options.data);
+				queryString = this.urlEncode(options.data);
 				if (options.method === 'GET') {
 					// append to url
 					url = url + '?' + queryString;
@@ -127,7 +133,7 @@ define([
 				}
 			}
 
-			var xhr = new XMLHttpRequest();
+			xhr = new XMLHttpRequest();
 
 			// setup callback
 			xhr.onreadystatechange = function () {
@@ -170,14 +176,16 @@ define([
 		 * @return {String} url encoded object.
 		 */
 		urlEncode: function (obj) {
-			var data = [];
-			for (var key in obj) {
-				var encodedKey = encodeURIComponent(key),
-				    value = obj[key];
+			var data, key, encodedKey, value, i, len;
+
+			data = [];
+			for (key in obj) {
+				encodedKey = encodeURIComponent(key);
+				value = obj[key];
 
 				if (value instanceof Array) {
 					// Add each value in array seperately
-					for (var i = 0, len = value.length; i < len; i++) {
+					for (i = 0, len = value.length; i < len; i++) {
 						data.push(encodedKey + '=' + encodeURIComponent(value[i]));
 					}
 				} else {
