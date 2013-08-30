@@ -1,10 +1,12 @@
+/* create all WebAbsolutes tables */
 PRAGMA foreign_keys = OFF;
+
+DROP TABLE IF EXISTS [observatory];
 
 CREATE TABLE [observatory] (
 [ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
 [code] CHAR(5)  UNIQUE NOT NULL,
 [name] VARCHAR(255)  NULL,
-[default_pier_id] INTEGER NULL,
 [location] VARCHAR(255)  NULL,
 [latitude] NUMERIC  NULL,
 [longitude] NUMERIC  NULL,
@@ -12,9 +14,11 @@ CREATE TABLE [observatory] (
 [geomagnetic_longitude] NUMERIC  NULL,
 [elevation] NUMERIC  NULL,
 [orientation] VARCHAR(255)  NULL,
-CONSTRAINT observatory_uniq UNIQUE (code) ON CONFLICT ABORT,
+[default_pier_id] INTEGER NULL,
 FOREIGN KEY(default_pier_id) REFERENCES pier(id)
 );
+
+DROP TABLE IF EXISTS [pier];
 
 CREATE TABLE [pier] (
 [ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -30,8 +34,10 @@ CONSTRAINT pier_uniq UNIQUE (observatory_id, name, begin) ON CONFLICT ABORT,
 FOREIGN KEY(observatory_id) REFERENCES observatory(id),
 FOREIGN KEY(default_mark_id) REFERENCES mark(id),
 FOREIGN KEY(default_electronics_id) REFERENCES instrument(id),
-FOREIGN KEY(default_electronics_id) REFERENCES instrument(id)
+FOREIGN KEY(default_theodolite_id) REFERENCES instrument(id)
 );
+
+DROP TABLE IF EXISTS [mark];
 
 CREATE TABLE [mark] (
 [ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -43,6 +49,8 @@ CREATE TABLE [mark] (
 CONSTRAINT mark_uniq UNIQUE (pier_id, name, begin) ON CONFLICT ABORT,
 FOREIGN KEY(pier_id) REFERENCES pier(id)
 );
+
+DROP TABLE IF EXISTS [instrument];
 
 CREATE TABLE [instrument] (
 [ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -56,46 +64,96 @@ CONSTRAINT instrument_uniq UNIQUE (observatory_id, serial_number, begin) ON CONF
 FOREIGN KEY(observatory_id) REFERENCES observatory(id)
 );
 
+
+DROP TABLE IF EXISTS [observation];
+
 CREATE TABLE [observation] (
 [ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
 [observatory_id] INTEGER NOT NULL,
 [begin] INTEGER  NOT NULL,
 [end] INTEGER  NULL,
+[reviewer_user_id]  INTEGER,
+[pier_temperature] NUMERIC,
+[elect_temperature] NUMERIC,
+[flux_temperature] NUMERIC,
+[proton_temperature] NUMERIC,
+[mark_id] INTEGER NOT NULL,
+[electronics_id] INTEGER,
+[theodolite_id] INTEGER,
 [annotation] TEXT NULL,
 CONSTRAINT observation_uniq UNIQUE (observatory_id, begin) ON CONFLICT ABORT,
-FOREIGN KEY(observatory_id) REFERENCES observatory(id)
+FOREIGN KEY(observatory_id) REFERENCES observatory(id),
+FOREIGN KEY(reviewer_user_id) REFERENCES user(id),
+FOREIGN KEY(mark_id) REFERENCES mark(id),
+FOREIGN KEY(electronics_id) REFERENCES instrument(id),
+FOREIGN KEY(theodolite_id) REFERENCES instrument(id)
 );
+
+DROP TABLE IF EXISTS [reading];
 
 CREATE TABLE [reading] (
 [ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
 [observation_id] INTEGER NOT NULL,
 [set_number] INTEGER NOT NULL, 
-[mark_id] INTEGER NOT NULL,
-[electronics_id] INTEGER NOT NULL,
-[theodolite_id] INTEGER NOT NULL,
-[temperature] NUMERIC NOT NULL,
+[observer_user_id]  INTEGER,
 [declination_valid] CHAR(1) NOT NULL DEFAULT 'Y',
 [horizontal_intensity_valid] CHAR(1) NOT NULL DEFAULT 'Y',
 [vertical_intensity_valid] CHAR(1) NOT NULL DEFAULT 'Y',
-[observer] VARCHAR(255) NOT NULL,
 [annotation] TEXT NULL,
 CONSTRAINT reading_uniq UNIQUE (observation_id, set_number) ON CONFLICT ABORT,
 FOREIGN KEY(observation_id) REFERENCES observation(id),
-FOREIGN KEY(mark_id) REFERENCES mark(id),
-FOREIGN KEY(electronics_id) REFERENCES instruments(id),
-FOREIGN KEY(theodolite_id) REFERENCES instruments(id)
+FOREIGN KEY(observer_user_id) REFERENCES user(id)
 );
+
+
+DROP TABLE IF EXISTS [measurement];
 
 CREATE TABLE [measurement] (
 [ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
 [reading_id] INTEGER NOT NULL,
-[type] CHAR(20) NOT NULL, 
-[time] INTEGER NOT NULL,
+[type] CHAR(20) NOT NULL CHECK(type IN ('FirstMarkUp','FirstMarkDown','SecondMarkUp','SecondMarkDown','NorthDownTime','NorthUpTime','SouthDownTime','SouthUpTime','EastDownTime','EastUpTime','WestDownTime','WestUpTime')), 
+[time] INTEGER,
 [angle] INTEGER NOT NULL,
-CONSTRAINT measurement_uniq UNIQUE (reading_id, type, time, angle) ON CONFLICT ABORT,
-FOREIGN KEY(reading_id) REFERENCES reading(id),
-CONSTRAINT measurement_ck1 CHECK (type IN ('first_mark_up', 'first_mark_down', 'west_down', 'east_down', 'west_up', 'east_up', 'second_mark_up', 'second_mark_down', 'south_down', 'north_up', 'south_up', 'north_down'))
+[h] NUMERIC,
+[d] NUMERIC,
+[z] NUMERIC,
+[f] NUMERIC,
+FOREIGN KEY(reading_id) REFERENCES reading(id)
+);
+
+
+DROP TABLE IF EXISTS [user];
+
+CREATE TABLE [user] (
+[ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+[name] VARCHAR(255),
+[username] VARCHAR(255)  NOT NULL,
+[default_observatory_id] INTEGER,
+[email] VARCHAR(255),
+[password] VARCHAR(255),
+[last_login] INTEGER,
+[enabled] CHAR(1) NOT NULL DEFAULT 'Y',
+CONSTRAINT user_uniq UNIQUE (username) ON CONFLICT ABORT,
+FOREIGN KEY(default_observatory_id) REFERENCES observatory(id)
+);
+
+
+DROP TABLE IF EXISTS [role];
+CREATE TABLE [role] (
+[ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+[name] VARCHAR(255),
+[description] VARCHAR(255)  NOT NULL,
+CONSTRAINT role_uniq UNIQUE (name) ON CONFLICT ABORT
+);
+
+DROP TABLE IF EXISTS [user_role];
+CREATE TABLE [user_role] (
+[ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+[user_id] INTEGER,
+[role_id] INTEGER,
+CONSTRAINT user_role_uniq UNIQUE (user_id, role_id) ON CONFLICT ABORT,
+FOREIGN KEY(user_id) REFERENCES user(id)
+FOREIGN KEY(role_id) REFERENCES role(id)
 );
 
 PRAGMA foreign_keys = ON;
-
