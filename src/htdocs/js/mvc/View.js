@@ -1,4 +1,5 @@
 /*global define*/
+/*jshint unused:vars*/
 define([
 	'mvc/Util',
 	'mvc/Events'
