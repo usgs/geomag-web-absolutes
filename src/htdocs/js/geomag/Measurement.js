@@ -14,7 +14,11 @@ define([
 		'id': null,
 		'type': null,
 		'time': null,
-		'angle': null
+		'angle': null,
+		'h': null,
+		'e': null,
+		'z': null,
+		'f': null
 	};
 
 	/**
@@ -30,18 +34,18 @@ define([
 	// Observatory extends Model
 	Measurement.prototype = Object.create(Model.prototype);
 
-	Measurement.FIRST_MARK_UP = 'first_mark_up';
-	Measurement.FIRST_MARK_DOWN = 'first_mark_down';
-	Measurement.WEST_DOWN = 'west_down';
-	Measurement.EAST_DOWN = 'east_down';
-	Measurement.WEST_UP = 'west_up';
-	Measurement.EAST_UP = 'east_up';
-	Measurement.SECOND_MARK_UP = 'second_mark_up';
-	Measurement.SECOND_MARK_DOWN = 'second_mark_down';
-	Measurement.SOUTH_DOWN = 'south_down';
-	Measurement.NORTH_UP = 'north_up';
-	Measurement.SOUTH_UP = 'south_up';
-	Measurement.NORTH_DOWN = 'north_down';
+	Measurement.FIRST_MARK_UP = 'FirstMarkUp';
+	Measurement.FIRST_MARK_DOWN = 'FirstMarkDown';
+	Measurement.WEST_DOWN = 'WestDown';
+	Measurement.EAST_DOWN = 'EastDown';
+	Measurement.WEST_UP = 'WestUp';
+	Measurement.EAST_UP = 'EastUp';
+	Measurement.SECOND_MARK_UP = 'SecondMarkUp';
+	Measurement.SECOND_MARK_DOWN = 'SecondMarkDown';
+	Measurement.SOUTH_DOWN = 'SouthDown';
+	Measurement.NORTH_UP = 'NorthUp';
+	Measurement.SOUTH_UP = 'SouthUp';
+	Measurement.NORTH_DOWN = 'NorthDown';
 
 	// return constructor from closure
 	return Measurement;

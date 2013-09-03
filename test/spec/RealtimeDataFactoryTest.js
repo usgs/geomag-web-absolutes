@@ -1,12 +1,34 @@
 /* global define, describe, it */
+/*jshint unused:vars*/
 
 define([
 	'chai',
 	'geomag/RealtimeDataFactory',
-	'mvc/Model'
-], function (chai, RealtimeDataFactory, Model ) {
+	'mvc/Model',
+	'geomag/Reading',
+	'geomag/Measurement',
+	'mvc/Collection'
+], function (chai, RealtimeDataFactory, Model, Reading, Measurement, Collection ) {
 	'use strict';
 	var expect = chai.expect;
+
+	var meas1 = new Measurement({'id': 11,'type': Measurement.SOUTH_UP,
+			'time': 1377011990,'angle':118, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
+	var meas2 = new Measurement({'id': 12,'type': Measurement.NORTH_DOWN,
+			'time': 1377011999,'angle':297, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
+
+	var READINGTESTOBJECT = {
+		'id': 1,
+		'set_number': 1,
+		'declination_valid': true,
+		'horizontal_intensity_valid': true,
+		'vertical_intensity_valid': true,
+		'observer': 'Eddie',
+		'annotation': 'This is a test',
+		'measurements': new Collection([
+			meas1, meas2
+		]),
+	};
 
 	var TESTOBJECT = {
 		'starttime': 1377011990,
@@ -51,10 +73,10 @@ define([
 			});
 		});
 
-		describe('getRealtimeDataByParam()',function(){
-			it('initializes with TESTOBJECT, gets back type:array pairs', function(){
+		describe('getRealtimeData()',function(){
+			it('initializes with TESTOBJECT, gets back data', function(){
 				var realtimeDataFactory = new RealtimeDataFactory(TESTOBJECT);
-				//expect(realtimeDataFactory.get('observatory')).to.equal('BOU');
+
 				realtimeDataFactory.getRealtimeData({
 					'starttime': 1377011990,
 					'endtime': 1377012000,
@@ -67,6 +89,15 @@ define([
 				});
 			});
 		});
+
+/*		describe('getTimeSeriesData()', function(){
+			it('initializes with reading, gets back timeseries', function(){
+				var realtimeDataFactory = new RealtimeDataFactory();
+
+				realtimeDataFactory.getTimeSeries(READINGTESTOBJECT);
+				//expect(reading.timeseries).to.deep.equal(READINGTESTDATA);
+			});
+		}); */
 
 	});
 });

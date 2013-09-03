@@ -13,17 +13,12 @@ define([
 	var DEFAULTS = {
 		'id': null,
 		'set_number': null,
-		'mark_id': null,
-		'electronics_id': null,
-		'theodolite_id': null,
-		'temperature': null,
 		'declination_valid': null,
 		'horizontal_intensity_valid': null,
 		'vertical_intensity_valid': null,
 		'observer': null,
 		'annotation': null,
-		'measurements': null,
-		'timeseries': null
+		'measurements': null
 	};
 
 	/**
@@ -43,6 +38,9 @@ define([
 	 * Get the Measurements for this reading.
 	 *
 	 * @return a key:array of type:[measurements]
+	 *
+	 * This is needed for future enhancements where we will have multiple measurements per type.
+	 * So use this call so we don't have to refactor everything later.
 	 */
 	Reading.prototype.getMeasurements = function () {
 		var measurements = this.get('measurements'),
