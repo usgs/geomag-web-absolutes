@@ -28,6 +28,7 @@ require([
 		'spec/mvc/ModelTest',
 		'spec/mvc/ViewTest',
 		'spec/mvc/CollectionTest',
+		'spec/mvc/UtilTest',
 		'spec/mvc/XhrTest',
 		'spec/ObservatoryTest',
 		'spec/MarkTest',

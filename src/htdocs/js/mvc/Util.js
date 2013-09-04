@@ -1,5 +1,5 @@
 /*global define*/
-
+/*jshint unused:vars*/
 define([], function () {
 	'use strict';
 
@@ -298,6 +298,25 @@ define([], function () {
 				}
 			}
 			return false;
+		},
+
+		/**
+		 * Bind a function so it is always called with a specific context.
+		 *
+		 * @param func {Function}
+		 *        function being bound to a specific context.
+		 * @param context {Object}
+		 *        context that will be "this" when the bound function is called.
+		 * @param varargs {...}
+		 *        variable number of arguments passed to func.
+		 * @return {Function} the bound function.
+		 */
+		'bind': function (func, context, varargs) {
+			var vararg = Array.prototype.slice.call(arguments, 2);
+			return function() {
+				var args = Array.prototype.slice.call(arguments, 0);
+				func.apply(context, vararg.concat(args));
+			};
 		}
 
 	};
