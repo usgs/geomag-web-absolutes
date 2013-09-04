@@ -14,7 +14,6 @@ define([
 	'use strict';
 	var expect = chai.expect;
 
-
 	describe('Unit tests for the "InclinationView" class', function () {
 
 		var testBaselineCalculator = {
@@ -30,7 +29,6 @@ define([
 			expect(InclinationView).to.not.be.undefined;
 			/*jshint +W030*/
 		});
-
 
 		it('can be instantiated', function () {
 			var reading = new Reading();
@@ -49,7 +47,6 @@ define([
 			/*jshint +W030*/
 		});
 
-
 		it('updates the view during a render', function () {
 			var reading = new Reading();
 			var view = new InclinationView({
@@ -58,15 +55,19 @@ define([
 			});
 
 			/*jshint -W030*/
-			expect(Number(view._inclination.innerHTML)).to.equal(testBaselineCalculator.inclination());
-			expect(Number(view._horizontalComponent.innerHTML)).to.equal(testBaselineCalculator.horizontalComponent());
-			expect(Number(view._verticalComponent.innerHTML)).to.equal(testBaselineCalculator.verticalComponent());
-			expect(Number(view._southDownMinusNorthUp.innerHTML)).to.equal(testBaselineCalculator.southDownMinusNorthUp());
-			expect(Number(view._northDownMinusSouthUp.innerHTML)).to.equal(testBaselineCalculator.northDownMinusSouthUp());
+			expect(Number(view._inclination.innerHTML)).to.equal(
+					testBaselineCalculator.inclination());
+			expect(Number(view._horizontalComponent.innerHTML)).to.equal(
+					testBaselineCalculator.horizontalComponent());
+			expect(Number(view._verticalComponent.innerHTML)).to.equal(
+					testBaselineCalculator.verticalComponent());
+			expect(Number(view._southDownMinusNorthUp.innerHTML)).to.equal(
+					testBaselineCalculator.southDownMinusNorthUp());
+			expect(Number(view._northDownMinusSouthUp.innerHTML)).to.equal(
+					testBaselineCalculator.northDownMinusSouthUp());
 			/*jshint +W030*/
 		});
 
 	});
-
 
 });
