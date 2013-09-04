@@ -27,19 +27,22 @@ define([
 	 * When a list item is clicked, the corresponding model in the collection is
 	 * selected.
 	 *
-	 * @param options {Object} view options.
-	 * @param options.collection {mvc.Collection} collection being displayed.
-	 * @param options.el {DomElement} default is new DIV element.  element where
-	 *                   list is rendered.
-	 * @param options.format {Function(model)} default model.id.  function used to
-	 *                       generate list item content for each model in the
-	 *                       collection.
-	 * @param options.clickToSelect {Boolean} default true.  When user clicks on
-	 *                              a list item, select the corresponding model
-	 *                              in the collection.
-	 * @param options.clickToDeselect {Boolean} default true.  When user clicks on
-	 *                                a selected list item, deselect the
-	 *                                corresponding model in the collection.
+	 * @param options {Object}
+	 *        view options.
+	 * @param options.collection {mvc.Collection}
+	 *        collection being displayed.
+	 * @param options.el {DomElement}
+	 *        default is new DIV element.
+	 *        element where list is rendered.
+	 * @param options.format {Function(model)}
+	 *        default displays model.id.
+	 *        function to format list content for each item in the collection.
+	 * @param options.clickToSelect {Boolean}
+	 *        default true.
+	 *        When a list item is clicked, select that item in the collection.
+	 * @param options.clickToDeselect {Boolean}
+	 *        default true.
+	 *        When a selected list item is clicked, deselect in the collection.
 	 */
 	CollectionList = function (options) {
 		options = Util.extend({}, DEFAULTS, options);
@@ -134,6 +137,8 @@ define([
 	 * Handle collection select event.
 	 *
 	 * Adds "selected" class to list item for currently selected model.
+	 *
+	 * @param obj {Object} object that was selected.
 	 */
 	CollectionList.prototype._onSelect = function (obj) {
 		var index, selected;
@@ -149,6 +154,8 @@ define([
 	 * Handle collection deselect event.
 	 *
 	 * Removes "selected" class from list item for currently selected model.
+	 *
+	 * @param obj {Object} object that was deselected.
 	 */
 	CollectionList.prototype._onDeselect = function (obj) {
 		var index, selected;
