@@ -59,29 +59,29 @@ define([
 	CollectionList.prototype.initialize = function (options) {
 		var selected;
 
-		this.options = options;
+		this._options = options;
 		// collection used for display
-		this.collection = options.collection;
-		this.list = options.el.appendChild(document.createElement('ol'));
+		this._collection = options.collection;
+		this._list = options.el.appendChild(document.createElement('ol'));
 
 		// when collection updates, update view
-		this.collection.on('reset', this.render, this);
-		this.collection.on('add', this.render, this);
-		this.collection.on('remove', this.render, this);
-		this.collection.on('select', this._onSelect, this);
-		this.collection.on('deselect', this._onDeselect, this);
+		this._collection.on('reset', this.render, this);
+		this._collection.on('add', this.render, this);
+		this._collection.on('remove', this.render, this);
+		this._collection.on('select', this._onSelect, this);
+		this._collection.on('deselect', this._onDeselect, this);
 
 		// when user clicks on list, select in collection
 		if (options.clickToSelect) {
 			this._onClick = Util.bind(this._onClick, this);
-			Util.addEvent(this.list, 'click', this._onClick);
+			Util.addEvent(this._list, 'click', this._onClick);
 		}
 
 		// render first time
 		this.render();
 
 		// apply existing selection
-		selected = this.collection.getSelected();
+		selected = this._collection.getSelected();
 		if (selected !== null) {
 			this._onSelect(selected);
 		}
@@ -92,16 +92,16 @@ define([
 	 */
 	CollectionList.prototype.render = function () {
 		var buf = [],
-		    data = this.collection.data(),
+		    data = this._collection.data(),
 		    i, len;
 
 		for (i = 0, len = data.length; i < len; i++) {
 			buf.push('<li data-index="', i, '">',
-					this.options.format(data[i]),
+					this._options.format(data[i]),
 					'</li>');
 		}
 
-		this.list.innerHTML = buf.join('');
+		this._list.innerHTML = buf.join('');
 	};
 
 	/**
@@ -113,20 +113,20 @@ define([
 		var item, index, toselect, selected;
 
 		e = Util.getEvent(e);
-		item = Util.getParentNode(e.target, 'LI', this.list);
+		item = Util.getParentNode(e.target, 'LI', this._list);
 		if (item !== null) {
 			index = parseInt(item.getAttribute('data-index'), 10);
-			toselect = this.collection.data()[index];
+			toselect = this._collection.data()[index];
 
-			if (this.options.clickToDeselect) {
-				selected = this.collection.getSelected();
+			if (this._options.clickToDeselect) {
+				selected = this._collection.getSelected();
 				if (selected === toselect) {
-					this.collection.deselect();
+					this._collection.deselect();
 					return;
 				}
 			}
 
-			this.collection.select(toselect);
+			this._collection.select(toselect);
 		}
 	};
 
@@ -139,8 +139,8 @@ define([
 		var index, selected;
 
 		// find element for selection
-		index = this.collection.getIds()[obj.id];
-		selected = this.list.childNodes[index];
+		index = this._collection.getIds()[obj.id];
+		selected = this._list.childNodes[index];
 		// add selected class
 		Util.addClass(selected, 'selected');
 	};
@@ -154,8 +154,8 @@ define([
 		var index, selected;
 
 		// find element for selection
-		index = this.collection.getIds()[obj.id];
-		selected = this.list.childNodes[index];
+		index = this._collection.getIds()[obj.id];
+		selected = this._list.childNodes[index];
 		// remove selected class
 		Util.removeClass(selected, 'selected');
 	};
