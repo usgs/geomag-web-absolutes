@@ -42,11 +42,11 @@ define([
 		// build the view skeleton
 		this.el.innerHTML = [
 				'<dl>',
-					'<dt>Inclination</dt>',
+					'<dt>Inclination (deg)</dt>',
 					'<dd class="inclination"></dd>',
-					'<dt>Horizontal Component</dt>',
+					'<dt>Horizontal Component (nT)</dt>',
 					'<dd class="horizontalComponent"></dd>',
-					'<dt>Vertical Component</dt>',
+					'<dt>Vertical Component (nT)</dt>',
 					'<dd class="verticalComponent"></dd>',
 					'<dt>(SD-NU-180)*60</dt>',
 					'<dd class="southDownMinusNorthUp"></dd>',
