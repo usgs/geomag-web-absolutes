@@ -73,7 +73,7 @@ define([
 		this.render();
 	};
 
-	/** 
+	/**
 	 * Update the view based on the current reading.
 	 */
 	InclinationView.prototype.render = function () {
