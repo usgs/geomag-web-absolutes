@@ -171,3 +171,4 @@ define([
 	// return constructor
 	return CollectionList;
 });
+
