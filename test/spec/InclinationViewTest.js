@@ -15,7 +15,7 @@ define([
 	var expect = chai.expect;
 
 
-	describe('Unit tests for the \"InclinationView\" class', function () {
+	describe('Unit tests for the "InclinationView" class', function () {
 
 		var testBaselineCalculator = {
 			inclination : function () { return 1; },
