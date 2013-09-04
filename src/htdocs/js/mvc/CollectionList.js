@@ -9,11 +9,10 @@ define([
 	'use strict';
 
 
-	// used to assign unique id's for each list.
-	var SEQUENCE = 0;
+	var DEFAULTS, CollectionList;
 
 	// Default options
-	var DEFAULTS = {
+	DEFAULTS = {
 		format: function(model) {
 			return model.id;
 		},
@@ -42,7 +41,7 @@ define([
 	 *                                a selected list item, deselect the
 	 *                                corresponding model in the collection.
 	 */
-	var CollectionList = function(options) {
+	CollectionList = function(options) {
 		options = Util.extend({}, DEFAULTS, options);
 		// call parent constructor
 		View.call(this, options);
@@ -58,11 +57,12 @@ define([
 	 * @param options {Object} same as constructor.
 	 */
 	CollectionList.prototype.initialize = function(options) {
+		var selected;
+
 		this.options = options;
 		// collection used for display
 		this.collection = options.collection;
 		this.list = options.el.appendChild(document.createElement('ol'));
-		this.prefix = '_collection_list_' + (++SEQUENCE) + '_';
 
 		// when collection updates, update view
 		this.collection.on('reset', this.render, this);
@@ -81,7 +81,7 @@ define([
 		this.render();
 
 		// apply existing selection
-		var selected = this.collection.getSelected();
+		selected = this.collection.getSelected();
 		if (selected !== null) {
 			this._onSelect(selected);
 		}
@@ -92,10 +92,11 @@ define([
 	 */
 	CollectionList.prototype.render = function() {
 		var buf = [],
-		    data = this.collection.data();
+		    data = this.collection.data(),
+		    i, len;
 
-		for (var i=0, len=data.length; i<len; i++) {
-			buf.push('<li id="', this.prefix, i, '">',
+		for (i=0, len=data.length; i<len; i++) {
+			buf.push('<li data-index="', i, '">',
 					this.options.format(data[i]),
 					'</li>');
 		}
@@ -109,14 +110,16 @@ define([
 	 * @param  e {Event} the click event.
 	 */
 	CollectionList.prototype._onClick = function(e) {
+		var item, index, toselect, selected;
+
 		e = Util.getEvent(e);
-		var item = Util.getParentNode(e.target, 'LI', this.el);
+		item = Util.getParentNode(e.target, 'LI', this.list);
 		if (item !== null) {
-			var index = parseInt(item.getAttribute('id').replace(this.prefix, ''), 10);
-			var toselect = this.collection.data()[index];
+			index = parseInt(item.getAttribute('data-index'), 10);
+			toselect = this.collection.data()[index];
 
 			if (this.options.clickToDeselect) {
-				var selected = this.collection.getSelected();
+				selected = this.collection.getSelected();
 				if (selected === toselect) {
 					this.collection.deselect();
 					return;
@@ -133,9 +136,11 @@ define([
 	 * Adds "selected" class to list item for currently selected model.
 	 */
 	CollectionList.prototype._onSelect = function(obj) {
+		var index, selected;
+
 		// find element for selection
-		var index = this.collection.getIds()[obj.id];
-		var selected = this.el.querySelector('#' + this.prefix + index);
+		index = this.collection.getIds()[obj.id];
+		selected = this.list.childNodes[index];
 		// add selected class
 		Util.addClass(selected, 'selected');
 	};
@@ -146,9 +151,11 @@ define([
 	 * Removes "selected" class from list item for currently selected model.
 	 */
 	CollectionList.prototype._onDeselect = function(obj) {
+		var index, selected;
+
 		// find element for selection
-		var index = this.collection.getIds()[obj.id];
-		var selected = this.el.querySelector('#' + this.prefix + index);
+		index = this.collection.getIds()[obj.id];
+		selected = this.list.childNodes[index];
 		// remove selected class
 		Util.removeClass(selected, 'selected');
 	};
