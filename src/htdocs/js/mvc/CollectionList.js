@@ -2,7 +2,7 @@
 define([
 	'mvc/View',
 	'mvc/Util'
-], function(
+], function (
 	View,
 	Util
 ) {
@@ -13,7 +13,7 @@ define([
 
 	// Default options
 	DEFAULTS = {
-		format: function(model) {
+		format: function (model) {
 			return model.id;
 		},
 		clickToSelect: true,
@@ -41,7 +41,7 @@ define([
 	 *                                a selected list item, deselect the
 	 *                                corresponding model in the collection.
 	 */
-	CollectionList = function(options) {
+	CollectionList = function (options) {
 		options = Util.extend({}, DEFAULTS, options);
 		// call parent constructor
 		View.call(this, options);
@@ -56,7 +56,7 @@ define([
 	 *
 	 * @param options {Object} same as constructor.
 	 */
-	CollectionList.prototype.initialize = function(options) {
+	CollectionList.prototype.initialize = function (options) {
 		var selected;
 
 		this.options = options;
@@ -90,12 +90,12 @@ define([
 	/**
 	 * Redraw the list based on existing collection contents.
 	 */
-	CollectionList.prototype.render = function() {
+	CollectionList.prototype.render = function () {
 		var buf = [],
 		    data = this.collection.data(),
 		    i, len;
 
-		for (i=0, len=data.length; i<len; i++) {
+		for (i = 0, len = data.length; i < len; i++) {
 			buf.push('<li data-index="', i, '">',
 					this.options.format(data[i]),
 					'</li>');
@@ -109,7 +109,7 @@ define([
 	 *
 	 * @param  e {Event} the click event.
 	 */
-	CollectionList.prototype._onClick = function(e) {
+	CollectionList.prototype._onClick = function (e) {
 		var item, index, toselect, selected;
 
 		e = Util.getEvent(e);
@@ -135,7 +135,7 @@ define([
 	 *
 	 * Adds "selected" class to list item for currently selected model.
 	 */
-	CollectionList.prototype._onSelect = function(obj) {
+	CollectionList.prototype._onSelect = function (obj) {
 		var index, selected;
 
 		// find element for selection
@@ -150,7 +150,7 @@ define([
 	 *
 	 * Removes "selected" class from list item for currently selected model.
 	 */
-	CollectionList.prototype._onDeselect = function(obj) {
+	CollectionList.prototype._onDeselect = function (obj) {
 		var index, selected;
 
 		// find element for selection
