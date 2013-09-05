@@ -7,16 +7,16 @@ class Mark {
 
 	// mark attributes
 	public $id;
-	public $pierId;
+	public $pier_id;
 	public $name;
 	public $begin;
 	public $end;
 	public $azimuth;
 
-	public function __construct ($id=null, $pierId=null, $name=null,
+	public function __construct ($id=null, $pier_id=null, $name=null,
 				$begin=null, $end=null, $azimuth=null) {
 		$this->id = $id;
-		$this->pierId = $pierId;
+		$this->pier_id = $pier_id;
 		$this->name = $name;
 		$this->begin = $begin;
 		$this->end = $end;
@@ -24,13 +24,13 @@ class Mark {
 	}
 
 	public static function fromArray (&$p) {
-		return new Mark($p['id'], $p['pierId'], $p['name'], $p['begin'],
+		return new Mark($p['id'], $p['pier_id'], $p['name'], $p['begin'],
 					$p['end'], $p['azimuth']);
 	}
 
 	public function toArray () {
 		return array('id' => $this->id,
-					'pierId' => $this->pierId,
+					'pier_id' => $this->pier_id,
 					'name' => $this->name,
 					'begin' => $this->begin,
 					'end' => $this->end,

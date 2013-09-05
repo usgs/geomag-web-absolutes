@@ -29,12 +29,14 @@ class ObservatoryFactory {
 				'ORDER BY name');
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-				$observatory = new Observatory($row['ID'],
-						$row['code'], $row['name'], $row['default_pier_id'],
-						$row['location'], $row['latitude'], $row['longitude'],
-						$row['geomagnetic_latitude'],
-						$row['geomagnetic_longitude'],
-						$row['elevation'], $row['orientation']);
+				$observatory = new Observatory(intval($row['ID']),
+						$row['code'], $row['name'],
+						intval($row['default_pier_id']),
+						$row['location'], floatval($row['latitude']),
+						floatval($row['longitude']),
+						floatval($row['geomagnetic_latitude']),
+						floatval($row['geomagnetic_longitude']),
+						floatval($row['elevation']), $row['orientation']);
 				$objects[] = $observatory;
 			}
 		} else {
@@ -68,12 +70,14 @@ class ObservatoryFactory {
 				$instruments = $this->getInstruments($id);
 				$observations = $this->getObservations($id);
 				$piers = $this->getPiers($id);
-				$observatory = new ObservatoryDetail($row['ID'],
-						$row['code'], $row['name'], $row['default_pier_id'],
-						$row['location'], $row['latitude'], $row['longitude'],
-						$row['geomagnetic_latitude'],
-						$row['geomagnetic_longitude'],
-						$row['elevation'], $row['orientation'],
+				$observatory = new ObservatoryDetail(intval($row['ID']),
+						$row['code'], $row['name'],
+						intval($row['default_pier_id']),
+						$row['location'], floatval($row['latitude']),
+						floatval($row['longitude']),
+						floatval($row['geomagnetic_latitude']),
+						floatval($row['geomagnetic_longitude']),
+						floatval($row['elevation']), $row['orientation'],
 						$instruments, $observations, $piers);
 			}
 		} else {
@@ -103,10 +107,11 @@ class ObservatoryFactory {
 
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-				$instrument = new Instrument($row['ID'],
-						$row['observatory_id'], $row['serial_number'],
-						$row['begin'], $row['end'], $row['name'],
-						$row['type']);
+				$instrument = new Instrument(intval($row['ID']),
+						intval($row['observatory_id']),
+						$row['serial_number'],
+						intval($row['begin']), intval($row['end']),
+						$row['name'], $row['type']);
 				$instruments[] = $instrument;
 			}
 		} else {
@@ -137,12 +142,15 @@ class ObservatoryFactory {
 
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-				$observation = new Observation($row['ID'],
-						$row['observatory_id'], $row['begin'], $row['end'],
-						$row['reviewer_user_id'], $row['mark_id'],
-						$row['electronics_id'], $row['theodolite_id'],
-						$row['pier_temperature'], $row['elect_temperature'],
-						$row['flux_temperature'], $row['proton_temperature'],
+				$observation = new Observation(intval($row['ID']),
+						intval($row['observatory_id']), intval($row['begin']),
+						intval($row['end']), intval($row['reviewer_user_id']),
+						intval($row['mark_id']), intval($row['electronics_id']),
+						intval($row['theodolite_id']),
+						floatval($row['pier_temperature']),
+						floatval($row['elect_temperature']),
+						floatval($row['flux_temperature']),
+						floatval($row['proton_temperature']),
 						$row['annotation']);
 				$observations[] = $observation;
 			}
@@ -173,12 +181,14 @@ class ObservatoryFactory {
 
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-				$marks = $this->getMarks($row['ID']);
-				$pier = new Pier($row['ID'], $row['observatory_id'],
-						$row['name'], $row['begin'], $row['end'],
-						$row['correction'], $row['default_mark_id'],
-						$row['default_electronics_id'],
-						$row['default_theodolite_id'], $marks);
+				$pier_id = intval($row['ID']);
+				$marks = $this->getMarks($pier_id);
+				$pier = new Pier($pier_id, intval($row['observatory_id']),
+						$row['name'], intval($row['begin']),
+						intval($row['end']), floatval($row['correction']),
+						intval($row['default_mark_id']),
+						intval($row['default_electronics_id']),
+						intval($row['default_theodolite_id']), $marks);
 				$piers[] = $pier;
 			}
 		} else {
@@ -208,9 +218,9 @@ class ObservatoryFactory {
 
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-				$mark = new Mark($row['ID'], $row['pier_id'],
-						$row['name'], $row['begin'], $row['end'],
-						$row['azimuth']);
+				$mark = new Mark(intval($row['ID']), intval($row['pier_id']),
+						$row['name'], intval($row['begin']),
+						intval($row['end']), floatval($row['azimuth']));
 				$marks[$row['ID']] = $mark;
 			}
 		} else {
@@ -236,4 +246,3 @@ class ObservatoryFactory {
 }
 
 ?>
-

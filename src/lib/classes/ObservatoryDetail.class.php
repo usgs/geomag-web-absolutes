@@ -11,16 +11,16 @@ class ObservatoryDetail extends Observatory {
 	public $piers;
 
 	public function __construct ($id=null, $code=null, $name=null, 
-				$defaultPierId=null, $location=null,
+				$default_pier_id=null, $location=null,
 				$latitude=null, $longitude=null,
-				$geomagneticLatitude=null,
-				$geomagneticLongitude=null, $elevation=null,
+				$geomagnetic_latitude=null,
+				$geomagnetic_longitude=null, $elevation=null,
 				$orientation=null, $instruments=array(),
 				$observations=array(), $piers=array()) {
 
-		parent::__construct($id, $code, $name, $defaultPierId, $location, 
-					        $latitude, $longitude, $geomagneticLatitude, 
-					        $geomagneticLongitude, $elevation, $orientation);
+		parent::__construct($id, $code, $name, $default_pier_id, $location, 
+					        $latitude, $longitude, $geomagnetic_latitude, 
+					        $geomagnetic_longitude, $elevation, $orientation);
 		$this->instruments = $instruments;
 		$this->observations = $observations;
 		$this->piers = $piers;
@@ -48,10 +48,10 @@ class ObservatoryDetail extends Observatory {
 		}
 
 		return new ObservatoryDetail($p['id'], $p['code'], $p['name'],
-					$p['defaultPierId'], $p['location'],
+					$p['default_pier_id'], $p['location'],
 					$p['latitude'], $p['longitude'],
-					$p['geomagneticLatitude'],
-					$p['geomagneticLongitude'],
+					$p['geomagnetic_latitude'],
+					$p['geomagnetic_longitude'],
 					$p['elevation'], $p['orientation'],
 					$instruments, $observations, $piers);
 	}

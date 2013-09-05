@@ -7,66 +7,65 @@ class Observation {
 
 	// observation attributes
 	public $id;
-	public $observatoryId;
+	public $observatory_id;
 	public $begin;
 	public $end;
-	public $reviewerUserId;
-	public $markId;
-	public $electronicsId;
-	public $theodoliteId;
-	public $pierTemperature;
-	public $electTemperature;
-	public $fluxTemperature;
-	public $protonTemperature;
+	public $reviewer_user_id;
+	public $mark_id;
+	public $electronics_id;
+	public $theodolite_id;
+	public $pier_temperature;
+	public $elect_temperature;
+	public $flux_temperature;
+	public $proton_temperature;
 	public $annotation;
 
-	public function __construct ($id=null, $observatoryId=null, $begin=null,
-				$end=null ,$reviewerUserId=null, $markId=null,
-				$electronicsId=null, $theodoliteId=null,
-				$pierTemperature=null, $electTemperature=null,
-				$fluxTemperature=null, $protonTemperature=null,
+	public function __construct ($id=null, $observatory_id=null, $begin=null,
+				$end=null ,$reviewer_user_id=null, $mark_id=null,
+				$electronics_id=null, $theodolite_id=null,
+				$pier_temperature=null, $elect_temperature=null,
+				$flux_temperature=null, $proton_temperature=null,
 				$annotation=null) {
 		$this->id = $id;
-		$this->observatoryId = $observatoryId;
+		$this->observatory_id = $observatory_id;
 		$this->begin = $begin;
 		$this->end = $end;
-		$this->reviewerUserId = $reviewerUserId;
-		$this->markId = $markId;
-		$this->electronicsId = $electronicsId;
-		$this->theodoliteId = $theodoliteId;
-		$this->pierTemperature = $pierTemperature;
-		$this->electTemperature = $electTemperature;
-		$this->fluxTemperature = $fluxTemperature;
-		$this->protonTemperature = $protonTemperature;
+		$this->reviewer_user_id = $reviewer_user_id;
+		$this->mark_id = $mark_id;
+		$this->electronics_id = $electronics_id;
+		$this->theodolite_id = $theodolite_id;
+		$this->pier_temperature = $pier_temperature;
+		$this->elect_temperature = $elect_temperature;
+		$this->flux_temperature = $flux_temperature;
+		$this->proton_temperature = $proton_temperature;
 		$this->annotation = $annotation;
 	}
 
 	public static function fromArray (&$p) {
-		return new Observation($p['id'], $p['observatoryId'], $p['begin'],
-				$p['end'], $p['reviewerUserId'], $p['markId'],
-				$p['electronicsId'],$p['theodoliteId'],
-				$p['pierTemperature'],$p['electTemperature'],
-				$p['fluxTemperature'],$p['protonTemperature'],
+		return new Observation($p['id'], $p['observatory_id'], $p['begin'],
+				$p['end'], $p['reviewer_user_id'], $p['mark_id'],
+				$p['electronics_id'],$p['theodolite_id'],
+				$p['pier_temperature'],$p['elect_temperature'],
+				$p['flux_temperature'],$p['proton_temperature'],
 				$p['annotation']);
 	}
 
 	public function toArray () {
 		return array('id' => $this->id,
-				'observatoryId' => $this->observatoryId,
+				'observatory_id' => $this->observatory_id,
 				'begin' => $this->begin,
 				'end' => $this->end,
-				'reviewerUserId' => $this->reviewerUserId,
-				'markId' => $this->markId,
-				'electronicsId' => $this->electronicsId,
-				'theodoliteId' => $this->theodoliteId,
-				'pierTemperature' => $this->pierTemperature,
-				'electTemperature' => $this->electTemperature,
-				'fluxTemperature' => $this->fluxTemperature,
-				'protonTemperature' => $this->protonTemperature,
+				'reviewer_user_id' => $this->reviewer_user_id,
+				'mark_id' => $this->mark_id,
+				'electronics_id' => $this->electronics_id,
+				'theodolite_id' => $this->theodolite_id,
+				'pier_temperature' => $this->pier_temperature,
+				'elect_temperature' => $this->elect_temperature,
+				'flux_temperature' => $this->flux_temperature,
+				'proton_temperature' => $this->proton_temperature,
 				'annotation' => $this->annotation);
 	}
 
 }
 
 ?>
-

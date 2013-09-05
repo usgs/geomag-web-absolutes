@@ -7,31 +7,31 @@ class Pier {
 
 	// pier attributes
 	public $id;
-	public $observatoryId;
+	public $observatory_id;
 	public $name;
 	public $begin;
 	public $end;
 	public $correction;
-	public $defaultMarkId;
-	public $defaultElectronicsId;
-	public $defaultTheodoliteId;
+	public $default_mark_id;
+	public $default_electronics_id;
+	public $default_theodolite_id;
 
 	//multi valued attributes
 	public $marks;
 
-	public function __construct ($id=null, $observatoryId=null,
+	public function __construct ($id=null, $observatory_id=null,
 				$name=null, $begin=null, $end=null, $correction=null,
-				$defaultMarkId=null, $defaultElectronicsId=null,
-				$defaultTheodoliteId=null, $marks=array()) {
+				$default_mark_id=null, $default_electronics_id=null,
+				$default_theodolite_id=null, $marks=array()) {
 		$this->id = $id;
-		$this->observatoryId = $observatoryId;
+		$this->observatory_id = $observatory_id;
 		$this->name = $name;
 		$this->begin = $begin;
 		$this->end = $end;
 		$this->correction = $correction;
-		$this->defaultMarkId = $defaultMarkId;
-		$this->defaultElectronicsId = $defaultElectronicsId;
-		$this->defaultTheodoliteId = $defaultTheodoliteId;
+		$this->default_mark_id = $default_mark_id;
+		$this->default_electronics_id = $default_electronics_id;
+		$this->default_theodolite_id = $default_theodolite_id;
 		$this->marks = $marks;
 	}
 
@@ -42,22 +42,22 @@ class Pier {
 				$marks[] = Mark::fromArray($mark);
 			}
 		}
-		return new Pier($p['id'], $p['observatoryId'], $p['name'],
+		return new Pier($p['id'], $p['observatory_id'], $p['name'],
 					$p['begin'], $p['end'], $p['correction'],
-					$p['defaultMarkId'], $p['defaultElectronicsId'],
-					$p['defaultTheodoliteId'], $marks);
+					$p['defaul_mark_id'], $p['default_electronics_id'],
+					$p['default_theodolite_id'], $marks);
 	}
 
 	public function toArray () {
 		return array('id' => $this->id,
-					'observatoryId' => $this->observatoryId,
+					'observatory_id' => $this->observatory_id,
 					'name' => $this->name,
 					'begin' => $this->begin,
 					'end' => $this->end,
 					'correction' => $this->correction,
-					'defaultMarkId' => $this->defaultMarkId,
-					'defaultElectronicsId' => $this->defaultElectronicsId,
-					'defaultTheodoliteId' => $this->defaultTheodoliteId,
+					'default_mark_id' => $this->default_mark_id,
+					'default_electronics_id' => $this->default_electronics_id,
+					'default_theodolite_id' => $this->default_theodolite_id,
 					'marks' => $this->marks);
 	}
 
