@@ -16,7 +16,7 @@ try {
 		echo $_REQUEST['callback'] . '(' . $json . ');';
 	}
 	else {
-		header('Content-Type: application/json');	
+		header('Content-Type: application/json');
 		echo $json;
 	}
 } catch (Exception $e) {
