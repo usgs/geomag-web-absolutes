@@ -12,8 +12,12 @@ $MOUNT_PATH = $CONFIG['MOUNT_PATH'];
 
 
 $dburl = 'sqlite:' . $DATA_DIR . DIRECTORY_SEPARATOR . $CONFIG['SQLITE_DB'];
-$dbschema = '../lib/sql/sqlite/create_tables.sql';
+$dbschema = $DATA_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR .
+		'sql' . DIRECTORY_SEPARATOR . 'sqlite' . DIRECTORY_SEPARATOR .
+		'create_tables.sql';
 
+include_once $APP_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR .
+		'lib.inc.php';
 
 // connect to database
 $DB = new PDO($dburl);
@@ -27,4 +31,6 @@ try {
 	// database doesn't have schema, load
 	$DB->exec(file_get_contents($dbschema));
 }
+$OBSERVATION_FACTORY = new ObservationFactory($DB);
+$OBSERVATORY_FACTORY = new ObservatoryFactory($DB);
 
