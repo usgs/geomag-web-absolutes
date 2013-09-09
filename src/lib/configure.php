@@ -132,5 +132,4 @@
 		// write config file
 		file_put_contents($CONFIG_FILE, $ini);
 	}
-
 ?>
