@@ -48,7 +48,7 @@ define([
 
 	/**
 	 * @param options {Object} observatory attributes.
-	 * Same as constructor.
+	 *        options.  Same as constructor.
 	 */
 	RealtimeFactory.prototype.getRealtimeData = function(options) {
 		options = Util.extend( {}, this.options, options);
@@ -66,6 +66,11 @@ define([
 		});
 	};
 
+	/**
+	 * @param reading {Object}
+	 * Takes a reading object and increases/decreases starttime/endtime
+	 * for the Factory if appropriate.
+	 */
 	RealtimeFactory.prototype._setReadingStartEnd = function(reading) {
 		var measurements = reading.get('measurements');
 		var measurement_data = measurements.data();
@@ -84,6 +89,10 @@ define([
 		}
 	};
 
+	/**
+	 * @param measurement {Object}
+	 * Sets h, e, z, f in a measurement
+	 */
 	RealtimeFactory.prototype._setMeasurementValues = function(measurement) {
 		var values = this.data.data[0].values;
 		var timeoffset = measurement.get('time') - this.options.starttime;
@@ -98,14 +107,18 @@ define([
 		measurement.set({'f':tmpf});
 	};
 
-	RealtimeFactory.prototype.getTimeSeries = function(readingIn, callbackObj) {
+	/**
+	 * @params options {Object}
+	 * @params options.readint {Object}
+	 * @arams options.success {function}
+	 */
+	RealtimeFactory.prototype.getRealtimeDataByReading = function(options) {
 		var obj = this;
-		var readIn = readingIn;
-		var callback = callbackObj;
-		var measurements = readingIn.get('measurements');
-		var measurement_data = measurements.data();
+		var reading = options.reading;
+		var success = options.success;
+		var measurements = reading.get('measurements').data();
 
-		this._setReadingStartEnd( readingIn );
+		this._setReadingStartEnd( options.reading );
 
 		this.getRealtimeData({
 			'starttime': this.options.starttime,
@@ -115,21 +128,27 @@ define([
 			'success': function(data) {
 				obj.data = data;
 
-				for( var i = 0; i < measurement_data.length; i++ ){
-					var measurement = measurement_data[i];
+				for( var i = 0; i < measurements.length; i++ ){
+					var measurement = measurements[i];
 					obj._setMeasurementValues(measurement);
 				}
-				callback.success(readIn);
+				success(reading);
 			}
 		});
 
 	};
 
-	RealtimeFactory.prototype.getRealtimeDataByObservation = function(observation) {
+	/**
+	 * @params options {Object}
+	 * @params options.observation {Object}
+	 * @params options.success {function}
+	 */
+	RealtimeFactory.prototype.getRealtimeDataByObservation = function(options) {
 		var obj = this;
-		var readings = observation.get('readings');
+		var readings = options.observation.get('readings');
 		var readingsData = readings.data();
-		var obs = observation;
+		var obs = options.observation;
+		var success = options.success;
 
 		for(var i = 0; i < readingsData.length; i++ ) {
 			var reading = readingsData[i];
@@ -153,7 +172,7 @@ define([
 						obj._setMeasurementValues(measurement);
 					}
 				}
-				var tmp = obs;
+				success(obs);
 			}
 		});
 	};

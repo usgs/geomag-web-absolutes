@@ -37,6 +37,14 @@ define([
 			'time': 1377011990, 'h': 20881.2, 'e': 36.545, 'z':47623.3, 'f': 52530.7});
 	var meas2a = new Measurement({'id': 12,'type': Measurement.NORTH_DOWN,
 			'time': 1377012000, 'h': null, 'e': null, 'z':null, 'f': null });
+	var meas3a = new Measurement({'id': 12,'type': Measurement.NORTH_DOWN,
+			'time': 1377012000, 'h': null, 'e': null, 'z':null, 'f': null });
+	var meas4a = new Measurement({'id': 12,'type': Measurement.NORTH_DOWN,
+			'time': 1377012000, 'h': null, 'e': null, 'z':null, 'f': null });
+	var meas5a = new Measurement({'id': 12,'type': Measurement.NORTH_DOWN,
+			'time': 1377012000, 'h': null, 'e': null, 'z':null, 'f': null });
+	var meas6a = new Measurement({'id': 12,'type': Measurement.NORTH_DOWN,
+			'time': 1377012000, 'h': null, 'e': null, 'z':null, 'f': null });
 
 
 	var READINGTESTOBJECT = {
@@ -68,11 +76,33 @@ define([
 		'measurements': new Collection([meas5, meas6 ])
 	});
 
+	var reading1a = new Reading ({
+		'id': 1,
+		'set_number': 1,
+		'measurements': new Collection([meas1a, meas2a ])
+	});
+	var reading2a = new Reading ({
+		'id': 1,
+		'set_number': 1,
+		'measurements': new Collection([meas3a, meas4a])
+	});
+	var reading3a = new Reading ({
+		'id': 1,
+		'set_number': 1,
+		'measurements': new Collection([meas5a, meas6a ])
+	});
+
 	var OBSERVATIONTESTOBJECT = {
 		'id': null,
 		'begin': null,
 		'end': null,
 		'readings': new Collection( [reading1, reading2, reading3])
+	};
+	var OBSERVATIONTESTDATA = {
+		'id': null,
+		'begin': null,
+		'end': null,
+		'readings': new Collection( [reading1a, reading2a, reading3a])
 	};
 
 	var TESTOBJECT = {
@@ -135,15 +165,16 @@ define([
 			});
 		});
 
-		describe('getTimeSeriesData()', function(){
+		describe('getRealtimeDataByReading()', function(){
 			it('initializes with reading, gets back timeseries', function(){
 				var reading = new Reading(READINGTESTOBJECT);
 				var realtimeDataFactory = new RealtimeDataFactory({observatory:['BOU']});
 
-				realtimeDataFactory.getTimeSeries(reading, {'success': function(reading) {
-					expect(reading).to.deep.equal(READINGTESTDATA);
-				}});
-				//expect(reading.timeseries).to.deep.equal(READINGTESTDATA);
+				realtimeDataFactory.getRealtimeDataByReading({'reading': reading,
+					'success': function(reading) {
+						expect(reading).to.deep.equal(READINGTESTDATA);
+					}
+				});
 			});
 		});
 
@@ -152,8 +183,13 @@ define([
 				var realtimeDataFactory = new RealtimeDataFactory({observatory:['BOU']});
 				var observation = new Observation(OBSERVATIONTESTOBJECT);
 
-				realtimeDataFactory.getRealtimeDataByObservation(observation);
-				//expect(reading.timeseries).to.deep.equal(READINGTESTDATA);
+				realtimeDataFactory.getRealtimeDataByObservation({
+					'observation': observation,
+					'success': function(observation){
+						expect(observation).to.be.an.instanceOf(Observation);
+						expect(observation).to.deep.equal(OBSERVATIONTESTDATA);
+					}
+				});
 			});
 		});
 
