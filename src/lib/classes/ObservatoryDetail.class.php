@@ -10,7 +10,7 @@ class ObservatoryDetail extends Observatory {
 	public $observations;
 	public $piers;
 
-	public function __construct ($id=null, $code=null, $name=null, 
+	public function __construct ($id=null, $code=null, $name=null,
 				$default_pier_id=null, $location=null,
 				$latitude=null, $longitude=null,
 				$geomagnetic_latitude=null,
@@ -18,19 +18,19 @@ class ObservatoryDetail extends Observatory {
 				$orientation=null, $instruments=array(),
 				$observations=array(), $piers=array()) {
 
-		parent::__construct($id, $code, $name, $default_pier_id, $location, 
-					        $latitude, $longitude, $geomagnetic_latitude, 
-					        $geomagnetic_longitude, $elevation, $orientation);
+		parent::__construct($id, $code, $name, $default_pier_id, $location,
+				$latitude, $longitude, $geomagnetic_latitude,
+				$geomagnetic_longitude, $elevation, $orientation);
 		$this->instruments = $instruments;
 		$this->observations = $observations;
 		$this->piers = $piers;
 	}
 
 	public static function fromArray (&$p) {
-		$instruments = array(); 
-		$observations = array(); 
-		$piers = array(); 
-		
+		$instruments = array();
+		$observations = array();
+		$piers = array();
+
 		if (isset($p['instruments'])) {
 			foreach ($p['instruments'] as $instrument) {
 				$instruments[] = Instrument::fromArray($instrument);

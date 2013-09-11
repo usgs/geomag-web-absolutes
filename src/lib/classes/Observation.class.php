@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Data class representing one observation with detail 
+ * Data class representing one observation with detail.
  */
 class Observation {
 

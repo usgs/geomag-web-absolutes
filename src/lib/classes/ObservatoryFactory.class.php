@@ -11,15 +11,15 @@ class ObservatoryFactory {
 	 *      The PDO database connection for this factory.
 	 */
 	public function __construct ($db){
-		$this->db = $db;	
+		$this->db = $db;
 	}
 
 	/**
-	 * Reads all the observatories from the database into an array of 
+	 * Reads all the observatories from the database into an array of
 	 * standard observatory objects.
 	 *
 	 * @return {Array{Object}}
-	 * 
+	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
@@ -43,10 +43,10 @@ class ObservatoryFactory {
 			$this->triggerError($statement);
 		}
 		$statement->closeCursor();
-		
+
 		return $objects;
 	}
-	
+
 	/**
 	 * Reads the requested observatory detail object from the database.
 	 *
@@ -54,7 +54,7 @@ class ObservatoryFactory {
 	 *      The database Id of the observatory.
 	 *
 	 * @return {ObservatoryDetail}
-	 * 
+	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
@@ -93,9 +93,9 @@ class ObservatoryFactory {
 	 *
 	 * @param id {Integer}
 	 *      The database Id of the observatory.
-	 *	 
+	 *
 	 * @return {Array{Object}}
-	 * 
+	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
@@ -130,7 +130,7 @@ class ObservatoryFactory {
 	 *      The database Id of the observatory.
 	 *
 	 * @return {Array{Object}}
-	 * 
+	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
@@ -169,7 +169,7 @@ class ObservatoryFactory {
 	 *      The database Id of the observatory.
 	 *
 	 * @return {Array{Object}}
-	 * 
+	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
@@ -206,7 +206,7 @@ class ObservatoryFactory {
 	 *      The database Id of the pier.
 	 *
 	 * @return {Array{Object}}
-	 * 
+	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
