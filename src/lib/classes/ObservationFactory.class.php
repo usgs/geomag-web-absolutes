@@ -75,9 +75,9 @@ class ObservationFactory {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$measurement = new Measurement(intval($row['ID']),
 						intval($row['reading_id']), $row['type'],
-						intval($row['time']), floatval($row['h']),
-						floatval($row['e']), floatval($row['z']),
-						floatval($row['f']));
+						intval($row['time']), intval($row['angle']),
+						floatval($row['h']), floatval($row['e']),
+						floatval($row['z']), floatval($row['f']));
 				$measurements[] = $measurement;
 			}
 		} else {
