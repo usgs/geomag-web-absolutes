@@ -24,8 +24,16 @@ define([
 	/**
 	 * Constructor.
 	 *
-	 * @param  options {Object} observatory attributes.
-	 */
+	 * @param options {Object} Measurement attributes.
+	 * @param options.id {int}
+	 * @param options.type {string}
+	 * @param options.time {epoch time}
+	 * @param options.angle {float}
+	 * @param options.h {float}
+	 * @param options.e {float}
+	 * @param options.z {float}
+	 * @param options.f {float}
+	 **/
 	var Measurement	 = function (options) {
 		// Call parent constructor
 		Model.call(this, Util.extend({}, DEFAULTS, options));
@@ -34,6 +42,7 @@ define([
 	// Observatory extends Model
 	Measurement.prototype = Object.create(Model.prototype);
 
+	// These are in the same order as appear on the paper form.
 	Measurement.FIRST_MARK_UP = 'FirstMarkUp';
 	Measurement.FIRST_MARK_DOWN = 'FirstMarkDown';
 	Measurement.WEST_DOWN = 'WestDown';

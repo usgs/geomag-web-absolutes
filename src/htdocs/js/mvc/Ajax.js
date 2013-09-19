@@ -1,4 +1,9 @@
 /*global define*/
+
+/**************************/
+/* DEPRECATED, use Xhr.js */
+/**************************/
+
 define([
 	'mvc/Util'
 ], function(

@@ -1,5 +1,4 @@
 /*global define*/
-/*jshint unused:vars*/
 
 define([
 	'mvc/Model',
@@ -15,8 +14,8 @@ define([
 ) {
 	'use strict';
 
-	//var DEFAULT_URL = 'http://ehpd-geomag.cr.usgs.gov/map/observatories_data.json.php';
 	var DEFAULT_URL = '/map/observatories_data.json.php';
+	//var DEFAULT_URL = 'http://ehpd-geomag.cr.usgs.gov/map/observatories_data.json.php';
 
 	/** Define default attributes. */
 	var DEFAULTS = {
@@ -41,6 +40,7 @@ define([
 	 */
 	var RealtimeFactory = function (options) {
 		// Call parent constructor
+		Model.call(this, Util.extend({}, DEFAULTS, options));
 		this.options = Util.extend({}, DEFAULTS, options);
 	};
 	// RealtimeFactory extends Model
@@ -48,9 +48,9 @@ define([
 
 	/**
 	 * @param options {Object} observatory attributes.
-	 *        options.  Same as constructor.
+	 *        options.???  Same as constructor.
 	 */
-	RealtimeFactory.prototype.getRealtimeData = function(options) {
+	RealtimeFactory.prototype.getRealtimeData = function (options) {
 		options = Util.extend( {}, this.options, options);
 
 		Xhr.jsonp({
@@ -67,71 +67,143 @@ define([
 	};
 
 	/**
-	 * @param reading {Object}
-	 * Takes a reading object and increases/decreases starttime/endtime
-	 * for the Factory if appropriate.
+	 * @param startend {Object}
+	 * @param startend.start {epoch time}
+	 * @param startend.end {epoch time}
+	 * Sets RealTimeFactory's starttime and enddtime.
 	 */
-	RealtimeFactory.prototype._setReadingStartEnd = function(reading) {
+	RealtimeFactory.prototype._setStartEnd = function (startend) {
+		if( this.options.starttime === null ) {
+			this.options.starttime = startend.start;
+		}
+		else if ( this.options.starttime > startend.start ) {
+			this.options.starttime = startend.start;
+		}
+		if( this.options.endtime === null ) {
+			this.options.endtime = startend.end;
+		}
+		else if( this.options.endtime < startend.end ) {
+			this.options.endtime = startend.end;
+		}
+	};
+
+	/**
+	 * Deprecated.
+	 * Created to determine if we already loaded the data.
+	 * If needed, we can add the code back into measurment/reading/observation.
+	 */
+	RealtimeFactory.prototype._checkDataExists = function (startend) {
+		if( this.options.starttime === null || this.options.endtime === null ){
+			return false;
+		}
+		if( this.options.data !== null ) {
+			if( this.options.starttime < startend.start &&
+			    this.options.endtime > startend.end){
+				return false;
+			}
+		}
+		return true;
+	};
+
+	/**
+	 * @param reading {Object}
+	 * @return starttime {Object}
+	 * Loops through a reading and returns the start and end time.
+	 */
+	RealtimeFactory.prototype._getReadingStartEnd = function (reading) {
 		var measurements = reading.get('measurements');
 		var measurement_data = measurements.data();
+		var start, end;
 
-		if( measurement_data.length && this.options.starttime === null) {
-			this.options.starttime  = measurement_data[0].get('time');
-			this.options.endttime = this.options.starttime ;
+		if( measurement_data.length !== 0) {
+			start = measurement_data[0].get('time');
+			end = start;
 		}
 
 		for(var i = 0; i < measurement_data.length; i++) {
 			var measurement = measurement_data[i];
-			if( measurement.get('time') < this.options.starttime  )
-				{ this.options.starttime  = measurement.get('time'); }
-			if( measurement.get('time') > this.options.endttime )
-				{ this.options.endttime = measurement.get('time'); }
+			if( measurement.get('time') < start )
+				{ start = measurement.get('time'); }
+			if( measurement.get('time') > end )
+				{ end = measurement.get('time'); }
 		}
+
+	return {'start':start, 'end':end};
 	};
 
 	/**
 	 * @param measurement {Object}
 	 * Sets h, e, z, f in a measurement
 	 */
-	RealtimeFactory.prototype._setMeasurementValues = function(measurement) {
+	RealtimeFactory.prototype._setMeasurementValues = function (measurement) {
 		var values = this.data.data[0].values;
 		var timeoffset = measurement.get('time') - this.options.starttime;
+
 		var tmph = values.H[timeoffset]; if( tmph === undefined ) { tmph = null; }
 		var tmpe = values.E[timeoffset]; if( tmpe === undefined ) { tmpe = null; }
 		var tmpz = values.Z[timeoffset]; if( tmpz === undefined ) { tmpz = null; }
 		var tmpf = values.F[timeoffset]; if( tmpf === undefined ) { tmpf = null; }
-
 		measurement.set({'h':tmph});
 		measurement.set({'e':tmpe});
 		measurement.set({'z':tmpz});
 		measurement.set({'f':tmpf});
+
+
 	};
 
-	/**
-	 * @params options {Object}
-	 * @params options.readint {Object}
-	 * @arams options.success {function}
-	 */
-	RealtimeFactory.prototype.getRealtimeDataByReading = function(options) {
-		var obj = this;
-		var reading = options.reading;
-		var success = options.success;
-		var measurements = reading.get('measurements').data();
+	RealtimeFactory.prototype._setMeasurements = function (measurements, obj) {
+		for( var i = 0; i < measurements.length; i++ ){
+			var measurement = measurements[i];
+			obj._setMeasurementValues(measurement);
+		}
+	};
 
-		this._setReadingStartEnd( options.reading );
+	RealtimeFactory.prototype.getRealtimeDataByMeasurement = function(options) {
+		var obj = this;
+		var measurement = options.measurement;
+		var success = options.success;
+		var startend = {'start': measurement.get('time'),
+		                'end': measurement.get('time') + 1};
+
+		this._setStartEnd(startend);
 
 		this.getRealtimeData({
-			'starttime': this.options.starttime,
-			'endtime': this.options.endttime,
+			'starttime': measurement.get('time'),
+			'endtime': measurement.get('time') + 1,
 			'channels': ['H','E','Z','F'],
 			'freq': 'seconds',
 			'success': function(data) {
 				obj.data = data;
 
-				for( var i = 0; i < measurements.length; i++ ){
-					var measurement = measurements[i];
-					obj._setMeasurementValues(measurement);
-				}
+				obj._setMeasurementValues(measurement);
+				success(measurement);
+			}
+		});
+	};
+
+	/**
+	 * @params options {Object}
+	 * @params options.reading {Object}
+	 * @arams options.success {function}
+	 */
+	RealtimeFactory.prototype.getRealtimeDataByReading = function (options) {
+		var obj = this;
+		var reading = options.reading;
+		var success = options.success;
+		var measurements = reading.get('measurements').data();
+
+		var startend = this._getReadingStartEnd( options.reading );
+		this._setStartEnd( startend );
+
+		this.getRealtimeData({
+			'starttime': this.options.starttime,
+			'endtime': this.options.endtime,
+			'channels': ['H','E','Z','F'],
+			'freq': 'seconds',
+			'success': function(data) {
+				obj.data = data;
+
+				obj._setMeasurements(measurements, obj);
 				success(reading);
 			}
 		});
@@ -143,21 +215,36 @@ define([
 	 * @params options.observation {Object}
 	 * @params options.success {function}
 	 */
-	RealtimeFactory.prototype.getRealtimeDataByObservation = function(options) {
+	RealtimeFactory.prototype.getRealtimeDataByObservation = function (options) {
 		var obj = this;
 		var readings = options.observation.get('readings');
 		var readingsData = readings.data();
 		var obs = options.observation;
 		var success = options.success;
+		var begin = obs.get('begin');
+		var end = obs.get('end');
 
 		for(var i = 0; i < readingsData.length; i++ ) {
-			var reading = readingsData[i];
-			this._setReadingStartEnd(reading);
+			var readingstartend = this._getReadingStartEnd( readingsData[i] );
+			if( begin === null ) {
+				begin = readingstartend.start;
+			} else if( begin > readingstartend.start) {
+				begin = readingstartend.start;
+			}
+			if( end === null ) {
+				end = readingstartend.end;
+			} else if( end < readingstartend.end) {
+				end = readingstartend.end;
+			}
 		}
+		obs.set({'begin':begin});
+		obs.set({'end':end});
+
+		this._setStartEnd( {'start': begin,'end': end} );
 
 		this.getRealtimeData({
 			'starttime': this.options.starttime,
-			'endtime': this.options.endttime,
+			'endtime': this.options.endtime,
 			'channels': ['H','E','Z','F'],
 			'freq': 'seconds',
 			'success': function(data) {
