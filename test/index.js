@@ -35,7 +35,6 @@ require([
 		'spec/UserTest',
 		'spec/UserRoleTest',
 		'spec/ReadingTest',
-		'spec/TimeSeriesTest',
 		'spec/DeclinationViewTest',
 		'spec/RealtimeDataFactoryTest'
 	], function () {
