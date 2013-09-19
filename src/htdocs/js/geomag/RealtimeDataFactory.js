@@ -15,7 +15,6 @@ define([
 	'use strict';
 
 	var DEFAULT_URL = '/map/observatories_data.json.php';
-	//var DEFAULT_URL = 'http://ehpd-geomag.cr.usgs.gov/map/observatories_data.json.php';
 
 	/** Define default attributes. */
 	var DEFAULTS = {
@@ -147,8 +146,6 @@ define([
 		measurement.set({'e':tmpe});
 		measurement.set({'z':tmpz});
 		measurement.set({'f':tmpf});
-
-
 	};
 
 	RealtimeFactory.prototype._setMeasurements = function (measurements, obj) {
@@ -158,6 +155,12 @@ define([
 		}
 	};
 
+	/**
+	 * @params options {Object}
+	 * @params options.measurement {Object}
+	 * @params options.success {function}
+	 * Fills in HEZF on a single measurement object.
+	 */
 	RealtimeFactory.prototype.getRealtimeDataByMeasurement = function(options) {
 		var obj = this;
 		var measurement = options.measurement;
@@ -184,7 +187,10 @@ define([
 	/**
 	 * @params options {Object}
 	 * @params options.reading {Object}
-	 * @arams options.success {function}
+	 * @params options.success {function}
+	 * Fills in HEZF for all the measurements in a reading.
+	 * Not certain this will ever be used. Measurement and Observation
+	 *  should be the two used.
 	 */
 	RealtimeFactory.prototype.getRealtimeDataByReading = function (options) {
 		var obj = this;
@@ -214,6 +220,7 @@ define([
 	 * @params options {Object}
 	 * @params options.observation {Object}
 	 * @params options.success {function}
+	 * Fills in HEZF for all the measurements in a observation.
 	 */
 	RealtimeFactory.prototype.getRealtimeDataByObservation = function (options) {
 		var obj = this;
