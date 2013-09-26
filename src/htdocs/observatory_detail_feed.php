@@ -17,7 +17,6 @@ include_once '../conf/config.inc.php';
 
 
 // process request
-header('Content-Type: application/json');
 try {
 	// 09/04/12 -- EMM: This exception is for testing client-side error handling.
 	//                  Remove it for production.
@@ -27,8 +26,7 @@ try {
 	if (isset($_REQUEST['callback'])) {
 		header('Content-Type: text/javascript');
 		echo $_REQUEST['callback'] . '(' . $json . ');';
-	}
-	else {
+	} else {
 		header('Content-Type: application/json');
 		echo $json;
 	}

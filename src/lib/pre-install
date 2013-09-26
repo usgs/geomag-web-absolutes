@@ -44,8 +44,8 @@ file_put_contents($APACHE_CONFIG_FILE, '
 		Order Allow,Deny
 		Allow from all
 	</Location>
-	RewriteRule ^${MOUNT_PATH}/observatory_detail_feed/(.*)\$ /observatory_detail_feed.php?id=\$1 [L,PT]
-	RewriteRule ^${MOUNT_PATH}/observatory_summary_feed\$ /observatory_summary_feed.php [L,PT]
+	RewriteRule ^${MOUNT_PATH}/observatory_detail_feed/(.*)\$ ${MOUNT_PATH}/observatory_detail_feed.php?id=\$1 [L,PT]
+	RewriteRule ^${MOUNT_PATH}/observatory_summary_feed\$ ${MOUNT_PATH}/observatory_summary_feed.php [L,PT]
 ');
 
 
