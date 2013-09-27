@@ -10,7 +10,6 @@ define([
 	Util,
 	Reading,
 	Xhr
-
 ) {
 	'use strict';
 
@@ -66,77 +65,12 @@ define([
 	};
 
 	/**
-	 * @param startend {Object}
-	 * @param startend.start {epoch time}
-	 * @param startend.end {epoch time}
-	 * Sets RealTimeFactory's starttime and enddtime.
-	 */
-	RealtimeFactory.prototype._setStartEnd = function (startend) {
-		if( this.options.starttime === null ) {
-			this.options.starttime = startend.start;
-		}
-		else if ( this.options.starttime > startend.start ) {
-			this.options.starttime = startend.start;
-		}
-		if( this.options.endtime === null ) {
-			this.options.endtime = startend.end;
-		}
-		else if( this.options.endtime < startend.end ) {
-			this.options.endtime = startend.end;
-		}
-	};
-
-	/**
-	 * Deprecated.
-	 * Created to determine if we already loaded the data.
-	 * If needed, we can add the code back into measurment/reading/observation.
-	 */
-	RealtimeFactory.prototype._checkDataExists = function (startend) {
-		if( this.options.starttime === null || this.options.endtime === null ){
-			return false;
-		}
-		if( this.options.data !== null ) {
-			if( this.options.starttime < startend.start &&
-			    this.options.endtime > startend.end){
-				return false;
-			}
-		}
-		return true;
-	};
-
-	/**
-	 * @param reading {Object}
-	 * @return starttime {Object}
-	 * Loops through a reading and returns the start and end time.
-	 */
-	RealtimeFactory.prototype._getReadingStartEnd = function (reading) {
-		var measurements = reading.get('measurements');
-		var measurement_data = measurements.data();
-		var start, end;
-
-		if( measurement_data.length !== 0) {
-			start = measurement_data[0].get('time');
-			end = start;
-		}
-
-		for(var i = 0; i < measurement_data.length; i++) {
-			var measurement = measurement_data[i];
-			if( measurement.get('time') < start )
-				{ start = measurement.get('time'); }
-			if( measurement.get('time') > end )
-				{ end = measurement.get('time'); }
-		}
-
-	return {'start':start, 'end':end};
-	};
-
-	/**
 	 * @param measurement {Object}
 	 * Sets h, e, z, f in a measurement
 	 */
 	RealtimeFactory.prototype._setMeasurementValues = function (measurement) {
 		var values = this.data.data[0].values;
-		var timeoffset = measurement.get('time') - this.options.starttime;
+		var timeoffset = measurement.get('time') - this.data.request.starttime;
 
 		var tmph = values.H[timeoffset]; if( tmph === undefined ) { tmph = null; }
 		var tmpe = values.E[timeoffset]; if( tmpe === undefined ) { tmpe = null; }
@@ -165,10 +99,6 @@ define([
 		var obj = this;
 		var measurement = options.measurement;
 		var success = options.success;
-		var startend = {'start': measurement.get('time'),
-		                'end': measurement.get('time') + 1};
-
-		this._setStartEnd(startend);
 
 		this.getRealtimeData({
 			'starttime': measurement.get('time'),
@@ -197,13 +127,11 @@ define([
 		var reading = options.reading;
 		var success = options.success;
 		var measurements = reading.get('measurements').data();
-
-		var startend = this._getReadingStartEnd( options.reading );
-		this._setStartEnd( startend );
+		var startend = reading.getReadingTimes();
 
 		this.getRealtimeData({
-			'starttime': this.options.starttime,
-			'endtime': this.options.endtime,
+			'starttime': startend.start,
+			'endtime': startend.end,
 			'channels': ['H','E','Z','F'],
 			'freq': 'seconds',
 			'success': function(data) {
@@ -213,7 +141,6 @@ define([
 				success(reading);
 			}
 		});
-
 	};
 
 	/**
@@ -228,30 +155,12 @@ define([
 		var readingsData = readings.data();
 		var obs = options.observation;
 		var success = options.success;
-		var begin = obs.get('begin');
-		var end = obs.get('end');
 
-		for(var i = 0; i < readingsData.length; i++ ) {
-			var readingstartend = this._getReadingStartEnd( readingsData[i] );
-			if( begin === null ) {
-				begin = readingstartend.start;
-			} else if( begin > readingstartend.start) {
-				begin = readingstartend.start;
-			}
-			if( end === null ) {
-				end = readingstartend.end;
-			} else if( end < readingstartend.end) {
-				end = readingstartend.end;
-			}
-		}
-		obs.set({'begin':begin});
-		obs.set({'end':end});
-
-		this._setStartEnd( {'start': begin,'end': end} );
+		var startend = obs.getObservationTimes();
 
 		this.getRealtimeData({
-			'starttime': this.options.starttime,
-			'endtime': this.options.endtime,
+			'starttime': startend.start,
+			'endtime': startend.end,
 			'channels': ['H','E','Z','F'],
 			'freq': 'seconds',
 			'success': function(data) {

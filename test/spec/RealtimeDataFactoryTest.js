@@ -208,7 +208,6 @@ define([
 				realtimeDataFactory.getRealtimeDataByObservation({
 					'observation': observation,
 					'success': function(observation){
-						//expect(observation).to.be.an.instanceOf(Observation);
 						expect(observation).to.deep.equal(OBSERVATIONTESTDATA);
 					}
 				});
