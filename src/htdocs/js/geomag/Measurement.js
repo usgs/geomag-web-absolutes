@@ -2,7 +2,8 @@
 
 define([
 	'mvc/Model',
-	'util/Util'
+	'util/Util',
+	'geomag/RealtimeDataFactory'
 ], function (
 	Model,
 	Util
@@ -41,6 +42,45 @@ define([
 
 	// Observatory extends Model
 	Measurement.prototype = Object.create(Model.prototype);
+
+	Measurement.prototype.setRealtimeValues = function (data) {
+		var values = data.data[0].values;
+		var timeoffset = this.get('time') - data.request.starttime;
+
+		var tmph = values.H[timeoffset]; if( tmph === undefined ) { tmph = null; }
+		var tmpe = values.E[timeoffset]; if( tmpe === undefined ) { tmpe = null; }
+		var tmpz = values.Z[timeoffset]; if( tmpz === undefined ) { tmpz = null; }
+		var tmpf = values.F[timeoffset]; if( tmpf === undefined ) { tmpf = null; }
+		this.set({'h':tmph});
+		this.set({'e':tmpe});
+		this.set({'z':tmpz});
+		this.set({'f':tmpf});
+	};
+
+	/**
+	 * @params options {Object}
+	 * @params options.realtimeDataFactory {Object}
+	 * @params options.success {function}
+	 * Fills in HEZF for the measurement.
+	 */
+	Measurement.prototype.setRealtimeData = function(options) {
+		var realtimeDataFactory = options.realtimeDataFactory;
+		var success = options.success;
+		var measurement = this;
+
+		realtimeDataFactory.getRealtimeData({
+			'starttime': measurement.get('time'),
+			'endtime': measurement.get('time') + 1,
+			'channels': ['H','E','Z','F'],
+			'freq': 'seconds',
+			'success': function(data) {
+
+			measurement.setRealtimeValues(data);
+			success(measurement);
+			}
+		});
+	};
+
 
 	// These are in the same order as appear on the paper form.
 	Measurement.FIRST_MARK_UP = 'FirstMarkUp';

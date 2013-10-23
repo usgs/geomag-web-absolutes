@@ -19,83 +19,92 @@ define([
 	) {
 	'use strict';
 	var expect = chai.expect;
+	var TESTMEASUREMENTS = [];
+	var TESTANSWERS = [];
 
-	var meas1 = new Measurement(
+	TESTMEASUREMENTS[Measurement.SOUTH_UP] = new Measurement(
 						{'id': 11,'type': Measurement.SOUTH_UP, 'time': 1377011990 });
-	var meas2 = new Measurement(
+	TESTMEASUREMENTS[Measurement.NORTH_DOWN] = new Measurement(
 						{'id': 12,'type': Measurement.NORTH_DOWN, 'time': 1377011995 });
-	var meas3 = new Measurement(
+	TESTMEASUREMENTS[Measurement.WEST_UP] = new Measurement(
 						{'id': 13,'type': Measurement.WEST_UP, 'time': 1377012000 });
-	var meas4 = new Measurement(
+	TESTMEASUREMENTS[Measurement.WEST_DOWN] = new Measurement(
 						{'id': 14,'type': Measurement.WEST_DOWN, 'time': 1377012320 });
-	var meas5 = new Measurement(
+	TESTMEASUREMENTS[Measurement.EAST_UP] = new Measurement(
 						{'id': 15,'type': Measurement.EAST_UP,'time': 1377012380 });
-	var meas6 = new Measurement(
+	TESTMEASUREMENTS[Measurement.EAST_DOWN] = new Measurement(
 						{'id': 16,'type': Measurement.EAST_DOWN,'time': 1377012420 });
 
-	var meas1a = new Measurement({'id': 11,
+	TESTANSWERS[Measurement.SOUTH_UP] = new Measurement({'id': 11,
 						'type': Measurement.SOUTH_UP,'time': 1377011990,
 						'h': 20881.2,'e': 36.545, 'z':47623.3, 'f': 52530.7 });
-	var meas2a = new Measurement({'id': 12,
+	TESTANSWERS[Measurement.NORTH_DOWN] = new Measurement({'id': 12,
 						'type': Measurement.NORTH_DOWN,'time': 1377011995,
 						'h': 20881.1,'e': 36.625, 'z':47623.3, 'f': 52530.6 });
-	var meas3a = new Measurement({'id': 13,
+	TESTANSWERS[Measurement.WEST_UP] = new Measurement({'id': 13,
 						'type': Measurement.WEST_UP,'time': 1377012000,
 						'h': 20881,'e': 36.657, 'z':47623.3, 'f': 52530.6 });
-	var meas4a = new Measurement({'id': 14,
+	TESTANSWERS[Measurement.WEST_DOWN] = new Measurement({'id': 14,
 						'type': Measurement.WEST_DOWN,'time': 1377012320,
 						'h': null, 'z':null, 'f': null });
-	var meas5a = new Measurement({'id': 15,
+	TESTANSWERS[Measurement.EAST_UP] = new Measurement({'id': 15,
 						'type': Measurement.EAST_UP,'time': 1377012380,
 						'h': null, 'z':null, 'f': null });
-	var meas6a = new Measurement({'id': 16,
+	TESTANSWERS[Measurement.EAST_DOWN] = new Measurement({'id': 16,
 						'type': Measurement.EAST_DOWN,'time': 1377012420,
 						'h': null, 'z':null, 'f': null });
-
 
 	var READINGTESTOBJECT = {
 		'id': 1,
 		'set_number': 1,
-		'measurements': new Collection([meas1, meas2])
+		'measurements': new Collection([TESTMEASUREMENTS[Measurement.SOUTH_UP],
+			                              TESTMEASUREMENTS[Measurement.NORTH_DOWN]])
 	};
 
 	var READINGTESTDATA = new Reading ({
 		'id': 1,
 		'set_number': 1,
-		'measurements': new Collection([meas1a, meas2a])
+		'measurements': new Collection([TESTMEASUREMENTS[Measurement.SOUTH_UP],
+			                              TESTMEASUREMENTS[Measurement.NORTH_DOWN]])
 
 	});
 
 	var reading1 = new Reading ({
 		'id': 1,
 		'set_number': 1,
-		'measurements': new Collection([meas1, meas2 ])
+		'measurements': new Collection([TESTMEASUREMENTS[Measurement.SOUTH_UP],
+			                              TESTMEASUREMENTS[Measurement.NORTH_DOWN]])
 	});
 	var reading2 = new Reading ({
 		'id': 1,
 		'set_number': 1,
-		'measurements': new Collection([meas3, meas4 ])
+		'measurements': new Collection([TESTMEASUREMENTS[Measurement.WEST_UP],
+			                              TESTMEASUREMENTS[Measurement.WEST_DOWN]])
 	});
 	var reading3 = new Reading ({
 		'id': 1,
 		'set_number': 1,
-		'measurements': new Collection([meas5, meas6 ])
+		'measurements': new Collection([TESTMEASUREMENTS[Measurement.EAST_UP],
+			                              TESTMEASUREMENTS[Measurement.EAST_DOWN]])
 	});
 
 	var reading1a = new Reading ({
 		'id': 1,
 		'set_number': 1,
-		'measurements': new Collection([meas1a, meas2a ])
+		'measurements': new Collection([TESTANSWERS[Measurement.SOUTH_UP],
+			                              TESTANSWERS[Measurement.NORTH_DOWN]])
 	});
 	var reading2a = new Reading ({
 		'id': 1,
 		'set_number': 1,
-		'measurements': new Collection([meas3a, meas4a])
+		'measurements': new Collection([TESTANSWERS[Measurement.WEST_UP],
+			                              TESTANSWERS[Measurement.WEST_DOWN]])
 	});
 	var reading3a = new Reading ({
 		'id': 1,
 		'set_number': 1,
-		'measurements': new Collection([meas5a, meas6a ])
+		'measurements': new Collection([TESTANSWERS[Measurement.EAST_UP],
+			                              TESTANSWERS[Measurement.EAST_DOWN]])
 	});
 
 	var OBSERVATIONTESTOBJECT = {
@@ -171,42 +180,43 @@ define([
 			});
 		});
 
-		describe('getRealtimeDataByMeasurement()', function(){
-			it('passes in measurement, gets back measurement with realtime data',
-				 function(){
+		/**
+		 * The next three are really testing functions in Measurement, Reading,
+		 * and Observation, but since those three call RealtimeDataFactory,
+		 * I'm putting it in the same group as RealtimeDataFactory.
+		 **/
+		describe('measurement.setRealtimeData()', function(){
+			it('sets the values in a measurement',
+				function(){
 				var measurement = new Measurement(
 					{'id': 11,'type': Measurement.SOUTH_UP, 'time': 1377011990 });
 				var realtimeDataFactory = new RealtimeDataFactory({observatory:['BOU']});
-
-				realtimeDataFactory.getRealtimeDataByMeasurement(
-						{'measurement': measurement,'success': function() {
-						expect(measurement).to.deep.equal(meas1a);
-					}
+				measurement.setRealtimeData({'realtimeDataFactory': realtimeDataFactory,
+					'success': function(measurement) {expect(measurement).to.deep.equal(
+						TESTANSWERS[Measurement.SOUTH_UP]);}
 				});
 			});
 		});
 
-		describe('getRealtimeDataByReading()', function(){
-			it('passes in reading, gets back reading with realtime data', function(){
+		describe('reading.setRealtimeData()', function(){
+			it('sets all the measurements values in a reading', function(){
 				var reading = new Reading(READINGTESTOBJECT);
 				var realtimeDataFactory = new RealtimeDataFactory({observatory:['BOU']});
-
-				realtimeDataFactory.getRealtimeDataByReading({'reading': reading,
-					'success': function(reading) {
-						expect(reading).to.deep.equal(READINGTESTDATA);
-					}
+				reading.setRealtimeData({'realtimeDataFactory':realtimeDataFactory,
+					'success':function(reading){
+						expect(reading).to.deep.equal(READINGTESTDATA);}
 				});
 			});
 		});
 
-		describe('getRealtimeDataByObservation()', function(){
-			it('passes in observation, gets back observation with realtimedata',
+		describe('observation.setRealtimeData()', function(){
+			it('sets all the measurements values in an observation',
 				  function(){
 				var realtimeDataFactory = new RealtimeDataFactory({observatory:['BOU']});
 				var observation = new Observation(OBSERVATIONTESTOBJECT);
 
-				realtimeDataFactory.getRealtimeDataByObservation({
-					'observation': observation,
+				observation.setRealtimeData({
+					'realtimeDataFactory': realtimeDataFactory,
 					'success': function(observation){
 						expect(observation).to.deep.equal(OBSERVATIONTESTDATA);
 					}

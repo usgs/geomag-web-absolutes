@@ -53,5 +53,42 @@ define([
 		return({'start':begin, 'end':end});
 	};
 
+	/**
+	 * @params options {Object}
+	 * @params options.realtimeDataFactory {Object}
+	 * @params options.success {function}
+	 * Fills in HEZF for all the measurements in a observation.
+	 * could be refactored to call reading.setRealtimeData, but that slows
+	 * things down.
+	 */
+	Observation.prototype.setRealtimeData = function (options) {
+		var realtimeDataFactory = options.realtimeDataFactory;
+		var readings = this.get('readings');
+		var readingsData = readings.data();
+		var obs = this;
+		var success = options.success;
+
+		var startend = this.getObservationTimes();
+
+		realtimeDataFactory.getRealtimeData({
+			'starttime': startend.start,
+			'endtime': startend.end,
+			'channels': ['H','E','Z','F'],
+			'freq': 'seconds',
+			'success': function(data) {
+				for( var j = 0; j < readingsData.length; j++ ) {
+					var reading = readingsData[j];
+					var measurements = reading.get('measurements');
+					var measurement_data = measurements.data();
+					for( var i = 0; i < measurement_data.length; i++ ){
+						var measurement = measurement_data[i];
+						measurement.setRealtimeValues(data);
+					}
+				}
+				success(obs);
+			}
+		});
+	};
+
 	return Observation;
 });

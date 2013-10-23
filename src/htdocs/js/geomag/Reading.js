@@ -95,6 +95,37 @@ define([
 	return {'start':start, 'end':end};
 	};
 
+	/**
+	 * @params options {Object}
+	 * @params options.realtimeDataFactory {Object}
+	 * @params options.success {function}
+	 * Fills in HEZF for all the measurements in a reading.
+	 * Not certain this will ever be used. Measurement and Observation
+	 * should be the two used.
+	 */
+	Reading.prototype.setRealtimeData = function (options) {
+		var realtimeDataFactory = options.realtimeDataFactory;
+		var success = options.success;
+		var measurements = this.get('measurements').data();
+		var startend = this.getReadingTimes();
+		var reading = this;
+
+		realtimeDataFactory.getRealtimeData({
+			'starttime': startend.start,
+			'endtime': startend.end,
+			'channels': ['H','E','Z','F'],
+			'freq': 'seconds',
+			'success': function(data) {
+
+				for( var i = 0; i < measurements.length; i++ ){
+					var measurement = measurements[i];
+					measurement.setRealtimeValues(data);
+				}
+				success(reading);
+			}
+		});
+	};
+
 	// return constructor from closure
 	return Reading;
 });
