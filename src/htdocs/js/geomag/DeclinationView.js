@@ -85,10 +85,10 @@ define([
 		this._correctedF = this._el.querySelector('.correctedF');
 
 		// when reading changes render view
-		this._options.reading.on('change', this.render, this);
+		//this._options.reading.on('change', this.render, this);
 
 		// render current reading
-		this.render();
+		//this.render();
 	};
 
 	/**

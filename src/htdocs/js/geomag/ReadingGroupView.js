@@ -1,10 +1,18 @@
 /* global define */
 define([
 	'mvc/View',
-	'util/Util'
+	'util/Util',
+	'tablist/TabList',
+
+	'geomag/Reading',
+	'geomag/ReadingView'
 ], function (
 	View,
-	Util
+	Util,
+	TabList,
+
+	Reading,
+	ReadingView
 ) {
 	'use strict';
 
@@ -21,12 +29,45 @@ define([
 
 
 	ReadingGroupView.prototype.render = function () {
-		// TODO :: Render current model
+		var observation = this._observation;
+
+		// TODO :: Load readings off the observation instead.
+		this._tablist.addTab(this._createTab(observation, new Reading()));
+		this._tablist.addTab(this._createTab(observation, new Reading()));
 	};
 
 	ReadingGroupView.prototype._initialize = function () {
-		this._el.innerHTML = '<p>I am an ReadingGroupView!</p>';
+		this._observation = this._options.observation;
+		this._readings = this._observation.readings;
+		this._calculator = this._options.baselineCalculator;
+
+		this._tablist = new TabList({tabPosition: 'top'});
+		this._tablist.el.classList.add('reading-group-view');
+		this._el.appendChild(this._tablist.el);
+
+		// TODO :: Bind to observation, when readings are added/removed,
+		//         you will have to re-render
+		this.render();
 	};
+
+	ReadingGroupView.prototype._createTab = function (observation, reading) {
+		var el = document.createElement('div'),
+		    readingView = null;
+
+		el.classList.add('reading-wrapper');
+		readingView = new ReadingView({
+			el: el,
+			observation: observation,
+			reading: reading,
+			baselineCalculator: this._calculator
+		});
+
+		return {
+			title: 'Set X', // TODO :: Figure out a real title
+			content: el
+		};
+	};
+
 
 
 	return ReadingGroupView;
