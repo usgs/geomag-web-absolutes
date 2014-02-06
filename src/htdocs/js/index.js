@@ -1,15 +1,16 @@
 require.config({
 	baseUrl: 'js',
 	paths: {
+		'mvc': '/hazdev-webutils/src/mvc',
+		'util': '/hazdev-webutils/src/util'
 	},
 	shim: {
 	}
 });
 
 require([
-	'Greeter'
-], function (Greeter) {
+	'geomag/ObservatoryView'
+], function (ObservatoryView) {
 	'use strict';
-	var g = new Greeter();
-	console.log(g.sayHello());
+	new ObservatoryView({el: document.querySelector('.observatoryView')});
 });

@@ -1,7 +1,7 @@
 /* global define */
 define([
 	'mvc/Model',
-	'mvc/Util'
+	'util/Util'
 ], function (
 	Model,
 	Util

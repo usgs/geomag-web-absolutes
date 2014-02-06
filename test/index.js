@@ -2,7 +2,9 @@ require.config({
 	baseUrl: '..',
 	paths: {
 		mocha: 'mocha/mocha',
-		chai: 'chai/chai'
+		chai: 'chai/chai',
+		mvc: '/hazdev-webutils/src/mvc',
+		util: '/hazdev-webutils/src/util'
 	},
 	shim: {
 		mocha: {
@@ -23,13 +25,6 @@ require([
 	mocha.setup('bdd');
 
 	require([
-		'spec/GreeterTest',
-		'spec/mvc/EventsTest',
-		'spec/mvc/ModelTest',
-		'spec/mvc/ViewTest',
-		'spec/mvc/CollectionTest',
-		'spec/mvc/UtilTest',
-		'spec/mvc/XhrTest',
 		'spec/ObservatoryTest',
 		'spec/MarkTest',
 		'spec/MeasurementTest',

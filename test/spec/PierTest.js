@@ -7,7 +7,7 @@ define([
 	'geomag/Pier',
 	'mvc/Collection',
 	'mvc/Model',
-	'mvc/Util'
+	'util/Util'
 ], function (chai, Pier, Collection, Model, Util) {
 	'use strict';
 	var expect = chai.expect;
