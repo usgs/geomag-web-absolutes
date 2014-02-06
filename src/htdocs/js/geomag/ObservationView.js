@@ -1,10 +1,18 @@
 /* global define */
 define([
 	'mvc/View',
-	'util/Util'
+	'util/Util',
+
+	'geomag/Observation',
+	'geomag/ReadingGroupView',
+	'geomag/BaselineCalculator'
 ], function (
 	View,
-	Util
+	Util,
+
+	Observation,
+	ReadingGroupView,
+	ObservationBaselineCalculator
 ) {
 	'use strict';
 
@@ -25,7 +33,22 @@ define([
 	};
 
 	ObservationView.prototype._initialize = function () {
-		this._el.innerHTML = '<p>I am an ObservationView!</p>';
+		this._observation = this._options.observation || new Observation();
+		this._calculator = this._options.baselineCalculator ||
+				new ObservationBaselineCalculator();
+
+		this._el.innerHTML = [
+			'<section class="observation-view">',
+				'<section class="observation-meta-wrapper"></section>',
+				'<section class="reading-group-view-wrapper"></section>',
+			'</section>'
+		].join('');
+
+		this._readingGroupView = new ReadingGroupView({
+			el: this._el.querySelector('.reading-group-view-wrapper'),
+			observation: this._observation,
+			baselineCalculator: this._calculator
+		});
 	};
 
 
