@@ -1,0 +1,30 @@
+///////////////////////////////////////////////////////////////////////////////
+// configure theme variables
+
+// banner image
+$banner-image: '/theme/images/usgs-banner.jpg';
+$banner-background-color: #000;
+
+// site title and colors
+$site-title: 'National Geomagnetism Program';
+$site-title-color: #FFF;
+$site-title-background-color: #1B3C43;
+
+// primary color of site
+$sitenav-background-color: #A2C07B;
+
+
+///////////////////////////////////////////////////////////////////////////////
+// import template scss partial
+
+@import "../../../node_modules/hazdev-template/src/htdocs/css/template";
+
+
+///////////////////////////////////////////////////////////////////////////////
+// include site-wide content patterns
+// alternatively, these can be included per page instead of site-wide
+
+@import "../../../node_modules/hazdev-template/src/htdocs/css/flexible-grid.scss"
+
+///////////////////////////////////////////////////////////////////////////////
+// other site-wide css rules
