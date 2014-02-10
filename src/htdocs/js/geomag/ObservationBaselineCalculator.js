@@ -31,10 +31,10 @@ define([
 
 			// measurement.type
 			return this.calculator.magneticSouthMeridian(
-					measurements[Measurement.WEST_DOWN].get('angle'),
-					measurements[Measurement.WEST_UP].get('angle'),
-					measurements[Measurement.EAST_DOWN].get('angle'),
-					measurements[Measurement.EAST_UP].get('angle')
+					measurements[Measurement.WEST_DOWN][0].get('angle'),
+					measurements[Measurement.WEST_UP][0].get('angle'),
+					measurements[Measurement.EAST_DOWN][0].get('angle'),
+					measurements[Measurement.EAST_UP][0].get('angle')
 			);
 		},
 
@@ -50,10 +50,10 @@ define([
 			    meanMark = null;
 
 			meanMark = (
-					measurements[Measurement.FIRST_MARK_UP].get('angle') +
-					measurements[Measurement.FIRST_MARK_DOWN].get('angle') +
-					measurements[Measurement.SECOND_MARK_UP].get('angle') +
-					measurements[Measurement.SECOND_MARK_DOWN].get('angle')) / 4;
+					measurements[Measurement.FIRST_MARK_UP][0].get('angle') +
+					measurements[Measurement.FIRST_MARK_DOWN][0].get('angle') +
+					measurements[Measurement.SECOND_MARK_UP][0].get('angle') +
+					measurements[Measurement.SECOND_MARK_DOWN][0].get('angle')) / 4;
 
 			// meanMark = mark1/mark2(up/down) / 4
 			return this.calculator.magneticAzimuthMark(
@@ -76,8 +76,8 @@ define([
 			var measurements = reading.getMeasurements();
 
 			return this.calculator.geographicMeridian(
-					measurements[Measurement.FIRST_MARK_UP].get('angle'),
-					measurements[Measurement.SECOND_MARK_UP].get('angle'),
+					measurements[Measurement.FIRST_MARK_UP][0].get('angle'),
+					measurements[Measurement.SECOND_MARK_UP][0].get('angle'),
 					this.trueAzimuthOfMark(observation)
 			);
 		},
@@ -109,8 +109,8 @@ define([
 			var measurements = reading.getMeasurements();
 
 			return this.calculator.w(
-					measurements[Measurement.WEST_UP].get('angle'),
-					measurements[Measurement.EAST_DOWN].get('angle')
+					measurements[Measurement.WEST_UP][0].get('angle'),
+					measurements[Measurement.EAST_DOWN][0].get('angle')
 			);
 		},
 
@@ -125,8 +125,8 @@ define([
 			var measurements = reading.getMeasurements();
 
 			return this.calculator.e(
-					measurements[Measurement.EAST_UP].get('angle'),
-					measurements[Measurement.WEST_DOWN].get('angle')
+					measurements[Measurement.EAST_UP][0].get('angle'),
+					measurements[Measurement.WEST_DOWN][0].get('angle')
 			);
 		},
 
@@ -159,10 +159,10 @@ define([
 
 			// measurement.type
 			return this.calculator.inclination(
-					measurements[Measurement.SOUTH_DOWN].get('angle'),
-					measurements[Measurement.SOUTH_UP].get('angle'),
-					measurements[Measurement.NORTH_DOWN].get('angle'),
-					measurements[Measurement.NORTH_UP].get('angle')
+					measurements[Measurement.SOUTH_DOWN][0].get('angle'),
+					measurements[Measurement.SOUTH_UP][0].get('angle'),
+					measurements[Measurement.NORTH_DOWN][0].get('angle'),
+					measurements[Measurement.NORTH_UP][0].get('angle')
 			);
 		},
 
@@ -207,8 +207,8 @@ define([
 			var measurements = reading.getMeasurements();
 
 			return this.calculator.s(
-					measurements[Measurement.SOUTH_DOWN].get('angle'),
-					measurements[Measurement.NORTH_UP].get('angle')
+					measurements[Measurement.SOUTH_DOWN][0].get('angle'),
+					measurements[Measurement.NORTH_UP][0].get('angle')
 			);
 		},
 
@@ -223,8 +223,8 @@ define([
 			var measurements = reading.getMeasurements();
 
 			return this.calculator.n(
-					measurements[Measurement.NORTH_DOWN].get('angle'),
-					measurements[Measurement.SOUTH_UP].get('angle')
+					measurements[Measurement.NORTH_DOWN][0].get('angle'),
+					measurements[Measurement.SOUTH_UP][0].get('angle')
 			);
 		},
 
