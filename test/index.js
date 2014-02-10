@@ -36,7 +36,8 @@ require([
 		'spec/UserRoleTest',
 		'spec/ReadingTest',
 		'spec/DeclinationViewTest',
-		'spec/RealtimeDataFactoryTest'
+		'spec/RealtimeDataFactoryTest',
+		'spec/ObservationBaselineCalculatorTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();
