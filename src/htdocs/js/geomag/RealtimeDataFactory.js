@@ -2,9 +2,9 @@
 
 define([
 	'mvc/Model',
-	'mvc/Util',
+	'util/Util',
 	'geomag/Reading.js',
-	'mvc/Xhr'
+	'util/Xhr'
 ], function (
 	Model,
 	Util,
