@@ -12,39 +12,35 @@ define([
 
 
 	var meas1 = new Measurement({'id': 1,'type': Measurement.FIRST_MARK_UP,
-			'time': null,'angle':10.113});
+			'time': null,'angle':10.113, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0 });
 	var meas2 = new Measurement({'id': 2,'type': Measurement.FIRST_MARK_DOWN,
-			'time': null,'angle':190.105});
+			'time': null,'angle':190.105, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 	var meas3 = new Measurement({'id': 3,'type': Measurement.WEST_DOWN,
-			'time': null,'angle':287});
+			'time': null,'angle':287, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 	var meas4 = new Measurement({'id': 4,'type': Measurement.EAST_DOWN,
-			'time': null,'angle':99});
+			'time': null,'angle':99, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 	var meas5 = new Measurement({'id': 5,'type': Measurement.WEST_UP,
-			'time': null,'angle':101});
+			'time': null,'angle':101, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 	var meas6 = new Measurement({'id': 6,'type': Measurement.EAST_UP,
-			'time': null,'angle':286});
+			'time': null,'angle':286, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 	var meas7 = new Measurement({'id': 7,'type': Measurement.SECOND_MARK_UP,
-			'time': null,'angle':10.113});
+			'time': null,'angle':10.113, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 	var meas8 = new Measurement({'id': 8,'type': Measurement.SECOND_MARK_DOWN,
-			'time': null,'angle':190.105});
+			'time': null,'angle':190.105, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 	var meas9 = new Measurement({'id': 9,'type': Measurement.SOUTH_DOWN,
-			'time': null,'angle':238});
+			'time': null,'angle':238, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 	var measA = new Measurement({'id': 10,'type': Measurement.NORTH_UP,
-			'time': null,'angle':58});
+			'time': null,'angle':58, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 	var measB = new Measurement({'id': 11,'type': Measurement.SOUTH_UP,
-			'time': null,'angle':118});
+			'time': null,'angle':118, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 	var measC = new Measurement({'id': 12,'type': Measurement.NORTH_DOWN,
-			'time': null,'angle':297});
+			'time': null,'angle':297, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 	var testmeasure = new Measurement({'id': 14,'type': Measurement.NORTH_DOWN,
-			'time': 10,'angle':297});
+			'time': 10,'angle':297, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 
 	var TESTOBJECT = {
 		'id': 1,
 		'set_number': 1,
-		'mark_id': 1,
-		'electronics_id': 1,
-		'theodolite_id': 1,
-		'temperature': 24,
 		'declination_valid': true,
 		'horizontal_intensity_valid': true,
 		'vertical_intensity_valid': true,
@@ -54,22 +50,21 @@ define([
 			meas1, meas2, meas3, meas4, meas5, meas6,
 			meas7, meas8, meas9, measA, measB, measC
 		]),
-		'timeseries': null
 	};
 
 	var TESTMEASUREMENTS = {
-		first_mark_up:[meas1],
-		first_mark_down:[meas2],
-		west_down:[meas3],
-		east_down:[meas4],
-		west_up:[meas5],
-		east_up:[meas6],
-		second_mark_up:[meas7],
-		second_mark_down:[meas8],
-		south_down:[meas9],
-		north_up:[measA],
-		south_up:[measB],
-		north_down:[measC]
+		FirstMarkUp:[meas1],
+		FirstMarkDown:[meas2],
+		WestDown:[meas3],
+		EastDown:[meas4],
+		WestUp:[meas5],
+		EastUp:[meas6],
+		SecondMarkUp:[meas7],
+		SecondMarkDown:[meas8],
+		SouthDown:[meas9],
+		NorthUp:[measA],
+		SouthUp:[measB],
+		NorthDown:[measC]
 	};
 
 
