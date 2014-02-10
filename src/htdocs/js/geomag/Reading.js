@@ -1,13 +1,19 @@
 /*global define*/
-
 define([
 	'mvc/Model',
-	'util/Util'
+	'mvc/Collection',
+	'util/Util',
+
+	'geomag/Measurement'
 ], function (
 	Model,
-	Util
+	Collection,
+	Util,
+
+	Measurement
 ) {
 	'use strict';
+
 
 	/** Define default attributes. */
 	var DEFAULTS = {
@@ -21,6 +27,7 @@ define([
 		'measurements': null
 	};
 
+
 	/**
 	 * Constructor.
 	 *
@@ -29,10 +36,50 @@ define([
 	var Reading = function (options) {
 		// Call parent constructor
 		Model.call(this, Util.extend({}, DEFAULTS, options));
+		this._initialize();
 	};
-
 	// Reading extends Model
 	Reading.prototype = Object.create(Model.prototype);
+
+
+	Reading.prototype._initialize = function () {
+		var _this = this,
+		    measurements = this.get('measurements'),
+		    data = null,
+		    i = null,
+		    len = null,
+		    onChangeHandler = null;
+
+		if (measurements === null) {
+			measurements = new Collection([
+				new Measurement({type: Measurement.FIRST_MARK_UP}),
+				new Measurement({type: Measurement.FIRST_MARK_DOWN}),
+				new Measurement({type: Measurement.WEST_DOWN}),
+				new Measurement({type: Measurement.EAST_DOWN}),
+				new Measurement({type: Measurement.WEST_UP}),
+				new Measurement({type: Measurement.EAST_UP}),
+				new Measurement({type: Measurement.SECOND_MARK_UP}),
+				new Measurement({type: Measurement.SECOND_MARK_DOWN}),
+				new Measurement({type: Measurement.SOUTH_DOWN}),
+				new Measurement({type: Measurement.NORTH_UP}),
+				new Measurement({type: Measurement.SOUTH_UP}),
+				new Measurement({type: Measurement.NORTH_DOWN})
+			]);
+
+			this.set({'measurements': measurements});
+		}
+
+		data = measurements.data();
+		len = data.length;
+
+		onChangeHandler = function (evt) {
+			_this.trigger('change:measurement', evt);
+		};
+
+		for (i = 0; i < len; i++) {
+			data[i].on('change', onChangeHandler);
+		}
+	};
 
 	/**
 	 * Get the Measurements for this reading.

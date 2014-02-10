@@ -42,18 +42,41 @@ define([
 		this._calculator = this._options.baselineCalculator;
 		this._measurements = this._reading.getMeasurements();
 
+		this._firstMarkUpMeasurement =
+				this._measurements[Measurement.FIRST_MARK_UP][0];
+		this._firstMarkDownMeasurement =
+				this._measurements[Measurement.FIRST_MARK_DOWN][0];
+		this._westDownMeasurement = this._measurements[Measurement.WEST_DOWN][0];
+		this._eastDownMeasurement = this._measurements[Measurement.EAST_DOWN][0];
+		this._westUpMeasurement = this._measurements[Measurement.WEST_UP][0];
+		this._eastUpMeasurement = this._measurements[Measurement.EAST_UP][0];
+		this._secondMarkUpMeasurement =
+				this._measurements[Measurement.SECOND_MARK_UP][0];
+		this._secondMarkDownMeasurement =
+				this._measurements[Measurement.SECOND_MARK_DOWN][0];
+
+		this._southDownMeasurement = this._measurements[Measurement.SOUTH_DOWN][0];
+		this._northUpMeasurement = this._measurements[Measurement.NORTH_UP][0];
+		this._southUpMeasurement = this._measurements[Measurement.SOUTH_UP][0];
+		this._northDownMeasurement = this._measurements[Measurement.NORTH_DOWN][0];
+
 		this._el.innerHTML = [
 			'<section class="reading-view">',
-				'<section class="declination-view-wrapper">',
-					'<section class="declination-input">',
+				'<section class="row">',
+					'<h4>Declination</h4>',
+					'<section class="column one-of-two declination-input">',
 						'<table>',
 							'<thead>',
 								'<tr>',
-									'<th scope="col">Name</th>',
-									'<th scope="col">Time</th>',
-									'<th scope="col">Deg</th>',
-									'<th scope="col">Min</th>',
-									'<th scope="col">Sec</th>',
+									'<th scope="col">&nbsp;</th>',
+									'<th scope="col" class="measurement-time">Time</th>',
+									'<th scope="col" class="measurement-degrees">Deg</th>',
+									'<th scope="col" class="measurement-minutes">Min</th>',
+									'<th scope="col" class="measurement-seconds">Sec</th>',
+									'<th scope="col" class="measurement-h">H</th>',
+									'<th scope="col" class="measurement-e">E</th>',
+									'<th scope="col" class="measurement-z">Z</th>',
+									'<th scope="col" class="measurement-f">F</th>',
 								'</tr>',
 							'</thead>',
 							'<tbody>',
@@ -68,69 +91,117 @@ define([
 							'</tbody>',
 						'</table>',
 					'</section>',
-					'<section class="declination-output"></section>',
+					'<section class="column one-of-two declination-output"></section>',
 				'</section>',
-				'<section class="inclination-view-wrapper">',
-					'</section class="inclination-input">',
+				'<section class="row">',
+					'<h4>Inclination</h4>',
+					'<section class="column one-of-two inclination-input">',
+						'<table>',
+							'<thead>',
+								'<tr>',
+									'<th scope="col">&nbsp;</th>',
+									'<th scope="col" class="measurement-time">Time</th>',
+									'<th scope="col" class="measurement-degrees">Deg</th>',
+									'<th scope="col" class="measurement-minutes">Min</th>',
+									'<th scope="col" class="measurement-seconds">Sec</th>',
+									'<th scope="col" class="measurement-h">H</th>',
+									'<th scope="col" class="measurement-e">E</th>',
+									'<th scope="col" class="measurement-z">Z</th>',
+									'<th scope="col" class="measurement-f">F</th>',
+								'</tr>',
+							'</thead>',
+							'<tbody>',
+								'<tr class="south-down"></tr>',
+								'<tr class="north-up"></tr>',
+								'<tr class="south-up"></tr>',
+								'<tr class="north-down"></tr>',
+							'</tbody>',
+						'</table>',
 					'</section>',
-					'<section class="inclination-output"></section>',
-				'<section class="magnetometer-ordinates-view-wrapper"></section>',
+					'<section class="column one-of-two inclination-output"></section>',
+				'</section>',
+				'<section>',
+					'<h4>Magnetometer Ordinates</h4>',
+					'<section class="magnetometer-ordinates-output"></section>',
+				'</section>',
 			'</section>'
 		].join('');
 
 		this._firstMarkUpView = new MeasurementView({
 			el: this._el.querySelector('.first-mark-up'),
-			measurement: this._measurements[Measurement.FIRST_MARK_UP][0]
+			measurement: this._firstMarkUpMeasurement
 		});
 
-		this._firstMarkUpView = new MeasurementView({
+		this._firstMarkDownView = new MeasurementView({
 			el: this._el.querySelector('.first-mark-down'),
-			measurement: this._measurements[Measurement.FIRST_MARK_DOWN][0]
+			measurement: this._firstMarkDownMeasurement
 		});
 
-		this._firstMarkUpView = new MeasurementView({
+		this._westDownView = new MeasurementView({
 			el: this._el.querySelector('.west-down'),
-			measurement: this._measurements[Measurement.WEST_DOWN][0]
+			measurement: this._westDownMeasurement
 		});
 
-		this._firstMarkUpView = new MeasurementView({
+		this._eastDownView = new MeasurementView({
 			el: this._el.querySelector('.east-down'),
-			measurement: this._measurements[Measurement.EAST_DOWN][0]
+			measurement: this._eastDownMeasurement
 		});
 
-		this._firstMarkUpView = new MeasurementView({
+		this._westUpView = new MeasurementView({
 			el: this._el.querySelector('.west-up'),
-			measurement: this._measurements[Measurement.WEST_UP][0]
+			measurement: this._westUpMeasurement
 		});
 
-		this._firstMarkUpView = new MeasurementView({
+		this._eastUpView = new MeasurementView({
 			el: this._el.querySelector('.east-up'),
-			measurement: this._measurements[Measurement.EAST_UP][0]
+			measurement: this._eastUpMeasurement
 		});
 
-		this._firstMarkUpView = new MeasurementView({
+		this._secondMarkUpView = new MeasurementView({
 			el: this._el.querySelector('.second-mark-up'),
-			measurement: this._measurements[Measurement.SECOND_MARK_UP][0]
+			measurement: this._secondMarkUpMeasurement
 		});
 
-		this._firstMarkUpView = new MeasurementView({
+		this._secondMarkDownView = new MeasurementView({
 			el: this._el.querySelector('.second-mark-down'),
-			measurement: this._measurements[Measurement.SECOND_MARK_DOWN][0]
+			measurement: this._secondMarkDownMeasurement
 		});
 
 		this._declinationView = new DeclinationView({
-			el: this._el.querySelector('.declination-view-wrapper'),
+			el: this._el.querySelector('.declination-output'),
 			reading: this._reading,
 			baselineCalculator: this._calculator
 		});
 
+
+		this._southDownView = new MeasurementView({
+			el: this._el.querySelector('.south-down'),
+			measurement: this._southDownMeasurement
+		});
+
+		this._northUpView = new MeasurementView({
+			el: this._el.querySelector('.north-up'),
+			measurement: this._northUpMeasurement
+		});
+
+		this._southUpView = new MeasurementView({
+			el: this._el.querySelector('.south-up'),
+			measurement: this._southUpMeasurement
+		});
+
+		this._northDownView = new MeasurementView({
+			el: this._el.querySelector('.north-down'),
+			measurement: this._northDownMeasurement
+		});
+
 		this._inclinationView = new InclinationView({
-			el: this._el.querySelector('.inclination-view-wrapper'),
+			el: this._el.querySelector('.inclination-output'),
 			reading: this._reading
 		});
 
+
 		this._magnetometerOrdinatesView = new MagnetometerOrdinatesView({
-			el: this._el.querySelector('.magnetometer-ordinates-view-wrapper'),
+			el: this._el.querySelector('.magnetometer-ordinates-output'),
 			reading: this._reading
 		});
 	};

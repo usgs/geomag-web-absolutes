@@ -17,6 +17,23 @@ define([
 
 	};
 
+	var MEASUREMENT_TYPE_LABELS = {};
+	MEASUREMENT_TYPE_LABELS[Measurement.FIRST_MARK_UP] = 'Mark Up';
+	MEASUREMENT_TYPE_LABELS[Measurement.FIRST_MARK_DOWN] = 'Mark Down';
+
+	MEASUREMENT_TYPE_LABELS[Measurement.WEST_DOWN] = 'West Down';
+	MEASUREMENT_TYPE_LABELS[Measurement.EAST_DOWN] = 'East Down';
+	MEASUREMENT_TYPE_LABELS[Measurement.WEST_UP] = 'West Up';
+	MEASUREMENT_TYPE_LABELS[Measurement.EAST_UP] = 'East Up';
+
+	MEASUREMENT_TYPE_LABELS[Measurement.SECOND_MARK_UP] = 'Mark Up';
+	MEASUREMENT_TYPE_LABELS[Measurement.SECOND_MARK_DOWN] = 'Mark Down';
+
+	MEASUREMENT_TYPE_LABELS[Measurement.SOUTH_DOWN] = 'South Down';
+	MEASUREMENT_TYPE_LABELS[Measurement.NORTH_UP] = 'North Up';
+	MEASUREMENT_TYPE_LABELS[Measurement.SOUTH_UP] = 'South Up';
+	MEASUREMENT_TYPE_LABELS[Measurement.NORTH_DOWN] = 'North Down';
+
 
 	var MeasurementView = function (options) {
 		this._options = Util.extend({}, DEFAULTS, options);
@@ -88,9 +105,12 @@ define([
 		var _this = this,
 		    onInputChange = null;
 
-		this._measurement = this._options.measurement || new Measurement();
+		this._measurement = this._options.measurement;
 
 		this._el.innerHTML = [
+			'<th scope="row" class="measurement-type">',
+				MEASUREMENT_TYPE_LABELS[this._measurement.get('type')] || 'Type',
+			'</th>',
 			'<td class="measurement-time"><input type="text"/></td>',
 			'<td class="measurement-degrees"><input type="text"/></td>',
 			'<td class="measurement-minutes"><input type="text"/></td>',
