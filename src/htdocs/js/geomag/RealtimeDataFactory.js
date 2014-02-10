@@ -3,7 +3,7 @@
 define([
 	'mvc/Model',
 	'util/Util',
-	'geomag/Reading.js',
+	'geomag/Reading',
 	'util/Xhr'
 ], function (
 	Model,

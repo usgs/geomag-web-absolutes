@@ -2,8 +2,7 @@
 
 define([
 	'mvc/Model',
-	'util/Util',
-	'geomag/RealtimeDataFactory'
+	'util/Util'
 ], function (
 	Model,
 	Util

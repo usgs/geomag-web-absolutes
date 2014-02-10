@@ -1,0 +1,75 @@
+.reading-view {
+	> .row {
+		border-bottom:1px solid #666;
+		padding-bottom:1.33em;
+	}
+}
+
+.declination-input {
+
+	.first-mark-down,
+	.east-up {
+		th, td {
+			padding-bottom:16px;
+		}
+	}
+
+	.first-mark-up,
+	.first-mark-down,
+	.second-mark-up,
+	.second-mark-down {
+		> .measurement-time > input,
+		> .measurement-e {
+			display:none;
+		}
+	}
+
+	.measurement-h,
+	.measurement-z,
+	.measurement-f {
+		display:none;
+	}
+}
+
+.inclination-input {
+	.measurement-e {
+		display:none;
+	}
+}
+
+.declination-input,
+.inclination-input {
+
+	tbody th {
+		text-align:right;
+		padding-right:16px;
+
+		&:after {
+			content:':';
+		}
+	}
+
+	input {
+		width:5em;
+	}
+	.measurement-time > input {
+		width:8em;
+	}
+
+	.measurement-degrees,
+	.measurement-minutes,
+	.measurement-seconds {
+		> input {
+			text-align:center;
+		}
+	}
+
+	.measurement-seconds {
+		padding-right:16px;
+	}
+
+	.measurement-h,
+	.measurement-z {
+		padding-right:8px;
+	}
+}
