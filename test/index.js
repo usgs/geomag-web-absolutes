@@ -35,6 +35,7 @@ require([
 		'spec/UserTest',
 		'spec/UserRoleTest',
 		'spec/ReadingTest',
+		'spec/MeasurementViewTest',
 		'spec/DeclinationViewTest',
 		'spec/RealtimeDataFactoryTest',
 		'spec/ObservationBaselineCalculatorTest'

@@ -58,22 +58,7 @@ define([
 		if (time === null) {
 			timeString = '00:00:00';
 		} else {
-			time /= 1000;
-			timeHours = parseInt(time / 3600, 10);
-			timeMinutes = parseInt((time % 3600) / 60, 10);
-			timeSeconds = parseInt((time % 60), 10);
-
-			if (timeHours < 10) {
-				timeHours = '0' + timeHours;
-			}
-			if (timeMinutes < 10) {
-				timeMinutes = '0' + timeMinutes;
-			}
-			if (timeSeconds < 10) {
-				timeSeconds = '0' + timeSeconds;
-			}
-
-			timeString = '' + timeHours + ':' + timeMinutes + ':' + timeSeconds;
+			timeString = this._timeToString(time);
 		}
 
 		// Deconstruct the decimal degrees back to Dms
@@ -119,13 +104,13 @@ define([
 			'<td class="measurement-h">--</td>',
 			'<td class="measurement-e">--</td>',
 			'<td class="measurement-z">--</td>',
-			'<td class="measurement-f">--</td>',
+			'<td class="measurement-f">--</td>'
 		].join('');
 
-		this._timeInput = this._el.querySelector('.measurement-time');
-		this._degreesInput = this._el.querySelector('.measurement-degrees');
-		this._minutesInput = this._el.querySelector('.measurement-minutes');
-		this._secondsInput = this._el.querySelector('.measurement-seconds');
+		this._timeInput = this._el.querySelector('.measurement-time > input');
+		this._degreesInput = this._el.querySelector('.measurement-degrees > input');
+		this._minutesInput = this._el.querySelector('.measurement-minutes > input');
+		this._secondsInput = this._el.querySelector('.measurement-seconds > input');
 
 		this._hValue = this._el.querySelector('.measurement-h');
 		this._eValue = this._el.querySelector('.measurement-e');
@@ -140,23 +125,8 @@ define([
 
 			// TODO :: Improve this
 
-			time = time.replace(/[^\d]/g, '');
 
-			if (time.length === 4) {
-				// HHMM
-				time = ((parseInt(time.substr(0, 2), 10) * 3600) +
-				       (parseInt(time.substr(2, 2), 10) * 60)) * 1000;
-			} else if (time.length === 5) {
-				// HMMSS
-				time = ((parseInt(time.substr(0, 1), 10) * 3600) +
-				       (parseInt(time.substr(1, 2), 10) * 60) +
-				       parseInt(time.substr(3, 2), 10)) * 1000;
-			} else if (time.length === 6) {
-				// HHMMSS
-				time = ((parseInt(time.substring(0, 2), 10) * 3600) +
-				       (parseInt(time.substring(2, 2), 10) * 60) +
-				       parseInt(time.substring(4, 2), 10)) * 1000;
-			}
+			time = this._stringToTime(time);
 
 			minutes += (seconds / 60);
 			degrees += (minutes / 60);
@@ -172,6 +142,62 @@ define([
 		this._measurement.on('change', this._render, this);
 
 		this.render();
+	};
+
+	/**
+	 * @param time {Integer}
+	 *      The time offset (in milliseconds) from the beginning of the day.
+	 *
+	 * @return {String}
+	 *      A string formatted as "HH:mm:ss" representing the input time.
+	 */
+	MeasurementView.prototype._timeToString = function (time) {
+		var offset = time / 1000,
+		    timeHours = parseInt(offset / 3600, 10),
+		    timeMinutes = parseInt((offset % 3600) / 60, 10),
+		    timeSeconds = parseInt((offset % 60), 10);
+
+		if (timeHours < 10) {
+			timeHours = '0' + timeHours;
+		}
+		if (timeMinutes < 10) {
+			timeMinutes = '0' + timeMinutes;
+		}
+		if (timeSeconds < 10) {
+			timeSeconds = '0' + timeSeconds;
+		}
+
+		return '' + timeHours + ':' + timeMinutes + ':' + timeSeconds;
+	};
+
+	/**
+	 * @param time {String}
+	 *      The formatted time string to parse.
+	 *
+	 * @return {Integer}
+	 *      The offset (in milliseconds) represented by the input time string.
+	 */
+	MeasurementView.prototype._stringToTime = function (time) {
+		var timeString = time.replace(/[^\d]/g, ''),
+		    offset = null;
+
+		if (timeString.length === 4) {
+			// HHMM
+			offset = ((parseInt(timeString.substr(0, 2), 10) * 3600) +
+			       (parseInt(timeString.substr(2, 2), 10) * 60)) * 1000;
+		} else if (timeString.length === 5) {
+			// HMMSS
+			offset = ((parseInt(timeString.substr(0, 1), 10) * 3600) +
+			       (parseInt(timeString.substr(1, 2), 10) * 60) +
+			       parseInt(timeString.substr(3, 2), 10)) * 1000;
+		} else if (timeString.length === 6) {
+			// HHMMSS
+			offset = ((parseInt(timeString.substr(0, 2), 10) * 3600) +
+			       (parseInt(timeString.substr(2, 2), 10) * 60) +
+			       parseInt(timeString.substr(4, 2), 10)) * 1000;
+		}
+
+		return offset;
 	};
 
 
