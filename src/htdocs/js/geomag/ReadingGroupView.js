@@ -66,7 +66,7 @@ define([
 		});
 
 		return {
-			title: 'Set X', // TODO :: Figure out a real title
+			title: 'Set ' + reading.get('set_number'),
 			content: el
 		};
 	};
