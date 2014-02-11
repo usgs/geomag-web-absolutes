@@ -11,7 +11,7 @@ class ObservationFactory {
 	 *      The PDO database connection for this factory.
 	 */
 	public function __construct ($db){
-		$this->db = $db;	
+		$this->db = $db;
 	}
 
 	/**
@@ -21,7 +21,7 @@ class ObservationFactory {
 	 *      The database Id of the observation.
 	 *
 	 * @return {ObservationDetail}
-	 * 
+	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
@@ -57,8 +57,8 @@ class ObservationFactory {
 	/**
 	 * Reads all the Measurements for a specific observation.
 	 *
-	 * @param id {Integer}  
-	 *      The database Id of the reading. 
+	 * @param id {Integer}
+	 *      The database Id of the reading.
 	 *
 	 * @return {Array{Object}}
 	 *
@@ -75,7 +75,7 @@ class ObservationFactory {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$measurement = new Measurement(intval($row['ID']),
 						intval($row['reading_id']), $row['type'],
-						intval($row['time']), intval($row['angle']),
+						intval($row['time']), floatval($row['angle']),
 						floatval($row['h']), floatval($row['e']),
 						floatval($row['z']), floatval($row['f']));
 				$measurements[] = $measurement;
@@ -91,8 +91,8 @@ class ObservationFactory {
 	/**
 	 * Reads all the Readings for a specific observation.
 	 *
-	 * @param id {Integer}  
-	 *      The database Id of the observation. 
+	 * @param id {Integer}
+	 *      The database Id of the observation.
 	 *
 	 * @return {Array{Object}}
 	 *
