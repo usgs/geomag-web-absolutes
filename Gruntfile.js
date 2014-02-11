@@ -119,7 +119,10 @@ module.exports = function (grunt) {
 					middleware: function (connect, options) {
 						return [
 							mountPHP(options.base),
-							mountFolder(connect, options.base)
+							mountFolder(connect, options.base),
+							rewriteRulesSnippet,
+							mountFolder(connect, 'node_modules'),
+							mountFolder(connect, 'bower_components')
 						];
 					}
 				}
@@ -171,19 +174,35 @@ module.exports = function (grunt) {
 		requirejs: {
 			dist: {
 				options: {
-					name: 'index',
 					baseUrl: appConfig.dev + '/htdocs/js',
-					out: appConfig.dist + '/htdocs/js/index.js',
 					optimize: 'uglify2',
-					mainConfigFile: appConfig.dev + '/htdocs/js/index.js',
+					dir: appConfig.dist + '/htdocs/js',
+					// mainConfigFile: appConfig.dev + '/htdocs/js/index.js',
 					useStrict: true,
 					wrap: true,
-					uglify2: {
-						report: 'gzip',
-						mangle: true,
-						compress: true,
-						preserveComments: 'some'
-					}
+
+					// New
+					paths: {
+						'mvc': '../../../bower_components/hazdev-webutils/src/mvc',
+						'util': '../../../bower_components/hazdev-webutils/src/util',
+						'tablist': '../../../node_modules/hazdev-tablist/src/tablist'
+					},
+					modules: [
+						{
+							name: "index"
+						},
+						{
+							name: "observation"
+						}
+					]
+					// End New
+
+					// uglify2: {
+					// 	report: 'gzip',
+					// 	mangle: true,
+					// 	compress: true,
+					// 	preserveComments: 'some'
+					// }
 				}
 			}
 		},
@@ -191,8 +210,13 @@ module.exports = function (grunt) {
 			dist: {
 				files: {
 					'<%= app.dist %>/htdocs/css/index.css': [
-						'<%= app.dev %>/htdocs/css/**/*.css',
-						'.tmp/css/**/*.css'
+						'.tmp/css/index.css'
+					],
+					'<%= app.dist %>/htdocs/css/observation.css': [
+						'.tmp/css/observation.css'
+					],
+					'<%= app.dist %>/htdocs/css/theme.css': [
+						'.tmp/css/theme.css'
 					]
 				}
 			}
@@ -238,7 +262,7 @@ module.exports = function (grunt) {
 			conf: {
 				expand: true,
 				cwd: '<%= app.dev %>/conf',
-				dest: '<%= app.dist/conf',
+				dest: '<%= app.dist %>/conf',
 				src: [
 					'**/*',
 					'!**/*.orig'
@@ -261,6 +285,10 @@ module.exports = function (grunt) {
 				],
 				overwrite: true,
 				replacements: [
+					{
+						from: '<script src="http://localhost:35729/livereload.js?snipver=1"></script>',
+						to: ''
+					},
 					{
 						from: 'requirejs/require.js',
 						to: 'lib/requirejs/require.js'
@@ -305,6 +333,7 @@ module.exports = function (grunt) {
 		'compass',
 		'concurrent:dist',
 		'replace',
+		'configureRewriteRules',
 		'open:dist',
 		'connect:dist'
 	]);
