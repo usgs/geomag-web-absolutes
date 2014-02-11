@@ -35,10 +35,10 @@ define([
 		if (this.get('readings') === null) {
 			this.set({
 				readings: new Collection([
-						new Reading(),
-						new Reading(),
-						new Reading(),
-						new Reading()
+						new Reading({set_number: 1}),
+						new Reading({set_number: 2}),
+						new Reading({set_number: 3}),
+						new Reading({set_number: 4})
 						])
 			});
 		}
