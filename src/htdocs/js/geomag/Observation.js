@@ -1,10 +1,16 @@
 /* global define */
 define([
+	'mvc/Collection',
 	'mvc/Model',
-	'util/Util'
+	'util/Util',
+
+	'geomag/Reading'
 ], function (
+	Collection,
 	Model,
-	Util
+	Util,
+
+	Reading
 ) {
 	'use strict';
 
@@ -26,6 +32,16 @@ define([
 
 	var Observation = function (attributes) {
 		Model.call(this, Util.extend({}, DEFAULTS, attributes));
+		if (this.get('readings') === null) {
+			this.set({
+				readings: new Collection([
+						new Reading({set_number: 1}),
+						new Reading({set_number: 2}),
+						new Reading({set_number: 3}),
+						new Reading({set_number: 4})
+						])
+			});
+		}
 	};
 	Observation.prototype = Object.create(Model.prototype);
 

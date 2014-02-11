@@ -29,11 +29,14 @@ define([
 
 
 	ReadingGroupView.prototype.render = function () {
-		var observation = this._observation;
+		var observation = this._observation,
+		    readings = observation.get('readings').data(),
+		    i,
+		    len;
 
-		// TODO :: Load readings off the observation instead.
-		this._tablist.addTab(this._createTab(observation, new Reading()));
-		this._tablist.addTab(this._createTab(observation, new Reading()));
+		for (i = 0, len = readings.length; i < len; i++) {
+			this._tablist.addTab(this._createTab(observation, readings[i]));
+		}
 	};
 
 	ReadingGroupView.prototype._initialize = function () {
@@ -63,7 +66,7 @@ define([
 		});
 
 		return {
-			title: 'Set X', // TODO :: Figure out a real title
+			title: 'Set ' + reading.get('set_number'),
 			content: el
 		};
 	};

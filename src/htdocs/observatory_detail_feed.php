@@ -1,5 +1,18 @@
 <?php
 
+if (!isset($_REQUEST['id'])) {
+	header('HTTP/1.1 400 Bad Request');
+	echo 'id is required';
+	exit();
+}
+$id = intval($_REQUEST['id']);
+if ($id <= 0) {
+	header('HTTP/1.1 400 Bad Request');
+	echo 'id must be a positive integer';
+	exit();
+}
+
+// load config after ensuring required parameter is present
 include_once '../conf/config.inc.php';
 
 // process request
@@ -8,7 +21,7 @@ try {
 	//                  Remove it for production.
 	// throw new Exception('foo');
 	$json = str_replace('\"', '"', json_encode($OBSERVATORY_FACTORY->
-			getObservatories()));
+			getObservatory($id)));
 	if (isset($_REQUEST['callback'])) {
 		header('Content-Type: text/javascript');
 		echo $_REQUEST['callback'] . '(' . $json . ');';

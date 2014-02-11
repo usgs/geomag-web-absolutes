@@ -31,12 +31,12 @@ class ObservatoryFactory {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$observatory = new Observatory(intval($row['ID']),
 						$row['code'], $row['name'],
-						intval($row['default_pier_id']),
-						$row['location'], floatval($row['latitude']),
-						floatval($row['longitude']),
-						floatval($row['geomagnetic_latitude']),
-						floatval($row['geomagnetic_longitude']),
-						floatval($row['elevation']), $row['orientation']);
+						safeintval($row['default_pier_id']),
+						$row['location'], safefloatval($row['latitude']),
+						safefloatval($row['longitude']),
+						safefloatval($row['geomagnetic_latitude']),
+						safefloatval($row['geomagnetic_longitude']),
+						safefloatval($row['elevation']), $row['orientation']);
 				$objects[] = $observatory;
 			}
 		} else {
@@ -72,12 +72,12 @@ class ObservatoryFactory {
 				$piers = $this->getPiers($id);
 				$observatory = new ObservatoryDetail(intval($row['ID']),
 						$row['code'], $row['name'],
-						intval($row['default_pier_id']),
-						$row['location'], floatval($row['latitude']),
-						floatval($row['longitude']),
-						floatval($row['geomagnetic_latitude']),
-						floatval($row['geomagnetic_longitude']),
-						floatval($row['elevation']), $row['orientation'],
+						safeintval($row['default_pier_id']),
+						$row['location'], safefloatval($row['latitude']),
+						safefloatval($row['longitude']),
+						safefloatval($row['geomagnetic_latitude']),
+						safefloatval($row['geomagnetic_longitude']),
+						safefloatval($row['elevation']), $row['orientation'],
 						$instruments, $observations, $piers);
 			}
 		} else {
@@ -99,7 +99,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	private function getInstruments ($id) {
+	protected function getInstruments ($id) {
 		$instruments = array();
 		$statement = $this->db->prepare('SELECT * FROM instrument ' .
 				'WHERE observatory_id=:id ORDER BY name');
@@ -110,7 +110,7 @@ class ObservatoryFactory {
 				$instrument = new Instrument(intval($row['ID']),
 						intval($row['observatory_id']),
 						$row['serial_number'],
-						intval($row['begin']), intval($row['end']),
+						safeintval($row['begin']), safeintval($row['end']),
 						$row['name'], $row['type']);
 				$instruments[] = $instrument;
 			}
@@ -120,6 +120,38 @@ class ObservatoryFactory {
 
 		$statement->closeCursor();
 		return $instruments;
+	}
+
+	/**
+	 * Reads the all marks linked to a specific pier.
+	 *
+	 * @param id {Integer}
+	 *      The database Id of the pier.
+	 *
+	 * @return {Array{Object}}
+	 *
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	protected function getMarks ($id) {
+		$marks = array();
+		$statement = $this->db->prepare('SELECT * FROM mark WHERE ' .
+				'pier_id=:id ORDER BY name');
+		$statement->bindParam(':id', $id, PDO::PARAM_INT);
+
+		if ($statement->execute()) {
+			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+				$mark = new Mark(intval($row['ID']), intval($row['pier_id']),
+						$row['name'], safeintval($row['begin']),
+						safeintval($row['end']), safefloatval($row['azimuth']));
+				$marks[] = $mark;
+			}
+		} else {
+			$this->triggerError($statement);
+		}
+
+		$statement->closeCursor();
+		return $marks;
 	}
 
 	/**
@@ -134,7 +166,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getObservations ($id) {
+	protected function getObservations ($id) {
 		$observations = array();
 		$statement = $this->db->prepare('SELECT * FROM observation WHERE ' .
 				'observatory_id=:id ORDER BY begin DESC');
@@ -143,14 +175,14 @@ class ObservatoryFactory {
 		if ($statement->execute()) {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$observation = new Observation(intval($row['ID']),
-						intval($row['observatory_id']), intval($row['begin']),
-						intval($row['end']), intval($row['reviewer_user_id']),
-						intval($row['mark_id']), intval($row['electronics_id']),
-						intval($row['theodolite_id']),
-						floatval($row['pier_temperature']),
-						floatval($row['elect_temperature']),
-						floatval($row['flux_temperature']),
-						floatval($row['proton_temperature']),
+						intval($row['observatory_id']), safeintval($row['begin']),
+						safeintval($row['end']), safeintval($row['reviewer_user_id']),
+						safeintval($row['mark_id']), safeintval($row['electronics_id']),
+						safeintval($row['theodolite_id']),
+						safefloatval($row['pier_temperature']),
+						safefloatval($row['elect_temperature']),
+						safefloatval($row['flux_temperature']),
+						safefloatval($row['proton_temperature']),
 						$row['annotation']);
 				$observations[] = $observation;
 			}
@@ -173,7 +205,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getPiers ($id) {
+	protected function getPiers ($id) {
 		$piers = array();
 		$statement = $this->db->prepare('SELECT * FROM pier WHERE ' .
 				'observatory_id=:id ORDER BY name');
@@ -184,11 +216,11 @@ class ObservatoryFactory {
 				$pier_id = intval($row['ID']);
 				$marks = $this->getMarks($pier_id);
 				$pier = new Pier($pier_id, intval($row['observatory_id']),
-						$row['name'], intval($row['begin']),
-						intval($row['end']), floatval($row['correction']),
-						intval($row['default_mark_id']),
-						intval($row['default_electronics_id']),
-						intval($row['default_theodolite_id']), $marks);
+						$row['name'], safeintval($row['begin']),
+						safeintval($row['end']), safefloatval($row['correction']),
+						safeintval($row['default_mark_id']),
+						safeintval($row['default_electronics_id']),
+						safeintval($row['default_theodolite_id']), $marks);
 				$piers[] = $pier;
 			}
 		} else {
@@ -199,39 +231,7 @@ class ObservatoryFactory {
 		return $piers;
 	}
 
-	/**
-	 * Reads the all marks linked to a specific pier.
-	 *
-	 * @param id {Integer}
-	 *      The database Id of the pier.
-	 *
-	 * @return {Array{Object}}
-	 *
-	 * @throws {Exception}
-	 *      Can throw an exception if an SQL error occurs. See "triggerError"
-	 */
-	public function getMarks ($id) {
-		$marks = array();
-		$statement = $this->db->prepare('SELECT * FROM mark WHERE ' .
-				'pier_id=:id ORDER BY name');
-		$statement->bindParam(':id', $id, PDO::PARAM_INT);
-
-		if ($statement->execute()) {
-			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-				$mark = new Mark(intval($row['ID']), intval($row['pier_id']),
-						$row['name'], intval($row['begin']),
-						intval($row['end']), floatval($row['azimuth']));
-				$marks[$row['ID']] = $mark;
-			}
-		} else {
-			$this->triggerError($statement);
-		}
-
-		$statement->closeCursor();
-		return $marks;
-	}
-
-	private function triggerError (&$statement) {
+	protected function triggerError (&$statement) {
 		$error = $statement->errorInfo();
 		$statement->closeCursor();
 

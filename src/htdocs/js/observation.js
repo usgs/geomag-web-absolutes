@@ -1,3 +1,5 @@
+/* global observationId */
+
 require.config({
 	baseUrl: 'js',
 	paths: {
@@ -15,6 +17,8 @@ require([
 	'use strict';
 
 	new ObservationView({
-		el: document.querySelector('.observation-view-wrapper')
+		el: document.querySelector('.observation-view-wrapper'),
+		observationId: observationId
 	});
+
 });

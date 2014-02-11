@@ -57,6 +57,56 @@ define([
 		}
 	};
 
+	/**
+	 * Get a pier object based on a mark id.
+	 *
+	 * @param id {Integer}
+	 *        the mark id.
+	 * @return {Pier} the pier object, or null if not found.
+	 */
+	Observatory.prototype.getPierByMarkId = function (id) {
+		var piers = this.get('piers'),
+		    pier,
+		    marks,
+		    mark,
+		    i,
+		    len;
+		for (i = 0, len = piers.length; i < len; i++) {
+			pier = piers[i];
+			marks = pier.get('marks');
+			mark = marks.get(id);
+			if (mark !== null) {
+				return pier;
+			}
+		}
+		return null;
+	};
+
+	/**
+	 * Get a mark object based on a mark id.
+	 *
+	 * @param id {Integer}
+	 *        the mark id.
+	 * @return {Mark} the mark object, or null if not found.
+	 */
+	Observatory.prototype.getMarkById = function (id) {
+		var piers = this.get('piers'),
+		    pier,
+		    marks,
+		    mark,
+		    i,
+		    len;
+		for (i = 0, len = piers.length; i < len; i++) {
+			pier = piers[i];
+			marks = pier.get('marks');
+			mark = marks.get(id);
+			if (mark !== null) {
+				return mark;
+			}
+		}
+		return null;
+	};
+
 
 	// return constructor from closure
 	return Observatory;
