@@ -3,6 +3,7 @@ define([
 	'mvc/View',
 	'util/Util',
 
+	'geomag/ObservatoryFactory',
 	'geomag/Observation',
 	'geomag/ReadingGroupView',
 	'geomag/BaselineCalculator'
@@ -10,6 +11,7 @@ define([
 	View,
 	Util,
 
+	ObservatoryFactory,
 	Observation,
 	ReadingGroupView,
 	ObservationBaselineCalculator
@@ -18,6 +20,8 @@ define([
 
 
 	var DEFAULTS = {
+		observationId: null,
+		factory: new ObservatoryFactory()
 	};
 
 
@@ -33,21 +37,34 @@ define([
 	};
 
 	ObservationView.prototype._initialize = function () {
-		this._observation = this._options.observation || new Observation();
-		this._calculator = this._options.baselineCalculator ||
-				new ObservationBaselineCalculator();
+		var _this = this,
+		    el = this._el,
+		    factory = this._options.factory;
 
-		this._el.innerHTML = [
+		el.innerHTML = [
 			'<section class="observation-view">',
 				'<section class="observation-meta-wrapper"></section>',
 				'<section class="reading-group-view-wrapper"></section>',
 			'</section>'
 		].join('');
 
-		this._readingGroupView = new ReadingGroupView({
-			el: this._el.querySelector('.reading-group-view-wrapper'),
-			observation: this._observation,
-			baselineCalculator: this._calculator
+		this._calculator = this._options.baselineCalculator ||
+						new ObservationBaselineCalculator();
+		this._observation = null;
+		this._readingGroupView = null;
+
+		// load observation
+		factory.getObservation({
+			id: this._options.observationId || null,
+			success: function (observation) {
+				_this._observation = observation;
+
+				_this._readingGroupView = new ReadingGroupView({
+					el: el.querySelector('.reading-group-view-wrapper'),
+					observation: observation,
+					baselineCalculator: _this._calculator
+				});
+			}
 		});
 	};
 
