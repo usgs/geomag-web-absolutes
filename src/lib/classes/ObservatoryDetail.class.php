@@ -17,7 +17,6 @@ class ObservatoryDetail extends Observatory {
 				$geomagnetic_longitude=null, $elevation=null,
 				$orientation=null, $instruments=array(),
 				$observations=array(), $piers=array()) {
-
 		parent::__construct($id, $code, $name, $default_pier_id, $location,
 				$latitude, $longitude, $geomagnetic_latitude,
 				$geomagnetic_longitude, $elevation, $orientation);

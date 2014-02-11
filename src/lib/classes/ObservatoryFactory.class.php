@@ -99,7 +99,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	private function getInstruments ($id) {
+	protected function getInstruments ($id) {
 		$instruments = array();
 		$statement = $this->db->prepare('SELECT * FROM instrument ' .
 				'WHERE observatory_id=:id ORDER BY name');
@@ -123,6 +123,38 @@ class ObservatoryFactory {
 	}
 
 	/**
+	 * Reads the all marks linked to a specific pier.
+	 *
+	 * @param id {Integer}
+	 *      The database Id of the pier.
+	 *
+	 * @return {Array{Object}}
+	 * 
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	protected function getMarks ($id) {
+		$marks = array();
+		$statement = $this->db->prepare('SELECT * FROM mark WHERE ' .
+				'pier_id=:id ORDER BY name');
+		$statement->bindParam(':id', $id, PDO::PARAM_INT);
+
+		if ($statement->execute()) {
+			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+				$mark = new Mark(intval($row['ID']), intval($row['pier_id']),
+						$row['name'], intval($row['begin']),
+						intval($row['end']), floatval($row['azimuth']));
+				$marks[] = $mark;
+			}
+		} else {
+			$this->triggerError($statement);
+		}
+
+		$statement->closeCursor();
+		return $marks;
+	}
+
+	/**
 	 * Reads the all observations linked to a specific observatory
 	 * (top-level data only, no child arrays).
 	 *
@@ -134,7 +166,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getObservations ($id) {
+	protected function getObservations ($id) {
 		$observations = array();
 		$statement = $this->db->prepare('SELECT * FROM observation WHERE ' .
 				'observatory_id=:id ORDER BY begin DESC');
@@ -173,7 +205,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	public function getPiers ($id) {
+	protected function getPiers ($id) {
 		$piers = array();
 		$statement = $this->db->prepare('SELECT * FROM pier WHERE ' .
 				'observatory_id=:id ORDER BY name');
@@ -199,39 +231,7 @@ class ObservatoryFactory {
 		return $piers;
 	}
 
-	/**
-	 * Reads the all marks linked to a specific pier.
-	 *
-	 * @param id {Integer}
-	 *      The database Id of the pier.
-	 *
-	 * @return {Array{Object}}
-	 *
-	 * @throws {Exception}
-	 *      Can throw an exception if an SQL error occurs. See "triggerError"
-	 */
-	public function getMarks ($id) {
-		$marks = array();
-		$statement = $this->db->prepare('SELECT * FROM mark WHERE ' .
-				'pier_id=:id ORDER BY name');
-		$statement->bindParam(':id', $id, PDO::PARAM_INT);
-
-		if ($statement->execute()) {
-			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-				$mark = new Mark(intval($row['ID']), intval($row['pier_id']),
-						$row['name'], intval($row['begin']),
-						intval($row['end']), floatval($row['azimuth']));
-				$marks[$row['ID']] = $mark;
-			}
-		} else {
-			$this->triggerError($statement);
-		}
-
-		$statement->closeCursor();
-		return $marks;
-	}
-
-	private function triggerError (&$statement) {
+	protected function triggerError (&$statement) {
 		$error = $statement->errorInfo();
 		$statement->closeCursor();
 

@@ -31,5 +31,7 @@ try {
 	// database doesn't have schema, load
 	$DB->exec(file_get_contents($dbschema));
 }
-$OBSERVATORY_FACTORY = new ObservatoryFactory($DB);
 
+// create factories
+$OBSERVATORY_FACTORY = new ObservatoryFactory($DB);
+$OBSERVATION_FACTORY = new ObservationFactory($DB);
