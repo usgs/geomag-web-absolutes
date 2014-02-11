@@ -349,32 +349,27 @@ define([
 		 */
 		_getMeanValue: function (reading, channel) {
 			var measurements = reading.get('measurements'),
-			    values = [],
-			    mean = null;
+			    total = 0,
+			    count = 0,
+			    value,
+			    i, len;
 
 			if (measurements !== null) {
-
 				measurements = measurements.data();
-
-				for (var i = 0; i < measurements.length; i++) {
-
-					if (channel === 'h' && measurements[i].get('h') !== null) {
-						values.push(measurements[i].get('h'));
-					} else if (channel === 'z' && measurements[i].get('z') !== null) {
-						values.push(measurements[i].get('z'));
-					} else if (channel === 'e' && measurements[i].get('e') !== null) {
-						values.push(measurements[i].get('e'));
-					} else if (channel === 'f' && measurements[i].get('f') !== null) {
-						values.push(measurements[i].get('f'));
+				for (i = 0, len = measurements.length; i < len; i++) {
+					value = measurements[i].get(channel);
+					if (value !== null) {
+						total += value;
+						count++;
 					}
-				}
-
-				for (var x = 0; x < values.length; x++) {
-					mean += values[x];
 				}
 			}
 
-			return mean / values.length;
+			if (count === 0) {
+				return null;
+			}
+
+			return total / count;
 		}
 
 	});
