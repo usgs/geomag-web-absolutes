@@ -36,14 +36,14 @@ class ObservationFactory {
 			if($row) {
 				$readings = $this->getReadings($id);
 				$observation = new ObservationDetail(intval($row['ID']),
-						intval($row['observatory_id']), intval($row['begin']),
-						intval($row['end']), intval($row['reviewer_user_id']),
-						intval($row['mark_id']), intval($row['electronics_id']),
-						intval($row['theodolite_id']),
-						floatval($row['pier_temperature']),
-						floatval($row['elect_temperature']),
-						floatval($row['flux_temperature']),
-						floatval($row['proton_temperature']),
+						intval($row['observatory_id']), safeintval($row['begin']),
+						safeintval($row['end']), safeintval($row['reviewer_user_id']),
+						safeintval($row['mark_id']), safeintval($row['electronics_id']),
+						safeintval($row['theodolite_id']),
+						safefloatval($row['pier_temperature']),
+						safefloatval($row['elect_temperature']),
+						safefloatval($row['flux_temperature']),
+						safefloatval($row['proton_temperature']),
 						$row['annotation'], $readings);
 			}
 		} else {
@@ -75,9 +75,9 @@ class ObservationFactory {
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$measurement = new Measurement(intval($row['ID']),
 						intval($row['reading_id']), $row['type'],
-						intval($row['time']), floatval($row['angle']),
-						floatval($row['h']), floatval($row['e']),
-						floatval($row['z']), floatval($row['f']));
+						safeintval($row['time']), safefloatval($row['angle']),
+						safefloatval($row['h']), safefloatval($row['e']),
+						safefloatval($row['z']), safefloatval($row['f']));
 				$measurements[] = $measurement;
 			}
 		} else {
@@ -111,8 +111,8 @@ class ObservationFactory {
 				$measurements = $this->getMeasurements($reading_id);
 				$reading = new Reading($reading_id,
 						intval($row['observation_id']),
-						intval($row['set_number']),
-						intval($row['observer_user_id']),
+						safeintval($row['set_number']),
+						safeintval($row['observer_user_id']),
 						$row['declination_valid'],
 						$row['horizontal_intensity_valid'],
 						$row['vertical_intensity_valid'],

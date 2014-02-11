@@ -1,5 +1,26 @@
 <?php
 
+if (!function_exists("safefloatval")) {
+	function safefloatval($value=null) {
+		if ($value === null) {
+			return null;
+		} else {
+			return floatval($value);
+		}
+	}
+}
+
+if (!function_exists("safeintval")) {
+	function safeintval($value=null) {
+		if ($value === null) {
+			return null;
+		} else {
+			return intval($value);
+		}
+	}
+}
+
+
 // PHP Classes
 $classDir = $APP_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR .
 		'classes' . DIRECTORY_SEPARATOR;
