@@ -129,42 +129,50 @@ define([
 
 		this._firstMarkUpView = new MeasurementView({
 			el: this._el.querySelector('.first-mark-up'),
-			measurement: this._firstMarkUpMeasurement
+			measurement: this._firstMarkUpMeasurement,
+			observation: this._observation
 		});
 
 		this._firstMarkDownView = new MeasurementView({
 			el: this._el.querySelector('.first-mark-down'),
-			measurement: this._firstMarkDownMeasurement
+			measurement: this._firstMarkDownMeasurement,
+			observation: this._observation
 		});
 
 		this._westDownView = new MeasurementView({
 			el: this._el.querySelector('.west-down'),
-			measurement: this._westDownMeasurement
+			measurement: this._westDownMeasurement,
+			observation: this._observation
 		});
 
 		this._eastDownView = new MeasurementView({
 			el: this._el.querySelector('.east-down'),
-			measurement: this._eastDownMeasurement
+			measurement: this._eastDownMeasurement,
+			observation: this._observation
 		});
 
 		this._westUpView = new MeasurementView({
 			el: this._el.querySelector('.west-up'),
-			measurement: this._westUpMeasurement
+			measurement: this._westUpMeasurement,
+			observation: this._observation
 		});
 
 		this._eastUpView = new MeasurementView({
 			el: this._el.querySelector('.east-up'),
-			measurement: this._eastUpMeasurement
+			measurement: this._eastUpMeasurement,
+			observation: this._observation
 		});
 
 		this._secondMarkUpView = new MeasurementView({
 			el: this._el.querySelector('.second-mark-up'),
-			measurement: this._secondMarkUpMeasurement
+			measurement: this._secondMarkUpMeasurement,
+			observation: this._observation
 		});
 
 		this._secondMarkDownView = new MeasurementView({
 			el: this._el.querySelector('.second-mark-down'),
-			measurement: this._secondMarkDownMeasurement
+			measurement: this._secondMarkDownMeasurement,
+			observation: this._observation
 		});
 
 		this._declinationView = new DeclinationView({
@@ -176,22 +184,26 @@ define([
 
 		this._southDownView = new MeasurementView({
 			el: this._el.querySelector('.south-down'),
-			measurement: this._southDownMeasurement
+			measurement: this._southDownMeasurement,
+			observation: this._observation
 		});
 
 		this._northUpView = new MeasurementView({
 			el: this._el.querySelector('.north-up'),
-			measurement: this._northUpMeasurement
+			measurement: this._northUpMeasurement,
+			observation: this._observation
 		});
 
 		this._southUpView = new MeasurementView({
 			el: this._el.querySelector('.south-up'),
-			measurement: this._southUpMeasurement
+			measurement: this._southUpMeasurement,
+			observation: this._observation
 		});
 
 		this._northDownView = new MeasurementView({
 			el: this._el.querySelector('.north-down'),
-			measurement: this._northDownMeasurement
+			measurement: this._northDownMeasurement,
+			observation: this._observation
 		});
 
 		this._inclinationView = new InclinationView({

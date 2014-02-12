@@ -12,7 +12,8 @@ define([
 ) {
 	'use strict';
 
-
+	// TODO :: Remove angle hack once DB data is corrected
+	var ANGLE_FACTOR = 1000;
 	var DEFAULTS = {
 
 	};
@@ -45,55 +46,26 @@ define([
 		var time = this._measurement.get('time'),
 		    angle = this._measurement.get('angle'),
 		    timeString = null,
-		    timeHours = null,
-		    timeMinutes = null,
-		    timeSeconds = null,
-		    angleDegrees = null,
-		    angleMinutes = null,
-		    angleSeconds = null;
+		    dms = null;
 
-		// Deconstruct time (in milliseconds) from measurement object back to
-		// an 'HH:ii:ss' format
-		// TODO :: Refactor to its own method for testability
 		if (time === null) {
-			timeString = '00:00:00';
+			timeString = '';
 		} else {
-			time /= 1000;
-			timeHours = parseInt(time / 3600, 10);
-			timeMinutes = parseInt((time % 3600) / 60, 10);
-			timeSeconds = parseInt((time % 60), 10);
-
-			if (timeHours < 10) {
-				timeHours = '0' + timeHours;
-			}
-			if (timeMinutes < 10) {
-				timeMinutes = '0' + timeMinutes;
-			}
-			if (timeSeconds < 10) {
-				timeSeconds = '0' + timeSeconds;
-			}
-
-			timeString = '' + timeHours + ':' + timeMinutes + ':' + timeSeconds;
+			timeString = this._timeToString(time);
 		}
 
 		// Deconstruct the decimal degrees back to Dms
 		// TODO :: Refactor to its own method for testability
 		if (angle === null) {
-			angleDegrees = 0;
-			angleMinutes = 0.0;
-			angleSeconds = 0.0;
+			dms = ['', '', ''];
 		} else {
-			angleDegrees = parseInt(angle, 10);
-			angleMinutes = (angle - angleDegrees) * 60;
-			angleSeconds = (angleMinutes - parseInt(angleMinutes, 10)) * 60;
-
-			angleMinutes = parseInt(angleMinutes, 10);
+			dms = this._decimalToDms(angle/ANGLE_FACTOR);
 		}
 
 		this._timeInput.value = timeString;
-		this._degreesInput.value = angleDegrees;
-		this._minutesInput.value = angleMinutes;
-		this._secondsInput.value = angleSeconds;
+		this._degreesInput.value = dms[0];
+		this._minutesInput.value = dms[1];
+		this._secondsInput.value = dms[2];
 
 		this._hValue.innerHTML = this._measurement.get('h') || '--';
 		this._eValue.innerHTML = this._measurement.get('e') || '--';
@@ -106,6 +78,7 @@ define([
 		    onInputChange = null;
 
 		this._measurement = this._options.measurement;
+		this._observation = this._options.observation;
 
 		this._el.innerHTML = [
 			'<th scope="row" class="measurement-type">',
@@ -119,13 +92,13 @@ define([
 			'<td class="measurement-h">--</td>',
 			'<td class="measurement-e">--</td>',
 			'<td class="measurement-z">--</td>',
-			'<td class="measurement-f">--</td>',
+			'<td class="measurement-f">--</td>'
 		].join('');
 
-		this._timeInput = this._el.querySelector('.measurement-time');
-		this._degreesInput = this._el.querySelector('.measurement-degrees');
-		this._minutesInput = this._el.querySelector('.measurement-minutes');
-		this._secondsInput = this._el.querySelector('.measurement-seconds');
+		this._timeInput = this._el.querySelector('.measurement-time > input');
+		this._degreesInput = this._el.querySelector('.measurement-degrees > input');
+		this._minutesInput = this._el.querySelector('.measurement-minutes > input');
+		this._secondsInput = this._el.querySelector('.measurement-seconds > input');
 
 		this._hValue = this._el.querySelector('.measurement-h');
 		this._eValue = this._el.querySelector('.measurement-e');
@@ -134,34 +107,14 @@ define([
 
 		onInputChange = function (/*evt*/) {
 			var time = _this._timeInput.value || '00:00:00',
-			    degrees = parseInt(_this._degreesInput.value||'0', 10),
+			    degrees = parseFloat(_this._degreesInput.value||'0.0'),
 			    minutes = parseFloat(_this._minutesInput.value||'0.0'),
-			    seconds = parseFloat(_this._secondsInput.value||'0.0');
+			    seconds = parseInt(_this._secondsInput.value||'0', 10);
 
-			// TODO :: Improve this
-
-			time = time.replace(/[^\d]/g, '');
-
-			if (time.length === 4) {
-				// HHMM
-				time = ((parseInt(time.substr(0, 2), 10) * 3600) +
-				       (parseInt(time.substr(2, 2), 10) * 60)) * 1000;
-			} else if (time.length === 5) {
-				// HMMSS
-				time = ((parseInt(time.substr(0, 1), 10) * 3600) +
-				       (parseInt(time.substr(1, 2), 10) * 60) +
-				       parseInt(time.substr(3, 2), 10)) * 1000;
-			} else if (time.length === 6) {
-				// HHMMSS
-				time = ((parseInt(time.substring(0, 2), 10) * 3600) +
-				       (parseInt(time.substring(2, 2), 10) * 60) +
-				       parseInt(time.substring(4, 2), 10)) * 1000;
-			}
-
-			minutes += (seconds / 60);
-			degrees += (minutes / 60);
-
-			_this._measurement.set({'time': time, 'angle': degrees});
+			_this._measurement.set({
+				'time': _this._stringToTime(time),
+				'angle': _this._dmsToDegrees(degrees, minutes, seconds)*ANGLE_FACTOR
+			});
 		};
 
 		this._timeInput.addEventListener('blur', onInputChange);
@@ -169,9 +122,98 @@ define([
 		this._minutesInput.addEventListener('blur', onInputChange);
 		this._secondsInput.addEventListener('blur', onInputChange);
 
-		this._measurement.on('change', this._render, this);
+		this._measurement.on('change', this.render, this);
 
 		this.render();
+	};
+
+	/**
+	 * @param time {Integer}
+	 *      Timestamp (in milliseconds) since the epoch.
+	 *
+	 * @return {String}
+	 *      A string formatted as "HH:mm:ss" representing the input time.
+	 */
+	MeasurementView.prototype._timeToString = function (time) {
+		var offset = parseInt((time % 86400000) / 1000, 10),
+		    timeHours = parseInt(offset / 3600, 10),
+		    timeMinutes = parseInt((offset % 3600) / 60, 10),
+		    timeSeconds = parseInt((offset % 60), 10);
+
+		if (timeHours < 10) {
+			timeHours = '0' + timeHours;
+		}
+		if (timeMinutes < 10) {
+			timeMinutes = '0' + timeMinutes;
+		}
+		if (timeSeconds < 10) {
+			timeSeconds = '0' + timeSeconds;
+		}
+
+		return '' + timeHours + ':' + timeMinutes + ':' + timeSeconds;
+	};
+
+	/**
+	 * @param time {String}
+	 *      The formatted time string to parse. The date for the returned time
+	 *      is inherited from the observation "begin" attribute.
+	 *
+	 * @return {Integer}
+	 *      The millisecond timestamp since the epoch.
+	 */
+	MeasurementView.prototype._stringToTime = function (time) {
+		var observationOffset = this._observation.get('begin') || 0;
+
+		var timeString = time.replace(/[^\d]/g, ''),
+		    offset = null;
+
+		observationOffset -= (observationOffset % 86400000);
+
+		if (timeString.length === 4) {
+			// HHMM
+			offset = ((parseInt(timeString.substr(0, 2), 10) * 3600) +
+			       (parseInt(timeString.substr(2, 2), 10) * 60)) * 1000;
+		} else if (timeString.length === 5) {
+			// HMMSS
+			offset = ((parseInt(timeString.substr(0, 1), 10) * 3600) +
+			       (parseInt(timeString.substr(1, 2), 10) * 60) +
+			       parseInt(timeString.substr(3, 2), 10)) * 1000;
+		} else if (timeString.length === 6) {
+			// HHMMSS
+			offset = ((parseInt(timeString.substr(0, 2), 10) * 3600) +
+			       (parseInt(timeString.substr(2, 2), 10) * 60) +
+			       parseInt(timeString.substr(4, 2), 10)) * 1000;
+		}
+
+		return offset + observationOffset;
+	};
+
+	/**
+	 * @param degs {Number}
+	 *        The degree portion of the angle value. If this is a decimal, then
+	 *        the fractional portion is converted to minutes.
+	 * @param mins {Number}
+	 *        The minutes portion of the angle value. If this is a decimal, then
+	 *        the fractional portion is converted to seconds.
+	 * @param secs {Integer}
+	 *        The seconds portion of the angle value.
+	 *
+	 * @return {Decimal}
+	 *        The decimal degrees for the given DMS value.
+	 */
+	MeasurementView.prototype._dmsToDecimal = function (degs, mins, secs) {
+		return (parseInt(secs, 10) / 3600) + (parseFloat(mins) / 60) +
+				parseFloat(degs);
+	};
+
+	MeasurementView.prototype._decimalToDms = function (angle) {
+		var degrees = parseInt(angle, 10),
+		    minutes = (angle - degrees) * 60,
+		    seconds = parseInt((minutes - parseInt(minutes, 10)) * 60, 10);
+
+		minutes = parseInt(minutes, 10);
+
+		return [degrees, minutes, seconds];
 	};
 
 
