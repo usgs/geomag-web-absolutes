@@ -1,7 +1,7 @@
-/* global observationId */
+/* global observationId, MOUNT_PATH */
 
 require.config({
-	baseUrl: 'js',
+	baseUrl: MOUNT_PATH + '/js',
 	paths: {
 		'mvc': '/hazdev-webutils/src/mvc',
 		'util': '/hazdev-webutils/src/util',

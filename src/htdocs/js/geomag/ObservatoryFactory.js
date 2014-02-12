@@ -1,4 +1,4 @@
-/* global define */
+/* global define, MOUNT_PATH */
 define([
 	'util/Util',
 	'util/Xhr',
@@ -29,9 +29,9 @@ define([
 
 	// default options.
 	var DEFAULTS = {
-		observatorySummaryUrl: 'observatory_summary_feed.php',
-		observatoryDetailUrl: 'observatory_detail_feed.php',
-		observationDetailUrl: 'observation_data.php'
+		observatorySummaryUrl: MOUNT_PATH + '/observatory_summary_feed.php',
+		observatoryDetailUrl: MOUNT_PATH + '/observatory_detail_feed.php',
+		observationDetailUrl: MOUNT_PATH + '/observation_data.php'
 	};
 
 
