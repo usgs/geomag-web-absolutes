@@ -37,6 +37,7 @@ require([
 		'spec/ReadingTest',
 		'spec/MeasurementViewTest',
 		'spec/DeclinationViewTest',
+		'spec/ReadingViewTest',
 		'spec/RealtimeDataFactoryTest',
 		'spec/ObservationBaselineCalculatorTest'
 	], function () {
