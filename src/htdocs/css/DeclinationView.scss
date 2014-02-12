@@ -1,0 +1,78 @@
+$table-top-separation: 16px;
+$units-separation: 6px;
+
+.declination-view {
+  /* These fields aren't particularly useful, so don't show them */
+  .mean-mark-degrees,
+  .mean-mark-minutes,
+  .magnetic-azimuth-of-mark-degrees,
+  .magnetic-azimuth-of-mark-minutes,
+  .true-azimuth-of-mark-degrees,
+  .true-azimuth-of-mark-minutes,
+  .west-up-minus-east-down-angle,
+  .west-up-minus-east-down-degrees,
+  .east-up-minus-west-down-angle,
+  .east-up-minus-west-down-degrees {
+    display: none;
+  }
+
+  .declination-angles,
+  .f-table td {
+    width:8em;
+  }
+  .declination-degrees,
+  .declination-minutes {
+    width:5em;
+  }
+
+  thead {
+    th {
+      text-align:right;
+    }
+  }
+
+  tbody {
+    th {
+      text-align:right;
+      padding-right:16px;
+      width:15em;
+
+      &:after {
+        content:':';
+      }
+    }
+    td {
+      text-align:right;
+      padding-right:5px;
+    }
+  }
+
+  .west-up-minus-east-down {
+    th {
+      padding-top:$table-top-separation;
+    }
+  }
+
+  .west-up-minus-east-down,
+  .east-up-minus-west-down {
+    td {
+      &:after {
+        content:"'";
+        font-weight:bold;
+        padding-left:$units-separation;
+      }
+    }
+  }
+
+  .f-table {
+    padding-top:$table-top-separation;
+
+    td {
+      &:after {
+        content:'nT';
+        font-weight:bold;
+        padding-left:$units-separation;
+      }
+    }
+  }
+}
