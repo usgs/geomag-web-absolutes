@@ -4,7 +4,8 @@ require.config({
 		mocha: 'mocha/mocha',
 		chai: 'chai/chai',
 		mvc: '/hazdev-webutils/src/mvc',
-		util: '/hazdev-webutils/src/util'
+		util: '/hazdev-webutils/src/util',
+		tablist: '/hazdev-tablist/src/tablist'
 	},
 	shim: {
 		mocha: {
@@ -36,6 +37,7 @@ require([
 		'spec/UserRoleTest',
 		'spec/ReadingTest',
 		'spec/MeasurementViewTest',
+		'spec/ReadingGroupViewTest',
 		'spec/DeclinationViewTest',
 		'spec/ReadingViewTest',
 		'spec/RealtimeDataFactoryTest',
