@@ -41,7 +41,6 @@ define([
 
 	ReadingGroupView.prototype._initialize = function () {
 		this._observation = this._options.observation;
-		this._readings = this._observation.readings;
 		this._calculator = this._options.baselineCalculator;
 
 		this._tablist = new TabList({tabPosition: 'top'});
