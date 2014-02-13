@@ -7,7 +7,7 @@ define([
 	'geomag/Observation',
 	'geomag/ObservationMetaView',
 	'geomag/ReadingGroupView',
-	'geomag/BaselineCalculator'
+	'geomag/ObservationBaselineCalculator'
 ], function (
 	View,
 	Util,

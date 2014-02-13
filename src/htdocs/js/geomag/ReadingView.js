@@ -178,6 +178,7 @@ define([
 		this._declinationView = new DeclinationView({
 			el: this._el.querySelector('.declination-output'),
 			reading: this._reading,
+			observation: this._observation,
 			baselineCalculator: this._calculator
 		});
 
