@@ -20,12 +20,12 @@ define([
 		'id': null,
 		'set_number': null,
 		'declination_valid': 'Y',
-		'declination_shift': 0,
 		'horizontal_intensity_valid': 'Y',
 		'vertical_intensity_valid': 'Y',
 		'observer': null,
 		'annotation': null,
-		'measurements': null
+		'measurements': null,
+		'shift': 0
 	};
 
 
