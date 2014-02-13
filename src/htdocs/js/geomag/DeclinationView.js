@@ -45,7 +45,7 @@ define([
 	DeclinationView.prototype._initialize = function () {
 		this._observation = this._options.observation;
 		this._reading = this._options.reading;
-		this._calculator = this._options.observationBaselineCalculator;
+		this._calculator = this._options.baselineCalculator;
 		this._measurements = this._reading.getMeasurements();
 
 		this._el.classList.add('declination-view');
@@ -60,11 +60,11 @@ define([
 					'</tr>',
 				'</thead>',
 				'<tbody>',
-					'<tr class="mag-south-meridian">',
+					'<tr class="mag-s-meridian">',
 						'<th scope="row">Magnetic South Meridian</th>',
-						'<td class="mag-south-meridian-angle">------</td>',
-						'<td class="mag-south-meridian-degrees">---</td>',
-						'<td class="mag-south-meridian-minutes">----</td>',
+						'<td class="mag-s-meridian-angle">------</td>',
+						'<td class="mag-s-meridian-degrees">---</td>',
+						'<td class="mag-s-meridian-minutes">----</td>',
 					'</tr>',
 					'<tr class="mean-mark">',
 						'<th scope="row">Mean Mark</th>',
@@ -124,12 +124,11 @@ define([
 		].join('');
 
 		// save references to elements that will be updated during render
-		this._magSMeridianAngle = this._el.querySelector(
-		    '.mag-south-meridian-angle');
+		this._magSMeridianAngle = this._el.querySelector('.mag-s-meridian-angle');
 		this._magSMeridianDegrees = this._el.querySelector(
-		    '.mag-south-meridian-degrees');
+		    '.mag-s-meridian-degrees');
 		this._magSMeridianMinutes = this._el.querySelector(
-		    '.mag-south-meridian-minutes');
+		    '.mag-s-meridian-minutes');
 
 		this._meanMark = this._el.querySelector('.mean-mark-angle');
 
@@ -137,11 +136,11 @@ define([
 
 		this._trueAzOfMark = this._el.querySelector('.true-az-of-mark-angle');
 
-		this._magneticDeclination = this._el.querySelector(
+		this._magneticDeclinationAngle = this._el.querySelector(
 		    '.mag-declination-angle');
-		this._magneticDeclination = this._el.querySelector(
+		this._magneticDeclinationDegrees = this._el.querySelector(
 		    '.mag-declination-degrees');
-		this._magneticDeclination = this._el.querySelector(
+		this._magneticDeclinationMinutes = this._el.querySelector(
 		    '.mag-declination-minutes');
 
 		this._westUpMinusEastDown = this._el.querySelector(
@@ -175,37 +174,56 @@ define([
 		this._measurements[Measurement.SECOND_MARK_DOWN][0].on(
 				'change', this.render, this);
 
+		this._observation.on('mark-selected', this.render, this);
+
 		// render current reading
-		//this.render();
+		this.render();
 	};
 
 	/**
 	 * Update view based on current reading values.
 	 */
 	DeclinationView.prototype.render = function () {
+
 		var calculator = this._calculator,
 		    reading = this._reading,
+		    observation = this._observation,
+		    observatory = observation.get('observatory'),
 		    magSMeridianAngle = calculator.magneticSouthMeridian(reading),
 		    magSMeridianDegrees = parseInt(magSMeridianAngle, 10),
 		    magSMeridianMinutes = parseFloat((magSMeridianAngle -
-						magSMeridianDegrees)*60);
+						magSMeridianDegrees)*60),
+		    magDeclinationAngle = null,
+		    magDeclinationDegrees = null,
+		    magDeclinationMinutes = null;
 
-		this._magSMeridianAngle.innerHTML = magSMeridianAngle;
+		this._magSMeridianAngle.innerHTML = magSMeridianAngle.toFixed(2);
 		this._magSMeridianDegrees.innerHTML = magSMeridianDegrees;
-		this._magSMeridianMinutes.innerHTML = magSMeridianMinutes;
+		this._magSMeridianMinutes.innerHTML = magSMeridianMinutes.toFixed(2);
 
-		this._meanMark.innerHTML = calculator.meanMark(reading);
-		this._magneticAzOfMark.innerHTML = calculator.magneticAzMark(reading);
-		this._trueAzOfMark.innerHTML = calculator.trueAzOfMark(reading);
-		this._magneticDeclination.innerHTML =
-				calculator.magneticDeclination(reading);
 		this._westUpMinusEastDown.innerHTML =
-				calculator.westUpMinusEastDown(reading);
+				calculator.w(reading).toFixed(2);
 		this._eastUpMinusWestDown.innerHTML =
-				calculator.eastUpMinusWestDown(reading);
-		this._fMean.innerHTML = calculator.fMean(reading);
-		this._pierCorrection.innerHTML = calculator.pierCorrection(reading);
-		this._correctedF.innerHTML = calculator.correctedF(reading);
+				calculator.eastUpMinusWestDown(reading).toFixed(2);
+		this._fMean.innerHTML = calculator.meanF(reading).toFixed(2);
+
+		this._meanMark.innerHTML = calculator.meanMark(reading).toFixed(2);
+		this._magneticAzOfMark.innerHTML = calculator.magneticAzimuthMark(reading).toFixed(2);
+
+		if (observatory && observatory.get('piers').getSelected() && observatory .get('piers').getSelected().get('marks').getSelected() && observation.get('mark_id') !== null ) {
+			this._trueAzOfMark.innerHTML = calculator.trueAzimuthOfMark(observatory).toFixed(2);
+
+			magDeclinationAngle = calculator.magneticDeclination(observatory, reading);
+			magDeclinationDegrees = parseInt(magDeclinationAngle, 10);
+			magDeclinationMinutes = (magDeclinationAngle - magDeclinationDegrees) * 60;
+			this._magneticDeclinationAngle.innerHTML = magDeclinationAngle.toFixed(2);
+			this._magneticDeclinationDegrees.innerHTML = magDeclinationDegrees;
+			this._magneticDeclinationMinutes.innerHTML = magDeclinationMinutes.toFixed(2);
+
+
+			this._pierCorrection.innerHTML = calculator.pierCorrection(observatory);
+			this._correctedF.innerHTML = calculator.correctedF(observatory, reading).toFixed(2);
+		}
 	};
 
 
