@@ -12,8 +12,7 @@ define([
 ) {
 	'use strict';
 
-	// TODO :: Remove angle hack once DB data is corrected
-	var ANGLE_FACTOR = 1000;
+
 	var DEFAULTS = {
 
 	};
@@ -59,7 +58,7 @@ define([
 		if (angle === null) {
 			dms = ['', '', ''];
 		} else {
-			dms = this._decimalToDms(angle/ANGLE_FACTOR);
+			dms = this._decimalToDms(angle);
 		}
 
 		this._timeInput.value = timeString;
@@ -113,7 +112,7 @@ define([
 
 			_this._measurement.set({
 				'time': _this._stringToTime(time),
-				'angle': _this._dmsToDegrees(degrees, minutes, seconds)*ANGLE_FACTOR
+				'angle': _this._dmsToDecimal(degrees, minutes, seconds)
 			});
 		};
 
