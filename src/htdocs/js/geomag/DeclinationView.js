@@ -133,14 +133,13 @@ define([
 		this._meanMark = this._el.querySelector('.mean-mark-angle');
 
 		this._magneticAzOfMark = this._el.querySelector('.mag-az-of-mark-angle');
-
 		this._trueAzOfMark = this._el.querySelector('.true-az-of-mark-angle');
 
-		this._magneticDeclinationAngle = this._el.querySelector(
+		this._magDeclinationAngle = this._el.querySelector(
 		    '.mag-declination-angle');
-		this._magneticDeclinationDegrees = this._el.querySelector(
+		this._magDeclinationDegrees = this._el.querySelector(
 		    '.mag-declination-degrees');
-		this._magneticDeclinationMinutes = this._el.querySelector(
+		this._magDeclinationMinutes = this._el.querySelector(
 		    '.mag-declination-minutes');
 
 		this._westUpMinusEastDown = this._el.querySelector(
@@ -155,6 +154,7 @@ define([
 		// when reading changes render view
 		this._options.reading.on('change', this.render, this);
 
+		// also render when any related inputs change
 		this._measurements[Measurement.FIRST_MARK_UP][0].on(
 				'change', this.render, this);
 		this._measurements[Measurement.FIRST_MARK_DOWN][0].on(
@@ -191,8 +191,7 @@ define([
 		    observatory = observation.get('observatory'),
 		    magSMeridianAngle = calculator.magneticSouthMeridian(reading),
 		    magSMeridianDegrees = parseInt(magSMeridianAngle, 10),
-		    magSMeridianMinutes = parseFloat((magSMeridianAngle -
-						magSMeridianDegrees)*60),
+		    magSMeridianMinutes = (magSMeridianAngle - magSMeridianDegrees)*60,
 		    magDeclinationAngle = null,
 		    magDeclinationDegrees = null,
 		    magDeclinationMinutes = null;
@@ -201,28 +200,38 @@ define([
 		this._magSMeridianDegrees.innerHTML = magSMeridianDegrees;
 		this._magSMeridianMinutes.innerHTML = magSMeridianMinutes.toFixed(2);
 
+		this._meanMark.innerHTML = calculator.meanMark(reading).toFixed(2);
+
+		this._magneticAzOfMark.innerHTML =
+		    calculator.magneticAzimuthMark(reading).toFixed(2);
+
 		this._westUpMinusEastDown.innerHTML =
-				calculator.w(reading).toFixed(2);
+		    calculator.westUpMinusEastDown(reading).toFixed(2);
 		this._eastUpMinusWestDown.innerHTML =
-				calculator.eastUpMinusWestDown(reading).toFixed(2);
+		    calculator.eastUpMinusWestDown(reading).toFixed(2);
+
 		this._fMean.innerHTML = calculator.meanF(reading).toFixed(2);
 
-		this._meanMark.innerHTML = calculator.meanMark(reading).toFixed(2);
-		this._magneticAzOfMark.innerHTML = calculator.magneticAzimuthMark(reading).toFixed(2);
+		if (observatory && observatory.get('piers').getSelected() &&
+		    observatory .get('piers').getSelected().get('marks').getSelected() &&
+		    observation.get('mark_id') !== null ) {
 
-		if (observatory && observatory.get('piers').getSelected() && observatory .get('piers').getSelected().get('marks').getSelected() && observation.get('mark_id') !== null ) {
-			this._trueAzOfMark.innerHTML = calculator.trueAzimuthOfMark(observatory).toFixed(2);
+			this._trueAzOfMark.innerHTML =
+			    calculator.trueAzimuthOfMark(observatory).toFixed(2);
 
-			magDeclinationAngle = calculator.magneticDeclination(observatory, reading);
+			magDeclinationAngle =
+			    calculator.magneticDeclination(observatory, reading);
 			magDeclinationDegrees = parseInt(magDeclinationAngle, 10);
-			magDeclinationMinutes = (magDeclinationAngle - magDeclinationDegrees) * 60;
-			this._magneticDeclinationAngle.innerHTML = magDeclinationAngle.toFixed(2);
-			this._magneticDeclinationDegrees.innerHTML = magDeclinationDegrees;
-			this._magneticDeclinationMinutes.innerHTML = magDeclinationMinutes.toFixed(2);
+			magDeclinationMinutes =
+			    (magDeclinationAngle - magDeclinationDegrees) * 60;
 
+			this._magDeclinationAngle.innerHTML = magDeclinationAngle.toFixed(2);
+			this._magDeclinationDegrees.innerHTML = magDeclinationDegrees;
+			this._magDeclinationMinutes.innerHTML = magDeclinationMinutes.toFixed(2);
 
 			this._pierCorrection.innerHTML = calculator.pierCorrection(observatory);
-			this._correctedF.innerHTML = calculator.correctedF(observatory, reading).toFixed(2);
+			this._correctedF.innerHTML =
+			    calculator.correctedF(observatory, reading).toFixed(2);
 		}
 	};
 
