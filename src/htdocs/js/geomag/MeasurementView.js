@@ -12,8 +12,7 @@ define([
 ) {
 	'use strict';
 
-	// TODO :: Remove angle hack once DB data is corrected
-	var ANGLE_FACTOR = 1000;
+
 	var DEFAULTS = {
 
 	};
@@ -59,7 +58,7 @@ define([
 		if (angle === null) {
 			dms = ['', '', ''];
 		} else {
-			dms = this._decimalToDms(angle/ANGLE_FACTOR);
+			dms = this._decimalToDms(angle);
 		}
 
 		this._timeInput.value = timeString;
@@ -113,7 +112,7 @@ define([
 
 			_this._measurement.set({
 				'time': _this._stringToTime(time),
-				'angle': _this._dmsToDegrees(degrees, minutes, seconds)*ANGLE_FACTOR
+				'angle': _this._dmsToDecimal(degrees, minutes, seconds)
 			});
 		};
 
@@ -135,22 +134,12 @@ define([
 	 *      A string formatted as "HH:mm:ss" representing the input time.
 	 */
 	MeasurementView.prototype._timeToString = function (time) {
-		var offset = parseInt((time % 86400000) / 1000, 10),
-		    timeHours = parseInt(offset / 3600, 10),
-		    timeMinutes = parseInt((offset % 3600) / 60, 10),
-		    timeSeconds = parseInt((offset % 60), 10);
+		var offset = new Date(time),
+		    h = offset.getUTCHours(),
+		    m = offset.getUTCMinutes(),
+		    s = offset.getUTCSeconds();
 
-		if (timeHours < 10) {
-			timeHours = '0' + timeHours;
-		}
-		if (timeMinutes < 10) {
-			timeMinutes = '0' + timeMinutes;
-		}
-		if (timeSeconds < 10) {
-			timeSeconds = '0' + timeSeconds;
-		}
-
-		return '' + timeHours + ':' + timeMinutes + ':' + timeSeconds;
+		return '' + (h<10?'0':'') + h + (m<10?':0':':') + m + (s<10?':0':':') + s;
 	};
 
 	/**
@@ -162,30 +151,41 @@ define([
 	 *      The millisecond timestamp since the epoch.
 	 */
 	MeasurementView.prototype._stringToTime = function (time) {
-		var observationOffset = this._observation.get('begin') || 0;
+		var observationOffset = this._observation.get('begin');
 
 		var timeString = time.replace(/[^\d]/g, ''),
 		    offset = null;
 
-		observationOffset -= (observationOffset % 86400000);
+		if (observationOffset) {
+			observationOffset = new Date(observationOffset);
+		} else {
+			observationOffset = new Date();
+		}
 
 		if (timeString.length === 4) {
 			// HHMM
-			offset = ((parseInt(timeString.substr(0, 2), 10) * 3600) +
-			       (parseInt(timeString.substr(2, 2), 10) * 60)) * 1000;
+			offset = Date.UTC(observationOffset.getUTCFullYear(),
+					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
+					parseInt(timeString.substr(0, 2), 10),
+					parseInt(timeString.substr(2, 2), 10),
+					0, 0);
 		} else if (timeString.length === 5) {
 			// HMMSS
-			offset = ((parseInt(timeString.substr(0, 1), 10) * 3600) +
-			       (parseInt(timeString.substr(1, 2), 10) * 60) +
-			       parseInt(timeString.substr(3, 2), 10)) * 1000;
+			offset = Date.UTC(observationOffset.getUTCFullYear(),
+					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
+					parseInt(timeString.substr(0, 1), 10),
+					parseInt(timeString.substr(1, 2), 10),
+					parseInt(timeString.substr(3, 2), 10), 0);
 		} else if (timeString.length === 6) {
 			// HHMMSS
-			offset = ((parseInt(timeString.substr(0, 2), 10) * 3600) +
-			       (parseInt(timeString.substr(2, 2), 10) * 60) +
-			       parseInt(timeString.substr(4, 2), 10)) * 1000;
+			offset = Date.UTC(observationOffset.getUTCFullYear(),
+					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
+					parseInt(timeString.substr(0, 2), 10),
+					parseInt(timeString.substr(2, 2), 10),
+					parseInt(timeString.substr(4, 2), 10), 0);
 		}
 
-		return offset + observationOffset;
+		return offset;
 	};
 
 	/**
@@ -200,18 +200,27 @@ define([
 	 *
 	 * @return {Decimal}
 	 *        The decimal degrees for the given DMS value.
+	 *
+	 * @see MeasurementViewTest#degree_inversion_check
 	 */
 	MeasurementView.prototype._dmsToDecimal = function (degs, mins, secs) {
 		return (parseInt(secs, 10) / 3600) + (parseFloat(mins) / 60) +
 				parseFloat(degs);
 	};
 
+	/**
+	 * @see MeasurementViewTest#degree_inversion_check
+	 */
 	MeasurementView.prototype._decimalToDms = function (angle) {
 		var degrees = parseInt(angle, 10),
 		    minutes = (angle - degrees) * 60,
-		    seconds = parseInt((minutes - parseInt(minutes, 10)) * 60, 10);
+		    seconds = Math.round((minutes - parseInt(minutes, 10)) * 60, 10);
 
 		minutes = parseInt(minutes, 10);
+
+		// Correct any errors due to floating point
+		minutes += parseInt(seconds / 60, 10);
+		seconds = seconds % 60;
 
 		return [degrees, minutes, seconds];
 	};

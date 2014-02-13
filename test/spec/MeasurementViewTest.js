@@ -61,83 +61,102 @@ define([
 		});
 
 		describe('_stringToTime', function () {
-			var m = new MeasurementView(viewOptions);
+			var m = new MeasurementView(viewOptions),
+			    today = new Date();
 
 			it('parses start of day properly', function () {
+				var startOfDay = Date.UTC(today.getUTCFullYear(),
+						today.getUTCMonth(), today.getUTCDate(), 0, 0, 0, 0);
+
 				// hhmmss
-				expect(m._stringToTime('00:00:00')).to.equal(0);
-				expect(m._stringToTime('00 00 00')).to.equal(0);
-				expect(m._stringToTime('000000')).to.equal(0);
+				expect(m._stringToTime('00:00:00')).to.equal(startOfDay);
+				expect(m._stringToTime('00 00 00')).to.equal(startOfDay);
+				expect(m._stringToTime('000000')).to.equal(startOfDay);
 
 				// hmmss
-				expect(m._stringToTime('0:00:00')).to.equal(0);
-				expect(m._stringToTime('0 00 00')).to.equal(0);
-				expect(m._stringToTime('00000')).to.equal(0);
+				expect(m._stringToTime('0:00:00')).to.equal(startOfDay);
+				expect(m._stringToTime('0 00 00')).to.equal(startOfDay);
+				expect(m._stringToTime('00000')).to.equal(startOfDay);
 
 				// hhmm
-				expect(m._stringToTime('00:00')).to.equal(0);
-				expect(m._stringToTime('00 00')).to.equal(0);
-				expect(m._stringToTime('0000')).to.equal(0);
+				expect(m._stringToTime('00:00')).to.equal(startOfDay);
+				expect(m._stringToTime('00 00')).to.equal(startOfDay);
+				expect(m._stringToTime('0000')).to.equal(startOfDay);
 			});
 
 			it('parses end of day properly', function () {
+				var endOfDay = Date.UTC(today.getUTCFullYear(),
+						today.getUTCMonth(), today.getUTCDate(), 23, 59, 59, 0);
+
 				// hhmmss
-				expect(m._stringToTime('23:59:59')).to.equal(86399000);
-				expect(m._stringToTime('23 59 59')).to.equal(86399000);
-				expect(m._stringToTime('235959')).to.equal(86399000);
+				expect(m._stringToTime('23:59:59')).to.equal(endOfDay);
+				expect(m._stringToTime('23 59 59')).to.equal(endOfDay);
+				expect(m._stringToTime('235959')).to.equal(endOfDay);
 			});
 
 			it('parses one minute properly', function () {
+				var oneMinute = Date.UTC(today.getUTCFullYear(),
+						today.getUTCMonth(), today.getUTCDate(), 0, 1, 0, 0);
+
 				// hhmmss
-				expect(m._stringToTime('00:01:00')).to.equal(60000);
-				expect(m._stringToTime('00 01 00')).to.equal(60000);
-				expect(m._stringToTime('000100')).to.equal(60000);
+				expect(m._stringToTime('00:01:00')).to.equal(oneMinute);
+				expect(m._stringToTime('00 01 00')).to.equal(oneMinute);
+				expect(m._stringToTime('000100')).to.equal(oneMinute);
 
 				// hmmss
-				expect(m._stringToTime('0:01:00')).to.equal(60000);
-				expect(m._stringToTime('0 01 00')).to.equal(60000);
-				expect(m._stringToTime('00100')).to.equal(60000);
+				expect(m._stringToTime('0:01:00')).to.equal(oneMinute);
+				expect(m._stringToTime('0 01 00')).to.equal(oneMinute);
+				expect(m._stringToTime('00100')).to.equal(oneMinute);
 
 				// hhmm
-				expect(m._stringToTime('00:01')).to.equal(60000);
-				expect(m._stringToTime('00 01')).to.equal(60000);
-				expect(m._stringToTime('0001')).to.equal(60000);
+				expect(m._stringToTime('00:01')).to.equal(oneMinute);
+				expect(m._stringToTime('00 01')).to.equal(oneMinute);
+				expect(m._stringToTime('0001')).to.equal(oneMinute);
 			});
 
 			it('parses one hour properly', function () {
+				var oneHour = Date.UTC(today.getUTCFullYear(),
+						today.getUTCMonth(), today.getUTCDate(), 1, 0, 0, 0);
+
 				// hhmmss
-				expect(m._stringToTime('01:00:00')).to.equal(3600000);
-				expect(m._stringToTime('01 00 00')).to.equal(3600000);
-				expect(m._stringToTime('010000')).to.equal(3600000);
+				expect(m._stringToTime('01:00:00')).to.equal(oneHour);
+				expect(m._stringToTime('01 00 00')).to.equal(oneHour);
+				expect(m._stringToTime('010000')).to.equal(oneHour);
 
 				// hmmss
-				expect(m._stringToTime('1:00:00')).to.equal(3600000);
-				expect(m._stringToTime('1 00 00')).to.equal(3600000);
-				expect(m._stringToTime('10000')).to.equal(3600000);
+				expect(m._stringToTime('1:00:00')).to.equal(oneHour);
+				expect(m._stringToTime('1 00 00')).to.equal(oneHour);
+				expect(m._stringToTime('10000')).to.equal(oneHour);
 
 				// hhmm
-				expect(m._stringToTime('01:00')).to.equal(3600000);
-				expect(m._stringToTime('01 00')).to.equal(3600000);
-				expect(m._stringToTime('0100')).to.equal(3600000);
+				expect(m._stringToTime('01:00')).to.equal(oneHour);
+				expect(m._stringToTime('01 00')).to.equal(oneHour);
+				expect(m._stringToTime('0100')).to.equal(oneHour);
 			});
 
 			it('parses noon properly', function () {
+				var noon = Date.UTC(today.getUTCFullYear(),
+						today.getUTCMonth(), today.getUTCDate(), 12, 0, 0, 0);
+
 				// hhmmss
-				expect(m._stringToTime('12:00:00')).to.equal(43200000);
-				expect(m._stringToTime('12 00 00')).to.equal(43200000);
-				expect(m._stringToTime('120000')).to.equal(43200000);
+				expect(m._stringToTime('12:00:00')).to.equal(noon);
+				expect(m._stringToTime('12 00 00')).to.equal(noon);
+				expect(m._stringToTime('120000')).to.equal(noon);
 
 				// hhmm
-				expect(m._stringToTime('12:00')).to.equal(43200000);
-				expect(m._stringToTime('12 00')).to.equal(43200000);
-				expect(m._stringToTime('1200')).to.equal(43200000);
+				expect(m._stringToTime('12:00')).to.equal(noon);
+				expect(m._stringToTime('12 00')).to.equal(noon);
+				expect(m._stringToTime('1200')).to.equal(noon);
 			});
 
 			it('parses a mixed offset properly', function () {
+				var mixed = Date.UTC(today.getUTCFullYear(),
+						today.getUTCMonth(), today.getUTCDate(), 11, 11, 8, 0);
+
 				// hhmmss
-				expect(m._stringToTime('11:11:08')).to.equal(40268000);
-				expect(m._stringToTime('11 11 08')).to.equal(40268000);
-				expect(m._stringToTime('111108')).to.equal(40268000);
+				expect(m._stringToTime('11:11:08')).to.equal(mixed);
+				expect(m._stringToTime('11 11 08')).to.equal(mixed);
+				expect(m._stringToTime('111108')).to.equal(mixed);
 			});
 		});
 
@@ -173,6 +192,26 @@ define([
 
 				// Some tests from real observations
 				expect(m._decimalToDms(120.010)).to.deep.equal([120, 0, 36]);
+			});
+		});
+
+		// These are currently passing but take a long time (~10 sec) to complete.
+		// We should re-check this test any time the _dmsToDecimal or _decimalToDms
+		// methods are updated
+		describe.skip('degree_inversion_check', function () {
+			var m = new MeasurementView(viewOptions);
+
+			it('gives back original input', function () {
+				var deg, min, sec, result;
+
+				for (deg = 0; deg < 360; deg++) {
+					for (min = 0; min < 60; min++) {
+						for (sec = 0; sec < 60; sec++) {
+							result = m._dmsToDecimal(deg, min, sec);
+							expect(m._decimalToDms(result)).to.deep.equal([deg, min, sec]);
+						}
+					}
+				}
 			});
 		});
 	});
