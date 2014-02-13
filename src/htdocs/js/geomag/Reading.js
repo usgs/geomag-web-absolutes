@@ -144,31 +144,6 @@ define([
 		return {'start':start, 'end': end};
 	};
 
-/*	Reading.prototype.getReadingTimes = function () {
-		var measurements = this.getMeasurements();
-		var measurement;
-		var start = null, end = null;
-
-		if( Object.keys(measurements)[0].length > 0) {
-			measurement = measurements[Object.keys(measurements)[0]][0];
-			start = measurement.get('time');
-			end = start;
-		}
-
-		//for( type in measurements) {
-		for( var type = 0; type < measurements.length; type++) {
-			for( var i = 0; i < measurements[type].length; i++ ){
-				measurement = measurements[type][i];
-				if( measurement.get('time') < start )
-					{ start = measurement.get('time'); }
-				if( measurement.get('time') > end )
-					{ end = measurement.get('time'); }
-			}
-		} 
-
-	return {'start':start, 'end':end};
-	}; */
-
 	/**
 	 * @params options {Object}
 	 * @params options.realtimeDataFactory {Object}
