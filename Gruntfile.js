@@ -91,6 +91,10 @@ module.exports = function (grunt) {
 				{
 					from: '^/theme/(.*)$',
 					to: '/hazdev-template/src/htdocs/$1'
+				},
+				{
+					from: '^/observation/(.*)$',
+					to: '/observation.php?id=$1'
 				}
 			],
 			dev: {
@@ -101,11 +105,11 @@ module.exports = function (grunt) {
 					middleware: function (connect, options) {
 						return [
 							lrSnippet,
+							rewriteRulesSnippet,
 							mountFolder(connect, '.tmp'),
 							mountFolder(connect, options.components),
 							mountPHP(options.base),
 							mountFolder(connect, options.base),
-							rewriteRulesSnippet,
 							mountFolder(connect, 'node_modules')
 						];
 					}
@@ -118,9 +122,9 @@ module.exports = function (grunt) {
 					keepalive: true,
 					middleware: function (connect, options) {
 						return [
+							rewriteRulesSnippet,
 							mountPHP(options.base),
 							mountFolder(connect, options.base),
-							rewriteRulesSnippet,
 							mountFolder(connect, 'node_modules'),
 							mountFolder(connect, 'bower_components')
 						];
@@ -177,11 +181,9 @@ module.exports = function (grunt) {
 					baseUrl: appConfig.dev + '/htdocs/js',
 					optimize: 'uglify2',
 					dir: appConfig.dist + '/htdocs/js',
-					// mainConfigFile: appConfig.dev + '/htdocs/js/index.js',
 					useStrict: true,
 					wrap: true,
 
-					// New
 					paths: {
 						'mvc': '../../../bower_components/hazdev-webutils/src/mvc',
 						'util': '../../../bower_components/hazdev-webutils/src/util',
@@ -189,20 +191,12 @@ module.exports = function (grunt) {
 					},
 					modules: [
 						{
-							name: "index"
+							name: 'index'
 						},
 						{
-							name: "observation"
+							name: 'observation'
 						}
 					]
-					// End New
-
-					// uglify2: {
-					// 	report: 'gzip',
-					// 	mangle: true,
-					// 	compress: true,
-					// 	preserveComments: 'some'
-					// }
 				}
 			}
 		},
