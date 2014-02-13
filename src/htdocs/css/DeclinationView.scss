@@ -1,78 +1,56 @@
-$table-top-separation: 16px;
-$units-separation: 6px;
+$group-vertical-separation:10px;
+$line-vertical-separation:4px;
+$units-separation:2px;
 
 .declination-view {
-  /* These fields aren't particularly useful, so don't show them */
-  .mean-mark-degrees,
-  .mean-mark-minutes,
-  .mag-az-of-mark-degrees,
-  .mag-az-of-mark-minutes,
-  .true-az-of-mark-degrees,
-  .true-az-of-mark-minutes,
-  .west-up-minus-east-down-angle,
-  .west-up-minus-east-down-degrees,
-  .east-up-minus-west-down-angle,
-  .east-up-minus-west-down-degrees {
-    display: none;
-  }
+	dt {
+		float:left;
+		clear:left;
+		width:13em;
+		font-weight:bold;
+		text-align:right;
+		margin-top:$line-vertical-separation;
+		&:after {
+			content:':';
+		}
+	}
+	dd {
+		float:left;
+		width:7em;
+		margin-top:$line-vertical-separation;
+		small {
+			display:block;
+			text-align:right;
+		}
+	}
 
-  .declination-angles,
-  .f-table td {
-    width:8em;
-  }
-  .declination-degrees,
-  .declination-minutes {
-    width:5em;
-  }
+	.minutes {
+		&:after {
+			content:"'";
+			font-weight:bold;
+			padding-left:$units-separation;
+		}
+	}
+	.nt {
+		text-align:right;
+		&:after {
+			content:"nT";
+			font-weight:bold;
+			padding-left:$units-separation;
+		}
+	}
+	.deg {
+		&:after {
+			content:"°";
+			font-weight:bold;
+			padding-left:$units-separation;
+		}
+	}
 
-  thead {
-    th {
-      text-align:right;
-    }
-  }
-
-  tbody {
-    th {
-      text-align:right;
-      padding-right:16px;
-      width:15em;
-
-      &:after {
-        content:':';
-      }
-    }
-    td {
-      text-align:right;
-      padding-right:5px;
-    }
-  }
-
-  .west-up-minus-east-down {
-    th {
-      padding-top:$table-top-separation;
-    }
-  }
-
-  .west-up-minus-east-down,
-  .east-up-minus-west-down {
-    td {
-      &:after {
-        content:"'";
-        font-weight:bold;
-        padding-left:$units-separation;
-      }
-    }
-  }
-
-  .f-table {
-    padding-top:$table-top-separation;
-
-    td {
-      &:after {
-        content:'nT';
-        font-weight:bold;
-        padding-left:$units-separation;
-      }
-    }
-  }
+	.west-up-minus-east-down,
+	.west-up-minus-east-down-value,
+	.f-mean,
+	.f-mean-value {
+		padding-top:$group-vertical-separation;
+	}
 }
