@@ -11,6 +11,7 @@ define([
 
 
 	var ObservationBaselineCalculator = function (options) {
+		options = options || {};
 		this.calculator = options.calculator || new BaselineCalculator();
 		this.observation = options.observation;
 	};
@@ -20,10 +21,29 @@ define([
 
 
 		/**
-		 * magneticSouthMeridian
-		 * 
+		 * meanMark
+		 *
 		 * @param {Object} reading, an observation reading
-		 * 
+		 *
+		 * @return {Number} meanMark
+		 */
+		meanMark: function (reading) {
+			var measurements = reading.getMeasurements();
+
+			// measurement.type
+			return this.calculator._mean(
+					measurements[Measurement.FIRST_MARK_UP][0].get('angle'),
+					measurements[Measurement.FIRST_MARK_DOWN][0].get('angle'),
+					measurements[Measurement.SECOND_MARK_UP][0].get('angle'),
+					measurements[Measurement.SECOND_MARK_DOWN][0].get('angle')
+			);
+		},
+
+		/**
+		 * magneticSouthMeridian
+		 *
+		 * @param {Object} reading, an observation reading
+		 *
 		 * @return {Number} magneticSouthMeridian
 		 */
 		magneticSouthMeridian: function (reading) {
@@ -40,9 +60,9 @@ define([
 
 		/**
 		 * magneticAzimuthMark
-		 * 
+		 *
 		 * @param {Object} reading, an observation reading
-		 * 
+		 *
 		 * @return {Number} magneticAzimuthMark
 		 */
 		magneticAzimuthMark: function (reading) {
@@ -65,10 +85,10 @@ define([
 
 		/**
 		 * geographicMeridian
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
 		 * @param {Object} reading, a reading from an observation
-		 * 
+		 *
 		 * @return {Number} geographicMeridian
 		 */
 		geographicMeridian: function (observation, reading) {
@@ -85,10 +105,10 @@ define([
 
 		/**
 		 * magneticDeclination
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
 		 * @param {Object} reading, a reading from an observation
-		 * 
+		 *
 		 * @return {Number} magneticDeclination
 		 */
 		magneticDeclination: function (observation, reading) {
@@ -100,9 +120,9 @@ define([
 
 		/**
 		 * w
-		 * 
+		 *
 		 * @param {Object} reading, an observation reading
-		 * 
+		 *
 		 * @return {Number} w
 		 */
 		w: function (reading) {
@@ -116,9 +136,9 @@ define([
 
 		/**
 		 * e
-		 * 
+		 *
 		 * @param {Object} reading, an observation reading
-		 * 
+		 *
 		 * @return {Number} e
 		 */
 		e: function (reading) {
@@ -132,10 +152,10 @@ define([
 
 		/**
 		 * correctedF
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
 		 * @param {Object} reading, a reading from an observation
-		 * 
+		 *
 		 * @return {Number} correctedF
 		 */
 		correctedF: function (observation, reading) {
@@ -149,9 +169,9 @@ define([
 
 		/**
 		 * inclination
-		 * 
+		 *
 		 * @param {Object} reading, an observation reading
-		 * 
+		 *
 		 * @return {Number} inclination
 		 */
 		inclination: function (reading) {
@@ -168,10 +188,10 @@ define([
 
 		/**
 		 * horizontalComponent
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
 		 * @param {Object} reading, a reading from an observation
-		 * 
+		 *
 		 * @return {Number} horizontalComponent
 		 */
 		horizontalComponent: function (observation, reading) {
@@ -183,10 +203,10 @@ define([
 
 		/**
 		 * verticalComponent
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
 		 * @param {Object} reading, a reading from an observation
-		 * 
+		 *
 		 * @return {Number} verticalComponent
 		 */
 		verticalComponent: function (observation, reading) {
@@ -198,9 +218,9 @@ define([
 
 		/**
 		 * s
-		 * 
+		 *
 		 * @param {Object} reading, an observation reading
-		 * 
+		 *
 		 * @return {Number} s
 		 */
 		s: function (reading) {
@@ -214,9 +234,9 @@ define([
 
 		/**
 		 * n
-		 * 
+		 *
 		 * @param {Object} reading, an observation reading
-		 * 
+		 *
 		 * @return {Number} n
 		 */
 		n: function (reading) {
@@ -230,10 +250,10 @@ define([
 
 		/**
 		 * scaleValue
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
 		 * @param {Object} reading, a reading from an observation
-		 * 
+		 *
 		 * @return {Number} scaleValue
 		 */
 		scaleValue: function (observation, reading) {
@@ -244,10 +264,10 @@ define([
 
 		/**
 		 * computedE
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
 		 * @param {Object} reading, a reading from an observation
-		 * 
+		 *
 		 * @return {Number} computedE
 		 */
 		computedE: function (observation, reading) {
@@ -259,10 +279,10 @@ define([
 
 		/**
 		 * baselineD
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
 		 * @param {Object} reading, a reading from an observation
-		 * 
+		 *
 		 * @return {Number} baselineD
 		 */
 		baselineD: function (observation, reading) {
@@ -274,10 +294,10 @@ define([
 
 		/**
 		 * baselineH
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
 		 * @param {Object} reading, a reading from an observation
-		 * 
+		 *
 		 * @return {Number} baselineH
 		 */
 		baselineH: function (observation, reading) {
@@ -289,10 +309,10 @@ define([
 
 		/**
 		 * baselineZ
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
 		 * @param {Object} reading, a reading from an observation
-		 * 
+		 *
 		 * @return {Number} baselineZ
 		 */
 		baselineZ: function (observation, reading) {
@@ -304,24 +324,24 @@ define([
 
 		/**
 		 * d
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
 		 * @param {Object} reading, a reading from an observation
-		 * 
+		 *
 		 * @return {Number} d
 		 */
 		d: function (observation, reading) {
 			return this.calculator.d(
 					this.baselineD(observation, reading),
 					this.scaleValue(observation, reading)
-			); // 
+			); //
 		},
 
 		/**
 		 * pierCorrection
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
-		 * 
+		 *
 		 * @return {Number} pierCorrection
 		 */
 		pierCorrection: function (observation) {
@@ -330,9 +350,9 @@ define([
 
 		/**
 		 * trueAzimuthOfMark
-		 * 
+		 *
 		 * @param {Object} obsevation, an observation from an observatory
-		 * 
+		 *
 		 * @return {Number} trueAzimuthOfMark
 		 */
 		trueAzimuthOfMark: function (observation) {
@@ -341,10 +361,10 @@ define([
 
 		/**
 		 * _getMeanValue
-		 * 
+		 *
 		 * @param {Object} reading, an observation reading
-		 * @param {String} channel, a measurement channel 
-		 * 
+		 * @param {String} channel, a measurement channel
+		 *
 		 * @return {Number} mean of the selected channel
 		 */
 		_getMeanValue: function (reading, channel) {
