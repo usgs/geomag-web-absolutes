@@ -2,9 +2,11 @@
 
 define([
 	'mvc/Model',
+	'mvc/Collection',
 	'util/Util'
 ], function(
 	Model,
+	Collection,
 	Util
 ) {
 	'use strict';
@@ -65,7 +67,7 @@ define([
 	 * @return {Pier} the pier object, or null if not found.
 	 */
 	Observatory.prototype.getPierByMarkId = function (id) {
-		var piers = this.get('piers'),
+		var piers = this.get('piers').data(),
 		    pier,
 		    marks,
 		    mark,
@@ -90,7 +92,7 @@ define([
 	 * @return {Mark} the mark object, or null if not found.
 	 */
 	Observatory.prototype.getMarkById = function (id) {
-		var piers = this.get('piers'),
+		var piers = this.get('piers').data(),
 		    pier,
 		    marks,
 		    mark,
@@ -105,6 +107,48 @@ define([
 			}
 		}
 		return null;
+	};
+
+
+	/**
+	 * Get "electronics" instruments.
+	 *
+	 * @return {Collection<Instrument>} instruments with type === 'elec'.
+	 */
+	Observatory.prototype.getElectronics = function () {
+		var electronics = [],
+		    instruments = this.get('instruments').data(),
+		    instrument,
+		    i,
+		    len;
+		for (i = 0, len = instruments.length; i < len; i++) {
+			instrument = instruments[i];
+			if (instrument.get('type') === 'elec') {
+				electronics.push(instrument);
+			}
+		}
+		return new Collection(electronics);
+	};
+
+
+	/**
+	 * Get theodolite instruments.
+	 *
+	 * @return {Collection<Instrument>} instruments with type === 'theo'.
+	 */
+	Observatory.prototype.getTheodolites = function () {
+		var theodolites = [],
+		    instruments = this.get('instruments').data(),
+		    instrument,
+		    i,
+		    len;
+		for (i = 0, len = instruments.length; i < len; i++) {
+			instrument = instruments[i];
+			if (instrument.get('type') === 'theo') {
+				theodolites.push(instrument);
+			}
+		}
+		return new Collection(theodolites);
 	};
 
 

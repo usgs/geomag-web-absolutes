@@ -5,6 +5,7 @@ define([
 
 	'geomag/ObservatoryFactory',
 	'geomag/Observation',
+	'geomag/ObservationMetaView',
 	'geomag/ReadingGroupView',
 	'geomag/BaselineCalculator'
 ], function (
@@ -13,6 +14,7 @@ define([
 
 	ObservatoryFactory,
 	Observation,
+	ObservationMetaView,
 	ReadingGroupView,
 	ObservationBaselineCalculator
 ) {
@@ -51,6 +53,7 @@ define([
 		this._calculator = this._options.baselineCalculator ||
 						new ObservationBaselineCalculator();
 		this._observation = null;
+		this._observationMetaView = null;
 		this._readingGroupView = null;
 
 		// load observation
@@ -58,6 +61,11 @@ define([
 			id: this._options.observationId || null,
 			success: function (observation) {
 				_this._observation = observation;
+
+				_this._observationMetaView = new ObservationMetaView({
+					el: el.querySelector('.observation-meta-wrapper'),
+					observation: observation
+				});
 
 				_this._readingGroupView = new ReadingGroupView({
 					el: el.querySelector('.reading-group-view-wrapper'),

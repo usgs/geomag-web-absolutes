@@ -1,0 +1,55 @@
+// TODO: generalize into template content layout pattern
+
+
+// all become top aligned on small screens
+.top-aligned,
+.left-aligned,
+.right-aligned {
+	> label {
+		padding: 0;
+		margin: 0;
+		display: block;
+		font-weight: bold;
+	}
+
+	> input,
+	> select,
+	> textarea {
+		margin-bottom: 1em;
+	}
+
+	> textarea {
+		width: 100%;
+	}
+}
+
+
+// left and right stack, and change label text alignment
+@media screen and (min-width:768px) {
+	.left-aligned,
+	.right-aligned {
+		> label {
+			float:left;
+			clear:left;
+			width:8em;
+			padding-right:8px;
+		}
+
+		> input,
+		> select,
+		> textarea {
+			float:left;
+			margin-bottom:5px;
+		}
+
+		&:after {
+			display: block;
+			content: ' ';
+			clear: both;
+		}
+	}
+
+	.right-aligned > label {
+		text-align:right;
+	}
+}
