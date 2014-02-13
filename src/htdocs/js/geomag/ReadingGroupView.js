@@ -5,14 +5,16 @@ define([
 	'tablist/TabList',
 
 	'geomag/Reading',
-	'geomag/ReadingView'
+	'geomag/ReadingView',
+	'geomag/ObservationSummaryView'
 ], function (
 	View,
 	Util,
 	TabList,
 
 	Reading,
-	ReadingView
+	ReadingView,
+	ObservationSummaryView
 ) {
 	'use strict';
 
@@ -37,6 +39,7 @@ define([
 		for (i = 0, len = readings.length; i < len; i++) {
 			this._tablist.addTab(this._createTab(observation, readings[i]));
 		}
+		this._tablist.addTab(this._createSummaryTab(observation));
 	};
 
 	ReadingGroupView.prototype._initialize = function () {
@@ -70,6 +73,22 @@ define([
 		};
 	};
 
+	ReadingGroupView.prototype._createSummaryTab = function (observation) {
+		var el = document.createElement('div'),
+		    summaryView = null;
+
+		el.classList.add('summary-wrapper');
+		summaryView = new ObservationSummaryView({
+			el: el,
+			observation: observation,
+			baselineCalculator: this._calculator
+		});
+
+		return {
+			title: 'Summary',
+			content: el
+		};
+	};
 
 
 	return ReadingGroupView;
