@@ -38,6 +38,18 @@ define([
 					measurements[Measurement.SECOND_MARK_DOWN][0].get('angle')
 			);
 		},
+		meanH: function (reading) {
+			return this._getMeanValue(reading, 'h');
+		},
+		meanE: function (reading) {
+			return this._getMeanValue(reading, 'e');
+		},
+		meanZ: function (reading) {
+			return this._getMeanValue(reading, 'z');
+		},
+		meanF: function (reading) {
+			return this._getMeanValue(reading, 'f');
+		},
 
 		/**
 		 * magneticSouthMeridian
@@ -91,14 +103,14 @@ define([
 		 *
 		 * @return {Number} geographicMeridian
 		 */
-		geographicMeridian: function (observation, reading) {
+		geographicMeridian: function (observatory, reading) {
 			// measurement.type (markup1, markup2)
 			var measurements = reading.getMeasurements();
 
 			return this.calculator.geographicMeridian(
 					measurements[Measurement.FIRST_MARK_UP][0].get('angle'),
 					measurements[Measurement.SECOND_MARK_UP][0].get('angle'),
-					this.trueAzimuthOfMark(observation)
+					this.trueAzimuthOfMark(observatory)
 			);
 		},
 
@@ -111,10 +123,10 @@ define([
 		 *
 		 * @return {Number} magneticDeclination
 		 */
-		magneticDeclination: function (observation, reading) {
+		magneticDeclination: function (observatory, reading) {
 			return this.calculator.magneticDeclination(
 					this.magneticSouthMeridian(reading),
-					this.geographicMeridian(observation, reading)
+					this.geographicMeridian(observatory, reading)
 			);
 		},
 
@@ -133,6 +145,9 @@ define([
 					measurements[Measurement.EAST_DOWN][0].get('angle')
 			);
 		},
+		westUpMinusEastDown: function (reading){
+			return this.w(reading);
+		},
 
 		/**
 		 * e
@@ -149,6 +164,9 @@ define([
 					measurements[Measurement.WEST_DOWN][0].get('angle')
 			);
 		},
+		eastUpMinusWestDown: function (reading){
+			return this.e(reading);
+		},
 
 		/**
 		 * correctedF
@@ -158,12 +176,12 @@ define([
 		 *
 		 * @return {Number} correctedF
 		 */
-		correctedF: function (observation, reading) {
+		correctedF: function (observatory, reading) {
 			// dont need to check each measurement, use ns(ud) (value will be null for measurement values that don't matter)
 
 			return this.calculator.correctedF(
 					this._getMeanValue(reading, 'f'),
-					this.pierCorrection(observation)
+					this.pierCorrection(observatory)
 			);
 		},
 
@@ -194,9 +212,9 @@ define([
 		 *
 		 * @return {Number} horizontalComponent
 		 */
-		horizontalComponent: function (observation, reading) {
+		horizontalComponent: function (observatory, reading) {
 			return this.calculator.horizontalComponent(
-					this.correctedF(observation, reading),
+					this.correctedF(observatory, reading),
 					this.inclination(reading)
 			);
 		},
@@ -209,9 +227,9 @@ define([
 		 *
 		 * @return {Number} verticalComponent
 		 */
-		verticalComponent: function (observation, reading) {
+		verticalComponent: function (observatory, reading) {
 			return this.calculator.verticalComponent(
-					this.correctedF(observation, reading),
+					this.correctedF(observatory, reading),
 					this.inclination(reading)
 			);
 		},
@@ -231,6 +249,9 @@ define([
 					measurements[Measurement.NORTH_UP][0].get('angle')
 			);
 		},
+		southDownMinusNorthUp: function (reading) {
+			return this.s(reading);
+		},
 
 		/**
 		 * n
@@ -247,7 +268,9 @@ define([
 					measurements[Measurement.SOUTH_UP][0].get('angle')
 			);
 		},
-
+		northDownMinusSouthUp: function (reading) {
+			return this.n(reading);
+		},
 		/**
 		 * scaleValue
 		 *
@@ -256,9 +279,9 @@ define([
 		 *
 		 * @return {Number} scaleValue
 		 */
-		scaleValue: function (observation, reading) {
+		scaleValue: function (observatory, reading) {
 			return this.calculator.scaleValue(
-					this.horizontalComponent(observation, reading)
+					this.horizontalComponent(observatory, reading)
 			);
 		},
 
@@ -270,10 +293,10 @@ define([
 		 *
 		 * @return {Number} computedE
 		 */
-		computedE: function (observation, reading) {
+		computedE: function (observatory, reading) {
 			return this.calculator.computedE(
 					this._getMeanValue(reading, 'e'),
-					this.scaleValue(observation, reading)
+					this.scaleValue(observatory, reading)
 			);
 		},
 
@@ -285,10 +308,10 @@ define([
 		 *
 		 * @return {Number} baselineD
 		 */
-		baselineD: function (observation, reading) {
+		baselineD: function (observatory, reading) {
 			return this.calculator.baselineD(
-					this.magneticDeclination(observation, reading),
-					this.computedE(observation, reading)
+					this.magneticDeclination(observatory, reading),
+					this.computedE(observatory, reading)
 			);
 		},
 
@@ -300,9 +323,9 @@ define([
 		 *
 		 * @return {Number} baselineH
 		 */
-		baselineH: function (observation, reading) {
+		baselineH: function (observatory, reading) {
 			return this.calculator.baselineH(
-					this.horizontalComponent(observation, reading),
+					this.horizontalComponent(observatory, reading),
 					this._getMeanValue(reading, 'h')
 			);
 		},
@@ -315,9 +338,9 @@ define([
 		 *
 		 * @return {Number} baselineZ
 		 */
-		baselineZ: function (observation, reading) {
+		baselineZ: function (observatory, reading) {
 			return this.calculator.baselineZ(
-					this.verticalComponent(observation, reading),
+					this.verticalComponent(observatory, reading),
 					this._getMeanValue(reading, 'z')
 			);
 		},
@@ -330,10 +353,10 @@ define([
 		 *
 		 * @return {Number} d
 		 */
-		d: function (observation, reading) {
+		d: function (observatory, reading) {
 			return this.calculator.d(
-					this.baselineD(observation, reading),
-					this.scaleValue(observation, reading)
+					this.baselineD(observatory, reading),
+					this.scaleValue(observatory, reading)
 			); //
 		},
 
@@ -344,8 +367,8 @@ define([
 		 *
 		 * @return {Number} pierCorrection
 		 */
-		pierCorrection: function (observation) {
-			return observation.get('pierCorrection');
+		pierCorrection: function (observatory) {
+			return observatory.get('piers').getSelected().get('correction');
 		},
 
 		/**
@@ -355,8 +378,8 @@ define([
 		 *
 		 * @return {Number} trueAzimuthOfMark
 		 */
-		trueAzimuthOfMark: function (observation) {
-			return observation.get('trueAzimuthOfMark');
+		trueAzimuthOfMark: function (observatory) {
+			return observatory.get('piers').getSelected().get('marks').getSelected().get('azimuth');
 		},
 
 		/**
