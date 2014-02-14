@@ -1,0 +1,56 @@
+$group-vertical-separation:10px;
+$line-vertical-separation:4px;
+$units-separation:2px;
+
+.declination-view {
+	dt {
+		float:left;
+		clear:left;
+		width:13em;
+		font-weight:bold;
+		text-align:right;
+		margin-top:$line-vertical-separation;
+		&:after {
+			content:':';
+		}
+	}
+	dd {
+		float:left;
+		width:7em;
+		margin-top:$line-vertical-separation;
+		small {
+			display:block;
+			text-align:right;
+		}
+	}
+
+	.minutes {
+		&:after {
+			content:"'";
+			font-weight:bold;
+			padding-left:$units-separation;
+		}
+	}
+	.nt {
+		text-align:right;
+		&:after {
+			content:"nT";
+			font-weight:bold;
+			padding-left:$units-separation;
+		}
+	}
+	.deg {
+		&:after {
+			content:"°";
+			font-weight:bold;
+			padding-left:$units-separation;
+		}
+	}
+
+	.west-up-minus-east-down,
+	.west-up-minus-east-down-value,
+	.f-mean,
+	.f-mean-value {
+		padding-top:$group-vertical-separation;
+	}
+}

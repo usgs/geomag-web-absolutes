@@ -14,7 +14,7 @@ define([
 		'id': null,
 		'type': null,
 		'time': null,
-		'angle': null,
+		'angle': 0,
 		'h': null,
 		'e': null,
 		'z': null,

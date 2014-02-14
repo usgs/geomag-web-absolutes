@@ -228,6 +228,7 @@ define([
 			observation.set({
 				mark_id: (selected === null ? null : selected.id)
 			});
+			observation.trigger('mark-selected');
 		});
 
 		this._electronicsSelectView.on('change', function (selected) {
@@ -278,6 +279,7 @@ define([
 		    theodolites = observatory.getTheodolites(),
 		    // other locals
 		    pier = null;
+		observation.set({observatory:observatory});
 
 		// preserve existing selections
 		if (mark_id !== null) {
