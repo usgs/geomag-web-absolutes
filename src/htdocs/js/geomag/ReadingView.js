@@ -220,7 +220,9 @@ define([
 
 		this._magnetometerOrdinatesView = new MagnetometerOrdinatesView({
 			el: this._el.querySelector('.magnetometer-ordinates-output'),
-			reading: this._reading
+			reading: this._reading,
+			observation: this._observation,
+			baselineCalculator: this._calculator
 		});
 	};
 
