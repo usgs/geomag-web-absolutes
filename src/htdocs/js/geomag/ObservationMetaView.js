@@ -81,6 +81,7 @@ define([
 	ObservationMetaView.prototype._initialize = function () {
 		var _this = this,
 		    el = this._el,
+		    calculator = this._options.calculator,
 		    observation = this._options.observation,
 		    observatorySelectView,
 		    pierSelectView,
@@ -91,6 +92,7 @@ define([
 		    pierTemperature,
 		    idPrefix = IDPREFIX + (++SEQUENCE);
 
+		this._calculator = calculator;
 		this._observation = observation;
 		this._onChange = this._onChange.bind(this);
 
@@ -185,6 +187,11 @@ define([
 						electronics_id: null,
 						theodolite_id: null
 					});
+					// clear calculator settings
+					calculator.set({
+						pierCorrection: 0,
+						trueAzimuthOfMark: 0
+					});
 				}
 				// load observatory details
 				selected.getObservatory({
@@ -196,39 +203,51 @@ define([
 
 		});
 
-		this._pierSelectView.on('change', function (selected) {
+		this._pierSelectView.on('change', function (pier) {
 			var marks = null,
 			    mark_id = null,
-			    mark = null;
-			// update marks select box
-			if (selected === null) {
-				marksSelectView.setCollection(null);
-			} else {
-				marks = selected.get('marks');
+			    mark = null,
+			    pierCorrection = 0,
+			    trueAzimuthOfMark = 0;
+			if (pier !== null) {
+				pierCorrection = pier.get('correction');
+				// update mark
+				marks = pier.get('marks');
 				mark_id = observation.get('mark_id') ||
-						selected.get('default_mark_id');
+						pier.get('default_mark_id');
 				mark = marks.get(mark_id);
 				if (mark !== null) {
 					marks.select(mark);
+					trueAzimuthOfMark = mark.get('azimuth');
 				}
-				marksSelectView.setCollection(marks);
 				// set defaults
 				if (observation.get('electronics_id') === null) {
 					electronicsSelectView.selectById(
-							selected.get('default_electronics_id'));
+							pier.get('default_electronics_id'));
 				}
 				if (observation.get('theodolite_id') === null) {
 					theodoliteSelectView.selectById(
-							selected.get('default_theodolite_id'));
+							pier.get('default_theodolite_id'));
 				}
 			}
+			// azimuth is also set by marksSelectView.setCollection when
+			// mark changes, set now to prevent a double "change" event
+			calculator.set({
+				pierCorrection: pierCorrection,
+				trueAzimuthOfMark: trueAzimuthOfMark
+			});
+			marksSelectView.setCollection(marks);
 		});
 
-		this._marksSelectView.on('change', function (selected) {
-			observation.set({
-				mark_id: (selected === null ? null : selected.id)
-			});
-			observation.trigger('mark-selected');
+		this._marksSelectView.on('change', function (mark) {
+			var mark_id = null,
+			    trueAzimuthOfMark = 0;
+			if (mark !== null) {
+				mark_id = mark.id;
+				trueAzimuthOfMark = mark.get('azimuth');
+			}
+			observation.set({mark_id: mark_id});
+			calculator.set({trueAzimuthOfMark: trueAzimuthOfMark});
 		});
 
 		this._electronicsSelectView.on('change', function (selected) {
