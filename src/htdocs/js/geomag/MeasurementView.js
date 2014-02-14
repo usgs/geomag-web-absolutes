@@ -12,7 +12,6 @@ define([
 ) {
 	'use strict';
 
-
 	var DEFAULTS = {
 
 	};
