@@ -93,6 +93,10 @@ module.exports = function (grunt) {
 					to: '/hazdev-template/src/htdocs/$1'
 				},
 				{
+					from: '^/webabsolutes/(.*)$',
+					to: '/$1'
+				},
+				{
 					from: '^/observation/(.*)$',
 					to: '/observation.php?id=$1'
 				}

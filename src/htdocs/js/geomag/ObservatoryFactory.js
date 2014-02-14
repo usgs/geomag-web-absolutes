@@ -36,6 +36,32 @@ define([
 
 
 	/**
+	 * Utility function to select a collection item based on item id.
+	 *
+	 * If collection is not null, selects collection item with id
+	 * or triggers deselect if no matching item found.
+	 *
+	 * @param collection {Collection}
+	 *        collection being selected.
+	 * @param id {Number}
+	 *        id of collection item to select.
+	 */
+	var _selectById = function (collection, id) {
+		var item = null;
+		if (collection !== null) {
+			if (id !== null) {
+				item = collection.get(id);
+			}
+			if (item !== null) {
+				collection.select(item);
+			} else {
+				collection.deselect();
+			}
+		}
+	};
+
+
+	/**
 	 * Construct a new ObservatoryFactory.
 	 *
 	 * @param options {Object}
@@ -109,6 +135,7 @@ define([
 			success: function (observatory) {
 				observatory.instruments = _this._getInstruments(observatory.instruments);
 				observatory.piers = _this._getPiers(observatory.piers);
+				_selectById(observatory.piers, observatory.default_pier_id);
 				observatory.observations = _this._getObservations(observatory.observations);
 				options.success(new Observatory(observatory));
 			},
@@ -185,6 +212,7 @@ define([
 		for (i = 0, len = piers.length; i < len; i++) {
 			pier = piers[i];
 			pier.marks = this._getMarks(pier.marks);
+			_selectById(pier.marks, pier.default_mark_id);
 			piers[i] = new Pier(pier);
 		}
 		return new Collection(piers);

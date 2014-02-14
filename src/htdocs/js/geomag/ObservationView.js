@@ -23,7 +23,8 @@ define([
 
 	var DEFAULTS = {
 		observationId: null,
-		factory: new ObservatoryFactory()
+		factory: new ObservatoryFactory(),
+		baselineCalculator: new ObservationBaselineCalculator()
 	};
 
 
@@ -41,7 +42,8 @@ define([
 	ObservationView.prototype._initialize = function () {
 		var _this = this,
 		    el = this._el,
-		    factory = this._options.factory;
+		    factory = this._options.factory,
+		    calculator = this._options.baselineCalculator;
 
 		el.innerHTML = [
 			'<section class="observation-view">',
@@ -50,8 +52,7 @@ define([
 			'</section>'
 		].join('');
 
-		this._calculator = this._options.baselineCalculator ||
-						new ObservationBaselineCalculator();
+		this._calculator = calculator;
 		this._observation = null;
 		this._observationMetaView = null;
 		this._readingGroupView = null;
@@ -64,13 +65,14 @@ define([
 
 				_this._observationMetaView = new ObservationMetaView({
 					el: el.querySelector('.observation-meta-wrapper'),
-					observation: observation
+					observation: observation,
+					calculator: calculator
 				});
 
 				_this._readingGroupView = new ReadingGroupView({
 					el: el.querySelector('.reading-group-view-wrapper'),
 					observation: observation,
-					baselineCalculator: _this._calculator
+					baselineCalculator: calculator
 				});
 			}
 		});
