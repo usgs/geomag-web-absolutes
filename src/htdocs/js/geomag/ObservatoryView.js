@@ -12,6 +12,7 @@ define([
 
 
 	var DEFAULTS = {
+		observatoryId: null,
 		factory: new ObservatoryFactory()
 	};
 
@@ -23,16 +24,18 @@ define([
 
 	ObservatoryView.prototype.render = function () {
 		// TODO :: Render current model
+
 	};
 
 	ObservatoryView.prototype._initialize = function () {
 		var _this = this,
 		    el = this._el,
+		    observatoryId = this._options.observatoryId,
 		    factory = this._options.factory;
 
 		el.innerHTML = [
 				'<section class="observatories"></section>',
-				'<section class="observations-view"></section>',
+				'<section class="observations"></section>',
 		].join('');
 
 
@@ -42,6 +45,12 @@ define([
 				_this._buildObservatoryList(observatories);
 			}
 		});
+
+
+		if (observatoryId === null) {
+			observatoryId = 2; // Barrow (alphabetical order)
+			this._getObservatory(observatoryId);
+		}
 
 	};
 
@@ -71,47 +80,63 @@ define([
 
 	ObservatoryView.prototype._bindObservatoryListItems = function (observatories) {
 		var _this = this,
-		    factory = this._options.factory;
+		    observatory;
 
 		for (var i = 0; i < observatories.length; i++) {
+			observatory = observatories[i];
 			// TODO: add onClick handler for list
 			Util.addEvent(observatories[i], 'click', function () {
-				factory.getObservatory({
-					id: this.id,
-					success: function (data) {
-						_this._buildObservationList(data);
-					}
-				});
+				_this._getObservatory(this.id);
 			});
 		}
 
 	};
 
+	ObservatoryView.prototype._getObservatory = function (id) {
+		var _this = this,
+		    factory = this._options.factory;
+
+		factory.getObservatory({
+			id: id,
+			success: function (data) {
+				_this._buildObservationList(data);
+			}
+		});
+	};
 
 	ObservatoryView.prototype._buildObservationList = function (observatory) {
-		var observationsView = this._el.querySelector('.observations-view'),
+		var observationsView = this._el.querySelector('.observations'),
 		    observations = observatory.get('observations').data(),
 		    observation, list, markup = [];
 
 		observationsView.innerHTML = [
-				'<h2>', observatory.get('name'),'</h2>',
+				'<h2>Observations</h2>',
+				'<h3>', observatory.get('name'),'</h3>',
 				'<small>',
 					observatory.get('latitude') ,', ', observatory.get('longitude') ,
 				'</small>',
-				'<ul class="observations"></ul>'
+				'<ul></ul>'
 			].join('');
 
-		list = observationsView.querySelector('.observations');
+		list = observationsView.querySelector('ul');
 
 		for (var i = 0; i < observations.length; i++) {
 			observation = observations[i];
-			markup.push('<li><a href="/observation/' + observation.get('id') + '">Observation ' + observation.get('id') + '</a></li>');
+			markup.push('<li><a href="/observation/' + observation.get('id') + '">Observation ' + this._formatDate(observation) + '</a></li>');
 		}
 
 		list.innerHTML = markup.join('');
 	};
 
 
+	ObservatoryView.prototype._formatDate = function (observation) {
+			var begin = new Date(observation.get('begin') || new Date().getTime()),
+	    y = begin.getUTCFullYear(),
+	    m = begin.getUTCMonth() + 1,
+	    d = begin.getUTCDate();
+
+		return y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
+	};
 
 	return ObservatoryView;
 });
