@@ -28,7 +28,9 @@ define([
 		var reading = this._reading,
 		    startTime = null,
 		    endTime = null,
-		    times;
+		    times,
+		    degree,
+		    dms;
 
 		this._name.innerHTML = reading.get('set_number');
 
@@ -44,7 +46,17 @@ define([
 
 		this._shift.value = reading.get('shift');
 
-		this._degrees.innerHTML = this._calculator.magneticDeclination(reading);
+		degree = this._calculator.magneticDeclination(reading);
+		dms = this._decimalToDms(degree);
+		this._degrees.innerHTML = dms[0];
+		this._minutes.innerHTML = dms[1];
+
+		this._ordMin.innerHTML = this._calculator.computedE(reading);
+
+		this._baselineMin.innerHTML = this._calculator.baselineD(reading);
+
+		this._baselineNt.innerHTML = this._calculator.d(reading);
+
 	};
 
 
@@ -96,6 +108,8 @@ define([
 		this._shift.addEventListener('change', this._onChange);
 
 		this._reading.on('change', this.render, this);
+
+		this._calculator.on('change', this.render, this);
 
 		for (i = 0, len = this._measurements.length; i < len; i++) {
 			this._measurements[i].on('change', this.render, this);
@@ -154,6 +168,15 @@ define([
 			declination_valid: (this._valid.checked ? 'Y' : 'N'),
 			shift: parseInt(this._shift.value, 10)
 		});
+	};
+
+	DeclinationSummaryView.prototype._decimalToDms = function (angle) {
+		var degrees = parseInt(angle, 10),
+		    minutes = (angle - degrees) * 60;
+
+		minutes = parseInt(minutes, 10);
+
+		return [degrees, minutes];
 	};
 
 	return DeclinationSummaryView;
