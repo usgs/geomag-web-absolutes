@@ -34,23 +34,22 @@ define([
 		    factory = this._options.factory;
 
 		el.innerHTML = [
-				'<section class="observatories"></section>',
-				'<section class="observations"></section>',
+				'<section class="observatories column one-of-two"></section>',
+				'<section class="observations column one-of-two"></section>',
 		].join('');
-
 
 		// load observatories
 		factory.getObservatories({
 			success: function (observatories) {
 				_this._buildObservatoryList(observatories);
+
+				if (observatoryId === null) {
+					observatoryId = 2; // Barrow (alphabetical order)
+					_this._getObservatory(observatoryId);
+					_this._updateSelected(observatoryId);
+				}
 			}
 		});
-
-
-		if (observatoryId === null) {
-			observatoryId = 2; // Barrow (alphabetical order)
-			this._getObservatory(observatoryId);
-		}
 
 	};
 
@@ -87,8 +86,22 @@ define([
 			// TODO: add onClick handler for list
 			Util.addEvent(observatories[i], 'click', function () {
 				_this._getObservatory(this.id);
+				_this._updateSelected(this.id);
 			});
 		}
+
+	};
+
+	ObservatoryView.prototype._updateSelected = function (id) {
+
+		// clear last selected observatory
+		var selected = document.querySelector('.selected');
+
+		if (selected) {
+			selected.className = '';
+		}
+		// highlight currently selected observatory
+		document.getElementById(id).className = 'selected';
 
 	};
 
@@ -102,6 +115,7 @@ define([
 				_this._buildObservationList(data);
 			}
 		});
+
 	};
 
 	ObservatoryView.prototype._buildObservationList = function (observatory) {
@@ -111,10 +125,10 @@ define([
 
 		observationsView.innerHTML = [
 				'<h2>Observations</h2>',
-				'<h3>', observatory.get('name'),'</h3>',
-				'<small>',
-					observatory.get('latitude') ,', ', observatory.get('longitude') ,
-				'</small>',
+				// '<h3>', observatory.get('name'),'</h3>',
+				// '<small>',
+				// 	observatory.get('latitude') ,', ', observatory.get('longitude') ,
+				// '</small>',
 				'<ul></ul>'
 			].join('');
 

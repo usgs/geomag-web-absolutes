@@ -29,10 +29,19 @@ h1 {
 	}
 
 	> .observatories {
-
+		> ul > li.selected {
+		color: #000;
+		background: rgba(162, 192, 123, 0.6);
+		}
 	}
 
 	> .observations {
+	
+		> ul {
+			max-height:656px;
+			overflow:scroll;
+		}
+
 		> ul > li {
 			padding:0;
 		}
