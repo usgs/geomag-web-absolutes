@@ -123,13 +123,9 @@ define([
 		factory.getObservatory({
 			id: id,
 			success: function (data) {
-				//_this._buildObservationList(data);
-
 				_this._observationsView = new ObservationsView({
 					el: el.querySelector('.observations-view'),
-					//observations: data.get('observations').data()
-					observatoryId: id,
-					observatorySummary: false
+					observations: data.get('observations').data()
 				});
 			}
 		});
