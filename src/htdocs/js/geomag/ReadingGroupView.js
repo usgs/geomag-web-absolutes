@@ -6,7 +6,8 @@ define([
 
 	'geomag/Reading',
 	'geomag/ReadingView',
-	'geomag/ObservationSummaryView'
+	'geomag/ObservationSummaryView',
+	'geomag/ObservationBaselineCalculator'
 ], function (
 	View,
 	Util,
@@ -14,12 +15,14 @@ define([
 
 	Reading,
 	ReadingView,
-	ObservationSummaryView
+	ObservationSummaryView,
+	ObservationBaselineCalculator
 ) {
 	'use strict';
 
 
 	var DEFAULTS = {
+		baselineCalculator: new ObservationBaselineCalculator()
 	};
 
 
