@@ -43,6 +43,8 @@ define([
 		this._endTime.innerHTML = this._formatTime(endTime);
 
 		this._shift.value = reading.get('shift');
+
+		this._degrees.innerHTML = this._calculator.magneticDeclination(reading);
 	};
 
 
@@ -50,6 +52,7 @@ define([
 		var el = this._el,
 				i = null,
 				len = null;
+
 		el.innerHTML = [
 			'<th class="name" scope="row">&nbsp;</th>',
 			'<td class="valid"><input type="checkbox" /></td>',
