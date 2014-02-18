@@ -1,0 +1,59 @@
+.observations-view {
+
+	ul {
+		max-height:656px;
+		overflow:scroll;
+
+		li.empty {
+			padding:10px 15px;
+			background:#fff;
+			color:#888;
+			font-style:oblique;
+			cursor:default;
+		}
+
+	}
+
+	ul > li {
+		padding:0;
+
+		> a {
+			padding:10px 15px;
+			display:block;
+		}
+
+	}
+
+	.button {
+		display:block;
+		width:100%;
+		//color: #fff;
+		color:#000;
+		//background: #4e7ab9;
+		background: #a2c07b;
+		//background: #6f9045;
+		border-radius: 3px;
+		padding: 10px 15px;
+		text-align: center;
+		text-decoration: none;
+		//letter-spacing: 0.02em;
+		text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+		//font-weight:bold;
+	}
+
+	.button:hover {
+		cursor:pointer;
+		background-image: linear-gradient(to top, rgba(0,0,0,0.1) 0% ,rgba(0,0,0,0) 100%);
+	}
+}
+
+
+@media screen and (min-width:768px) {
+
+	.observations-view {
+		.button {
+			display:inline-block;
+		}
+	}
+
+}

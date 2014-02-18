@@ -2,155 +2,139 @@
 define([
 	'mvc/View',
 	'util/Util',
-	'geomag/ObservatoryFactory'
+	'geomag/ObservatoryFactory',
+	'geomag/ObservationsView'
 ], function (
 	View,
 	Util,
-	ObservatoryFactory
+	ObservatoryFactory,
+	ObservationsView
 ) {
 	'use strict';
 
 
 	var DEFAULTS = {
-		observatoryId: null,
+		observatoryId: 2,
 		factory: new ObservatoryFactory()
 	};
+
 
 	var ObservatoryView = function (options) {
 		this._options = Util.extend({}, DEFAULTS, options);
 		View.call(this, this._options);
 	};
+
 	ObservatoryView.prototype = Object.create(View.prototype);
 
-	ObservatoryView.prototype.render = function () {
-		// TODO :: Render current model
 
+	ObservatoryView.prototype.render = function (id) {
+		this._getObservations(id);
+		this._updateSelected(id);
 	};
 
+
 	ObservatoryView.prototype._initialize = function () {
-		var _this = this,
-		    el = this._el,
-		    observatoryId = this._options.observatoryId,
-		    factory = this._options.factory;
+		var el = this._el;
 
 		el.innerHTML = [
 				'<section class="observatories column one-of-two"></section>',
-				'<section class="observations column one-of-two"></section>',
+				'<section class="observations-view column one-of-two"></section>',
 		].join('');
+
+		this._getObservatories();
+		this.render(this._options.observatoryId);
+	};
+
+
+	ObservatoryView.prototype._getObservatories = function () {
+
+		var _this = this,
+		    factory = this._options.factory;
+
+		_this.observatoryId = this._options.observatoryId;
 
 		// load observatories
 		factory.getObservatories({
 			success: function (observatories) {
 				_this._buildObservatoryList(observatories);
-
-				if (observatoryId === null) {
-					observatoryId = 2; // Barrow (alphabetical order)
-					_this._getObservatory(observatoryId);
-					_this._updateSelected(observatoryId);
-				}
+				_this._updateSelected(_this.observatoryId);
 			}
 		});
-
 	};
 
 
 	ObservatoryView.prototype._buildObservatoryList = function (data) {
 
-		var observatories = this._el.querySelector('.observatories'),
+		var el = this._el.querySelector('.observatories'),
 		    observatoryList = document.createElement('ul'),
-		    observatory, markup = [];
-
-		observatories.innerHTML = '<h2>Observatories</h2>';
+		    observatory, listItem;
 
 		for (var i = 0; i < data.length; i++) {
 			observatory = data[i];
-			markup.push('<li id=' + observatory.get('id') + '>' + observatory.get('name') + '</li>');
+
+			listItem = document.createElement('li');
+			listItem.id = observatory.get('id');
+			listItem.innerHTML = observatory.get('name');
+
+			observatoryList.appendChild(listItem);
+
+			this._bindObservatoryListItems(listItem);
 		}
 
-		observatoryList.innerHTML = markup.join('');
-
-		observatories.appendChild(observatoryList);
-
-		var list = observatoryList.querySelectorAll('li');
-
-		this._bindObservatoryListItems(list);
+		el.innerHTML = '<h2>Observatories</h2>';
+		el.appendChild(observatoryList);
 
 	};
 
-	ObservatoryView.prototype._bindObservatoryListItems = function (observatories) {
-		var _this = this,
-		    observatory;
 
-		for (var i = 0; i < observatories.length; i++) {
-			observatory = observatories[i];
-			// TODO: add onClick handler for list
-			Util.addEvent(observatories[i], 'click', function () {
-				_this._getObservatory(this.id);
-				_this._updateSelected(this.id);
-			});
-		}
+	ObservatoryView.prototype._bindObservatoryListItems = function (observatory) {
+		var _this = this;
 
+		Util.addEvent(observatory, 'click', function () {
+			_this.render(this.id);
+		});
 	};
+
 
 	ObservatoryView.prototype._updateSelected = function (id) {
 
 		// clear last selected observatory
-		var selected = document.querySelector('.selected');
+		var selected = document.querySelector('.selected'),
+		    element = document.getElementById(id);
 
 		if (selected) {
 			selected.className = '';
 		}
 		// highlight currently selected observatory
-		document.getElementById(id).className = 'selected';
-
+		if (element) {
+			element.className = 'selected';
+		}
 	};
 
-	ObservatoryView.prototype._getObservatory = function (id) {
+
+	// list observations for observatory
+	ObservatoryView.prototype._getObservations = function (id) {
 		var _this = this,
+		    el = this._el,
 		    factory = this._options.factory;
+
+		this._observationsView = null;
 
 		factory.getObservatory({
 			id: id,
 			success: function (data) {
-				_this._buildObservationList(data);
+				//_this._buildObservationList(data);
+
+				_this._observationsView = new ObservationsView({
+					el: el.querySelector('.observations-view'),
+					//observations: data.get('observations').data()
+					observatoryId: id,
+					observatorySummary: false
+				});
 			}
 		});
-
 	};
 
-	ObservatoryView.prototype._buildObservationList = function (observatory) {
-		var observationsView = this._el.querySelector('.observations'),
-		    observations = observatory.get('observations').data(),
-		    observation, list, markup = [];
-
-		observationsView.innerHTML = [
-				'<h2>Observations</h2>',
-				// '<h3>', observatory.get('name'),'</h3>',
-				// '<small>',
-				// 	observatory.get('latitude') ,', ', observatory.get('longitude') ,
-				// '</small>',
-				'<ul></ul>'
-			].join('');
-
-		list = observationsView.querySelector('ul');
-
-		for (var i = 0; i < observations.length; i++) {
-			observation = observations[i];
-			markup.push('<li><a href="/observation/' + observation.get('id') + '">Observation ' + this._formatDate(observation) + '</a></li>');
-		}
-
-		list.innerHTML = markup.join('');
-	};
-
-
-	ObservatoryView.prototype._formatDate = function (observation) {
-			var begin = new Date(observation.get('begin') || new Date().getTime()),
-	    y = begin.getUTCFullYear(),
-	    m = begin.getUTCMonth() + 1,
-	    d = begin.getUTCDate();
-
-		return y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
-	};
 
 	return ObservatoryView;
 });

@@ -1,4 +1,4 @@
-.observatoryView {
+.observatory-view {
 
 	ul {
 		padding:0;
@@ -29,22 +29,4 @@
 			background: rgba(162, 192, 123, 0.6);
 		}
 	}
-
-	> .observations {
-	
-		> ul {
-			max-height:656px;
-			overflow:scroll;
-		}
-
-		> ul > li {
-			padding:0;
-		}
-
-		> ul > li > a {
-			padding:10px 15px;
-			display:block;
-		}
-	}
-
 }

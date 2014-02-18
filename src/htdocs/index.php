@@ -16,6 +16,6 @@ if (!isset($TEMPLATE)) {
 }
 ?>
 
-<div class="observatoryView row"></div>
+<div class="observatory-view row"></div>
 
 

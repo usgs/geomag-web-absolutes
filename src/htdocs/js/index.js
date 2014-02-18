@@ -12,5 +12,5 @@ require([
 	'geomag/ObservatoryView'
 ], function (ObservatoryView) {
 	'use strict';
-	new ObservatoryView({el: document.querySelector('.observatoryView')});
+	new ObservatoryView({el: document.querySelector('.observatory-view')});
 });
