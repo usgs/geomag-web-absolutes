@@ -446,7 +446,28 @@ define([
 
 		return total / count;
 	};
+	ObservationBaselineCalculator.prototype.getStats = function (data) {
+		var mean = this._calculator._mean.apply(this._calculator, data),
+		    min = Math.min.apply(Math, data),
+		    max = Math.max.apply(Math, data),
+		    i = null,
+		    len = null,
+		    variance = 0,
+		    difference = null;
 
+		for ( i = 0, len = data.length; i < len; i++) {
+			difference = mean - data[i];
+			variance += difference * difference;
+		}
+		variance /= len;
+
+		return {
+			mean: mean,
+			min: min,
+			max: max,
+			stdDev: Math.sqrt(variance)
+		};
+	};
 
 	return ObservationBaselineCalculator;
 
