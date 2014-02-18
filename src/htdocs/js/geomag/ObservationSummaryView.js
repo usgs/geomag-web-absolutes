@@ -5,14 +5,16 @@ define([
 
 	'geomag/DeclinationSummaryView',
 	'geomag/HorizontalIntensitySummaryView',
-	'geomag/VerticalIntensitySummaryView'
+	'geomag/VerticalIntensitySummaryView',
+	'geomag/Measurement'
 ], function (
 	View,
 	Util,
 
 	DeclinationSummaryView,
 	HorizontalIntensitySummaryView,
-	VerticalIntensitySummaryView
+	VerticalIntensitySummaryView,
+	Measurement
 ) {
 	'use strict';
 
@@ -32,26 +34,21 @@ define([
 
 	ObservationSummaryView.prototype.render = function () {
 		var readings = this._readings.data(),
-				declinationSummaryView = this._declinationSummaryView,
+
 				horizontalIntensitySummaryView = this._horizontalIntensitySummaryView,
 				verticalIntensitySummaryView = this._verticalIntensitySummaryView,
 				calculator = this._calculator,
 				i = null,
 				len = null,
 				reading;
-		Util.empty(declinationSummaryView);
+
+
 		Util.empty(horizontalIntensitySummaryView);
 		Util.empty(verticalIntensitySummaryView);
 		for (i = 0, len = readings.length; i < len; i++) {
 			reading = readings[i];
 			// create view if it does not exist
-			if (!reading.hasOwnProperty('_declinationSummary')) {
-				reading._declinationSummary = new DeclinationSummaryView({
-					el:document.createElement('tr'),
-					reading:reading,
-					calculator:calculator
-				});
-			}
+
 			// Create view if it does not exits
 			if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
 				reading._horizontalIntensitySummary = new HorizontalIntensitySummaryView({
@@ -69,16 +66,53 @@ define([
 				});
 			}
 
-			if (!reading.hasOwnProperty('_')) {
 			// insert view
-			declinationSummaryView.appendChild(reading._declinationSummary._el);
+
 			// insert view
 			horizontalIntensitySummaryView.appendChild(reading._horizontalIntensitySummary._el);
 			// insert view
 			verticalIntensitySummaryView.appendChild(reading._verticalIntensitySummary._el);
+
+
+		}
+		this._renderDeclination();
+	};
+
+	ObservationSummaryView.prototype._renderDeclination = function () {
+		var readings = this._readings.data(),
+				declinationSummaryView = this._declinationSummaryView,
+				calculator = this._calculator,
+				i = null,
+				len = null,
+				reading,
+				baselineD = [],
+				baselineDNt = [],
+				baselineDStats,
+				baselineDNtStats;
+
+		Util.empty(declinationSummaryView);
+
+		for (i = 0, len = readings.length; i < len; i++) {
+			reading = readings[i];
+			// create view if it does not exist
+			if (!reading.hasOwnProperty('_declinationSummary')) {
+				reading._declinationSummary = new DeclinationSummaryView({
+					el:document.createElement('tr'),
+					reading:reading,
+					calculator:calculator
+				});
+			}
+
+
+			// insert view
+			declinationSummaryView.appendChild(reading._declinationSummary._el);
+			// insert view
+
+			if (reading.get('declination_valid') === 'Y') {
+				baselineD.push(calculator.baselineD(reading));
+				baselineDNt.push(calculator.d(reading));
 			}
 		}
-
 		this._pierTemperature.innerHTML = this._observation.get('pier_temperature');
 		this._electronicsTemperature.innerHTML = 'elec temp';
 		this._fluxgateTemperature.innerHTML = 'flux temp';
@@ -86,10 +120,29 @@ define([
 		this._outsideTemperature.innerHTML = 'outs temp';
 		this._checkedBy.innerHTML = 'user name';
 		this._remarks.innerHTML = this._observation.get('annotation');
+
+		baselineDStats = calculator.getStats(baselineD);
+		baselineDNtStats = calculator.getStats(baselineDNt);
+
+		this._baselineMinMean.innerHTML = baselineDStats.mean;
+		this._baselineNtMean.innerHTML = baselineDNtStats.mean;
+
+		this._baselineMinRange.innerHTML ='[' +  baselineDStats.min + ', ' + baselineDStats.max + ']';
+		this._baselineNtRange.innerHTML = '[' + baselineDNtStats.min + ', ' + baselineDNtStats.max + ']';
+
+		this._baselineMinStdDev.innerHTML = baselineDStats.stdDev;
+		this._baselineNtStdDev.innerHTML = baselineDNtStats.stdDev;
 	};
 
+
 	ObservationSummaryView.prototype._initialize = function () {
-		var el = this._el;
+		var el = this._el,
+		    i = null,
+		    len = null,
+		    reading,
+		    measurements,
+		    readings;
+
 		this._observation = this._options.observation;
 		this._calculator = this._options.baselineCalculator;
 
@@ -120,20 +173,30 @@ define([
 						'</tbody>',
 					'</table>',
 					'<table>',
+						'<thead>',
+							'<th scope="col"></th>',
+							'<th scope="col" class="baseline-min">Min.</th>',
+							'<th scope="col" class="baseline-nt">nT</th>',
+						'</thead>',
 						'<tbody>',
 							'<tr>',
-								'<td class="declination-mean">Mean:</td>',
-								'<td class="declination-mean-outPut"></td>',
+								'<th class="mean">Mean:</th>',
+								'<td class="baseline-min-mean"></td>',
+								'<td class="baseline-nt-mean"></td>',
 							'</tr>',
 							'<tr>',
-								'<td class="declination-range">Range:</td>',
-								'<td class="declination-range-outPut"></td>',
+								'<th scope="row" class="declination-range">Range:</th>',
+								'<td class="baseline-min-range"></td>',
+								'<td class="baseline-nt-range"></td>',
 							'</tr>',
 							'<tr>',
-								'<td class="declination-stdDeviation">Std. Deviation:</td>',
-								'<td class="declination-stdDeviation"></td>',
+								'<th scope="row" class="baseline-std-dev">Std. Deviation:</th>',
+								'<td class="baseline-min-std-dev"></td>',
+								'<td class="baseline-nt-std-dev"></td>',
 							'</tr>',
+
 						'</tbody>',
+
 					'</table>',
 					'<h4>Horizontal Intensity</h4>',
 						'<table>',
@@ -235,6 +298,15 @@ define([
 
 		this._declinationSummaryView = el.querySelector('.declination-summary-view');
 
+		this._baselineMinMean = el.querySelector('.baseline-min-mean');
+		this._baselineNtMean = el.querySelector('.baseline-nt-mean');
+
+		this._baselineMinRange = el.querySelector('.baseline-min-range');
+		this._baselineNtRange = el.querySelector('.baseline-nt-range');
+
+		this._baselineMinStdDev = el.querySelector('.baseline-min-std-dev');
+		this._baselineNtStdDev = el.querySelector('.baseline-nt-std-dev');
+
 		this._horizontalIntensitySummaryView = el.querySelector('.horizontal-intensity-summary-view');
 
 		this._verticalIntensitySummaryView = el.querySelector('.vertical-intensity-summary-view');
@@ -251,6 +323,20 @@ define([
 		this._onChange = this._onChange.bind(this);
 		this._remarks.addEventListener('change', this._onChange);
 
+		this._calculator.on('change', this.render, this);
+
+		readings = this._readings.data();
+		for (i = 0, len = readings.length; i < len; i++) {
+
+			reading = readings[i];
+			reading.on('change', this.render, this);
+			measurements = reading.getMeasurements();
+			measurements[Measurement.WEST_DOWN][0].on('change', this._renderDeclination, this);
+			measurements[Measurement.EAST_DOWN][0].on('change', this._renderDeclination, this);
+			measurements[Measurement.WEST_UP][0].on('change', this._renderDeclination, this);
+			measurements[Measurement.EAST_UP][0].on('change', this._renderDeclination, this);
+
+		}
 		this.render();
 	};
 
