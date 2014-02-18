@@ -84,7 +84,7 @@ define([
 		var el = this._el;
 
 		this._observation = this._options.observation;
-		this._calculator = this._options.calculator;
+		this._calculator = this._options.baselineCalculator;
 
 
 		this._readings = this._observation.get('readings');
