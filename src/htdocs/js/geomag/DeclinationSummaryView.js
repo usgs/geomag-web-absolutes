@@ -94,14 +94,14 @@ define([
 
 		this._reading.on('change', this.render, this);
 
-		for (i = 0, len = this._measurements.length; i < len; i ++){
+		for (i = 0, len = this._measurements.length; i < len; i++) {
 			this._measurements[i].on('change', this.render, this);
 		}
 		this.render();
 	};
 
 
-	DeclinationSummaryView.prototype._getDeclinationMeasurements= function () {
+	DeclinationSummaryView.prototype._getDeclinationMeasurements = function () {
 		var allMeasurements = this._reading.getMeasurements(),
 		    measurements = [];
 
