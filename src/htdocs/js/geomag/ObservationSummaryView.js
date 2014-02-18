@@ -3,12 +3,16 @@ define([
 	'mvc/View',
 	'util/Util',
 
-	'geomag/DeclinationSummaryView'
+	'geomag/DeclinationSummaryView',
+	'geomag/HorizontalIntensitySummaryView',
+	'geomag/VerticalIntensitySummaryView'
 ], function (
 	View,
 	Util,
 
-	DeclinationSummaryView
+	DeclinationSummaryView,
+	HorizontalIntensitySummaryView,
+	VerticalIntensitySummaryView
 ) {
 	'use strict';
 
@@ -29,11 +33,15 @@ define([
 	ObservationSummaryView.prototype.render = function () {
 		var readings = this._readings.data(),
 				declinationSummaryView = this._declinationSummaryView,
+				horizontalIntensitySummaryView = this._horizontalIntensitySummaryView,
+				verticalIntensitySummaryView = this._verticalIntensitySummaryView,
 				calculator = this._calculator,
 				i = null,
 				len = null,
 				reading;
 		Util.empty(declinationSummaryView);
+		Util.empty(horizontalIntensitySummaryView);
+		Util.empty(verticalIntensitySummaryView);
 		for (i = 0, len = readings.length; i < len; i++) {
 			reading = readings[i];
 			// create view if it does not exist
@@ -44,8 +52,31 @@ define([
 					calculator:calculator
 				});
 			}
+			// Create view if it does not exits
+			if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
+				reading._horizontalIntensitySummary = new HorizontalIntensitySummaryView({
+						el:document.createElement('tr'),
+						reading:reading,
+						calculator:calculator
+				});
+			}
+			// Create view if it does not exits
+			if (!reading.hasOwnProperty('_verticalIntensitySummary')) {
+				reading._verticalIntensitySummary = new VerticalIntensitySummaryView({
+					el:document.createElement('tr'),
+					reading:reading,
+					calculator:calculator
+				});
+			}
+
+			if (!reading.hasOwnProperty('_')) {
 			// insert view
 			declinationSummaryView.appendChild(reading._declinationSummary._el);
+			// insert view
+			horizontalIntensitySummaryView.appendChild(reading._horizontalIntensitySummary._el);
+			// insert view
+			verticalIntensitySummaryView.appendChild(reading._verticalIntensitySummary._el);
+			}
 		}
 	};
 
@@ -97,23 +128,21 @@ define([
 							'</tr>',
 						'</tbody>',
 					'</table>',
-
-				'<section class="row">',
 					'<h4>Horizontal Intensity</h4>',
-					'<section class="column one-of-two horizontalIntensity">',
 						'<table>',
 							'<thead>',
 								'<tr>',
-									'<th scope="col">&nbsp;</th>',
-									'<th scope="col" class="horizontal-sTime">Start Time</th>',
-									'<th scope="col" class="horizontal-eTime">End Time</th>',
-									'<th scope="col" class="horizontal-absValue">Abs. Value (nT)</th>',
-									'<th scope="col" class="horizontal-ord">Ord.(nT)</th>',
-									'<th scope="col" class="horizontal-baseValues">Baseline Values (nT)</th>',
-									'<th scope="col" class="horizontal-observer">Observer</th>',
+									'<th scope="col" class="name">set</th>',
+									'<th scope="col" class="valid">Valid</th>',
+									'<th scope="col" class="start-time">Start Time</th>',
+									'<th scope="col" class="end-time">End Time</th>',
+									'<th scope="col" class="abs-value">Abs. Value (nT)</th>',
+									'<th scope="col" class="ord">Ord.(nT)</th>',
+									'<th scope="col" class="baseline-values">Baseline Values (nT)</th>',
+									'<th scope="col" class="observer">Observer</th>',
 								'</tr>',
 							'</thead>',
-							'<tbody class="horizontal-intensity">',
+							'<tbody class="horizontal-intensity-summary-view">',
 							'</tbody>',
 						'</table>',
 						'<table>',
@@ -132,24 +161,22 @@ define([
 								'</tr>',
 							'</tbody>',
 						'</table>',
-					'</section>',
-				'</section>',
-				'<section class="row">',
+
 					'<h4>Vertical Intensity</h4>',
-					'<section class="column one-of-two verticalIntensity">',
 						'<table>',
 							'<thead>',
 								'<tr>',
-									'<th scope="col">&nbsp;</th>',
-									'<th scope="col" class="vertical-intensity-sTime">Start Time</th>',
-									'<th scope="col" class="vertical-intensity-eTime">End Time</th>',
-									'<th scope="col" class="vertical-intensity-absValue">Abs. Value (nT)</th>',
-									'<th scope="col" class="vertical-intensity-ord">Ord.(nT)</th>',
-									'<th scope="col" class="vertical-intensity-baseValues">Baseline Values (nT)</th>',
-									'<th scope="col" class="vertical-intensity-observer">Observer</th>',
+									'<th scope="col" class="name">set</th>',
+									'<th scope="col" class="valid">Valid</th>',
+									'<th scope="col" class="start-time">Start Time</th>',
+									'<th scope="col" class="end-time">End Time</th>',
+									'<th scope="col" class="abs-value">Abs. Value (nT)</th>',
+									'<th scope="col" class="ord">Ord.(nT)</th>',
+									'<th scope="col" class="baseline-values">Baseline Values (nT)</th>',
+									'<th scope="col" class="observer">Observer</th>',
 								'</tr>',
 							'</thead>',
-							'<tbody class="vertical-intensity">',
+							'<tbody class="vertical-intensity-summary-view">',
 							'</tbody>',
 						'</table>',
 						'<table>',
@@ -168,8 +195,7 @@ define([
 								'</tr>',
 							'</tbody>',
 						'</table>',
-					'</section>',
-				'</section>',
+
 				'<section class="row"',
 					'<h4>Temperatures</h4>',
 					'<section class="colum one-of-two temperatures">',
@@ -208,6 +234,11 @@ define([
 		].join('');
 
 		this._declinationSummaryView = el.querySelector('.declination-summary-view');
+
+		this._horizontalIntensitySummaryView = el.querySelector('.horizontal-intensity-summary-view');
+
+		this._verticalIntensitySummaryView = el.querySelector('.vertical-intensity-summary-view');
+
 		this.render();
 	};
 
