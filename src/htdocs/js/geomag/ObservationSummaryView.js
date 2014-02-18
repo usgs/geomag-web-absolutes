@@ -78,11 +78,18 @@ define([
 			verticalIntensitySummaryView.appendChild(reading._verticalIntensitySummary._el);
 			}
 		}
+
+		this._pierTemperature.innerHTML = this._observation.get('pier_temperature');
+		this._electronicsTemperature.innerHTML = 'elec temp';
+		this._fluxgateTemperature.innerHTML = 'flux temp';
+		this._protonTemperature.innerHTML = 'prot temp';
+		this._outsideTemperature.innerHTML = 'outs temp';
+		this._checkedBy.innerHTML = 'user name';
+		this._remarks.innerHTML = this._observation.get('annotation');
 	};
 
 	ObservationSummaryView.prototype._initialize = function () {
 		var el = this._el;
-
 		this._observation = this._options.observation;
 		this._calculator = this._options.baselineCalculator;
 
@@ -196,39 +203,32 @@ define([
 							'</tbody>',
 						'</table>',
 
-				'<section class="row"',
 					'<h4>Temperatures</h4>',
-					'<section class="colum one-of-two temperatures">',
-						'<table>',
-							'<thead>',
-								'<tr>',
-									'<th scope="col" class="temp-pier">Pier</th>',
-									'<th scope="col" class="temp-electronics">Electronics</th>',
-									'<th scope="col" class="temp-fluxgate">Fluxgate</th>',
-									'<th scope="col" class="temp-proton">Proton</th>',
-									'<th scope="col" class="temp-outside>Outside</th>',
-									'<th scope="col" class="temp-checkedBy">Checked By:</th>',
-								'</tr>',
-							'</thead>',
-							'<tbody>',
-								'<tr>',
-									'<th class="pier"></th>',
-									'<th class="electronics"></th>',
-									'<th class="fluxgate"></th>',
-									'<th class="proton"></th>',
-									'<th class="outside"></th>',
-									'<th class="checkedBy"></th>',
-								'</tr>',
-								'<tr>',
-									'<td class="pier-out"></td>',
-									'<td class="electronics-out"></td>',
-									'<td class="fluxgate-out"></td>',
-									'<td class="proton-out"></td>',
-									'<td class="outside-out"></td>',
-									'<td class="checkedBy-input"></td>',
-								'</tr>',
-							'</tbody>',
-						'</table>',
+					'<table class="temperature-view">',
+						'<thead>',
+							'<tr>',
+								'<th scope="col">Pier</th>',
+								'<th scope="col">Electronics</th>',
+								'<th scope="col">Fluxgate</th>',
+								'<th scope="col">Proton</th>',
+								'<th scope="col">Outside</th>',
+							'</tr>',
+						'</thead>',
+						'<tbody>',
+							'<tr>',
+								'<td class="pier-temp-value"></td>',
+								'<td class="electronics-temp-value"></td>',
+								'<td class="fluxgate-temp-value"></td>',
+								'<td class="proton-temp-value"></td>',
+								'<td class="outside-temp-value"></td>',
+							'</tr>',
+						'</tbody>',
+					'</table>',
+					'<section class="reviewer">',
+						'<h4>Reviewer</h4>',
+						'<div>Reviewed by <span class="checked-by-value"></span></div>',
+						'<label for="observation-remarks">Reviewer comments</label>',
+						'<textarea id="observation-remarks"></textarea>',
 					'</section>',
 			'</section>'
 		].join('');
@@ -239,9 +239,26 @@ define([
 
 		this._verticalIntensitySummaryView = el.querySelector('.vertical-intensity-summary-view');
 
+		this._observation.on('change', this.render, this);
+		this._pierTemperature = el.querySelector('.pier-temp-value');
+		this._electronicsTemperature = el.querySelector('.electronics-temp-value');
+		this._fluxgateTemperature = el.querySelector('.fluxgate-temp-value');
+		this._protonTemperature = el.querySelector('.proton-temp-value');
+		this._outsideTemperature = el.querySelector('.outside-temp-value');
+		this._checkedBy = el.querySelector('.checked-by-value');
+		this._remarks = el.querySelector('.reviewer > textarea');
+
+		this._onChange = this._onChange.bind(this);
+		this._remarks.addEventListener('change', this._onChange);
+
 		this.render();
 	};
 
+	ObservationSummaryView.prototype._onChange = function () {
+		this._observation.set({
+			annotation: this._remarks.value
+		});
+	};
 
 	return ObservationSummaryView;
 });
