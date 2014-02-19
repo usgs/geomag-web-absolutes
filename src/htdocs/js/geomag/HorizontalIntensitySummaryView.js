@@ -83,6 +83,8 @@ define([
 
 		this._reading.on('change', this.render, this);
 
+		this._calculator.on('change', this.render, this);
+
 		for (i = 0, len = this._measurements.length; i < len; i ++){
 			this._measurements[i].on('change', this.render, this);
 		}
