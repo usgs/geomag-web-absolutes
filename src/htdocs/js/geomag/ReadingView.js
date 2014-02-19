@@ -7,7 +7,8 @@ define([
 	'geomag/InclinationView',
 	'geomag/MagnetometerOrdinatesView',
 	'geomag/Measurement',
-	'geomag/MeasurementView'
+	'geomag/MeasurementView',
+	'geomag/ObservationBaselineCalculator'
 ], function (
 	View,
 	Util,
@@ -16,12 +17,14 @@ define([
 	InclinationView,
 	MagnetometerOrdinatesView,
 	Measurement,
-	MeasurementView
+	MeasurementView,
+	ObservationBaselineCalculator
 ) {
 	'use strict';
 
 
 	var DEFAULTS = {
+		baselineCalculator:new ObservationBaselineCalculator()
 	};
 
 
