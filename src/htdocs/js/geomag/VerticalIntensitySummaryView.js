@@ -35,12 +35,18 @@ define([
 		this._valid.checked = (reading.get('vertical_intensity_valid') === 'Y');
 
 		times = this._getMeasurementValues('time');
-		if (times.lenght > 0) {
+		if (times.length > 0) {
 			startTime = Math.min.apply(null, times);
 			endTime = Math.max.apply(null, times);
 		}
 		this._startTime.innerHTML = this._formatTime(startTime);
 		this._endTime.innerHTML = this._formatTime(endTime);
+
+		this._absValue.innerHTML = this._calculator.verticalComponent(reading);
+
+		this._ord.innerHTML = this._calculator.meanZ(reading);
+
+		this._baselineValue.innerHTML = this._calculator.baselineZ(reading);
 
 	};
 
@@ -77,6 +83,7 @@ define([
 		this._valid.addEventListener('change', this._onChange);
 
 		this._reading.on('change', this.render, this);
+		this._calculator.on('change', this.render, this);
 
 		for (i = 0, len = this._measurements.length; i < len; i++) {
 			this._measurements[i].on('change', this.render, this);
