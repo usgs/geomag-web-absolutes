@@ -41,6 +41,12 @@ define([
 		}
 		this._startTime.innerHTML = this._formatTime(startTime);
 		this._endTime.innerHTML = this._formatTime(endTime);
+
+		this._absValue.innerHTML = this._calculator.horizontalComponent(reading);
+
+		this._ord.innerHTML = this._calculator.meanH(reading);
+
+		this._baselineValues.innerHTML = this._calculator.baselineH(reading);
 	};
 
 	HorizontalIntensitySummaryView.prototype._initialize = function () {
