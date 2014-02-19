@@ -103,7 +103,7 @@ define([
 			link.href = '#' + observatory.get('id');
 
 			listItem = document.createElement('li');
-			listItem.id = observatory.get('id');
+			listItem.id = 'observatory_' + observatory.get('id');
 			listItem.appendChild(link);
 
 			observatoryList.appendChild(listItem);
@@ -117,20 +117,11 @@ define([
 	};
 
 
-	// ObservatoryView.prototype._bindObservatoryListItems = function (observatory) {
-	// 	var _this = this;
-
-	// 	Util.addEvent(observatory, 'click', function () {
-	// 		_this.render(this.id);
-	// 	});
-	// };
-
-
 	ObservatoryView.prototype._updateSelected = function (id) {
 
 		// clear last selected observatory
 		var selected = document.querySelector('.selected'),
-		    element = document.getElementById(id);
+		    element = document.getElementById('observatory_' + id);
 
 		if (selected) {
 			selected.className = '';
