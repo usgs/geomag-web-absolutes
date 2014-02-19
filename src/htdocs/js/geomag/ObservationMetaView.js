@@ -286,9 +286,9 @@ define([
 		    theodoliteSelectView = this._theodoliteSelectView,
 		    // observation selections
 		    observation = this._observation,
-		    mark_id = observation.get('mark_id'),
-		    electronics_id = observation.get('electronics_id'),
-		    theodolite_id = observation.get('theodolite_id'),
+		    mark_id,
+		    electronics_id,
+		    theodolite_id,
 		    // observatory information
 		    piers = observatory.get('piers'),
 		    default_pier_id = observatory.get('default_pier_id'),
@@ -298,7 +298,22 @@ define([
 		    theodolites = observatory.getTheodolites(),
 		    // other locals
 		    pier = null;
-		observation.set({observatory:observatory});
+
+		// update observatory id
+		if (observation.get('observatory_id') !== observatory.id) {
+			// different observatory, clear related info
+			observation.set({
+				observatory_id: observatory.id,
+				mark_id: null,
+				electronics_id: null,
+				theodolite_id: null
+			});
+		}
+
+		// read these after they were potentially reset
+		mark_id = observation.get('mark_id');
+		electronics_id = observation.get('electronics_id');
+		theodolite_id = observation.get('theodolite_id');
 
 		// preserve existing selections
 		if (mark_id !== null) {
