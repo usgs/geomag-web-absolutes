@@ -34,8 +34,7 @@ define([
 
 	ObservationSummaryView.prototype.render = function () {
 		this._renderDeclination();
-		this._renderHorizontalIntensitySummaryView();
-		this._renderVerticalIntensitySummaryView();
+		this._renderInclination();
 		this._renderSummaryBottom();
 	};
 
@@ -93,6 +92,11 @@ define([
 		this._baselineNtStdDev.innerHTML = baselineDNtStats.stdDev;
 	};
 
+	ObservationSummaryView.prototype._renderInclination = function () {
+		this._renderHorizontalIntensitySummaryView();
+		this._renderVerticalIntensitySummaryView();
+	};
+
 	ObservationSummaryView.prototype._renderHorizontalIntensitySummaryView = function () {
 				var readings = this._readings.data(),
 				    horizontalIntensitySummaryView = this._horizontalIntensitySummaryView,
@@ -137,7 +141,9 @@ define([
 				  calculator = this._calculator,
 				  i = null,
 				  len = null,
-				  reading;
+				  reading,
+				  baselineZ = [],
+				  baselineZStats;
 
 			Util.empty(verticalIntensitySummaryView);
 			for (i = 0, len = readings.length; i < len; i++) {
@@ -154,7 +160,18 @@ define([
 
 				// insert view
 				verticalIntensitySummaryView.appendChild(reading._verticalIntensitySummary._el);
+
+				if (reading.get('vertical_intensity_valid') === 'Y') {
+					baselineZ.push(calculator.baselineZ(reading));
+				}
 			}
+			baselineZStats = calculator.getStats(baselineZ);
+
+			this._verticalBaselineValuesMean.innerHTML = baselineZStats.mean;
+
+			this._verticalBaselineValuesRange.innerHTML = '[' + baselineZStats.min + ', ' + baselineZStats.max + ']';
+
+			this._verticalBaselineValuesStdDev.innerHTML = baselineZStats.stdDev;
 	};
 
 	ObservationSummaryView.prototype._renderSummaryBottom = function () {
@@ -191,11 +208,13 @@ define([
 								'<th scope="col" class="valid">Valid</th>',
 								'<th scope="col" class="start-time">Start Time</th>',
 								'<th scope="col" class="end-time">End Time</th>',
-								'<th scope="col" class="degrees">Deg.</th>',
-								'<th scope="col" class="minutes">Min.</th>',
-								'<th scope="col" class="ord-min">Ord. Min.</th>',
-								'<th scope="col" class="baseline-min">Min.</th>',
-								'<th scope="col" class="baseline-nt">nT</th>',
+								'<th scope="col" colspan="2"class="absolute-declination">Absolute Declination</th>',
+								//'<th scope="col" class="degrees">Deg.</th>',
+								//'<th scope="col" class="minutes">Min.</th>',
+								'<th scope="col" class="ord-min">Ordinate</th>',
+								'<th scope="col" colspan="2" class="baseline-values">Baseline Values</th>',
+								//'<th scope="col" class="baseline-min">Min.</th>',
+								//'<th scope="col" class="baseline-nt">nT</th>',
 								'<th scope="col" class="observer">Observer</th>',
 								'<th scope="col" class="shift">180&#176; Shift</th>',
 							'</tr>',
@@ -225,20 +244,18 @@ define([
 								'<td class="baseline-min-std-dev"></td>',
 								'<td class="baseline-nt-std-dev"></td>',
 							'</tr>',
-
 						'</tbody>',
-
 					'</table>',
 					'<h4>Horizontal Intensity</h4>',
 						'<table>',
 							'<thead>',
 								'<tr>',
-									'<th scope="col" class="name">set</th>',
+									'<th scope="col" class="name">Set</th>',
 									'<th scope="col" class="valid">Valid</th>',
 									'<th scope="col" class="start-time">Start Time</th>',
 									'<th scope="col" class="end-time">End Time</th>',
 									'<th scope="col" class="abs-value">Abs. Value (nT)</th>',
-									'<th scope="col" class="ord">Ord.(nT)</th>',
+									'<th scope="col" class="ord">Ordinate</th>',
 									'<th scope="col" class="baseline-values">Baseline Values (nT)</th>',
 									'<th scope="col" class="observer">Observer</th>',
 								'</tr>',
@@ -249,7 +266,7 @@ define([
 						'<table>',
 							'<thead>',
 								'<th scope="col"></th>',
-								'<td scope="col" class="baseline-values">Baseline Values (nT)</td>',
+								'<th scope="col" class="baseline-values">Baseline Values (nT)</th>',
 							'</thead>',
 							'<tbody>',
 								'<tr>',
@@ -266,17 +283,16 @@ define([
 								'</tr>',
 							'</tbody>',
 						'</table>',
-
 					'<h4>Vertical Intensity</h4>',
 						'<table>',
 							'<thead>',
 								'<tr>',
-									'<th scope="col" class="name">set</th>',
+									'<th scope="col" class="name">Set</th>',
 									'<th scope="col" class="valid">Valid</th>',
 									'<th scope="col" class="start-time">Start Time</th>',
 									'<th scope="col" class="end-time">End Time</th>',
 									'<th scope="col" class="abs-value">Abs. Value (nT)</th>',
-									'<th scope="col" class="ord">Ord.(nT)</th>',
+									'<th scope="col" class="ord">Ordinate</th>',
 									'<th scope="col" class="baseline-values">Baseline Values (nT)</th>',
 									'<th scope="col" class="observer">Observer</th>',
 								'</tr>',
@@ -285,22 +301,25 @@ define([
 							'</tbody>',
 						'</table>',
 						'<table>',
+							'<thead>',
+								'<th scope="col"></th>',
+								'<th scope="col" class="baseline-values">Baseline Values (nT)</th>',
+							'</thead>',
 							'<tbody>',
 								'<tr>',
-									'<td class="vertical-intensity-mean">Mean:</td>',
-									'<td class="vertical-intensity-mean-outPut"></td>',
+									'<th scope="row" class="mean">Mean:</th>',
+									'<td class="vertical-baseline-values-mean"></td>',
 								'</tr>',
 								'<tr>',
-									'<td class="vertical-intensity-range">Range:</td>',
-									'<td class="vertical-intensity-range-outPut"></td>',
+									'<th scope="row" class="range">Range:</th>',
+									'<td class="vertical-baseline-values-range"></td>',
 								'</tr>',
 								'<tr>',
-									'<td class="vertical-intensity-stdDeviation">Std. Deviation:</td>',
-									'<td class="vertical-intensity-stdDeviation"></td>',
+									'<th scope="row" class="std-dev">Std. Deviation:</th>',
+									'<td class="vertical-baseline-values-std-dev"></td>',
 								'</tr>',
 							'</tbody>',
 						'</table>',
-
 					'<h4>Temperatures</h4>',
 					'<table class="temperature-view">',
 						'<thead>',
@@ -366,6 +385,12 @@ define([
 		this._onChange = this._onChange.bind(this);
 		this._remarks.addEventListener('change', this._onChange);
 
+		this._verticalBaselineValuesMean = el.querySelector('.vertical-baseline-values-mean');
+
+		this._verticalBaselineValuesRange = el.querySelector('.vertical-baseline-values-range');
+
+		this._verticalBaselineValuesStdDev = el.querySelector('.vertical-baseline-values-std-dev');
+
 		this._calculator.on('change', this.render, this);
 
 		readings = this._readings.data();
@@ -378,6 +403,11 @@ define([
 			measurements[Measurement.EAST_DOWN][0].on('change', this._renderDeclination, this);
 			measurements[Measurement.WEST_UP][0].on('change', this._renderDeclination, this);
 			measurements[Measurement.EAST_UP][0].on('change', this._renderDeclination, this);
+
+			measurements[Measurement.SOUTH_DOWN][0].on('change', this._renderInclination, this);
+			measurements[Measurement.NORTH_UP][0].on('change', this._renderInclination, this);
+			measurements[Measurement.SOUTH_UP][0].on('change', this._renderInclination, this);
+			measurements[Measurement.NORTH_DOWN][0].on('change', this._renderInclination, this);
 
 		}
 		this.render();
