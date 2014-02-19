@@ -13,11 +13,11 @@ class ObservationDetail extends Observation {
 				$electronics_id=null, $theodolite_id=null,
 				$pier_temperature=null, $elect_temperature=null,
 				$flux_temperature=null, $proton_temperature=null,
-				$annotation=null, $readings=array()) {
+				$reviewed=null, $annotation=null, $readings=array()) {
 		parent::__construct($id, $observatory_id, $begin, $end,
 					$reviewer_user_id, $mark_id, $electronics_id,
 					$theodolite_id, $pier_temperature, $elect_temperature,
-					$flux_temperature, $proton_temperature, $annotation);
+					$flux_temperature, $proton_temperature, $reviewed, $annotation);
 		$this->readings = $readings;
 	}
 
@@ -34,9 +34,9 @@ class ObservationDetail extends Observation {
 					$p['mark_id'], $p['electronics_id'], $p['theodolite_[d'],
 					$p['pier_temperature'], $p['elect_temperature'],
 					$p['flux_temperature'], $p['proton_temperature'],
-					$p['annotation'], $readings);
+					$p['reviewed'], $p['annotation'], $readings);
 	}
-	
+
 	public function toArray () {
 		$subclassArray = array('readings' => $this->readings);
 		return array_merge (parent::toArray(), subclassArray);
