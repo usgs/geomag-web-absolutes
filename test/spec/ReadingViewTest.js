@@ -3,18 +3,21 @@ define([
 	'chai',
 
 	'geomag/Reading',
-	'geomag/ReadingView'
+	'geomag/ReadingView',
+	'geomag/Observation'
 ], function (
 	chai,
 
 	Reading,
-	ReadingView
+	ReadingView,
+	Observation
 ) {
 	'use strict';
 
 	var expect = chai.expect;
 	var viewOptions = {
-		reading: new Reading()
+		reading: new Reading(),
+		observation: new Observation()
 	};
 
 	describe('ReadingView Unit Tests', function () {
