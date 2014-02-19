@@ -33,49 +33,10 @@ define([
 
 
 	ObservationSummaryView.prototype.render = function () {
-		var readings = this._readings.data(),
-
-				horizontalIntensitySummaryView = this._horizontalIntensitySummaryView,
-				verticalIntensitySummaryView = this._verticalIntensitySummaryView,
-				calculator = this._calculator,
-				i = null,
-				len = null,
-				reading;
-
-
-		Util.empty(horizontalIntensitySummaryView);
-		Util.empty(verticalIntensitySummaryView);
-		for (i = 0, len = readings.length; i < len; i++) {
-			reading = readings[i];
-			// create view if it does not exist
-
-			// Create view if it does not exits
-			if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
-				reading._horizontalIntensitySummary = new HorizontalIntensitySummaryView({
-						el:document.createElement('tr'),
-						reading:reading,
-						calculator:calculator
-				});
-			}
-			// Create view if it does not exits
-			if (!reading.hasOwnProperty('_verticalIntensitySummary')) {
-				reading._verticalIntensitySummary = new VerticalIntensitySummaryView({
-					el:document.createElement('tr'),
-					reading:reading,
-					calculator:calculator
-				});
-			}
-
-			// insert view
-
-			// insert view
-			horizontalIntensitySummaryView.appendChild(reading._horizontalIntensitySummary._el);
-			// insert view
-			verticalIntensitySummaryView.appendChild(reading._verticalIntensitySummary._el);
-
-
-		}
 		this._renderDeclination();
+		this._renderHorizontalIntensitySummaryView();
+		this._renderVerticalIntensitySummaryView();
+		this._renderSummaryBottom();
 	};
 
 	ObservationSummaryView.prototype._renderDeclination = function () {
@@ -102,8 +63,6 @@ define([
 					calculator:calculator
 				});
 			}
-
-
 			// insert view
 			declinationSummaryView.appendChild(reading._declinationSummary._el);
 			// insert view
@@ -134,6 +93,80 @@ define([
 		this._baselineNtStdDev.innerHTML = baselineDNtStats.stdDev;
 	};
 
+	ObservationSummaryView.prototype._renderHorizontalIntensitySummaryView = function () {
+				var readings = this._readings.data(),
+				    horizontalIntensitySummaryView = this._horizontalIntensitySummaryView,
+				    calculator = this._calculator,
+				    i = null,
+				    len = null,
+				    reading,
+				    baselineH = [],
+				    baselineHStats;
+
+				Util.empty(horizontalIntensitySummaryView);
+
+				for (i = 0, len = readings.length; i < len; i++) {
+					reading = readings[i];
+
+					if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
+						reading._horizontalIntensitySummary = new HorizontalIntensitySummaryView({
+								el:document.createElement('tr'),
+								reading:reading,
+								calculator:calculator
+							});
+					}
+					// insert view
+					horizontalIntensitySummaryView.appendChild(reading._horizontalIntensitySummary._el);
+
+					if (reading.get('horizontal_intensity_valid') === 'Y') {
+						baselineH.push(calculator.baselineH(reading));
+					}
+				}
+				baselineHStats = calculator.getStats(baselineH);
+
+				this._baselineValuesMean.innerHTML = baselineHStats.mean;
+
+				this._baselineValuesRange.innerHTML = '[' + baselineHStats.min + ', ' + baselineHStats.max + ']';
+
+				this._baselineValuesStdDev.innerHTML = baselineHStats.stdDev;
+	};
+
+	ObservationSummaryView.prototype._renderVerticalIntensitySummaryView = function () {
+			var readings = this._readings.data(),
+				  verticalIntensitySummaryView = this._verticalIntensitySummaryView,
+				  calculator = this._calculator,
+				  i = null,
+				  len = null,
+				  reading;
+
+			Util.empty(verticalIntensitySummaryView);
+			for (i = 0, len = readings.length; i < len; i++) {
+				reading = readings[i];
+
+				// Create view if it does not exits
+				if (!reading.hasOwnProperty('_verticalIntensitySummary')) {
+					reading._verticalIntensitySummary = new VerticalIntensitySummaryView({
+						el:document.createElement('tr'),
+						reading:reading,
+						calculator:calculator
+					});
+				}
+
+				// insert view
+				verticalIntensitySummaryView.appendChild(reading._verticalIntensitySummary._el);
+			}
+	};
+
+	ObservationSummaryView.prototype._renderSummaryBottom = function () {
+		this._pierTemperature.innerHTML = this._observation.get('pier_temperature');
+		this._electronicsTemperature.innerHTML = 'elec temp';
+		this._fluxgateTemperature.innerHTML = 'flux temp';
+		this._protonTemperature.innerHTML = 'prot temp';
+		this._outsideTemperature.innerHTML = 'outs temp';
+		this._checkedBy.innerHTML = 'user name';
+		this._remarks.innerHTML = this._observation.get('annotation');
+
+	};
 
 	ObservationSummaryView.prototype._initialize = function () {
 		var el = this._el,
@@ -146,9 +179,7 @@ define([
 		this._observation = this._options.observation;
 		this._calculator = this._options.baselineCalculator;
 
-
 		this._readings = this._observation.get('readings');
-
 
 		el.innerHTML = [
 			'<section class="observation-summary-view">',
@@ -216,18 +247,22 @@ define([
 							'</tbody>',
 						'</table>',
 						'<table>',
+							'<thead>',
+								'<th scope="col"></th>',
+								'<td scope="col" class="baseline-values">Baseline Values (nT)</td>',
+							'</thead>',
 							'<tbody>',
 								'<tr>',
-									'<td class="horizontal-intensity-mean">Mean:</td>',
-									'<td class="horizontal-intensity-mean-outPut"></td>',
+									'<th class="mean">Mean:</th>',
+									'<td class="baseline-values-mean"></td>',
 								'</tr>',
 								'<tr>',
-									'<td class="horizontal-intensity-range">Range:</td>',
-									'<td class="horizontal-intensity-range-outPut"></td>',
+									'<th scope="row" class="range">Range:</th>',
+									'<td class="baseline-values-range"></td>',
 								'</tr>',
 								'<tr>',
-									'<td class="horizontal-intensity-stdDeviation">Std. Deviation:</td>',
-									'<td class="horizontal-intensity-stdDeviation"></td>',
+									'<th scope="row" class="Std-dev">Std. Deviation:</th>',
+									'<td class="baseline-values-std-dev"></td>',
 								'</tr>',
 							'</tbody>',
 						'</table>',
@@ -295,7 +330,7 @@ define([
 					'</section>',
 			'</section>'
 		].join('');
-
+		// Declination summary view
 		this._declinationSummaryView = el.querySelector('.declination-summary-view');
 
 		this._baselineMinMean = el.querySelector('.baseline-min-mean');
@@ -307,8 +342,16 @@ define([
 		this._baselineMinStdDev = el.querySelector('.baseline-min-std-dev');
 		this._baselineNtStdDev = el.querySelector('.baseline-nt-std-dev');
 
+		// Horizontal Intensity summary view
 		this._horizontalIntensitySummaryView = el.querySelector('.horizontal-intensity-summary-view');
 
+		this._baselineValuesMean = el.querySelector('.baseline-values-mean');
+
+		this._baselineValuesRange = el.querySelector('.baseline-values-range');
+
+		this._baselineValuesStdDev = el.querySelector('.baseline-values-std-dev');
+
+		// Vertical intensity summary view
 		this._verticalIntensitySummaryView = el.querySelector('.vertical-intensity-summary-view');
 
 		this._observation.on('change', this.render, this);
