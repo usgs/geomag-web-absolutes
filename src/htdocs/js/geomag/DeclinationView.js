@@ -1,10 +1,16 @@
 /*global define*/
 define([
 	'mvc/View',
-	'util/Util'
+	'util/Util',
+
+	'geomag/Measurement',
+	'geomag/Reading'
 ], function (
 	View,
-	Util
+	Util,
+
+	Measurement,
+	Reading
 ) {
 	'use strict';
 
@@ -37,84 +43,133 @@ define([
 	 * @param options {Object} same as constructor.
 	 */
 	DeclinationView.prototype._initialize = function () {
+		this._reading = this._options.reading;
+		this._calculator = this._options.baselineCalculator;
+		this._measurements = this._reading.getMeasurements();
+
+		this._el.classList.add('declination-view');
 		this._el.innerHTML = [
-			'<dl class="tabular">',
-				'<dt>Magnetic South Meridian</dt>',
-				'<dd class="magneticSouthMeridian"></dd>',
-				'<dt>Mean Mark</dt>',
-				'<dd class="meanMark"></dd>',
-				'<dt>Magnetic Azimuth of Mark</dt>',
-				'<dd class="magneticAzimuthOfMark"></dd>',
-				'<dt>True Azimuth of Mark</dt>',
-				'<dd class="trueAzimuthOfMark"></dd>',
-				'<dt>Magnetic Declination</dt>',
-				'<dd class="magneticDeclination"></dd>',
-				'<dt>',
-					'(<abbr title="West Up">WU</abbr> - ',
-					'<abbr title="East Down">ED</abbr>)',
-					' * 60',
-				'</dt>',
-				'<dd class="westUpMinusEastDown"></dd>',
-				'<dt>',
-					'(<abbr title="East Up">EU</abbr> - ',
-					'<abbr title="West Down">WD</abbr>)',
-					' * 60',
-				'</dt>',
-				'<dd class="eastUpMinusWestDown"></dd>',
-				'<dt>F mean</dt>',
-				'<dd class="fMean"></dd>',
-				'<dt>Pier Correction</dt>',
-				'<dd class="pierCorrection"></dd>',
-				'<dt>Corrected F</dt>',
-				'<dd class="correctedF"></dd>',
+			'<dl>',
+				'<dt class="mag-s-meridian">Magnetic South Meridian</dt>',
+				'<dd class="mag-s-meridian-value">------</dd>',
+				'<dt class="mean-mark">Mean Mark</dt>',
+				'<dd class="mean-mark-value">------</dd>',
+				'<dt class="mag-az-of-mark">Magnetic Azimuth of Mark</dt>',
+				'<dd class="mag-az-of-mark-value">------</dd>',
+				'<dt class="true-az-of-mark">True Azimuth of Mark</dt>',
+				'<dd class="true-az-of-mark-value">------</dd>',
+				'<dt class="mag-declination">Magnetic Declination</dt>',
+				'<dd class="mag-declination-value">------</dd>',
+
+				'<dt class="west-up-minus-east-down">(WU - ED) * 60</dt>',
+				'<dd class="west-up-minus-east-down-value">----</dd>',
+				'<dt class="east-up-minus-west-down">(EU - WD) * 60</dt>',
+				'<dd class="east-up-minus-west-down-value">----</dd>',
+
+				'<dt class="f-mean">F Mean</dt>',
+				'<dd class="f-mean-value">--------</dd>',
+				'<dt class="pier-correction">Pier Correction</dt>',
+				'<dd class="pier-correction-value">-----</dd>',
+				'<dt class="corrected-f">Corrected F</dt>',
+				'<dd class="corrected-f-value">--------</dd>',
 			'</dl>'
 		].join('');
 
 		// save references to elements that will be updated during render
-		this._magneticSouthMeridian = this._el.querySelector(
-				'.magneticSouthMeridian');
-		this._meanMark = this._el.querySelector('.meanMark');
-		this._magneticAzimuthOfMark = this._el.querySelector(
-				'.magneticAzimuthOfMark');
-		this._trueAzimuthOfMark = this._el.querySelector('.trueAzimuthOfMark');
-		this._magneticDeclination = this._el.querySelector('.magneticDeclination');
-		this._westUpMinusEastDown = this._el.querySelector('.westUpMinusEastDown');
-		this._eastUpMinusWestDown = this._el.querySelector('.eastUpMinusWestDown');
-		this._fMean = this._el.querySelector('.fMean');
-		this._pierCorrection = this._el.querySelector('.pierCorrection');
-		this._correctedF = this._el.querySelector('.correctedF');
+		this._magneticSouthMeridian = this._el.querySelector('.mag-s-meridian-value');
+		this._meanMark = this._el.querySelector('.mean-mark-value');
+		this._magneticAzimuthOfMark = this._el.querySelector('.mag-az-of-mark-value');
+		this._trueAzimuthOfMark = this._el.querySelector('.true-az-of-mark-value');
+		this._magneticDeclination = this._el.querySelector(
+				'.mag-declination-value');
+
+		this._westUpMinusEastDown = this._el.querySelector(
+				'.west-up-minus-east-down-value');
+		this._eastUpMinusWestDown = this._el.querySelector(
+				'.east-up-minus-west-down-value');
+
+		this._fMean = this._el.querySelector('.f-mean-value');
+		this._pierCorrection = this._el.querySelector('.pier-correction-value');
+		this._correctedF = this._el.querySelector('.corrected-f-value');
 
 		// when reading changes render view
-		//this._options.reading.on('change', this.render, this);
+		this._options.reading.on('change', this.render, this);
+
+		// also render when any related inputs change
+		this._measurements[Measurement.FIRST_MARK_UP][0].on(
+				'change', this.render, this);
+		this._measurements[Measurement.FIRST_MARK_DOWN][0].on(
+				'change', this.render, this);
+
+		this._measurements[Measurement.WEST_DOWN][0].on(
+				'change', this.render, this);
+		this._measurements[Measurement.EAST_DOWN][0].on(
+				'change', this.render, this);
+		this._measurements[Measurement.WEST_UP][0].on(
+				'change', this.render, this);
+		this._measurements[Measurement.EAST_UP][0].on(
+				'change', this.render, this);
+
+		this._measurements[Measurement.SECOND_MARK_UP][0].on(
+				'change', this.render, this);
+		this._measurements[Measurement.SECOND_MARK_DOWN][0].on(
+				'change', this.render, this);
+
+		// watches for changes in pier/mark
+		this._calculator.on('change', this.render, this);
 
 		// render current reading
-		//this.render();
+		this.render();
 	};
 
 	/**
 	 * Update view based on current reading values.
 	 */
 	DeclinationView.prototype.render = function () {
-		var calculator = this._options.baselineCalculator,
-		    reading = this._options.reading;
+
+		var calculator = this._calculator,
+		    reading = this._reading;
 
 		this._magneticSouthMeridian.innerHTML =
-				calculator.magneticSouthMeridian(reading);
-		this._meanMark.innerHTML = calculator.meanMark(reading);
-		this._magneticAzimuthOfMark.innerHTML =
-				calculator.magneticAzimuthMark(reading);
-		this._trueAzimuthOfMark.innerHTML = calculator.trueAzimuthOfMark(reading);
+				this._formatDegreesMinutes(calculator.magneticSouthMeridian(reading));
+		this._meanMark.innerHTML = '<span class="deg">' +
+				calculator.meanMark(reading).toFixed(2) + '</span>';
+		this._magneticAzimuthOfMark.innerHTML = '<span class="deg">' +
+				calculator.magneticAzimuthMark(reading).toFixed(2) + '</span>';
+		this._trueAzimuthOfMark.innerHTML = '<span class="deg">' +
+				calculator.trueAzimuthOfMark() + '</span>';
 		this._magneticDeclination.innerHTML =
-				calculator.magneticDeclination(reading);
+				this._formatDegreesMinutes(calculator.magneticDeclination(reading));
+
 		this._westUpMinusEastDown.innerHTML =
-				calculator.westUpMinusEastDown(reading);
+				calculator.westUpMinusEastDown(reading).toFixed(2);
 		this._eastUpMinusWestDown.innerHTML =
-				calculator.eastUpMinusWestDown(reading);
-		this._fMean.innerHTML = calculator.fMean(reading);
-		this._pierCorrection.innerHTML = calculator.pierCorrection(reading);
-		this._correctedF.innerHTML = calculator.correctedF(reading);
+				calculator.eastUpMinusWestDown(reading).toFixed(2);
+
+		this._fMean.innerHTML = calculator.meanF(reading).toFixed(2);
+		this._pierCorrection.innerHTML = calculator.pierCorrection();
+		this._correctedF.innerHTML = calculator.correctedF(reading).toFixed(2);
 	};
 
+
+	DeclinationView.prototype._formatDegreesMinutes = function (angle) {
+		var buf = [],
+		    degrees,
+		    minutes;
+
+		degrees = parseInt(angle, 10);
+		minutes = (angle - degrees) * 60;
+
+		buf.push(
+				'<span class="deg">', angle.toFixed(2), '</span>',
+				'<span class="repeat">',
+					'<span class="deg">', degrees, '</span>',
+					'&nbsp;',
+					'<span class="minutes">', minutes.toFixed(2), '</span>',
+				'</span>');
+
+		return buf.join('');
+	};
 
 	return DeclinationView;
 });

@@ -3,32 +3,60 @@
 /*global it*/
 define([
 	'chai',
+	'mvc/Model',
+	'util/Util',
+
 	'geomag/DeclinationView',
+	'geomag/Measurement',
+	'geomag/Observation',
 	'geomag/Reading'
 ], function (
 	chai,
+	Model,
+	Util,
+
 	DeclinationView,
+	Measurement,
+	Observation,
 	Reading
 ) {
 	'use strict';
+
+
 	var expect = chai.expect;
 
+	// dummy ObservationBaselineCalculator for testing
+	var testObservationBaselineCalculator = Util.extend(new Model(), {
+		magneticSouthMeridian: function() { return 1; },
+		meanMark: function () { return 2; },
+		magneticAzimuthMark: function () { return 3; },
+		trueAzimuthOfMark: function () { return 4; },
+		magneticDeclination: function () { return 5; },
+		westUpMinusEastDown: function () { return 6; },
+		eastUpMinusWestDown: function () { return 7; },
+		meanF: function () { return 8; },
+		pierCorrection: function () { return 9; },
+		correctedF: function() { return 10; }
+	});
+
+	// dummy Declination View that tracks whether its
+	// render method has been called
+	var testDeclinationView = function (options) {
+		this.called = false;
+		DeclinationView.call(this, options);
+	};
+	testDeclinationView.prototype = Object.create(DeclinationView.prototype);
+	testDeclinationView.prototype.render = function() {
+		this.called = true;
+	};
+
+	var viewOptions = {
+		reading: new Reading(),
+		observation: new Observation(),
+		baselineCalculator: testObservationBaselineCalculator
+	};
+
 	describe('Unit tests for DeclinationView class', function () {
-
-		// test ObservationBaselineCalculator for testing
-		var testObservationBaselineCalculator = {
-			magneticSouthMeridian: function() { return 1; },
-			meanMark: function () { return 2; },
-			magneticAzimuthMark: function () { return 3; },
-			trueAzimuthOfMark: function () { return 4; },
-			magneticDeclination: function () { return 5; },
-			westUpMinusEastDown: function () { return 6; },
-			eastUpMinusWestDown: function () { return 7; },
-			fMean: function () { return 8; },
-			pierCorrection: function () { return 9; },
-			correctedF: function() { return 10; }
-		};
-
 
 		it('can be "require"d', function () {
 			/*jshint -W030*/
@@ -57,34 +85,94 @@ define([
 			/*jshint +W030*/
 		});
 
-		// TODO :: Enable this test once DeclinationView is truly implemented
-		it.skip('updates view elements during render', function () {
-			var reading = new Reading();
-			var view = new DeclinationView({
+		describe('Constructor', function () {
+			var m = new DeclinationView(viewOptions);
+
+			it('should be an instance of a DeclinationView', function () {
+				expect(m).to.be.an.instanceOf(DeclinationView);
+			});
+
+		});
+
+		describe('Initialize', function () {
+			var i = 0,
+			    len = 0,
+			    reading = new Reading(),
+			    measurements = reading.getMeasurements(),
+			    observation = new Observation(),
+			    view;
+
+			view = new testDeclinationView({
 				reading: reading,
+				observation: observation,
 				baselineCalculator: testObservationBaselineCalculator
 			});
 
-			expect(Number(view._magneticSouthMeridian.innerHTML)).to.equal(
-					testObservationBaselineCalculator.magneticSouthMeridian());
-			expect(Number(view._meanMark.innerHTML)).to.equal(
-					testObservationBaselineCalculator.meanMark());
-			expect(Number(view._magneticAzimuthOfMark.innerHTML)).to.equal(
-					testObservationBaselineCalculator.magneticAzimuthMark());
-			expect(Number(view._trueAzimuthOfMark.innerHTML)).to.equal(
-					testObservationBaselineCalculator.trueAzimuthOfMark());
-			expect(Number(view._magneticDeclination.innerHTML)).to.equal(
-					testObservationBaselineCalculator.magneticDeclination());
-			expect(Number(view._westUpMinusEastDown.innerHTML)).to.equal(
-					testObservationBaselineCalculator.westUpMinusEastDown());
-			expect(Number(view._eastUpMinusWestDown.innerHTML)).to.equal(
-					testObservationBaselineCalculator.eastUpMinusWestDown());
-			expect(Number(view._fMean.innerHTML)).to.equal(
-					testObservationBaselineCalculator.fMean());
-			expect(Number(view._pierCorrection.innerHTML)).to.equal(
-					testObservationBaselineCalculator.pierCorrection());
-			expect(Number(view._correctedF.innerHTML)).to.equal(
-					testObservationBaselineCalculator.correctedF());
+			it('binds measurement change to render', function () {
+				var testmeasurements = [
+						measurements[Measurement.FIRST_MARK_UP][0],
+						measurements[Measurement.FIRST_MARK_DOWN][0],
+						measurements[Measurement.WEST_DOWN][0],
+						measurements[Measurement.EAST_DOWN][0],
+						measurements[Measurement.WEST_UP][0],
+						measurements[Measurement.EAST_UP][0],
+						measurements[Measurement.SECOND_MARK_UP][0],
+						measurements[Measurement.SECOND_MARK_DOWN][0]
+				];
+
+				for (i = 0, len = testmeasurements.length; i < len; i++){
+					view.called = false;
+					testmeasurements[i].trigger('change');
+					expect(view.called).to.equal(true);
+				}
+			});
+
+			it('binds calculator change to render', function () {
+				view.called = false;
+				testObservationBaselineCalculator.trigger('change');
+				expect(view.called).to.equal(true);
+			});
+
+		});
+
+		describe('Render', function () {
+
+			it('updates view elements', function () {
+				var calculator = testObservationBaselineCalculator,
+				    view;
+
+				view = new DeclinationView({
+					reading: new Reading(),
+					observation: new Observation(),
+					baselineCalculator: calculator
+				});
+
+				expect(view._magneticSouthMeridian.innerHTML).to.equal(
+						view._formatDegreesMinutes(
+								calculator.magneticSouthMeridian()));
+				expect(view._meanMark.textContent).to.equal(
+						calculator.meanMark().toFixed(2));
+				expect(view._magneticAzimuthOfMark.textContent).to.equal(
+						calculator.magneticAzimuthMark().toFixed(2));
+				expect(view._trueAzimuthOfMark.textContent).to.equal('' +
+						calculator.trueAzimuthOfMark());
+				expect(view._magneticDeclination.innerHTML).to.equal(
+						view._formatDegreesMinutes(
+								calculator.magneticDeclination()));
+
+				expect(view._westUpMinusEastDown.textContent).to.equal(
+						calculator.westUpMinusEastDown().toFixed(2));
+				expect(view._eastUpMinusWestDown.textContent).to.equal(
+						calculator.eastUpMinusWestDown().toFixed(2));
+
+				expect(view._fMean.textContent).to.equal(
+						calculator.meanF().toFixed(2));
+				expect(view._pierCorrection.textContent).to.equal('' +
+						calculator.pierCorrection());
+				expect(view._correctedF.textContent).to.equal(
+						calculator.correctedF().toFixed(2));
+			});
+
 		});
 
 	});
