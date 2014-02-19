@@ -41,7 +41,7 @@ define([
 	 */
 	var CollectionSelectBox = function (options) {
 		this._options = Util.extend({}, DEFAULTS, options);
-		View.call(this, options);
+		View.call(this, this._options);
 	};
 	// CollectionSelectBox is a View
 	CollectionSelectBox.prototype = Object.create(View.prototype);
@@ -149,7 +149,7 @@ define([
 
 		if (collection === null || collection.data().length === 0) {
 			if (emptyText !== '') {
-				emptyText = '<option>' + emptyText + '</option>';
+				emptyText = '<option value="">' + emptyText + '</option>';
 			}
 			// clear element
 			el.innerHTML = emptyText;
