@@ -27,11 +27,14 @@ define([
 	'use strict';
 
 
+	// default mount path
+	var mountPath = (typeof MOUNT_PATH === 'undefined' ? '.' : MOUNT_PATH);
+
 	// default options.
 	var DEFAULTS = {
-		observatorySummaryUrl: MOUNT_PATH + '/observatory_summary_feed.php',
-		observatoryDetailUrl: MOUNT_PATH + '/observatory_detail_feed.php',
-		observationDetailUrl: MOUNT_PATH + '/observation_data.php'
+		observatorySummaryUrl: mountPath + '/observatory_summary_feed.php',
+		observatoryDetailUrl: mountPath + '/observatory_detail_feed.php',
+		observationDetailUrl: mountPath + '/observation_data.php'
 	};
 
 
@@ -96,11 +99,7 @@ define([
 		Xhr.ajax({
 			url: this._options.observatorySummaryUrl,
 			success: function (data) {
-				var i, len;
-				for (i = 0, len = data.length; i < len; i++) {
-					data[i] = new ObservatorySummary(_this, data[i]);
-				}
-				options.success(data);
+				options.success(_this._getObservatories(data));
 			},
 			error: options.error || function () {}
 		});
@@ -132,12 +131,8 @@ define([
 			data: {
 				id: options.id
 			},
-			success: function (observatory) {
-				observatory.instruments = _this._getInstruments(observatory.instruments);
-				observatory.piers = _this._getPiers(observatory.piers);
-				_selectById(observatory.piers, observatory.default_pier_id);
-				observatory.observations = _this._getObservations(observatory.observations);
-				options.success(new Observatory(observatory));
+			success: function (data) {
+				options.success(_this._getObservatory(data));
 			},
 			error: options.error || function () {}
 		});
@@ -160,7 +155,7 @@ define([
 		var _this = this;
 
 		if (options.id === null) {
-			options.success(new ObservationDetail(this));
+			options.success(this.newObservation());
 			return;
 		}
 
@@ -169,18 +164,64 @@ define([
 			data: {
 				id: options.id
 			},
-			success: function (observation) {
-				observation.readings = _this._getReadings(observation.readings);
-				options.success(new ObservationDetail(_this, observation));
+			success: function (data) {
+				options.success(_this._getObservation(data));
 			},
 			error: options.error || function () {}
 		});
+	};
+
+	/**
+	 * Synchronous factory method for new observation.
+	 *
+	 * @return {Observation}
+	 */
+	ObservatoryFactory.prototype.newObservation = function () {
+		return new ObservationDetail(this);
 	};
 
 
 	/////////////////////////////////////////////////////////////////////////////
 	// Utility Parsing Methods
 
+	/**
+	 * Parse an array of observatories into objects.
+	 *
+	 * @param observatories {Array<Object>}.
+	 * @return {Collection<Observatory>}.
+	 */
+	ObservatoryFactory.prototype._getObservatories = function (observatories) {
+		var i, len;
+		for (i = 0, len = observatories.length; i < len; i++) {
+			observatories[i] = new ObservatorySummary(this, observatories[i]);
+		}
+		return observatories;
+	};
+
+	/**
+	 * Parse an object into an Observatory.
+	 *
+	 * @param observatory {Object}
+	 * @return {Observatory}
+	 */
+	ObservatoryFactory.prototype._getObservatory = function (observatory) {
+		observatory.instruments = this._getInstruments(observatory.instruments);
+		observatory.piers = this._getPiers(observatory.piers);
+		_selectById(observatory.piers, observatory.default_pier_id);
+		observatory.observations = this._getObservations(observatory.observations);
+		return new Observatory(observatory);
+	};
+
+	/**
+	 * Parse an object into an Observation.
+	 *
+	 * @param observation {Object}
+	 * @return {Observation}
+	 */
+	ObservatoryFactory.prototype._getObservation = function (observation) {
+		observation.readings = this._getReadings(observation.readings);
+		return new ObservationDetail(this, observation);
+	};
 
 	/**
 	 * Parse an array of instruments.
