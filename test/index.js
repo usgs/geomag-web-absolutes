@@ -70,6 +70,7 @@ require([
 		'spec/ReadingViewTest',
 		'spec/RealtimeDataFactoryTest',
 		'spec/ObservationBaselineCalculatorTest',
+		'spec/ObservationMetaViewTest',
 		'spec/mvcutil/CollectionSelectBoxTest'
 	], function () {
 		if (window.mochaPhantomJS) {
