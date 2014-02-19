@@ -459,6 +459,14 @@ define([
 			difference = mean - data[i];
 			variance += difference * difference;
 		}
+		if (len === 0) {
+			return {
+				mean:NaN,
+				min:NaN,
+				max:NaN,
+				stdDev: NaN
+			};
+		}
 		variance /= len;
 
 		return {
