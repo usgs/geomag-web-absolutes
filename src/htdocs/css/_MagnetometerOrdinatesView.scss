@@ -1,0 +1,22 @@
+.magnetometer-ordinates-output {
+	.row {
+		padding-bottom:1.33em;
+	}
+
+
+	tbody th {
+		text-align:right;
+		padding-right:16px;
+
+		&:after {
+			content:':';
+		}
+	}
+
+	table td {
+		text-align:right;
+		padding-right:10px;
+		width:10em;
+		border:1px solid #666;
+	}
+}

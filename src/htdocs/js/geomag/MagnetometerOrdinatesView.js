@@ -28,87 +28,77 @@ define([
 	MagnetometerOrdinatesView.prototype = Object.create(View.prototype);
 
 
-
-
-
 	MagnetometerOrdinatesView.prototype._initialize = function () {
 		this._reading = this._options.reading;
 		this._measurements = this._reading.getMeasurements();
 		this._calculator = this._options.baselineCalculator;
-		this._observation = this._options.observation;
 
 		this._el.innerHTML = [
-			'<div id="ordinatesHEZF">',
-				'<dl>',
-					'<dt> </dt>',
-						'<dd class=titleMean>Mean Values</dd>',
-						'<dd class=titleScale>Scale Value</dd>',
-						'<dd class=titleComputed>Computed Values</dd>',
-					'<dt>H(C1):</dt>',
-						'<dd class="hMean"></dd>',
-						'<dd class="hScale"></dd>',
-						'<dd class="hComputed"></dd>',
-					'<dt>E(C2):</dt>',
-						'<dd class="eMean"></dd>',
-						'<dd class="eScale"></dd>',
-						'<dd class="eComputed"></dd>',
-					'<dt>Z(C3):</dt>',
-						'<dd class="zMean"></dd>',
-						'<dd class="zScale"></dd>',
-						'<dd class="zComputed"></dd>',
-					'<dt>F(C3):</dt>',
-						'<dd class="fMean"></dd>',
-						'<dd class="fScale"></dd>',
-						'<dd class="fComputed"></dd>',
-				'</dl>',
+			'<div class="row ordinatesHEZF">',
+				'<table>',
+					'<thead>',
+						'<tr>',
+							'<th>&nbsp</th>',
+							'<th scope="col" class=titleMean>Ordinate Mean</th>',
+							'<th scope="col" class=titleScale>Absolute</th>',
+							'<th scope="col" class=titleComputed>Baseline</th>',
+						'</tr>',
+					'</thead>',
+					'<tbody>',
+						'<tr>',
+							'<th>H</th>',
+							'<td class="hMean"></td>',
+							'<td class="absoluteH"></td>',
+							'<td class="hBaseline"></td>',
+						'</tr>',
+						'<tr>',
+							'<th>E</th>',
+							'<td class="eMean"></td>',
+							'<td class="absoluteH"></td>',
+							'<td class="hBaseline"></td>',
+						'</tr>',
+						'<tr>',
+							'<th>D</th>',
+							'<td class="dMean"></td>',
+							'<td class="absoluteD"></td>',
+							'<td class="dBaseline"></td>',
+						'</tr>',
+						'<tr>',
+							'<th>Z</th>',
+							'<td class="zMean"></td>',
+							'<td class="absoluteZ"></td>',
+							'<td class="zBaseline"></td>',
+						'</tr>',
+						'<tr>',
+							'<th>F</th>',
+							'<td class="fMean"></td>',
+							'<td class="absoluteF"></td>',
+							'<td class="fBaseline"></td>',
+						'</tr>',
+					'</tbody>',
+				'</table>',
+				'<p class="scaleValue">',
+				'</p>',
 			'</div>',
-			'<div id="declination">',
-				'<dl >',
-					'<dt><abbr title="Absolute D">Abs. D:</abbr></dt>',
-					'<dd class="absoluteD"></dd>',
-					'<dt><abbr title="Absolute H">Abs. H:</abbr></dt>',
-					'<dd class="absoluteH"></dd>',
-					'<dt><abbr title="Absolute Z">Abs. Z:</abbr></dt>',
-					'<dd class="absoluteZ"></dd>',
-					'<dt><abbr title="Corrected F">Corr. F:</abbr></dt>',
-					'<dd class="correctedF"></dd>',
-				'</dl>',
-			'</div>',
-			'<div id="baseline">',
-				'<dl >',
-					'<dt>D Baseline:</dt>',
-						'<dd class=dBaseline></dd>',
-						'<dd class=dBaselineNT></dd>',
-					'<dt>H Baseline:</dt>',
-						'<dd class=dBaseline></dd>',
-					'<dt>Z Baseline:</dt>',
-						'<dd class=dBaseline></dd>',
-				'</dl>',
-			'</div>'
 		].join('');
 
 		this._hMean = this._el.querySelector('.hMean');
-		this._hScale = this._el.querySelector('.hScale');
-		this._hComputed = this._el.querySelector('.hComputed');
 		this._eMean = this._el.querySelector('.eMean');
-		this._eScale = this._el.querySelector('.eScale');
-		this._eComputed = this._el.querySelector('.eComputed');
+		this._dMean = this._el.querySelector('.dMean');
 		this._zMean = this._el.querySelector('.zMean');
-		this._zScale = this._el.querySelector('.zScale');
-		this._zComputed = this._el.querySelector('.zComputed');
 		this._fMean = this._el.querySelector('.fMean');
-		this._fScale = this._el.querySelector('.fScale');
 
-		this._fComputed = this._el.querySelector('.fComputed');
 		this._absoluteD = this._el.querySelector('.absoluteD');
 		this._absoluteH = this._el.querySelector('.absoluteH');
 		this._absoluteZ = this._el.querySelector('.absoluteZ');
-		this._correctedF = this._el.querySelector('.correctedF');
+		this._absoluteF = this._el.querySelector('.absoluteF');
 
-		this._dBaseline = this._el.querySelector('.dBaseline');
-		this._dBaselineNT = this._el.querySelector('.dBaselineNT');
 		this._hBaseline = this._el.querySelector('.hBaseline');
+		this._eBaseline = this._el.querySelector('.dBaseline');
+		this._dBaseline = this._el.querySelector('.dBaseline');
 		this._zBaseline = this._el.querySelector('.zBaseline');
+
+		this._scaleValue = this._el.querySelector('.scaleValue');
 
 
 		this._measurements[Measurement.FIRST_MARK_UP][0].on('change', this.render, this);
@@ -126,40 +116,53 @@ define([
 
 	};
 
-		MagnetometerOrdinatesView.prototype.render = function () {
+	MagnetometerOrdinatesView.prototype.render = function () {
 		// TODO :: Render current model
 		var calculator = this._calculator,
 		    reading = this._reading,
-		    observation = this._observation,
-		    observatory = observation.get('observatory');
+		    meanH = calculator.meanH(reading),
+		    meanE = calculator.meanE(reading),
+		    meanZ = calculator.meanZ(reading),
+		    meanF = calculator.meanF(reading),
+		    scaleValue = calculator.scaleValue(reading),
+		    absoluteD = (calculator.magneticDeclination(reading) * 60),
+		    absoluteH = calculator.horizontalComponent(reading),
+		    absoluteZ = calculator.verticalComponent(reading),
+		    correctedF = calculator.correctedF(reading),
+		    baselineD = calculator.baselineD(reading),
+		    baselineE = calculator.baselineD(reading) *
+		                  calculator.scaleValue(reading),
+		    baselineH = calculator.baselineH(reading),
+		    baselineZ = calculator.baselineZ(reading);
 
+		if( meanH !== null ) {this._hMean.innerHTML = meanH.toFixed(2);}
+		if( meanE !== null ) {this._eMean.innerHTML = meanE.toFixed(2);}
+		if( meanZ !== null ) {this._zMean.innerHTML = meanZ.toFixed(2);}
+		if( meanF !== null ) {this._fMean.innerHTML = meanF.toFixed(2);}
 
-		this._hMean.innerHTML = calculator.meanH(reading);
-		this._eMean.innerHTML = calculator.meanE(reading);
-		this._zMean.innerHTML = calculator.meanZ(reading);
-
-		this._hComputed.innerHTML = this._hMean.innerHTML;
-
-		this._zComputed.innerHTML = this._hMean.innerHTML;
-		this._fComputed.innerHTML = this._hMean.innerHTML;
-
-		if( observatory && observatory.get('piers').getSelected() &&
-				observatory.get('piers').getSelected().get('marks').getSelected() &&
-				observation.get('mark_id') !== null ) {
-
-		this._eScale.innerHTML = calculator.scaleValue(observatory, reading);
-
-		this._eComputed.innerHTML = calculator.computedE(observatory, reading);
-		this._absoluteD.innerHTML = calculator.magneticDeclination(observatory, reading) * 60;
-		this._absoluteH.innerHTML = calculator.horizontalComponent(observatory, reading);
-		this._absoluteZ.innerHTML = calculator.verticalComponent(observatory, reading);
-		this._correctedF.innerHTML = calculator.correctedF(observatory, reading);
-		this._dBaseline = calculator.baselineD( observatory, reading);
-		this._dBaselineNT = calculator.baselineD( observatory, reading) *
-												calculator.scaleValue(observatory, reading);
-		this._HBaseline = calculator.baselineH( observatory, reading);
-		this._ZBaseline = calculator.baselineZ( observatory, reading);
+		if( scaleValue !== null ) {
+			this._scaleValue.innerHTML = '*Scale Value for D = '+
+				scaleValue.toFixed(2) +
+				' (3437.7468 / Mean F * cos(Inclination))';
 		}
+
+		if( absoluteD !== null ) {
+			this._absoluteD.innerHTML = absoluteD.toFixed(2);
+		}
+		if( absoluteH !== null ) {
+			this._absoluteH.innerHTML = absoluteH.toFixed(2);
+		}
+		if( absoluteZ !== null ) {
+			this._absoluteZ.innerHTML = absoluteZ.toFixed(2);
+		}
+		if( correctedF !== null ) {
+			this._absoluteF.innerHTML = correctedF.toFixed(2);
+		}
+
+		if( baselineD !== null ) {this._dBaseline = baselineD.toFixed(2);}
+		if( baselineE !== null ) {this._dBaselineE = baselineE.toFixed(2);}
+		if( baselineH !== null ) {this._HBaseline = baselineH.toFixed(2);}
+		if( baselineZ !== null ) {this._ZBaseline = baselineZ.toFixed(2);}
 
 	};
 

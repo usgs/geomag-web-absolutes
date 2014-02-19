@@ -123,7 +123,7 @@ define([
 					'</section>',
 					'<section class="column one-of-two inclination-output"></section>',
 				'</section>',
-				'<section>',
+				'<section >',
 					'<h4>Magnetometer Ordinates</h4>',
 					'<section class="magnetometer-ordinates-output"></section>',
 				'</section>',
