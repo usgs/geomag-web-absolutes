@@ -1,6 +1,4 @@
-$group-vertical-separation:10px;
 $line-vertical-separation:4px;
-$units-separation:2px;
 
 .declination-view {
 	dt {
@@ -26,33 +24,10 @@ $units-separation:2px;
 		}
 	}
 
-	.minutes {
-		&:after {
-			content:"'";
-			font-weight:bold;
-			padding-left:$units-separation;
-		}
-	}
-	.nt {
-		text-align:right;
-		&:after {
-			content:"nT";
-			font-weight:bold;
-			padding-left:$units-separation;
-		}
-	}
-	.deg {
-		&:after {
-			content:"°";
-			font-weight:bold;
-			padding-left:$units-separation;
-		}
-	}
-
 	.west-up-minus-east-down,
 	.west-up-minus-east-down-value,
 	.f-mean,
 	.f-mean-value {
-		padding-top:$group-vertical-separation;
+		padding-top:10px;
 	}
 }
