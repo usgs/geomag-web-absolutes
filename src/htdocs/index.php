@@ -3,7 +3,7 @@ if (!isset($TEMPLATE)) {
 	include_once '../conf/config.inc.php';
 	include_once 'functions.inc.php';
 
-	$TITLE = 'Observatory List';
+	$TITLE = 'Observatory Overview';
 
 	$HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/index.css"/>';
 	$FOOT =

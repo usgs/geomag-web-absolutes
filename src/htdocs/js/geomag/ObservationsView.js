@@ -26,10 +26,11 @@ define([
 		var observations = this._options.observations;
 
 		this._el.innerHTML = [
-				'<h2>Observations</h2>',
+				'<h2 class="title">Observations</h2>',
 				'<section class="observations-new"></section>',
-				'<section class="observations-pending">></section>',
-				'<section class="observations-completed">></section>'
+				'<section class="observations-all"></section>',
+				// '<section class="observations-pending"></section>', // TODO
+				// '<section class="observations-completed"></section>' // TODO
 		].join('');
 
 		// You can pass in an id or a collection of observations
@@ -45,13 +46,18 @@ define([
 		// create, "add new observation" button
 		this.getAddObservationButton();
 
-		// build pending observations list
-		this.getPendingObservations(observations);
+		// first pass, get all observations, this can be removed once 
+		// observation status is implemented, see methods below
+		this.getAllObservations(observations);
 
-		// build completed observations list
-		this.getCompletedObservations(observations);
+		// TODO, build pending observations list
+		//this.getPendingObservations(observations);
+
+		// TODO, build completed observations list
+		//this.getCompletedObservations(observations);
 
 	};
+
 
 	// get observations from observatoryId
 	ObservationsView.prototype.getObservationsById = function (observatoryId) {
@@ -64,15 +70,19 @@ define([
 			success: function (data) {
 				var observations = data.get('observations').data();
 				_this.render(observations);
+			},
+			error: function () {
+				_this._el.innerHTML = '<p>The observatory (id = ' + observatoryId + ') that you requested does not exists in the database.</p>';
 			}
 		});
 	};
 
+
+	// create, "add new observation" button
 	ObservationsView.prototype.getAddObservationButton = function () {
 		var el = this._el.querySelector('.observations-new'),
 		    button = document.createElement('a');
 
-		// TODO, get create new button
 		button.className = 'button';
 		button.href = '/observation/';
 		button.role = 'button';
@@ -81,53 +91,73 @@ define([
 		el.appendChild(button);
 	};
 
-	ObservationsView.prototype.getPendingObservations = function (observations) {
-		var el = this._el.querySelector('.observations-pending'),
-		    pending = [],
-		    observation;
 
-		for (var i = 0; i < observations.length; i++) {
-			observation = observations[i];
+	// get all observations
+	ObservationsView.prototype.getAllObservations = function (observations) {
+		var el = this._el.querySelector('.observations-all');
 
-			// if (observation.reviewed === 'N') {
-			// 	pending.push(observation);
-			// }
-			pending.push(observation); // DELETE, just for testing
-		}
-
-		el.innerHTML = '<h3>Pending</h3>';
-		el.appendChild(this._buildObservationList(pending));
+		el.innerHTML = '<h3>Observations</h3>';
+		el.appendChild(this._buildObservationList(observations));
 	};
 
-	ObservationsView.prototype.getCompletedObservations = function (observations) {
-		var el = this._el.querySelector('.observations-completed'),
-		    completed = [],
-		    observation;
 
-		for (var i = 0; i < observations.length; i++) {
-			observation = observations[i];
+	// TODO, get all pending observations
+	// ObservationsView.prototype.getPendingObservations = function (observations) {
+	// 	var el = this._el.querySelector('.observations-pending'),
+	// 	    pending = [],
+	// 	    observation;
 
-			// if (observation.reviewed === 'Y') {
-			// 	completed.push(observation);
-			// }
-			//completed.push(observation); // DELETE, just for testing
-		}
+	// 	for (var i = 0; i < observations.length; i++) {
+	// 		observation = observations[i];
 
-		el.innerHTML = '<h3>Completed</h3>';
-		el.appendChild(this._buildObservationList(completed));
-	};
+	// 		if (observation.reviewed === 'N') {
+	// 			pending.push(observation);
+	// 		}
+	// 	}
+
+	// 	el.innerHTML = '<h3>Pending</h3>';
+	// 	el.appendChild(this._buildObservationList(pending));
+	// };
+
+	// TODO, get all completed observations
+	// ObservationsView.prototype.getCompletedObservations = function (observations) {
+	// 	var el = this._el.querySelector('.observations-completed'),
+	// 	    completed = [],
+	// 	    observation;
+
+	// 	for (var i = 0; i < observations.length; i++) {
+	// 		observation = observations[i];
+
+	// 		if (observation.reviewed === 'Y') {
+	// 			completed.push(observation);
+	// 		}
+	// 	}
+
+	// 	el.innerHTML = '<h3>Completed</h3>';
+	// 	el.appendChild(this._buildObservationList(completed));
+	// };
+
 
 	ObservationsView.prototype._buildObservationList = function (observations) {
 		var list = document.createElement('ul'),
 		    observation, markup = [];
 
-		for (var i = 0; i < observations.length; i++) {
-			observation = observations[i];
-			markup.push('<li><a href="/observation/' + observation.get('id') + '">Observation ' + this._formatDate(observation) + '</a></li>');
+		if (observations === null || observations.length === 0) {
+			list.innerHTML = '<li class="empty">There are no observations.</li>';
+			return list;
 		}
 
-		if (observations.length === 0) {
-			markup.push('<li class="empty">There are no observations.</li>');
+		for (var i = 0; i < observations.length; i++) {
+			observation = observations[i];
+			markup.push(
+				'<li>' +
+					'<a href="/observation/' + observation.get('id') + '">Observation ' +
+						this._formatDate(observation) +
+					'</a>' +
+					//TODO, add delete button to observations
+					//'<a href="#" class="delete">Delete</a>' +
+				'</li>'
+			);
 		}
 
 		list.innerHTML = markup.join('');

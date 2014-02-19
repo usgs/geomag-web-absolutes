@@ -1,11 +1,13 @@
-/* global define */
+/* global define, unescape */
 define([
 	'mvc/View',
+	'util/Events',
 	'util/Util',
 	'geomag/ObservatoryFactory',
 	'geomag/ObservationsView'
 ], function (
 	View,
+	Events,
 	Util,
 	ObservatoryFactory,
 	ObservationsView
@@ -14,7 +16,7 @@ define([
 
 
 	var DEFAULTS = {
-		observatoryId: 2,
+		observatoryId: null,
 		factory: new ObservatoryFactory()
 	};
 
@@ -34,15 +36,40 @@ define([
 
 
 	ObservatoryView.prototype._initialize = function () {
-		var el = this._el;
+		var _this = this,
+		    el = this._el,
+		    id = this._options.observatoryId,
+		    hash;
 
-		el.innerHTML = [
-				'<section class="observatories column one-of-two"></section>',
-				'<section class="observations-view column one-of-two"></section>',
-		].join('');
+		hash = this._getHash();
 
-		this._getObservatories();
-		this.render(this._options.observatoryId);
+		// Overview of a single observatory, one column layout
+		if (id) {
+			el.innerHTML = [
+					'<section class="observatories"></section>',
+					'<section class="observations-view"></section>',
+			].join('');
+
+			this._getObservations(id);
+
+		// Overview of all observatories/ observations, two column layout
+		} else {
+			el.innerHTML = [
+					'<section class="observatories column one-of-two"></section>',
+					'<section class="observations-view column one-of-two"></section>',
+			].join('');
+
+			// TODO, find better way to render first observatory
+			this._options.observatoryId = (hash) ? hash : 2; // render the first observatory
+			this._getObservatories();
+			this.render(this._options.observatoryId);
+		}
+
+		// on a URL change, update the observatory
+		Events.on('hashchange', function() {
+			_this.render(_this._getHash());
+		});
+
 	};
 
 
@@ -62,38 +89,41 @@ define([
 		});
 	};
 
-
 	ObservatoryView.prototype._buildObservatoryList = function (data) {
 
 		var el = this._el.querySelector('.observatories'),
 		    observatoryList = document.createElement('ul'),
-		    observatory, listItem;
+		    observatory, listItem, link;
 
 		for (var i = 0; i < data.length; i++) {
 			observatory = data[i];
 
+			link = document.createElement('a');
+			link.innerHTML = observatory.get('name');
+			link.href = '#' + observatory.get('id');
+
 			listItem = document.createElement('li');
 			listItem.id = observatory.get('id');
-			listItem.innerHTML = observatory.get('name');
+			listItem.appendChild(link);
 
 			observatoryList.appendChild(listItem);
 
-			this._bindObservatoryListItems(listItem);
+			//this._bindObservatoryListItems(listItem);
 		}
 
-		el.innerHTML = '<h2>Observatories</h2>';
+		el.innerHTML = '<h2>Observatory</h2>';
 		el.appendChild(observatoryList);
 
 	};
 
 
-	ObservatoryView.prototype._bindObservatoryListItems = function (observatory) {
-		var _this = this;
+	// ObservatoryView.prototype._bindObservatoryListItems = function (observatory) {
+	// 	var _this = this;
 
-		Util.addEvent(observatory, 'click', function () {
-			_this.render(this.id);
-		});
-	};
+	// 	Util.addEvent(observatory, 'click', function () {
+	// 		_this.render(this.id);
+	// 	});
+	// };
 
 
 	ObservatoryView.prototype._updateSelected = function (id) {
@@ -127,10 +157,31 @@ define([
 					el: el.querySelector('.observations-view'),
 					observations: data.get('observations').data()
 				});
+				el.querySelector('.title').innerHTML = data.get('name');
 			}
 		});
 	};
 
+
+	ObservatoryView.prototype._getHash = function(url){
+
+		var hash;
+
+		if (typeof url === 'undefined' || url === null){
+			url = window.location.hash;
+		}
+
+		if (url.indexOf('#') === -1) {
+			return null;
+		}
+
+		hash = url.substr(url.indexOf('#') + 1, url.length - url.indexOf('#'));
+
+		// Fix URL encoding of settings hash
+		hash = unescape(hash);
+
+		return hash;
+	};
 
 	return ObservatoryView;
 });

@@ -110,6 +110,10 @@ module.exports = function (grunt) {
 				{
 					from: '^/observation/(.*)$',
 					to: '/observation.php?id=$1'
+				},
+				{
+					from: '^/observatory/(.*)$',
+					to: '/observatory.php?id=$1'
 				}
 			],
 			dev: {

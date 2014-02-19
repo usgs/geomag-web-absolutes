@@ -1,10 +1,45 @@
 .observations-view {
 
 	ul {
+		padding:0;
+		list-style:none;
+		border:1px solid rgb(207,207,207);
+		background:rgb(247,247,247);
+		color:rgb(100,100,100);
 		max-height:656px;
 		overflow:scroll;
 
-		li.empty {
+		> li {
+			padding: 0;
+			position:relative;
+			border-top:1px solid rgb(207,207,207);
+
+			> a {
+				padding:10px 15px;
+				display:block;
+				color:#00f;
+			}
+
+			> a:hover {
+				cursor:pointer;
+				background:#fff;
+				text-decoration:underline;
+			}
+
+			> a.delete {
+				background: #FFE0E0;
+				position: absolute;
+				top: 0;
+				right: 0;
+				border-left: 1px solid #ccc;
+			}
+
+			> a.delete:hover {
+				background: #fee;
+			}
+		}
+
+		> li.empty {
 			padding:10px 15px;
 			background:#fff;
 			color:#888;
@@ -12,33 +47,21 @@
 			cursor:default;
 		}
 
-	}
-
-	ul > li {
-		padding:0;
-
-		> a {
-			padding:10px 15px;
-			display:block;
+		> li:first-child {
+			border-top:none;
 		}
-
 	}
 
 	.button {
 		display:block;
 		width:100%;
-		//color: #fff;
 		color:#000;
-		//background: #4e7ab9;
 		background: #a2c07b;
-		//background: #6f9045;
 		border-radius: 3px;
 		padding: 10px 15px;
 		text-align: center;
 		text-decoration: none;
-		//letter-spacing: 0.02em;
 		text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
-		//font-weight:bold;
 	}
 
 	.button:hover {
