@@ -25,13 +25,7 @@ define([
 	var stub;
 	var observationsView;
 
-	// var getClickEvent = function () {
-	// 	var clickEvent = document.createEvent('MouseEvents');
-	// 	clickEvent.initMouseEvent('click', true, true, window, 1, 0, 0);
-	// 	return clickEvent;
-	// };
-
-	describe.only('Observations Unit Tests', function () {
+	describe('Observations Unit Tests', function () {
 
 		before(function () {
 			stub = sinon.stub(Xhr, 'ajax', function (options) {
