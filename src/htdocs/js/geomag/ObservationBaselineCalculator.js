@@ -143,7 +143,7 @@ define([
 		return this._calculator.magneticDeclination(
 				this.magneticSouthMeridian(reading),
 				this.geographicMeridian(reading),
-				this.declinationShift(reading)
+				reading.get('declination_shift')
 		);
 	};
 
