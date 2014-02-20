@@ -43,7 +43,7 @@
 		$readings[] = new Reading(null, null, 1, 21, 'Y', 'Y', 'Y',
 				'Test of create', $measurements);
 		$observation = new ObservationDetail(null, 1, time(), null, 15, 18,
-				30, 31, 20.0, 17.1, 19.7, 14.6, "Test of create", $readings);
+				30, 31, 20.0, 17.1, 19.7, 14.6, 'N', "Test of create", $readings);
 		$newobs = $OBSERVATION_FACTORY->createObservation($observation);
 		notify('Create an observation', !null, $newobs);
 		notify('Create readings', 1, count($newobs->readings));
@@ -54,7 +54,7 @@
 		$measurements[] = new Measurement(null, null, 'WestUpTime', time(),
 				15000, 22000.00, -170.00, 47000.37, 52000.42);
 		$readings2 = array();
-		$readings2[] = new Reading(null, null, 1, 21, 'N', 'N', 'N',
+		$readings2[] = new Reading(null, null, 1, 21, 'N', 0, 'N', 'N',
 				'Test of update', $measurements);
 		$newobs->readings = $readings2;
 		$newobs->annotation = "Test of update";
