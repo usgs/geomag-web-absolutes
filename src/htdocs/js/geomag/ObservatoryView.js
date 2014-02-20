@@ -30,6 +30,10 @@ define([
 
 
 	ObservatoryView.prototype.render = function (id) {
+		if (id === null) {
+			id = this._options.observatoryId;
+		}
+
 		this._getObservations(id);
 		this._updateSelected(id);
 	};
@@ -46,7 +50,7 @@ define([
 		// Overview of a single observatory, one column layout
 		if (id) {
 			el.innerHTML = [
-					'<section class="observatories"></section>',
+					//'<section class="observatories"></section>',
 					'<section class="observations-view"></section>',
 			].join('');
 
@@ -107,8 +111,6 @@ define([
 			listItem.appendChild(link);
 
 			observatoryList.appendChild(listItem);
-
-			//this._bindObservatoryListItems(listItem);
 		}
 
 		el.innerHTML = '<h2>Observatory</h2>';
@@ -120,8 +122,8 @@ define([
 	ObservatoryView.prototype._updateSelected = function (id) {
 
 		// clear last selected observatory
-		var selected = document.querySelector('.selected'),
-		    element = document.getElementById('observatory_' + id);
+		var selected = this._el.querySelector('.selected'),
+		    element = this._el.querySelector('#observatory_' + id);
 
 		if (selected) {
 			selected.className = '';
@@ -133,24 +135,17 @@ define([
 	};
 
 
-	// list observations for observatory
 	ObservatoryView.prototype._getObservations = function (id) {
 		var _this = this,
-		    el = this._el,
-		    factory = this._options.factory;
+		    el = this._el;
 
 		this._observationsView = null;
 
-		factory.getObservatory({
-			id: id,
-			success: function (data) {
-				_this._observationsView = new ObservationsView({
-					el: el.querySelector('.observations-view'),
-					observations: data.get('observations').data()
-				});
-				el.querySelector('.title').innerHTML = data.get('name');
-			}
+		_this._observationsView = new ObservationsView({
+				el: el.querySelector('.observations-view'),
+				observatoryId: id
 		});
+
 	};
 
 
@@ -162,12 +157,12 @@ define([
 			url = window.location.hash;
 		}
 
-		if (url.indexOf('#') === -1) {
+		if (url === '#' || url.indexOf('#') === -1) {
 			return null;
 		}
 
+		// strip # from hash
 		hash = url.substr(url.indexOf('#') + 1, url.length - url.indexOf('#'));
-
 		// Fix URL encoding of settings hash
 		hash = unescape(hash);
 

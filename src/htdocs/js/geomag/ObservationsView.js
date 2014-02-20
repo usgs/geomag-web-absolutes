@@ -37,18 +37,18 @@ define([
 		if (observations) {
 			this.render(observations);
 		} else {
-			this.getObservationsById(this._options.observatoryId);
+			this.getObservations(this._options.observatoryId);
 		}
 	};
 
-	ObservationsView.prototype.render = function (observations) {
+	ObservationsView.prototype.render = function (observatory) {
 
 		// create, "add new observation" button
 		this.getAddObservationButton();
 
 		// first pass, get all observations, this can be removed once 
 		// observation status is implemented, see methods below
-		this.getAllObservations(observations);
+		this.getAllObservations(observatory);
 
 		// TODO, build pending observations list
 		//this.getPendingObservations(observations);
@@ -60,16 +60,15 @@ define([
 
 
 	// get observations from observatoryId
-	ObservationsView.prototype.getObservationsById = function (observatoryId) {
+	ObservationsView.prototype.getObservations = function (observatoryId) {
 
 		var _this = this,
 		    factory = this._options.factory;
 
 		factory.getObservatory({
 			id: observatoryId,
-			success: function (data) {
-				var observations = data.get('observations').data();
-				_this.render(observations);
+			success: function (observatory) {
+				_this.render(observatory);
 			},
 			error: function () {
 				_this._el.innerHTML = '<p>The observatory (id = ' + observatoryId + ') that you requested does not exists in the database.</p>';
@@ -93,8 +92,13 @@ define([
 
 
 	// get all observations
-	ObservationsView.prototype.getAllObservations = function (observations) {
-		var el = this._el.querySelector('.observations-all');
+	ObservationsView.prototype.getAllObservations = function (observatory) {
+		var el = this._el.querySelector('.observations-all'),
+		    observations = observatory.get('observations').data(),
+		    title = this._el.querySelector('.title');
+
+		// set section title
+		title.innerHTML = observatory.get('name');
 
 		el.innerHTML = '<h3>Observations</h3>';
 		el.appendChild(this._buildObservationList(observations));
