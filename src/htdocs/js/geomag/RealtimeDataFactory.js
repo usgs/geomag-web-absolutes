@@ -56,8 +56,6 @@ define([
 	 *        options.???  Same as constructor.
 	 */
 	RealtimeDataFactory.prototype.getRealtimeData = function (options) {
-		var now;
-
 		options = Util.extend({}, this.get(), options);
 
 		// TODO: this is a hack to deal with
