@@ -362,7 +362,7 @@ define([
 		}); // END :: correctedF
 
 
-		describe('inclincation()', function () {
+		describe('inclination()', function () {
 
 			it('computes correctly', function () {
 				var southDown = 1.0,
