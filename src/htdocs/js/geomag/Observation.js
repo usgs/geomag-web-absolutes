@@ -26,7 +26,7 @@ define([
 		'elect_temperature': null,
 		'flux_temperature': null,
 		'proton_temperature': null,
-		'reviewed': null,
+		'reviewed': 'N',
 		'annotation': null,
 		'readings': null
 	};
@@ -41,6 +41,11 @@ define([
 						new Reading({set_number: 3}),
 						new Reading({set_number: 4})
 						])
+			});
+		}
+		if (this.get('begin') === null) {
+			this.set({
+				begin: new Date().getTime()
 			});
 		}
 	};
