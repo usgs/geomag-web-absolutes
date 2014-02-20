@@ -18,13 +18,14 @@ class Observation {
 	public $elect_temperature;
 	public $flux_temperature;
 	public $proton_temperature;
+	public $reviewed;
 	public $annotation;
 
 	public function __construct ($id=null, $observatory_id=null, $begin=null,
 				$end=null, $reviewer_user_id=null, $mark_id=null,
 				$electronics_id=null, $theodolite_id=null,
 				$pier_temperature=null, $elect_temperature=null,
-				$flux_temperature=null, $proton_temperature=null,
+				$flux_temperature=null, $proton_temperature=null, $reviewed=null,
 				$annotation=null) {
 		$this->id = $id;
 		$this->observatory_id = $observatory_id;
@@ -38,6 +39,7 @@ class Observation {
 		$this->elect_temperature = $elect_temperature;
 		$this->flux_temperature = $flux_temperature;
 		$this->proton_temperature = $proton_temperature;
+		$this->reviewed = $reviewed;
 		$this->annotation = $annotation;
 	}
 
@@ -47,7 +49,7 @@ class Observation {
 				$p['electronics_id'], $p['theodolite_id'],
 				$p['pier_temperature'], $p['elect_temperature'],
 				$p['flux_temperature'], $p['proton_temperature'],
-				$p['annotation']);
+				$p['reviewed'], $p['annotation']);
 	}
 
 	public function toArray () {
@@ -63,6 +65,7 @@ class Observation {
 				'elect_temperature' => $this->elect_temperature,
 				'flux_temperature' => $this->flux_temperature,
 				'proton_temperature' => $this->proton_temperature,
+				'reviewed' => $this->reviewed,
 				'annotation' => $this->annotation);
 	}
 

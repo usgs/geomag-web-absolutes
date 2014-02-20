@@ -33,11 +33,11 @@ class ObservationFactory {
 				'observatory_id, begin, end, reviewer_user_id, mark_id, ' .
 				'electronics_id, theodolite_id, pier_temperature, '.
 				'elect_temperature, flux_temperature, proton_temperature, '.
-				'annotation) VALUES ( ' .
+				'reviewed, annotation) VALUES ( ' .
 				':observatory_id, :begin, :end, :reviewer_user_id, :mark_id, ' .
 				':electronics_id, :theodolite_id, :pier_temperature, ' .
 				':elect_temperature, :flux_temperature, :proton_temperature, ' .
-				':annotation)');
+				':reviewed, :annotation)');
 
 		$statement->bindParam(':observatory_id',
 				$object->observatory_id, PDO::PARAM_INT);
@@ -58,6 +58,8 @@ class ObservationFactory {
 				$object->flux_temperature, PDO::PARAM_STR);
 		$statement->bindParam(':proton_temperature',
 				$object->proton_temperature, PDO::PARAM_STR);
+		$statement->bindParam(':reviewed',
+				$object->reviewed, PDO::PARAM_STR);
 		$statement->bindParam(':annotation',
 				$object->annotation, PDO::PARAM_STR);
 		if (!$statement->execute()) {
@@ -128,7 +130,7 @@ class ObservationFactory {
 						safefloatval($row['elect_temperature']),
 						safefloatval($row['flux_temperature']),
 						safefloatval($row['proton_temperature']),
-						$row['annotation'], $readings);
+						$row['reviewed'], $row['annotation'], $readings);
 			}
 		} else {
 			$this->triggerError($statement);
@@ -161,6 +163,7 @@ class ObservationFactory {
 				'elect_temperature=:elect_temperature, '.
 				'flux_temperature=:flux_temperature, '.
 				'proton_temperature=:proton_temperature, '.
+				'reviewed=:reviewed, '.
 				'annotation=:annotation WHERE id=:id');
 
 		$statement->bindParam(':observatory_id',
@@ -182,6 +185,8 @@ class ObservationFactory {
 				$object->flux_temperature, PDO::PARAM_STR);
 		$statement->bindParam(':proton_temperature',
 				$object->proton_temperature, PDO::PARAM_STR);
+		$statement->bindParam(':reviewed',
+				$object->reviewed, PDO::PARAM_STR);
 		$statement->bindParam(':annotation',
 				$object->annotation, PDO::PARAM_STR);
 		$statement->bindParam(':id', $object->id, PDO::PARAM_INT);
@@ -216,7 +221,6 @@ class ObservationFactory {
 		$statement = $this->db->prepare('INSERT INTO measurement (' .
 				'reading_id, type, time, angle, h, e, z, f) VALUES (' .
 				':reading_id, :type, :time, :angle, :h, :e, :z, :f)');
-
 		foreach ($measurements as $object) {
 			$statement->bindParam(':reading_id', $id, PDO::PARAM_INT);
 			$statement->bindParam(':type', $object->type, PDO::PARAM_STR);
@@ -253,11 +257,12 @@ class ObservationFactory {
 	protected function createReadings($readings, $id) {
 		$statement = $this->db->prepare('INSERT INTO reading (' .
 				'observation_id, set_number, observer_user_id, ' .
-				'declination_valid, horizontal_intensity_valid, ' .
+				'declination_valid, declination_shift, horizontal_intensity_valid, ' .
 				'vertical_intensity_valid, annotation) VALUES (' .
 				':observation_id, :set_number, :observer_user_id, ' .
-				':declination_valid, :horizontal_intensity_valid, ' .
-				':vertical_intensity_valid, :annotation)');
+				':declination_valid, :declination_shift, ' .
+				':horizontal_intensity_valid, :vertical_intensity_valid,' .
+				':annotation)');
 
 		foreach ($readings as $object) {
 			$statement->bindParam(':observation_id', $id, PDO::PARAM_INT);
@@ -267,6 +272,8 @@ class ObservationFactory {
 					$object->observer_user_id, PDO::PARAM_INT);
 			$statement->bindParam(':declination_valid',
 					$object->declination_valid, PDO::PARAM_STR);
+			$statement->bindParam(':declination_shift',
+					$object->declination_shift, PDO::PARAM_INT);
 			$statement->bindParam(':horizontal_intensity_valid',
 					$object->horizontal_intensity_valid, PDO::PARAM_STR);
 			$statement->bindParam(':vertical_intensity_valid',
@@ -397,6 +404,7 @@ class ObservationFactory {
 						safeintval($row['set_number']),
 						safeintval($row['observer_user_id']),
 						$row['declination_valid'],
+						safeintval($row['declination_shift']),
 						$row['horizontal_intensity_valid'],
 						$row['vertical_intensity_valid'],
 						$row['annotation'], $measurements );

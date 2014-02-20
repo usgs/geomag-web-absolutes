@@ -37,13 +37,13 @@
 
 		// Create an observation
 		$measurements = array();
-		$measurements[] = new Measurement(null, null, 'EastUpTime', time(),
+		$measurements[] = new Measurement(null, null, 'EastUp', time(),
 				16500, 21500.82, -174.01, 47874.37, 52592.42);
 		$readings = array();
-		$readings[] = new Reading(null, null, 1, 21, 'Y', 'Y', 'Y',
+		$readings[] = new Reading(null, null, 1, 21, 'Y', 0, 'Y', 'Y',
 				'Test of create', $measurements);
 		$observation = new ObservationDetail(null, 1, time(), null, 15, 18,
-				30, 31, 20.0, 17.1, 19.7, 14.6, "Test of create", $readings);
+				30, 31, 20.0, 17.1, 19.7, 14.6, 'N', "Test of create", $readings);
 		$newobs = $OBSERVATION_FACTORY->createObservation($observation);
 		notify('Create an observation', !null, $newobs);
 		notify('Create readings', 1, count($newobs->readings));
@@ -51,10 +51,10 @@
 				measurements));
 
 		// Edit an observation
-		$measurements[] = new Measurement(null, null, 'WestUpTime', time(),
+		$measurements[] = new Measurement(null, null, 'WestUp', time(),
 				15000, 22000.00, -170.00, 47000.37, 52000.42);
 		$readings2 = array();
-		$readings2[] = new Reading(null, null, 1, 21, 'N', 'N', 'N',
+		$readings2[] = new Reading(null, null, 1, 21, 'N', 0, 'N', 'N',
 				'Test of update', $measurements);
 		$newobs->readings = $readings2;
 		$newobs->annotation = "Test of update";
@@ -72,6 +72,7 @@
 		notify('Delete an observation', null, $deleteobs);
 	} catch (Exception $e) {
 		print $e->getMessage() . "\n";
+		print $e->getTraceAsString() . "\n";
 	}
 ?>
 
