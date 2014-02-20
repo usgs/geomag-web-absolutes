@@ -26,6 +26,7 @@ define([
 		'elect_temperature': null,
 		'flux_temperature': null,
 		'proton_temperature': null,
+		'reviewed': null,
 		'annotation': null,
 		'readings': null
 	};
