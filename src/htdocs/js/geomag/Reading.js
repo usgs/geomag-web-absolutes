@@ -117,29 +117,31 @@ define([
 	 * Get the starting and end time for this reading.
 	 * @returns {object}
 	 */
-	Reading.prototype.getReadingTimes = function () {
-		var measurements = this.getMeasurements();
-		var measurement;
-		var start = null, end = null;
-		var type;
 
-		if( Object.keys(measurements)[0].length > 0) {
-			measurement = measurements[Object.keys(measurements)[0]][0];
+	Reading.prototype.getReadingTimes = function () {
+		var measurements = this.get('measurements'),
+		    data,
+		    measurement,
+		    start,
+		    end;
+
+		if (measurements !== null) {
+			data = measurements.data();
+
+			measurement = data[0];
 			start = measurement.get('time');
 			end = start;
-		}
 
-		for( type in measurements) {
-			for( var i = 0; i < measurements[type].length; i++ ){
-				measurement = measurements[type][i];
+			for( var i = 0; i < data.length; i++) {
+				measurement = data[i];
 				if( measurement.get('time') < start )
 					{ start = measurement.get('time'); }
-				if( measurement.get('time') > end )
+				if (measurement.get('time') > end )
 					{ end = measurement.get('time'); }
 			}
 		}
 
-	return {'start':start, 'end':end};
+		return {'start':start, 'end': end};
 	};
 
 	/**
