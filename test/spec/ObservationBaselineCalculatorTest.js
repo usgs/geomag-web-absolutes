@@ -281,7 +281,7 @@ define([
 
 		}); // END :: corrected F
 
-		describe('inclincation()', function () {
+		describe('inclination()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 66.6606;
@@ -291,7 +291,7 @@ define([
 				expect(Math.abs(calc.inclination(READING) - expected)).to.be.below(EPSILON);
 			});
 
-		}); // END :: inclincation
+		}); // END :: inclination
 
 		describe('horizontalComponent()', function () {
 
