@@ -150,6 +150,9 @@ define([
 		this._realtimeDataFactory.set({observatory: code});
 	};
 
+	/**
+	 * Bind measurements to realtimedata factory.
+	 */
 	ObservationView.prototype._bindRealtimeDataFactory = function () {
 		var realtimeDataFactory = this._realtimeDataFactory,
 		    observation = this._observation,
@@ -176,6 +179,12 @@ define([
 		}
 	};
 
+	/**
+	 * Get realtime data for one measurement.
+	 *
+	 * @param measurement {Measurement}
+	 *        the measurement object.
+	 */
 	ObservationView.prototype._getRealtimeData = function (measurement) {
 		var realtimeDataFactory = this._realtimeDataFactory,
 		    observatory = realtimeDataFactory.get('observatory'),
