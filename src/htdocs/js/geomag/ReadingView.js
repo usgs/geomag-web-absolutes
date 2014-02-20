@@ -212,7 +212,9 @@ define([
 
 		this._inclinationView = new InclinationView({
 			el: this._el.querySelector('.inclination-output'),
-			reading: this._reading
+			reading: this._reading,
+			observation: this._observation,
+			baselineCalculator: this._calculator
 		});
 
 
