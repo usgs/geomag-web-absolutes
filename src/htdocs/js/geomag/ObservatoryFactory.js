@@ -191,11 +191,11 @@ define([
 	 * @return {Collection<Observatory>}.
 	 */
 	ObservatoryFactory.prototype._getObservatories = function (observatories) {
-		var i, len;
+		var i, len, data = [];
 		for (i = 0, len = observatories.length; i < len; i++) {
-			observatories[i] = new ObservatorySummary(this, observatories[i]);
+			data[i] = new ObservatorySummary(this, observatories[i]);
 		}
-		return observatories;
+		return data;
 	};
 
 	/**
@@ -205,11 +205,18 @@ define([
 	 * @return {Observatory}
 	 */
 	ObservatoryFactory.prototype._getObservatory = function (observatory) {
-		observatory.instruments = this._getInstruments(observatory.instruments);
-		observatory.piers = this._getPiers(observatory.piers);
-		_selectById(observatory.piers, observatory.default_pier_id);
-		observatory.observations = this._getObservations(observatory.observations);
-		return new Observatory(observatory);
+		// observatory.instruments = this._getInstruments(observatory.instruments);
+		// observatory.piers = this._getPiers(observatory.piers);
+		// _selectById(observatory.piers, observatory.default_pier_id);
+		// observatory.observations = this._getObservations(observatory.observations);
+		// return new Observatory(observatory);
+
+		var data = Util.extend({}, observatory);
+		data.instruments = this._getInstruments(observatory.instruments);
+		data.piers = this._getPiers(observatory.piers);
+		data.observations = this._getObservations(observatory.observations);
+		_selectById(data.piers, data.default_pier_id);
+		return new Observatory(data);
 	};
 
 	/**
@@ -232,11 +239,12 @@ define([
 	 */
 	ObservatoryFactory.prototype._getInstruments = function (instruments) {
 		var i,
-		    len;
+		    len,
+		    data = [];
 		for (i = 0, len = instruments.length; i < len; i++) {
-			instruments[i] = new Instrument(instruments[i]);
+			data[i] = new Instrument(instruments[i]);
 		}
-		return new Collection(instruments);
+		return new Collection(data);
 	};
 
 	/**
@@ -249,14 +257,15 @@ define([
 	ObservatoryFactory.prototype._getPiers = function (piers) {
 		var pier,
 		    i,
-		    len;
+		    len,
+		    data = [];
 		for (i = 0, len = piers.length; i < len; i++) {
 			pier = piers[i];
 			pier.marks = this._getMarks(pier.marks);
 			_selectById(pier.marks, pier.default_mark_id);
-			piers[i] = new Pier(pier);
+			data[i] = new Pier(pier);
 		}
-		return new Collection(piers);
+		return new Collection(data);
 	};
 
 	/**
@@ -268,11 +277,12 @@ define([
 	 */
 	ObservatoryFactory.prototype._getMarks = function (marks) {
 		var i,
-		    len;
+		    len,
+		    data = [];
 		for (i = 0, len = marks.length; i < len; i++) {
-			marks[i] = new Mark(marks[i]);
+			data[i] = new Mark(marks[i]);
 		}
-		return new Collection(marks);
+		return new Collection(data);
 	};
 
 	/**
@@ -284,11 +294,12 @@ define([
 	 */
 	ObservatoryFactory.prototype._getObservations = function (observations) {
 		var i,
-		    len;
+		    len,
+		    data = [];
 		for (i = 0, len = observations.length; i < len; i++) {
-			observations[i] = new ObservationSummary(this, observations[i]);
+			data[i] = new ObservationSummary(this, observations[i]);
 		}
-		return new Collection(observations);
+		return new Collection(data);
 	};
 
 	/**
@@ -301,13 +312,14 @@ define([
 	ObservatoryFactory.prototype._getReadings = function (readings) {
 		var reading,
 		    i,
-		    len;
+		    len,
+		    data = [];
 		for (i = 0, len = readings.length; i < len; i++) {
 			reading = readings[i];
 			reading.measurements = this._getMeasurements(reading.measurements);
-			readings[i] = new Reading(reading);
+			data[i] = new Reading(reading);
 		}
-		return new Collection(readings);
+		return new Collection(data);
 	};
 
 	/**
@@ -319,11 +331,12 @@ define([
 	 */
 	ObservatoryFactory.prototype._getMeasurements = function (measurements) {
 		var i,
-		    len;
+		    len,
+		    data = [];
 		for (i = 0, len = measurements.length; i < len; i++) {
-			measurements[i] = new Measurement(measurements[i]);
+			data[i] = new Measurement(measurements[i]);
 		}
-		return new Collection(measurements);
+		return new Collection(data);
 	};
 
 
