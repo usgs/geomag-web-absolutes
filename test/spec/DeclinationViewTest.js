@@ -41,12 +41,12 @@ define([
 
 	// dummy Declination View that tracks whether its
 	// render method has been called
-	var testDeclinationView = function (options) {
+	var TestDeclinationView = function (options) {
 		this.called = false;
 		DeclinationView.call(this, options);
 	};
-	testDeclinationView.prototype = Object.create(DeclinationView.prototype);
-	testDeclinationView.prototype.render = function() {
+	TestDeclinationView.prototype = Object.create(DeclinationView.prototype);
+	TestDeclinationView.prototype.render = function() {
 		this.called = true;
 	};
 
@@ -102,7 +102,7 @@ define([
 			    observation = new Observation(),
 			    view;
 
-			view = new testDeclinationView({
+			view = new TestDeclinationView({
 				reading: reading,
 				observation: observation,
 				baselineCalculator: testObservationBaselineCalculator

@@ -36,12 +36,12 @@ define([
 
 	// dummy Inclination View that tracks whether its
 	// render method has been called
-	var testInclinationView = function (options) {
+	var TestInclinationView = function (options) {
 		this.called = false;
 		InclinationView.call(this, options);
 	};
-	testInclinationView.prototype = Object.create(InclinationView.prototype);
-	testInclinationView.prototype.render = function() {
+	TestInclinationView.prototype = Object.create(InclinationView.prototype);
+	TestInclinationView.prototype.render = function() {
 		this.called = true;
 	};
 
@@ -92,7 +92,7 @@ define([
 			    observation = new Observation(),
 			    view;
 
-			view = new testInclinationView({
+			view = new TestInclinationView({
 				reading: reading,
 				observation: observation,
 				baselineCalculator: testObservationBaselineCalculator
