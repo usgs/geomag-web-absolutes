@@ -37,6 +37,7 @@ define([
 		baselineE: function() { return 11; },
 		baselineH: function() { return 12; },
 		baselineZ: function() { return 13; },
+		computedE: function() { return 15; },
 		d: function() { return 14; }
 	});
 
@@ -176,8 +177,8 @@ define([
 					calculator.baselineZ().toFixed(2));
 
 				expect(magnetometerOrdinatesView._scaleValue.textContent).to.equal(
-					'*Scale Value for D = 5.0000 (3437.7468 / Absolute F * cos(Inclination))');
-
+					' *D = 15.00 computed with Scale Value = 5.0000  ' +
+					'using equation (Mean E * scaleValue / 60)');
 			});
 		});
 

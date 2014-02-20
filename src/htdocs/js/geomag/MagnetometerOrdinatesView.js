@@ -77,8 +77,8 @@ define([
 						'</tr>',
 					'</tbody>',
 				'</table>',
-				'<p class="scaleValue"></p>',
-				'<p class="equation"></p>',
+				'<p class="scaleValue">',
+				'</p>',
 			'</div>',
 		].join('');
 
@@ -99,13 +99,9 @@ define([
 		this._zBaseline = this._el.querySelector('.zBaseline');
 
 		this._scaleValue = this._el.querySelector('.scaleValue');
-		this._scaleValue = this._el.querySelector('.equation');
 
-
-		this._measurements[Measurement.FIRST_MARK_UP][0].
-				on('change', this.render, this);
-		this._measurements[Measurement.FIRST_MARK_DOWN][0].
-				on('change', this.render, this);
+		// hook up to measurements on change.
+		// Only need time/angles not markup/markdown
 		this._measurements[Measurement.WEST_DOWN][0].
 				on('change', this.render, this);
 		this._measurements[Measurement.EAST_DOWN][0].
@@ -122,6 +118,8 @@ define([
 				on('change', this.render, this);
 		this._measurements[Measurement.NORTH_DOWN][0].
 				on('change', this.render, this);
+		// hook up to calculator on change.
+		// for changes to pier and mark. 
 		this._calculator.on('change', this.render, this);
 
 		this.render();
@@ -151,9 +149,11 @@ define([
 		this._dBaseline.innerHTML = calculator.d(reading).toFixed(2);
 		this._zBaseline.innerHTML = calculator.baselineZ(reading).toFixed(2);
 
-		this._scaleValue.innerHTML = '*Scale Value for D = '+
+		this._scaleValue.innerHTML = ' *D = ' +
+			calculator.computedE(reading).toFixed(2) +
+			' computed with Scale Value = ' +
 			calculator.scaleValue(reading).toFixed(4) +
-			'<br> (3437.7468 / Absolute F * cos(Inclination))';
+			' <br> using equation (Mean E * scaleValue / 60)';
 
 	};
 
