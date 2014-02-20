@@ -42,7 +42,7 @@ define([
 		// create, "add new observation" button
 		this.getAddObservationButton();
 
-		// first pass, get all observations, this can be removed once 
+		// first pass, get all observations, this can be removed once
 		// observation status is implemented, see methods below
 		this.getAllObservations(observatory);
 
