@@ -23,7 +23,6 @@ define([
 	ObservationsView.prototype = Object.create(View.prototype);
 
 	ObservationsView.prototype._initialize = function () {
-		var observations = this._options.observations;
 
 		this._el.innerHTML = [
 				'<h2 class="title">Observations</h2>',
@@ -33,12 +32,9 @@ define([
 				// '<section class="observations-completed"></section>' // TODO
 		].join('');
 
-		// You can pass in an id or a collection of observations
-		if (observations) {
-			this.render(observations);
-		} else {
-			this.getObservations(this._options.observatoryId);
-		}
+		// load all observations from an observatory
+		this.getObservations(this._options.observatoryId);
+
 	};
 
 	ObservationsView.prototype.render = function (observatory) {
