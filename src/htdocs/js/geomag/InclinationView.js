@@ -3,14 +3,14 @@ define([
 	'mvc/View',
 	'util/Util',
 
-	'geomag/Reading',
-	'geomag/Measurement'
+	'geomag/Measurement',
+	'geomag/Reading'
 ], function (
 	View,
 	Util,
 
-	Reading,
-	Measurement
+	Measurement,
+	Reading
 ) {
 	'use strict';
 
@@ -52,25 +52,21 @@ define([
 		this._el.innerHTML = [
 			'<dl>',
 				'<dt class="inclination">Inclination</dt>',
-				'<dd class="inclination-value angle">------</dd>',
-
+				'<dd class="inclination-value">------</dd>',
 				'<dt class="horizontal-component">Horizontal Component</dt>',
-				'<dd class="horizontal-component-value angle">------</dd>',
-
+				'<dd class="horizontal-component-value">------</dd>',
 				'<dt class="vertical-component">Vertical Component</dt>',
-				'<dd class="vertical-component-value angle">------</dd>',
+				'<dd class="vertical-component-value">------</dd>',
 
 				'<dt class="south-down-minus-north-up">(SD - NU - 180) * 60</dt>',
-				'<dd class="south-down-minus-north-up-value minutes">----</dd>',
-
+				'<dd class="south-down-minus-north-up-value">----</dd>',
 				'<dt class="north-down-minus-south-up">(ND - SU - 180) * 60</dt>',
-				'<dd class="north-down-minus-south-up-value minutes">----</dd>',
+				'<dd class="north-down-minus-south-up-value">----</dd>',
 			'</dl>'
 		].join('');
 
 		// save references to elements that will be updated during render
 		this._inclinationAngle = this._el.querySelector('.inclination-value');
-
 		this._horizontalComponent =
 		    this._el.querySelector('.horizontal-component-value');
 		this._verticalComponent =
