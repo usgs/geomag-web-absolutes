@@ -19,10 +19,10 @@ define([
 	var DEFAULTS = {
 		'id': null,
 		'set_number': null,
-		'declination_valid': null,
-		'declination_shift': null,
-		'horizontal_intensity_valid': null,
-		'vertical_intensity_valid': null,
+		'declination_valid': 'Y',
+		'declination_shift': 0,
+		'horizontal_intensity_valid': 'Y',
+		'vertical_intensity_valid': 'Y',
 		'observer': null,
 		'annotation': null,
 		'measurements': null
