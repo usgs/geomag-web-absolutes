@@ -35,7 +35,8 @@
     "grunt-contrib-uglify": "~0.2.2",
     "hazdev-template": "0.0.5",
     "grunt-connect-rewrite": "~0.2.1",
-    "hazdev-tablist": "0.0.3"
+    "hazdev-tablist": "0.0.3",
+    "grunt-connect-proxy": "~0.1.8"
   },
   "engines": {
     "node": ">=0.8.0"
