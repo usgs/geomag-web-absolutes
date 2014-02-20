@@ -1,6 +1,4 @@
-$group-vertical-separation:10px;
 $line-vertical-separation:4px;
-$units-separation:2px;
 
 .inclination-view {
   dt {
@@ -22,35 +20,11 @@ $units-separation:2px;
     margin-left:1em;
     .repeat {
       display:block;
-    //  text-align:right;
-    }
-  }
-
-  .minutes {
-    &:after {
-      content:"'";
-      font-weight:bold;
-      padding-left:$units-separation;
-    }
-  }
-  .nt {
-    text-align:right;
-    &:after {
-      content:"nT";
-      font-weight:bold;
-      padding-left:$units-separation;
-    }
-  }
-  .deg {
-    &:after {
-      content:"°";
-      font-weight:bold;
-      padding-left:$units-separation;
     }
   }
 
   .south-down-minus-north-up,
   .south-down-minus-north-up-value {
-    padding-top:$group-vertical-separation;
+    padding-top:10px;
   }
 }
