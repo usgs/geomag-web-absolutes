@@ -97,21 +97,21 @@ define([
 
 		var el = this._el.querySelector('.observatories'),
 		    observatoryList = document.createElement('ul'),
-		    observatory, listItem, link;
+		    markup = [], observatory;//, listItem, link;
 
 		for (var i = 0; i < data.length; i++) {
 			observatory = data[i];
 
-			link = document.createElement('a');
-			link.innerHTML = observatory.get('name');
-			link.href = '#' + observatory.get('id');
-
-			listItem = document.createElement('li');
-			listItem.id = 'observatory_' + observatory.get('id');
-			listItem.appendChild(link);
-
-			observatoryList.appendChild(listItem);
+			markup.push([
+				'<li id="observatory_', observatory.get('id'),'">',
+					'<a href="#', observatory.get('id') ,'" >',
+						observatory.get('name') ,
+					'</a>',
+				'</li>'
+			].join(''));
 		}
+
+		observatoryList.innerHTML = markup.join('');
 
 		el.innerHTML = '<h2>Observatory</h2>';
 		el.appendChild(observatoryList);
