@@ -68,9 +68,9 @@ define([
 		// save references to elements that will be updated during render
 		this._inclinationAngle = this._el.querySelector('.inclination-value');
 		this._horizontalComponent =
-		    this._el.querySelector('.horizontal-component-value');
+				this._el.querySelector('.horizontal-component-value');
 		this._verticalComponent =
-		    this._el.querySelector('.vertical-component-value');
+				this._el.querySelector('.vertical-component-value');
 
 		this._southDownMinusNorthUp = this._el.querySelector(
 				'.south-down-minus-north-up-value');
@@ -90,6 +90,7 @@ define([
 		this._measurements[Measurement.NORTH_DOWN][0].on(
 				'change', this.render, this);
 
+		// watches for changes in pier/mark
 		this._calculator.on('change', this.render, this);
 
 		// render current reading
@@ -101,30 +102,41 @@ define([
 	 */
 	InclinationView.prototype.render = function () {
 		var calculator = this._calculator,
-		    reading = this._reading,
-		    //observation = this._observation,
-		    //observatory = observation.get('observatory'),
-		    inclinationAngle = calculator.inclination(reading),
-		    inclinationDegrees = parseInt(inclinationAngle, 10),
-		    inclinationMinutes = (inclinationAngle - inclinationDegrees)*60;
+		    reading = this._reading;
 
-		this._inclinationAngle.innerHTML = '<span class="deg">' +
-		    inclinationAngle.toFixed(2) +
-		    '</span><span class="repeat"><span class="deg">' +
-		    inclinationDegrees + '</span>&nbsp;<span class="minutes">' +
-		    inclinationMinutes.toFixed(2) + '</span></span>';
+		this._inclinationAngle.innerHTML =
+				this._formatDegreesMinutes(calculator.inclination(reading));
 
 		this._horizontalComponent.innerHTML = '<span class="deg">' +
-		    calculator.horizontalComponent(reading).toFixed(2) + '</span>';
+				calculator.horizontalComponent(reading).toFixed(2) + '</span>';
 		this._verticalComponent.innerHTML = '<span class="deg">' +
-		    calculator.verticalComponent(reading).toFixed(2) + '</span>';
+				calculator.verticalComponent(reading).toFixed(2) + '</span>';
 
 		this._southDownMinusNorthUp.innerHTML =
-		    calculator.southDownMinusNorthUp(reading).toFixed(2);
+				calculator.southDownMinusNorthUp(reading).toFixed(2);
 		this._northDownMinusSouthUp.innerHTML =
-		    calculator.northDownMinusSouthUp(reading).toFixed(2);
+				calculator.northDownMinusSouthUp(reading).toFixed(2);
 	};
 
+
+	InclinationView.prototype._formatDegreesMinutes = function (angle) {
+		var buf = [],
+		    degrees,
+		    minutes;
+
+		degrees = parseInt(angle, 10);
+		minutes = (angle - degrees) * 60;
+
+		buf.push(
+				'<span class="deg">', angle.toFixed(2), '</span>',
+				'<span class="repeat">',
+					'<span class="deg">', degrees, '</span>',
+					'&nbsp;',
+					'<span class="minutes">', minutes.toFixed(2), '</span>',
+				'</span>');
+
+		return buf.join('');
+	};
 
 	return InclinationView;
 });
