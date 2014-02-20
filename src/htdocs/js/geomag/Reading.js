@@ -20,6 +20,7 @@ define([
 		'id': null,
 		'set_number': null,
 		'declination_valid': null,
+		'declination_shift': null,
 		'horizontal_intensity_valid': null,
 		'vertical_intensity_valid': null,
 		'observer': null,
