@@ -64,7 +64,8 @@ define([
 		 *
 		 * @return {Number} Decimal degrees
 		 */
-		magneticDeclination: function (magneticSouthMeridian, geographicMeridian) {
+		magneticDeclination:
+				function (magneticSouthMeridian, geographicMeridian, shift) {
 			var magneticDecl = magneticSouthMeridian - geographicMeridian;
 			while (magneticDecl >= 180.0) {
 				magneticDecl -= 180.0;
@@ -72,6 +73,10 @@ define([
 			while (magneticDecl < 0) {
 				magneticDecl += 180.0;
 			}
+
+			// Apply the declination shift if there is one
+			magneticDecl += shift;
+
 			return (magneticDecl);
 		},
 
