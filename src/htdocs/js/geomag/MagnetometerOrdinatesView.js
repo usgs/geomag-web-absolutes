@@ -55,7 +55,7 @@ define([
 							'<th>E</th>',
 							'<td class="eMean"></td>',
 							'<td class="absoluteH"></td>',
-							'<td class="hBaseline"></td>',
+							'<td class="eBaseline"></td>',
 						'</tr>',
 						'<tr>',
 							'<th>D</th>',
@@ -77,8 +77,8 @@ define([
 						'</tr>',
 					'</tbody>',
 				'</table>',
-				'<p class="scaleValue">',
-				'</p>',
+				'<p class="scaleValue"></p>',
+				'<p class="equation"></p>',
 			'</div>',
 		].join('');
 
@@ -94,23 +94,35 @@ define([
 		this._absoluteF = this._el.querySelector('.absoluteF');
 
 		this._hBaseline = this._el.querySelector('.hBaseline');
-		this._eBaseline = this._el.querySelector('.dBaseline');
+		this._eBaseline = this._el.querySelector('.eBaseline');
 		this._dBaseline = this._el.querySelector('.dBaseline');
 		this._zBaseline = this._el.querySelector('.zBaseline');
 
 		this._scaleValue = this._el.querySelector('.scaleValue');
+		this._scaleValue = this._el.querySelector('.equation');
 
 
-		this._measurements[Measurement.FIRST_MARK_UP][0].on('change', this.render, this);
-		this._measurements[Measurement.FIRST_MARK_DOWN][0].on('change', this.render, this);
-		this._measurements[Measurement.WEST_DOWN][0].on('change', this.render, this);
-		this._measurements[Measurement.EAST_DOWN][0].on('change', this.render, this);
-		this._measurements[Measurement.WEST_UP][0].on('change', this.render, this);
-		this._measurements[Measurement.EAST_UP][0].on('change', this.render, this);
-		this._measurements[Measurement.SOUTH_DOWN][0].on('change', this.render, this);
-		this._measurements[Measurement.NORTH_UP][0].on('change', this.render, this);
-		this._measurements[Measurement.SOUTH_UP][0].on('change', this.render, this);
-		this._measurements[Measurement.NORTH_DOWN][0].on('change', this.render, this);
+		this._measurements[Measurement.FIRST_MARK_UP][0].
+				on('change', this.render, this);
+		this._measurements[Measurement.FIRST_MARK_DOWN][0].
+				on('change', this.render, this);
+		this._measurements[Measurement.WEST_DOWN][0].
+				on('change', this.render, this);
+		this._measurements[Measurement.EAST_DOWN][0].
+				on('change', this.render, this);
+		this._measurements[Measurement.WEST_UP][0].
+				on('change', this.render, this);
+		this._measurements[Measurement.EAST_UP][0].
+				on('change', this.render, this);
+		this._measurements[Measurement.SOUTH_DOWN][0].
+				on('change', this.render, this);
+		this._measurements[Measurement.NORTH_UP][0].
+				on('change', this.render, this);
+		this._measurements[Measurement.SOUTH_UP][0].
+				on('change', this.render, this);
+		this._measurements[Measurement.NORTH_DOWN][0].
+				on('change', this.render, this);
+		this._calculator.on('change', this.render, this);
 
 		this.render();
 
@@ -119,50 +131,29 @@ define([
 	MagnetometerOrdinatesView.prototype.render = function () {
 		// TODO :: Render current model
 		var calculator = this._calculator,
-		    reading = this._reading,
-		    meanH = calculator.meanH(reading),
-		    meanE = calculator.meanE(reading),
-		    meanZ = calculator.meanZ(reading),
-		    meanF = calculator.meanF(reading),
-		    scaleValue = calculator.scaleValue(reading),
-		    absoluteD = (calculator.magneticDeclination(reading) * 60),
-		    absoluteH = calculator.horizontalComponent(reading),
-		    absoluteZ = calculator.verticalComponent(reading),
-		    correctedF = calculator.correctedF(reading),
-		    baselineD = calculator.baselineD(reading),
-		    baselineE = calculator.baselineD(reading) *
-		                  calculator.scaleValue(reading),
-		    baselineH = calculator.baselineH(reading),
-		    baselineZ = calculator.baselineZ(reading);
+		    reading = this._reading;
 
-		if( meanH !== null ) {this._hMean.innerHTML = meanH.toFixed(2);}
-		if( meanE !== null ) {this._eMean.innerHTML = meanE.toFixed(2);}
-		if( meanZ !== null ) {this._zMean.innerHTML = meanZ.toFixed(2);}
-		if( meanF !== null ) {this._fMean.innerHTML = meanF.toFixed(2);}
+		this._hMean.innerHTML = calculator.meanH(reading).toFixed(2);
+		this._eMean.innerHTML = calculator.meanE(reading).toFixed(2);
+		this._zMean.innerHTML = calculator.meanZ(reading).toFixed(2);
+		this._fMean.innerHTML = calculator.meanF(reading).toFixed(2);
 
-		if( scaleValue !== null ) {
-			this._scaleValue.innerHTML = '*Scale Value for D = '+
-				scaleValue.toFixed(2) +
-				' (3437.7468 / Mean F * cos(Inclination))';
-		}
+		this._absoluteH.innerHTML =
+			calculator.horizontalComponent(reading).toFixed(2);
+		this._absoluteD.innerHTML =
+			(calculator.magneticDeclination(reading) * 60).toFixed(2);
+		this._absoluteZ.innerHTML =
+			calculator.verticalComponent(reading).toFixed(2);
+		this._absoluteF.innerHTML = calculator.correctedF(reading).toFixed(2);
 
-		if( absoluteD !== null ) {
-			this._absoluteD.innerHTML = absoluteD.toFixed(2);
-		}
-		if( absoluteH !== null ) {
-			this._absoluteH.innerHTML = absoluteH.toFixed(2);
-		}
-		if( absoluteZ !== null ) {
-			this._absoluteZ.innerHTML = absoluteZ.toFixed(2);
-		}
-		if( correctedF !== null ) {
-			this._absoluteF.innerHTML = correctedF.toFixed(2);
-		}
+		this._hBaseline.innerHTML = calculator.baselineH(reading).toFixed(2);
+		this._eBaseline.innerHTML = calculator.baselineE(reading).toFixed(2);
+		this._dBaseline.innerHTML = calculator.d(reading).toFixed(2);
+		this._zBaseline.innerHTML = calculator.baselineZ(reading).toFixed(2);
 
-		if( baselineD !== null ) {this._dBaseline = baselineD.toFixed(2);}
-		if( baselineE !== null ) {this._dBaselineE = baselineE.toFixed(2);}
-		if( baselineH !== null ) {this._HBaseline = baselineH.toFixed(2);}
-		if( baselineZ !== null ) {this._ZBaseline = baselineZ.toFixed(2);}
+		this._scaleValue.innerHTML = '*Scale Value for D = '+
+			calculator.scaleValue(reading).toFixed(4) +
+			'<br> (3437.7468 / Absolute F * cos(Inclination))';
 
 	};
 

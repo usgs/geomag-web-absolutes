@@ -190,7 +190,7 @@ define([
 		 */
 		scaleValue: function (absoluteH) {
 			if( absoluteH === 0 ) {
-				return null;
+				return 0;
 			}
 			return (SCALE_VALUE_COEFFICIENT / absoluteH);
 		},
@@ -218,6 +218,19 @@ define([
 		 * @return {Number} Decimal degrees
 		 */
 		baselineD: function (magneticDeclination, computedE) {
+			return (magneticDeclination - computedE);
+		},
+
+		/**
+		 * Baseline E
+		 * Identical to baselineD, renamed as it's really baselineE
+		 *
+		 * @param magneticDeclination {Number} Decimal degrees
+		 * @param computedE {Number} Decimal degrees
+		 *
+		 * @return {Number} Decimal degrees
+		 */
+		baselineE: function (magneticDeclination, computedE) {
 			return (magneticDeclination - computedE);
 		},
 
@@ -254,6 +267,9 @@ define([
 		 * @return {Number} nT
 		 */
 		d: function (baselineD, scaleValue) {
+			if( scaleValue === 0 ) {
+				return 0;
+			}
 			return (baselineD * 60.0 / scaleValue);
 		},
 

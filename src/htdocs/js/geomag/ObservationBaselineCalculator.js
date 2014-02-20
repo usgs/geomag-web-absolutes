@@ -327,6 +327,21 @@ define([
 	};
 
 	/**
+	 * baselineE
+	 Identical to baselineD, renamed as it's more appropriate.
+	 *
+	 * @param {Object} reading, a reading from an observation
+	 *
+	 * @return {Number} baselineE
+	 */
+	ObservationBaselineCalculator.prototype.baselineE = function (reading) {
+		return this._calculator.baselineE(
+				this.magneticDeclination(reading),
+				this.computedE(reading)
+		);
+	};
+
+	/**
 	 * baselineH
 	 *
 	 * @param {Object} reading, a reading from an observation
