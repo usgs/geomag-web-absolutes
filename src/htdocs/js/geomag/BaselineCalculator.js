@@ -75,6 +75,7 @@ define([
 			}
 
 			// Apply the declination shift if there is one
+			if (shift == null) { shift = 0; }
 			magneticDecl += shift;
 
 			return (magneticDecl);
