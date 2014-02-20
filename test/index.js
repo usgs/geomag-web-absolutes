@@ -69,6 +69,7 @@ require([
 		'spec/DeclinationViewTest',
 		'spec/InclinationViewTest',
 		'spec/ReadingViewTest',
+		'spec/RealtimeDataTest',
 		'spec/RealtimeDataFactoryTest',
 		'spec/ObservationBaselineCalculatorTest',
 		'spec/ObservationMetaViewTest',
