@@ -83,6 +83,7 @@ define([
 		    el = this._el,
 		    calculator = this._options.calculator,
 		    observation = this._options.observation,
+		    observatories = this._options.observatories,
 		    observatorySelectView,
 		    pierSelectView,
 		    marksSelectView,
@@ -263,13 +264,7 @@ define([
 		});
 
 		// load observatories collection
-		this._observation.getObservatories({
-			success: function (observatories) {
-				observatories = new Collection(observatories);
-				_selectById(observatories, observation.get('observatory_id'));
-				observatorySelectView.setCollection(observatories);
-			}
-		});
+		observatorySelectView.setCollection(observatories);
 
 		// fill in observation inputs
 		this.render();
