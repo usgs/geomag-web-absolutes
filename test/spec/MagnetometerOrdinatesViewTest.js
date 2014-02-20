@@ -177,8 +177,8 @@ define([
 					calculator.baselineZ().toFixed(2));
 
 				expect(magnetometerOrdinatesView._scaleValue.textContent).to.equal(
-					' *D = 15.00 computed with Scale Value = 5.0000  ' +
-					'using equation (Mean E * scaleValue / 60)');
+					'Ordinate Mean D is calculated using ' +
+					'(Corrected F * scaleValue / 60) Where scale Value = 5.0000');
 			});
 		});
 

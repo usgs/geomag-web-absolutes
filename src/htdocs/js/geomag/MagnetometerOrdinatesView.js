@@ -133,6 +133,7 @@ define([
 
 		this._hMean.innerHTML = calculator.meanH(reading).toFixed(2);
 		this._eMean.innerHTML = calculator.meanE(reading).toFixed(2);
+		this._dMean.innerHTML = calculator.computedE(reading).toFixed(2);
 		this._zMean.innerHTML = calculator.meanZ(reading).toFixed(2);
 		this._fMean.innerHTML = calculator.meanF(reading).toFixed(2);
 
@@ -149,11 +150,11 @@ define([
 		this._dBaseline.innerHTML = calculator.d(reading).toFixed(2);
 		this._zBaseline.innerHTML = calculator.baselineZ(reading).toFixed(2);
 
-		this._scaleValue.innerHTML = ' *D = ' +
-			calculator.computedE(reading).toFixed(2) +
-			' computed with Scale Value = ' +
-			calculator.scaleValue(reading).toFixed(4) +
-			' <br> using equation (Mean E * scaleValue / 60)';
+
+		this._scaleValue.innerHTML =
+			'Ordinate Mean D is calculated using (Corrected F * scaleValue / 60)' +
+			'<br> Where scale Value = ' +
+			calculator.scaleValue(reading).toFixed(4);
 
 	};
 
