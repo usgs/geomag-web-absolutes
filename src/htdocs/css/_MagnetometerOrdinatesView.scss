@@ -1,32 +1,28 @@
 .magnetometer-ordinates-output {
-	.row {
-		padding-bottom:1.33em;
-	}
 
+	.magnetometerOrdinatesCells,
+	.magnetometerOrdinatesHead {
+		th {
+			text-align:right;
+			padding-right:16px;
 
-	tbody th {
-		text-align:right;
-		padding-right:16px;
-
-		&:after {
-			content:':';
+			&:after {
+				content:':';
+			}
 		}
 	}
 
-	table td {
-		text-align:right;
-		padding-right:10px;
-		width:10em;
-		border:none;
+	.magnetometerOrdinatesCells {
+		td {
+			text-align:right;
+			padding-right:10px;
+			width:10em;
+		}
 	}
 
 	.dMean,
 	.scaleValue {
 	font-family:script;
 	font-style:oblique;
-	}
-
-	.scaleValue {
-	font-size:75%;
 	}
 }
