@@ -206,13 +206,46 @@ define([
 
 		describe('magneticDeclination()', function () {
 
-			it('computes correctly', function () {
+			it('computes correctly when given no shift', function () {
 				var magneticSouthMeridian = 1.0,
 				    geographicMeridian = 2.0,
 				    expected = 179.0;
 
 				expect(calc.magneticDeclination(
 						magneticSouthMeridian, geographicMeridian)).to.equal(expected);
+			});
+
+			it('computes correctly when given a positive shift', function () {
+				var magneticSouthMeridian = 1.0,
+				    geographicMeridian = 2.0,
+				    shift = 3.0,
+				    expected = 182.0;
+
+				expect(calc.magneticDeclination(
+						magneticSouthMeridian, geographicMeridian, shift))
+						.to.equal(expected);
+			});
+
+			it('computes correctly when given a negative shift', function () {
+				var magneticSouthMeridian = 1.0,
+				    geographicMeridian = 2.0,
+				    shift = -3.0,
+				    expected = 176.0;
+
+				expect(calc.magneticDeclination(
+						magneticSouthMeridian, geographicMeridian, shift))
+						.to.equal(expected);
+			});
+
+			it('computes correctly when given a 0 shift', function () {
+				var magneticSouthMeridian = 1.0,
+				    geographicMeridian = 2.0,
+				    shift = 0,
+				    expected = 179.0;
+
+				expect(calc.magneticDeclination(
+						magneticSouthMeridian, geographicMeridian, shift))
+						.to.equal(expected);
 			});
 
 			it('computes correctly with data from BDT20131651602.bns', function () {

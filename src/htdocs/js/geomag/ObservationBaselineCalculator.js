@@ -142,7 +142,8 @@ define([
 	ObservationBaselineCalculator.prototype.magneticDeclination = function (reading) {
 		return this._calculator.magneticDeclination(
 				this.magneticSouthMeridian(reading),
-				this.geographicMeridian(reading)
+				this.geographicMeridian(reading),
+				reading.get('declination_shift')
 		);
 	};
 
