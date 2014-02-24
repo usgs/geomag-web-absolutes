@@ -72,8 +72,8 @@ define([
 			});
 		});
 
-		describe('getValues()', function() {
-			it('retrieves data from the specified observatory', function() {
+		describe('getValues()', function () {
+			it('retrieves data from the specified observatory', function () {
 				var values = realtimeData.getValues(1392826002345, 'BRW');
 				expect(values).to.deep.equal({
 					H:9204.77,
@@ -83,7 +83,7 @@ define([
 				});
 			});
 
-			it('defaults to the first observatory', function() {
+			it('defaults to the first observatory', function () {
 				var values = realtimeData.getValues(1392826002345);
 				expect(values).to.deep.equal({
 					H:20859.1,
@@ -92,6 +92,16 @@ define([
 					F:52456.5
 				});
 			});
+
+			it('returns null if the time is out of range', function () {
+				expect(realtimeData.getValues(1392826000000)).to.equal(null);
+				expect(realtimeData.getValues(1392826006000)).to.equal(null);
+			});
+
+			it('returns null if the observatory is not present', function () {
+				expect(realtimeData.getValues(1392826002345, 'BSL')).to.equal(null);
+			});
+
 		});
 
 	});
