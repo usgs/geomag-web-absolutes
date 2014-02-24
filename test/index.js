@@ -1,10 +1,13 @@
-// PhantomJS is missing native bind support, https://github.com/ariya/phantomjs/issues/10522
-// Polyfill from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+// PhantomJS is missing native bind support,
+//     https://github.com/ariya/phantomjs/issues/10522
+// Polyfill from:
+//     https://developer.mozilla.org
+//         /en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
 if (!Function.prototype.bind) {
 	Function.prototype.bind = function (oThis) {
 		if (typeof this !== "function") {
-			// closest thing possible to the ECMAScript 5 internal IsCallable function
-			throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+			// closest thing possible to the ECMAScript 5 internal IsCallable
+			throw new TypeError("object to be bound is not callable");
 		}
 
 		var aArgs = Array.prototype.slice.call(arguments, 1),
@@ -31,6 +34,7 @@ require.config({
 	paths: {
 		mocha: 'mocha/mocha',
 		chai: 'chai/chai',
+		sinon: 'sinon/pkg/sinon',
 		mvc: '/hazdev-webutils/src/mvc',
 		util: '/hazdev-webutils/src/util',
 		tablist: '/hazdev-tablist/src/tablist'
@@ -42,6 +46,9 @@ require.config({
 		chai: {
 			deps: ['mocha'],
 			exports: 'chai'
+		},
+		sinon: {
+			exports: 'sinon'
 		}
 	}
 });
