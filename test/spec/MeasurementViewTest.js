@@ -32,26 +32,6 @@ define([
 			});
 		});
 
-		describe('_dmsToDecimal', function () {
-			var m = new MeasurementView(viewOptions);
-
-			it('parses DMS properly', function () {
-				// Edge case
-				expect(m._dmsToDecimal(0, 0, 0)).to.equal(0.0);
-				// All whole numbers
-				expect(m._dmsToDecimal(29, 59, 60)).to.equal(30.0);
-				// Decimal degree value
-				expect(m._dmsToDecimal(29.5, 29, 60)).to.equal(30.0);
-				// Decimal minute value
-				expect(m._dmsToDecimal(0, 29.5, 30)).to.equal(0.5);
-				// Decimal degree and minute value
-				expect(m._dmsToDecimal(29.5, 29.5, 30)).to.equal(30.0);
-
-				// Some tests from real observations
-				expect(m._dmsToDecimal(120, 0, 36)).to.equal(120.010);
-			});
-		});
-
 		describe('_decimalToDms', function () {
 			var m = new MeasurementView(viewOptions);
 
