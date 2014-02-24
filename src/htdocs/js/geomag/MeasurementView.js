@@ -3,11 +3,13 @@ define([
 	'mvc/View',
 	'util/Util',
 
+	'geomag/Formatter',
 	'geomag/Measurement'
 ], function (
 	View,
 	Util,
 
+	Format,
 	Measurement
 ) {
 	'use strict';
@@ -49,7 +51,8 @@ define([
 		if (time === null) {
 			timeString = '';
 		} else {
-			timeString = this._timeToString(time);
+			//timeString = this._timeToString(time);
+			timeString = Format.timeToString(time);
 		}
 
 		// Deconstruct the decimal degrees back to Dms
@@ -57,7 +60,7 @@ define([
 		if (angle === null) {
 			dms = ['', '', ''];
 		} else {
-			dms = this._decimalToDms(angle);
+			dms = Format.decimalToDms(angle);
 		}
 
 		this._timeInput.value = timeString;
@@ -110,8 +113,8 @@ define([
 			    seconds = parseInt(_this._secondsInput.value||'0', 10);
 
 			_this._measurement.set({
-				'time': _this._stringToTime(time),
-				'angle': _this._dmsToDecimal(degrees, minutes, seconds)
+				'time': Format.stringToTime(time),
+				'angle': Format.dmsToDecimal(degrees, minutes, seconds)
 			});
 		};
 
@@ -124,106 +127,6 @@ define([
 
 		this.render();
 	};
-
-	/**
-	 * @param time {Integer}
-	 *      Timestamp (in milliseconds) since the epoch.
-	 *
-	 * @return {String}
-	 *      A string formatted as "HH:mm:ss" representing the input time.
-	 */
-	MeasurementView.prototype._timeToString = function (time) {
-		var offset = new Date(time),
-		    h = offset.getUTCHours(),
-		    m = offset.getUTCMinutes(),
-		    s = offset.getUTCSeconds();
-
-		return '' + (h<10?'0':'') + h + (m<10?':0':':') + m + (s<10?':0':':') + s;
-	};
-
-	/**
-	 * @param time {String}
-	 *      The formatted time string to parse. The date for the returned time
-	 *      is inherited from the observation "begin" attribute.
-	 *
-	 * @return {Integer}
-	 *      The millisecond timestamp since the epoch.
-	 */
-	MeasurementView.prototype._stringToTime = function (time) {
-		var observationOffset = this._observation.get('begin');
-
-		var timeString = time.replace(/[^\d]/g, ''),
-		    offset = null;
-
-		if (observationOffset) {
-			observationOffset = new Date(observationOffset);
-		} else {
-			observationOffset = new Date();
-		}
-
-		if (timeString.length === 4) {
-			// HHMM
-			offset = Date.UTC(observationOffset.getUTCFullYear(),
-					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
-					parseInt(timeString.substr(0, 2), 10),
-					parseInt(timeString.substr(2, 2), 10),
-					0, 0);
-		} else if (timeString.length === 5) {
-			// HMMSS
-			offset = Date.UTC(observationOffset.getUTCFullYear(),
-					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
-					parseInt(timeString.substr(0, 1), 10),
-					parseInt(timeString.substr(1, 2), 10),
-					parseInt(timeString.substr(3, 2), 10), 0);
-		} else if (timeString.length === 6) {
-			// HHMMSS
-			offset = Date.UTC(observationOffset.getUTCFullYear(),
-					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
-					parseInt(timeString.substr(0, 2), 10),
-					parseInt(timeString.substr(2, 2), 10),
-					parseInt(timeString.substr(4, 2), 10), 0);
-		}
-
-		return offset;
-	};
-
-	/**
-	 * @param degs {Number}
-	 *        The degree portion of the angle value. If this is a decimal, then
-	 *        the fractional portion is converted to minutes.
-	 * @param mins {Number}
-	 *        The minutes portion of the angle value. If this is a decimal, then
-	 *        the fractional portion is converted to seconds.
-	 * @param secs {Integer}
-	 *        The seconds portion of the angle value.
-	 *
-	 * @return {Decimal}
-	 *        The decimal degrees for the given DMS value.
-	 *
-	 * @see MeasurementViewTest#degree_inversion_check
-	 */
-	MeasurementView.prototype._dmsToDecimal = function (degs, mins, secs) {
-		return (parseInt(secs, 10) / 3600) + (parseFloat(mins) / 60) +
-				parseFloat(degs);
-	};
-
-	/**
-	 * @see MeasurementViewTest#degree_inversion_check
-	 */
-	MeasurementView.prototype._decimalToDms = function (angle) {
-		var degrees = parseInt(angle, 10),
-		    minutes = (angle - degrees) * 60,
-		    seconds = Math.round((minutes - parseInt(minutes, 10)) * 60, 10);
-
-		minutes = parseInt(minutes, 10);
-
-		// Correct any errors due to floating point
-		minutes += parseInt(seconds / 60, 10);
-		seconds = seconds % 60;
-
-		return [degrees, minutes, seconds];
-	};
-
 
 	return MeasurementView;
 });
