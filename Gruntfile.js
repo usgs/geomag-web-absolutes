@@ -3,7 +3,8 @@
 var LIVE_RELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({port: LIVE_RELOAD_PORT});
 var gateway = require('gateway');
-var rewriteRulesSnippet = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
+var rewriteRulesSnippet = require('grunt-connect-rewrite' +
+		'/lib/utils').rewriteRequest;
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
 
@@ -137,8 +138,8 @@ module.exports = function (grunt) {
 					keepalive: true,
 					middleware: function (connect, options) {
 						return [
-							proxySnippet,
 							rewriteRulesSnippet,
+							proxySnippet,
 							mountPHP(options.base),
 							mountFolder(connect, options.base),
 							mountFolder(connect, 'node_modules'),
@@ -296,7 +297,8 @@ module.exports = function (grunt) {
 				overwrite: true,
 				replacements: [
 					{
-						from: '<script src="http://localhost:35729/livereload.js?snipver=1"></script>',
+						from: '<script src="http://localhost:35729/livereload.js'+
+								'?snipver=1"></script>',
 						to: ''
 					},
 					{
