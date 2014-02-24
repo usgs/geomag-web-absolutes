@@ -87,8 +87,9 @@ define([
 	 *
 	 * @return a key:array of type:[measurements]
 	 *
-	 * This is needed for future enhancements where we will have multiple measurements per type.
-	 * So use this call so we don't have to refactor everything later.
+	 * This is needed for future enhancements where we will have multiple
+	 * measurements per type.  Use this call so we don't have to refactor
+	 * everything later.
 	 */
 	Reading.prototype.getMeasurements = function () {
 		var measurements = this.get('measurements'),
