@@ -23,12 +23,33 @@ define([
 		observation: new Observation()
 	};
 
-	describe('MeasurementView Unit Tests', function () {
-		describe('Constructor', function () {
+	describe('Formatter Unit Tests', function () {
+
+		describe('_timeToString', function () {
 			var m = new MeasurementView(viewOptions);
 
-			it('should be an instance of a MeasurementView', function () {
-				expect(m).to.be.an.instanceOf(MeasurementView);
+			it('parses start of day properly', function () {
+				expect(m._timeToString(0)).to.equal('00:00:00');
+			});
+
+			it('parses end of day properly', function () {
+				expect(m._timeToString(86399999)).to.equal('23:59:59');
+			});
+
+			it('parses one minute properly', function () {
+				expect(m._timeToString(60000)).to.equal('00:01:00');
+			});
+
+			it('parses one hour properly', function () {
+				expect(m._timeToString(3600000)).to.equal('01:00:00');
+			});
+
+			it('parses noon properly', function () {
+				expect(m._timeToString(43200000)).to.equal('12:00:00');
+			});
+
+			it('parses a mixed offset properly', function () {
+				expect(m._timeToString(40268000)).to.equal('11:11:08');
 			});
 		});
 
