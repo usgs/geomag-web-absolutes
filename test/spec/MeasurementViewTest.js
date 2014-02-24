@@ -32,21 +32,6 @@ define([
 			});
 		});
 
-		describe('_decimalToDms', function () {
-			var m = new MeasurementView(viewOptions);
-
-			it('parses decimals properly', function () {
-				// Edge case
-				expect(m._decimalToDms(0.0)).to.deep.equal([0, 0, 0]);
-				expect(m._decimalToDms(30.0)).to.deep.equal([30, 0, 0]);
-				expect(m._decimalToDms(30.5)).to.deep.equal([30, 30, 0]);
-				expect(m._decimalToDms(0.5)).to.deep.equal([0, 30, 0]);
-
-				// Some tests from real observations
-				expect(m._decimalToDms(120.010)).to.deep.equal([120, 0, 36]);
-			});
-		});
-
 		// These are currently passing but take a long time (~10 sec) to complete.
 		// We should re-check this test any time the _dmsToDecimal or _decimalToDms
 		// methods are updated
