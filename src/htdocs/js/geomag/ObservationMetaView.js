@@ -160,7 +160,8 @@ define([
 				});
 		// observation inputs
 		this._date = date = el.querySelector('.date');
-		this._pierTemperature = pierTemperature = el.querySelector('.pier-temperature');
+		this._pierTemperature = pierTemperature =
+				el.querySelector('.pier-temperature');
 
 		date.addEventListener('change', this._onChange);
 		pierTemperature.addEventListener('change', this._onChange);
@@ -341,7 +342,8 @@ define([
 		    pierTemperature = this._pierTemperature.value;
 
 		date = this._parseDate(date);
-		pierTemperature = (pierTemperature === '' ? null : parseFloat(pierTemperature));
+		pierTemperature = (pierTemperature === '' ?
+				null : parseFloat(pierTemperature));
 
 		observation.set({
 			begin: date,
