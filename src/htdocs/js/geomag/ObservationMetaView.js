@@ -4,13 +4,17 @@ define([
 	'mvc/Collection',
 	'util/Util',
 
-	'mvcutil/CollectionSelectBox'
+	'mvcutil/CollectionSelectBox',
+
+	'geomag/Formatter'
 ], function (
 	View,
 	Collection,
 	Util,
 
-	CollectionSelectBox
+	CollectionSelectBox,
+
+	Format
 ) {
 	'use strict';
 
@@ -341,7 +345,7 @@ define([
 		    date = this._date.value,
 		    pierTemperature = this._pierTemperature.value;
 
-		date = this._parseDate(date);
+		date = Format.parseDate(date);
 		pierTemperature = (pierTemperature === '' ?
 				null : parseFloat(pierTemperature));
 
@@ -351,22 +355,6 @@ define([
 		});
 	};
 
-	/**
-	 * Parse a date string into an epoch timestamp.
-	 *
-	 * @param date {String}
-	 *        UTC date in format 'YYYY-MM-DD'.
-	 * @return {Number} corresponding epoch timestamp (for 00:00:00), or null.
-	 */
-	ObservationMetaView.prototype._parseDate = function(date) {
-		if (date !== '') {
-			var parts = date.split('-');
-			return Date.UTC(parseInt(parts[0], 10),
-					parseInt(parts[1], 10) - 1,
-					parseInt(parts[2], 10));
-		}
-		return null;
-	};
 
 	/**
 	 * Formatting callback for electronics and theodolite select views.

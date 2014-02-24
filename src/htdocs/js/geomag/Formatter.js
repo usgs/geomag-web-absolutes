@@ -197,6 +197,23 @@ define([
 	};
 
 	/**
+	 * Parse a date string into an epoch timestamp.
+	 *
+	 * @param date {String}
+	 *        UTC date in format 'YYYY-MM-DD'.
+	 * @return {Number} corresponding epoch timestamp (for 00:00:00), or null.
+	 */
+	Format.parseDate = function(date) {
+		if (date !== '') {
+			var parts = date.split('-');
+			return Date.UTC(parseInt(parts[0], 10),
+					parseInt(parts[1], 10) - 1,
+					parseInt(parts[2], 10));
+		}
+		return null;
+	};
+
+	/**
 	 * String to Time
 	 *
 	 * @param time {String}
