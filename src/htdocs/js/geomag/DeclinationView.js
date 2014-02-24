@@ -3,11 +3,13 @@ define([
 	'mvc/View',
 	'util/Util',
 
+	'geomag/Formatter',
 	'geomag/Measurement'
 ], function (
 	View,
 	Util,
 
+	Format,
 	Measurement
 ) {
 	'use strict';
@@ -74,9 +76,11 @@ define([
 		].join('');
 
 		// save references to elements that will be updated during render
-		this._magneticSouthMeridian = this._el.querySelector('.mag-s-meridian-value');
+		this._magneticSouthMeridian =
+				this._el.querySelector('.mag-s-meridian-value');
 		this._meanMark = this._el.querySelector('.mean-mark-value');
-		this._magneticAzimuthOfMark = this._el.querySelector('.mag-az-of-mark-value');
+		this._magneticAzimuthOfMark =
+				this._el.querySelector('.mag-az-of-mark-value');
 		this._trueAzimuthOfMark = this._el.querySelector('.true-az-of-mark-value');
 		this._magneticDeclination = this._el.querySelector(
 				'.mag-declination-value');
@@ -129,44 +133,24 @@ define([
 		    reading = this._reading;
 
 		this._magneticSouthMeridian.innerHTML =
-				this._formatDegreesMinutes(calculator.magneticSouthMeridian(reading));
-		this._meanMark.innerHTML = '<span class="deg">' +
-				calculator.meanMark(reading).toFixed(2) + '</span>';
-		this._magneticAzimuthOfMark.innerHTML = '<span class="deg">' +
-				calculator.magneticAzimuthMark(reading).toFixed(2) + '</span>';
-		this._trueAzimuthOfMark.innerHTML = '<span class="deg">' +
-				calculator.trueAzimuthOfMark() + '</span>';
+				Format.degreesMinutes(calculator.magneticSouthMeridian(reading));
+		this._meanMark.innerHTML = Format.degrees(calculator.meanMark(reading));
+		this._magneticAzimuthOfMark.innerHTML =
+				Format.degrees(calculator.magneticAzimuthMark(reading));
+		this._trueAzimuthOfMark.innerHTML =
+				Format.degreesNoRounding(calculator.trueAzimuthOfMark());
 		this._magneticDeclination.innerHTML =
-				this._formatDegreesMinutes(calculator.magneticDeclination(reading));
+				Format.degreesMinutes(calculator.magneticDeclination(reading));
 
 		this._westUpMinusEastDown.innerHTML =
-				calculator.westUpMinusEastDown(reading).toFixed(2);
+				Format.minutes(calculator.westUpMinusEastDown(reading));
 		this._eastUpMinusWestDown.innerHTML =
-				calculator.eastUpMinusWestDown(reading).toFixed(2);
+				Format.minutes(calculator.eastUpMinusWestDown(reading));
 
-		this._fMean.innerHTML = calculator.meanF(reading).toFixed(2);
-		this._pierCorrection.innerHTML = calculator.pierCorrection();
-		this._correctedF.innerHTML = calculator.correctedF(reading).toFixed(2);
-	};
-
-
-	DeclinationView.prototype._formatDegreesMinutes = function (angle) {
-		var buf = [],
-		    degrees,
-		    minutes;
-
-		degrees = parseInt(angle, 10);
-		minutes = (angle - degrees) * 60;
-
-		buf.push(
-				'<span class="deg">', angle.toFixed(2), '</span>',
-				'<span class="repeat">',
-					'<span class="deg">', degrees, '</span>',
-					'&nbsp;',
-					'<span class="minutes">', minutes.toFixed(2), '</span>',
-				'</span>');
-
-		return buf.join('');
+		this._fMean.innerHTML = Format.nt(calculator.meanF(reading));
+		this._pierCorrection.innerHTML =
+				Format.ntNoRounding(calculator.pierCorrection());
+		this._correctedF.innerHTML = Format.nt(calculator.correctedF(reading));
 	};
 
 	return DeclinationView;
