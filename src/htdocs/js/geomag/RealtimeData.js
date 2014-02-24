@@ -40,6 +40,7 @@ define([
 	RealtimeData.prototype.getValues = function (timeMs, observatory) {
 		var time,
 		    timeIndex,
+		    obj,
 		    channels,
 		    channel,
 		    r = null;
@@ -49,8 +50,14 @@ define([
 		if (timeIndex !== -1) {
 			// find correct observatory
 			if (observatory) {
-				channels = this._data.get(observatory).values;
+				obj = this._data.get(observatory);
+				if (obj === null) {
+					return null;
+				} else {
+					channels = obj.values;
+				}
 			} else {
+				// default to first observatory
 				channels = this._data.data()[0].values;
 			}
 			// extract values for time
