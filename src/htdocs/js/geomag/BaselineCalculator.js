@@ -190,7 +190,7 @@ define([
 		 */
 		scaleValue: function (absoluteH) {
 			if( absoluteH === 0 ) {
-				return 0;
+				return 1;
 			}
 			return (SCALE_VALUE_COEFFICIENT / absoluteH);
 		},
@@ -267,9 +267,6 @@ define([
 		 * @return {Number} nT
 		 */
 		d: function (baselineD, scaleValue) {
-			if( scaleValue === 0 ) {
-				return 0;
-			}
 			return (baselineD * 60.0 / scaleValue);
 		},
 
