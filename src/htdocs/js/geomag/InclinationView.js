@@ -3,11 +3,13 @@ define([
 	'mvc/View',
 	'util/Util',
 
+	'geomag/Formatter',
 	'geomag/Measurement'
 ], function (
 	View,
 	Util,
 
+	Format,
 	Measurement
 ) {
 	'use strict';
@@ -103,37 +105,17 @@ define([
 		    reading = this._reading;
 
 		this._inclinationAngle.innerHTML =
-				this._formatDegreesMinutes(calculator.inclination(reading));
+				Format.degreesMinutes(calculator.inclination(reading));
 
-		this._horizontalComponent.innerHTML = '<span class="deg">' +
-				calculator.horizontalComponent(reading).toFixed(2) + '</span>';
-		this._verticalComponent.innerHTML = '<span class="deg">' +
-				calculator.verticalComponent(reading).toFixed(2) + '</span>';
+		this._horizontalComponent.innerHTML =
+				Format.nt(calculator.horizontalComponent(reading));
+		this._verticalComponent.innerHTML =
+				Format.nt(calculator.verticalComponent(reading));
 
 		this._southDownMinusNorthUp.innerHTML =
-				calculator.southDownMinusNorthUp(reading).toFixed(2);
+				Format.minutes(calculator.southDownMinusNorthUp(reading));
 		this._northDownMinusSouthUp.innerHTML =
-				calculator.northDownMinusSouthUp(reading).toFixed(2);
-	};
-
-
-	InclinationView.prototype._formatDegreesMinutes = function (angle) {
-		var buf = [],
-		    degrees,
-		    minutes;
-
-		degrees = parseInt(angle, 10);
-		minutes = (angle - degrees) * 60;
-
-		buf.push(
-				'<span class="deg">', angle.toFixed(2), '</span>',
-				'<span class="repeat">',
-					'<span class="deg">', degrees, '</span>',
-					'&nbsp;',
-					'<span class="minutes">', minutes.toFixed(2), '</span>',
-				'</span>');
-
-		return buf.join('');
+				Format.minutes(calculator.northDownMinusSouthUp(reading));
 	};
 
 	return InclinationView;
