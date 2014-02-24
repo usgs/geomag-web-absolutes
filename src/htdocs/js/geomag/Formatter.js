@@ -203,7 +203,7 @@ define([
 	 *        UTC date in format 'YYYY-MM-DD'.
 	 * @return {Number} corresponding epoch timestamp (for 00:00:00), or null.
 	 */
-	Format.parseDate = function(date) {
+	Formatter.parseDate = function(date) {
 		if (date !== '') {
 			var parts = date.split('-');
 			return Date.UTC(parseInt(parts[0], 10),
