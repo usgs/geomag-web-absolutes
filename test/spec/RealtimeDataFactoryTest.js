@@ -147,16 +147,17 @@ define([
 						// check returned data
 						expect(data).to.deep.equal(new RealtimeData(TESTDATA));
 
-						// check arguments
-						sinon.assert.calledWith(stub, sinon.match({
-							data: {
-								starttime: 1377011990,
-								endtime: 1377012000,
-								'obs[]': ['BOU'],
-								'chan[]': ['H', 'E', 'Z', 'F'],
-								freq: 'seconds'
-							}
-						}));
+						// check stub was called
+						expect(stub.callCount).to.equal(1);
+
+						// check data args present as expected
+						expect(stub.getCall(0).args[0].data).to.deep.equal({
+							starttime: 1377011990,
+							endtime: 1377012000,
+							'obs[]': ['BOU'],
+							'chan[]': ['H', 'E', 'Z', 'F'],
+							freq: 'seconds'
+						});
 
 						done();
 					},
