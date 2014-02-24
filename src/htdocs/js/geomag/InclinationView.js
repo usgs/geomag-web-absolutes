@@ -3,14 +3,12 @@ define([
 	'mvc/View',
 	'util/Util',
 
-	'geomag/Measurement',
-	'geomag/Reading'
+	'geomag/Measurement'
 ], function (
 	View,
 	Util,
 
-	Measurement,
-	Reading
+	Measurement
 ) {
 	'use strict';
 

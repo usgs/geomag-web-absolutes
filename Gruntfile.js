@@ -3,7 +3,10 @@
 var LIVE_RELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({port: LIVE_RELOAD_PORT});
 var gateway = require('gateway');
-var rewriteRulesSnippet = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
+var rewriteRulesSnippet = require('grunt-connect-rewrite' +
+		'/lib/utils').rewriteRequest;
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
 
 var mountFolder = function (connect, dir) {
 	return connect.static(require('path').resolve(dir));
@@ -87,6 +90,14 @@ module.exports = function (grunt) {
 			options: {
 				hostname: 'localhost'
 			},
+			proxies: [{
+				context: '/map',
+				host: 'geomag.usgs.gov',
+				port: 80,
+				https: false,
+				changeOrigin: true,
+				xforward: false
+			}],
 			rules: [
 				{
 					from: '^/theme/(.*)$',
@@ -110,6 +121,7 @@ module.exports = function (grunt) {
 						return [
 							lrSnippet,
 							rewriteRulesSnippet,
+							proxySnippet,
 							mountFolder(connect, '.tmp'),
 							mountFolder(connect, options.components),
 							mountPHP(options.base),
@@ -127,6 +139,7 @@ module.exports = function (grunt) {
 					middleware: function (connect, options) {
 						return [
 							rewriteRulesSnippet,
+							proxySnippet,
 							mountPHP(options.base),
 							mountFolder(connect, options.base),
 							mountFolder(connect, 'node_modules'),
@@ -284,7 +297,8 @@ module.exports = function (grunt) {
 				overwrite: true,
 				replacements: [
 					{
-						from: '<script src="http://localhost:35729/livereload.js?snipver=1"></script>',
+						from: '<script src="http://localhost:35729/livereload.js'+
+								'?snipver=1"></script>',
 						to: ''
 					},
 					{
@@ -332,6 +346,7 @@ module.exports = function (grunt) {
 		'concurrent:dist',
 		'replace',
 		'configureRewriteRules',
+		'configureProxies',
 		'open:dist',
 		'connect:dist'
 	]);
@@ -340,6 +355,7 @@ module.exports = function (grunt) {
 		'clean:dist',
 		'compass:dev',
 		'configureRewriteRules',
+		'configureProxies',
 		'connect:dev',
 		'connect:test',
 		'open:server',

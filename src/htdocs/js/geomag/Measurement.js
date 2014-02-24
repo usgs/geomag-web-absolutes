@@ -42,42 +42,29 @@ define([
 	// Observatory extends Model
 	Measurement.prototype = Object.create(Model.prototype);
 
-	Measurement.prototype.setRealtimeValues = function (data) {
-		var values = data.data[0].values;
-		var timeoffset = this.get('time') - data.request.starttime;
-
-		var tmph = values.H[timeoffset]; if( tmph === undefined ) { tmph = null; }
-		var tmpe = values.E[timeoffset]; if( tmpe === undefined ) { tmpe = null; }
-		var tmpz = values.Z[timeoffset]; if( tmpz === undefined ) { tmpz = null; }
-		var tmpf = values.F[timeoffset]; if( tmpf === undefined ) { tmpf = null; }
-		this.set({'h':tmph});
-		this.set({'e':tmpe});
-		this.set({'z':tmpz});
-		this.set({'f':tmpf});
-	};
 
 	/**
-	 * @params options {Object}
-	 * @params options.realtimeDataFactory {Object}
-	 * @params options.success {function}
-	 * Fills in HEZF for the measurement.
+	 * Set realtime data values corresponding to measurement time.
+	 *
+	 * @param realtimeData {RealtimeData}
+	 *        as returned by RealtimeDataFactory.
 	 */
-	Measurement.prototype.setRealtimeData = function(options) {
-		var realtimeDataFactory = options.realtimeDataFactory;
-		var success = options.success;
-		var measurement = this;
-
-		realtimeDataFactory.getRealtimeData({
-			'starttime': measurement.get('time'),
-			'endtime': measurement.get('time') + 1,
-			'channels': ['H','E','Z','F'],
-			'freq': 'seconds',
-			'success': function(data) {
-
-			measurement.setRealtimeValues(data);
-			success(measurement);
-			}
-		});
+	Measurement.prototype.setRealtimeData = function (realtimeData) {
+		var values = realtimeData.getValues(this.get('time')),
+		    toset;
+		toset = {
+			h: null,
+			e: null,
+			z: null,
+			f: null
+		};
+		if (values !== null) {
+			toset.h = values.H;
+			toset.e = values.E;
+			toset.z = values.Z;
+			toset.f = values.F;
+		}
+		this.set(toset);
 	};
 
 

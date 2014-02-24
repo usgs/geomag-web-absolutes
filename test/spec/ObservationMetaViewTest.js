@@ -48,13 +48,6 @@ define([
 		}));
 	};
 
-	factory.getObservatories = function (options) {
-		options.success(this._getObservatories([
-			{id: 1, name: 'Observatory 1'},
-			{id: 5, name: 'Observatory 5'}
-		]));
-	};
-
 
 	describe('Unit tests for ObservationMetaView', function () {
 
@@ -72,7 +65,11 @@ define([
 			it('sets defaults for empty observation', function () {
 				view = new ObservationMetaView({
 					observation: observation,
-					calculator: calculator
+					calculator: calculator,
+					observatories: new Collection(factory._getObservatories([
+						{id: 1, name: 'Observatory 1'},
+						{id: 5, name: 'Observatory 5'}
+					]))
 				});
 
 				view._observatorySelectView.selectById(5);

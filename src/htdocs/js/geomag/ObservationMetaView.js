@@ -83,6 +83,7 @@ define([
 		    el = this._el,
 		    calculator = this._options.calculator,
 		    observation = this._options.observation,
+		    observatories = this._options.observatories,
 		    observatorySelectView,
 		    pierSelectView,
 		    marksSelectView,
@@ -159,7 +160,8 @@ define([
 				});
 		// observation inputs
 		this._date = date = el.querySelector('.date');
-		this._pierTemperature = pierTemperature = el.querySelector('.pier-temperature');
+		this._pierTemperature = pierTemperature =
+				el.querySelector('.pier-temperature');
 
 		date.addEventListener('change', this._onChange);
 		pierTemperature.addEventListener('change', this._onChange);
@@ -263,13 +265,7 @@ define([
 		});
 
 		// load observatories collection
-		this._observation.getObservatories({
-			success: function (observatories) {
-				observatories = new Collection(observatories);
-				_selectById(observatories, observation.get('observatory_id'));
-				observatorySelectView.setCollection(observatories);
-			}
-		});
+		observatorySelectView.setCollection(observatories);
 
 		// fill in observation inputs
 		this.render();
@@ -346,7 +342,8 @@ define([
 		    pierTemperature = this._pierTemperature.value;
 
 		date = this._parseDate(date);
-		pierTemperature = (pierTemperature === '' ? null : parseFloat(pierTemperature));
+		pierTemperature = (pierTemperature === '' ?
+				null : parseFloat(pierTemperature));
 
 		observation.set({
 			begin: date,

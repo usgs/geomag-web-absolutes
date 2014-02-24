@@ -3,15 +3,18 @@
 define([
 	'mvc/Model',
 	'util/Util',
-	'geomag/Reading',
-	'util/Xhr'
+	'util/Xhr',
+
+	'geomag/RealtimeData'
 ], function (
 	Model,
 	Util,
-	Reading,
-	Xhr
+	Xhr,
+
+	RealtimeData
 ) {
 	'use strict';
+
 
 	var DEFAULT_URL = '/map/observatories_data.json.php';
 
@@ -21,8 +24,7 @@ define([
 		'starttime': null,
 		'endtime': null,
 		'channels': ['H','E','Z','F'],
-		'freq': 'seconds',
-		'data': null
+		'freq': 'seconds'
 	};
 
 
@@ -36,23 +38,37 @@ define([
 	 * @param options.freq {string{seconds|minutes}}
 	 * @param options.success {callback()}
 	 */
-	var RealtimeFactory = function (options) {
+	var RealtimeDataFactory = function (options) {
 		// Call parent constructor
 		Model.call(this, Util.extend({}, DEFAULTS, options));
-		this.options = Util.extend({}, DEFAULTS, options);
+
+		// TODO: this is a hack to deal with
+		// https://github.com/usgs/hazdev-webutils/issues/8
+		this._lastcall = null;
 	};
-	// RealtimeFactory extends Model
-	RealtimeFactory.prototype = Object.create(Model.prototype);
+
+	// RealtimeDataFactory extends Model
+	RealtimeDataFactory.prototype = Object.create(Model.prototype);
+
 
 	/**
 	 * @param options {Object} observatory attributes.
 	 *        options.???  Same as constructor.
 	 */
-	RealtimeFactory.prototype.getRealtimeData = function (options) {
-		options = Util.extend( {}, this.options, options);
+	RealtimeDataFactory.prototype.getRealtimeData = function (options) {
+		options = Util.extend({}, this.get(), options);
+
+		// TODO: this is a hack to deal with
+		// https://github.com/usgs/hazdev-webutils/issues/8
+		if (this._lastcall !== null) {
+			while (this._lastcall === new Date().getTime()) {
+				// wait until its not
+			}
+		}
+		this._lastcall = new Date().getTime();
 
 		Xhr.jsonp({
-			'url': options.url,
+			url: options.url,
 			data: {
 				'starttime': options.starttime,
 				'endtime': options.endtime,
@@ -60,12 +76,15 @@ define([
 				'chan[]': options.channels,
 				'freq': options.freq
 			},
-			'success': options.success
+			success: function (data) {
+				options.success(new RealtimeData(data));
+			}
 		});
 	};
 
+
 	// return constructor from closure
-	return RealtimeFactory;
+	return RealtimeDataFactory;
 });
 
 
