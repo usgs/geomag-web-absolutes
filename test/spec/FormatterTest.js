@@ -18,12 +18,29 @@ define([
 
 	describe('Formatter Unit Tests', function () {
 
+		describe('decimalToDms', function () {
+			it('parses decimals properly', function () {
+				// Edge case
+				expect(Format.decimalToDms(0.0)).to.deep.equal([0, 0, 0]);
+				expect(Format.decimalToDms(30.0)).to.deep.equal([30, 0, 0]);
+				expect(Format.decimalToDms(30.5)).to.deep.equal([30, 30, 0]);
+				expect(Format.decimalToDms(0.5)).to.deep.equal([0, 30, 0]);
+
+				// Some tests from real observations
+				expect(Format.decimalToDms(120.010)).to.deep.equal([120, 0, 36]);
+				expect(Format.decimalToDms(193.2192)).to.deep.equal([193, 13, 9]);
+				expect(Format.decimalToDms(259.1139)).to.deep.equal([259, 6, 50]);
+			});
+		});
+
 		describe('degrees', function () {
 			it('are formatted properly', function () {
 				expect(Format.degrees(0.0)).to.equal(
 						'<span class="deg">0.00<span class="units">&deg;</span></span>');
+				// Rounds down properly
 				expect(Format.degrees(30.0123456789)).to.equal(
 						'<span class="deg">30.01<span class="units">&deg;</span></span>');
+				// Rounds up properly
 				expect(Format.degrees(30.5555555555)).to.equal(
 						'<span class="deg">30.56<span class="units">&deg;</span></span>');
 			});
@@ -44,18 +61,48 @@ define([
 			});
 		});
 
-		describe('decimalToDms', function () {
-			it('parses decimals properly', function () {
-				// Edge case
-				expect(Format.decimalToDms(0.0)).to.deep.equal([0, 0, 0]);
-				expect(Format.decimalToDms(30.0)).to.deep.equal([30, 0, 0]);
-				expect(Format.decimalToDms(30.5)).to.deep.equal([30, 30, 0]);
-				expect(Format.decimalToDms(0.5)).to.deep.equal([0, 30, 0]);
-
-				// Some tests from real observations
-				expect(Format.decimalToDms(120.010)).to.deep.equal([120, 0, 36]);
-				expect(Format.decimalToDms(193.2192)).to.deep.equal([193, 13, 9]);
-				expect(Format.decimalToDms(259.1139)).to.deep.equal([259, 6, 50]);
+		describe('degrees/minutes angles', function () {
+			it('are formatted properly', function () {
+				expect(Format.degreesMinutes(0)).to.equal(
+						'<span class="deg">' +
+							'0.00<span class="units">&deg;</span>' +
+						'</span>' +
+						'<span class="repeat">' +
+							'<span class="deg">' +
+								'0<span class="units">&deg;</span>' +
+							'</span>' +
+							'&nbsp;' +
+							'<span class="minutes">' +
+								'0.00<span class="units">\'</span>' +
+							'</span>' +
+						'</span>');
+				expect(Format.degreesMinutes(179.95)).to.equal(
+						'<span class="deg">' +
+							'179.95<span class="units">&deg;</span>' +
+						'</span>' +
+						'<span class="repeat">' +
+							'<span class="deg">' +
+								'179<span class="units">&deg;</span>' +
+							'</span>' +
+							'&nbsp;' +
+							'<span class="minutes">' +
+								'57.00<span class="units">\'</span>' +
+							'</span>' +
+						'</span>');
+				// Still works when rounding is required
+				expect(Format.degreesMinutes(179.94583)).to.equal(
+						'<span class="deg">' +
+							'179.95<span class="units">&deg;</span>' +
+						'</span>' +
+						'<span class="repeat">' +
+							'<span class="deg">' +
+								'179<span class="units">&deg;</span>' +
+							'</span>' +
+							'&nbsp;' +
+							'<span class="minutes">' +
+								'56.75<span class="units">\'</span>' +
+							'</span>' +
+						'</span>');
 			});
 		});
 
@@ -78,6 +125,74 @@ define([
 						.to.equal('' + 193.2192);
 				expect(Format.dmsToDecimal(259, 6, 50).toFixed(4))
 						.to.equal('' + 259.1139);
+			});
+		});
+
+		describe('minutes', function () {
+			it('are formatted properly', function () {
+				expect(Format.minutes(0.0)).to.equal(
+						'<span class="minutes">0.00<span class="units">\'</span></span>');
+				// Rounds down properly
+				expect(Format.minutes(30.0123456789)).to.equal(
+						'<span class="minutes">30.01<span class="units">\'</span></span>');
+				// Rounds up properly
+				expect(Format.minutes(30.5555555555)).to.equal(
+						'<span class="minutes">30.56<span class="units">\'</span></span>');
+			});
+		});
+
+		describe('nanoTeslas', function () {
+			it('are formatted properly', function () {
+				expect(Format.nt(0.0)).to.equal(
+						'<span class="nano-teslas">' +
+							'0.00<span class="units">nT</span>' +
+						'</span>');
+				// Rounds down properly
+				expect(Format.nt(30.0123456789)).to.equal(
+						'<span class="nano-teslas">' +
+							'30.01<span class="units">nT</span>' +
+							'</span>');
+				// Rounds up properly
+				expect(Format.nt(30.5555555555)).to.equal(
+						'<span class="nano-teslas">' +
+							'30.56<span class="units">nT</span>' +
+						'</span>');
+				// A number closer to an actual F value
+				expect(Format.nt(54599.6237843)).to.equal(
+						'<span class="nano-teslas">' +
+							'54599.62<span class="units">nT</span>' +
+						'</span>');
+			});
+		});
+
+		describe('nanoTeslas with no rounding', function () {
+			it('are formatted properly', function () {
+				expect(Format.ntNoRounding(0)).to.equal(
+						'<span class="nano-teslas">' +
+							'0<span class="units">nT</span>' +
+						'</span>');
+				expect(Format.ntNoRounding(30.0123456789)).to.equal(
+						'<span class="nano-teslas">' +
+							'30.0123456789<span class="units">nT</span>' +
+						'</span>');
+				expect(Format.ntNoRounding(30.5555555555)).to.equal(
+						'<span class="nano-teslas">' +
+							'30.5555555555<span class="units">nT</span>' +
+						'</span>');
+				expect(Format.ntNoRounding(54599.6237843)).to.equal(
+						'<span class="nano-teslas">' +
+							'54599.6237843<span class="units">nT</span>' +
+						'</span>');
+			});
+		});
+
+		describe('parseDate', function () {
+			it('parses Date properly', function () {
+				expect(Format.parseDate('2000-01-01')).to.equal(946684800000);
+				// add 1 day, should add 24h*60min*60sec*1000 = 86400000
+				expect(Format.parseDate('2000-01-02')).to.equal(946771200000);
+				// add 1 month, should add 31d*24h*60min*60sec*1000 = 2678400000
+				expect(Format.parseDate('2000-02-01')).to.equal(949363200000);
 			});
 		});
 
