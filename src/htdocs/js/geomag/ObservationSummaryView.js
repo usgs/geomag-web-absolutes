@@ -209,12 +209,8 @@ define([
 								'<th scope="col" class="start-time">Start Time</th>',
 								'<th scope="col" class="end-time">End Time</th>',
 								'<th scope="col" colspan="2"class="absolute-declination">Absolute Declination</th>',
-								//'<th scope="col" class="degrees">Deg.</th>',
-								//'<th scope="col" class="minutes">Min.</th>',
 								'<th scope="col" class="ord-min">Ordinate</th>',
 								'<th scope="col" colspan="2" class="baseline-values">Baseline Values</th>',
-								//'<th scope="col" class="baseline-min">Min.</th>',
-								//'<th scope="col" class="baseline-nt">nT</th>',
 								'<th scope="col" class="observer">Observer</th>',
 								'<th scope="col" class="shift">180&#176; Shift</th>',
 							'</tr>',
@@ -409,6 +405,11 @@ define([
 			measurements[Measurement.SOUTH_UP][0].on('change', this._renderInclination, this);
 			measurements[Measurement.NORTH_DOWN][0].on('change', this._renderInclination, this);
 
+
+			measurements[Measurement.FIRST_MARK_UP][0].on('change', this._renderInclination, this);
+			measurements[Measurement.FIRST_MARK_DOWN][0].on('change', this._renderInclination, this);
+			measurements[Measurement.SECOND_MARK_UP][0].on('change', this._renderInclination, this);
+			measurements[Measurement.SECOND_MARK_DOWN][0].on('change', this._renderInclination, this);
 		}
 		this.render();
 	};
