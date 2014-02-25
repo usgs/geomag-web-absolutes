@@ -62,7 +62,7 @@ try {
 		if ($observation === null) {
 			header('HTTP/1.1 400 Bad Request');
 			echo 'no matching observation found';
-			exit();	
+			exit();
 		}
 		// delete
 		$OBSERVATION_FACTORY->deleteObservation($observation);
@@ -79,7 +79,7 @@ try {
 			if ($observation->id !== null) {
 				header('HTTP/1.1 400 Bad Request');
 				echo 'cannot create an observation that already has an id';
-				exit();	
+				exit();
 			}
 			$observation = $OBSERVATION_FACTORY->createObservation($observation);
 		} else if ($method === 'PUT') {
@@ -87,15 +87,19 @@ try {
 			if ($observation->id === null) {
 				header('HTTP/1.1 400 Bad Request');
 				echo 'cannot update an observation without an id';
-				exit();	
+				exit();
 			}
 			$observation = $OBSERVATION_FACTORY->updateObservation($observation);
+		} else {
+				header('HTTP/1.1 405 Method not allowed');
+				echo 'unsupported HTTP method';
+				exit();
 		}
 
 		// output resulting observation
 		$json = str_replace('\"', '"', json_encode($observation));
 		header('Content-Type: application/json');
-		echo $json;		
+		echo $json;
 	}
 } catch (Exception $e) {
 	// fail noisily
