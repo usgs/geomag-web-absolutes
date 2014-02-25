@@ -225,7 +225,7 @@ class ObservationFactory {
 			$statement->bindParam(':reading_id', $id, PDO::PARAM_INT);
 			$statement->bindParam(':type', $object->type, PDO::PARAM_STR);
 			$statement->bindParam(':time', $object->time, PDO::PARAM_INT);
-			$statement->bindParam(':angle', $object->angle, PDO::PARAM_INT);
+			$statement->bindParam(':angle', $object->angle, PDO::PARAM_STR);
 			$statement->bindParam(':h', $object->h, PDO::PARAM_STR);
 			$statement->bindParam(':e', $object->e, PDO::PARAM_STR);
 			$statement->bindParam(':z', $object->z, PDO::PARAM_STR);

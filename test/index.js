@@ -78,6 +78,7 @@ require([
 		'spec/ReadingViewTest',
 		'spec/RealtimeDataTest',
 		'spec/RealtimeDataFactoryTest',
+		'spec/observation_data_Test',
 		'spec/ObservationBaselineCalculatorTest',
 		'spec/ObservationMetaViewTest',
 		'spec/mvcutil/CollectionSelectBoxTest',

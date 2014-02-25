@@ -155,6 +155,7 @@ module.exports = function (grunt) {
 			test: {
 				options: {
 					base: '<%= app.test %>',
+					devBase: '<%= app.dev %>/htdocs',
 					components: bowerConfig.directory,
 					port: 8000,
 					middleware: function (connect, options) {
@@ -162,9 +163,9 @@ module.exports = function (grunt) {
 							mountFolder(connect, '.tmp'),
 							mountFolder(connect, 'bower_components'),
 							mountFolder(connect, 'node_modules'),
-							mountPHP(options.base),
 							mountFolder(connect, options.base),
-							mountFolder(connect, appConfig.dev + '/htdocs/js')
+							mountPHP(options.devBase),
+							mountFolder(connect, options.devBase + '/js')
 						];
 					}
 				}
