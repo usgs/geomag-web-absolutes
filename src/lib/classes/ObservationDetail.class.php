@@ -25,7 +25,7 @@ class ObservationDetail extends Observation {
 		$readings = array();
 		if (isset($p['readings'])) {
 			foreach ($p['readings'] as $reading) {
-				$readings[] = Reading::fromArray($readings);
+				$readings[] = Reading::fromArray($reading);
 			}
 		}
 
