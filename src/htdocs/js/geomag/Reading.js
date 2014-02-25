@@ -115,6 +115,21 @@ define([
 		return r;
 	};
 
+	/**
+	 * Utility method to call a function on each measurement in this reading.
+	 *
+	 * @param callback {Function}
+	 *        function to call with each measurement.
+	 */
+	Reading.prototype.eachMeasurement = function (callback) {
+		var measurements = this.get('measurements').data(),
+		    i,
+		    len;
+		for (i = 0, len = measurements.length; i < len; i++) {
+			callback(measurements[i]);
+		}
+	};
+
 
 	// return constructor from closure
 	return Reading;
