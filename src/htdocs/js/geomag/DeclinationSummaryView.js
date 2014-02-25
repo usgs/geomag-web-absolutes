@@ -57,6 +57,8 @@ define([
 
 		this._baselineNt.innerHTML = this._calculator.d(reading);
 
+
+
 	};
 
 
@@ -66,7 +68,7 @@ define([
 				len = null;
 
 		el.innerHTML = [
-			'<th class="name" scope="row">&nbsp;</th>',
+			'<th class="name" scope="row"></th>',
 			'<td class="valid"><input type="checkbox" /></td>',
 			'<td class="start-time"></td>',
 			'<td class="end-time"></td>',
@@ -80,7 +82,7 @@ define([
 				'<select>',
 					'<option value="-180">-180</option>',
 					'<option value="0" selected="selected">0</option>',
-					'<option vaolue="+180">+180</option>',
+					'<option value="+180">+180</option>',
 				'</select>',
 			'</td>'
 
