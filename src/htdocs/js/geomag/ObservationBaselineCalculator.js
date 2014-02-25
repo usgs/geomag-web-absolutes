@@ -77,7 +77,7 @@ define([
 	 * @return {Number} magneticSouthMeridian
 	 */
 	ObservationBaselineCalculator.prototype.magneticSouthMeridian =
-		function (reading) {
+			function (reading) {
 		var measurements = reading.getMeasurements();
 
 		// measurement.type
@@ -200,7 +200,7 @@ define([
 	 */
 	ObservationBaselineCalculator.prototype.correctedF =
 			function (reading) {
-		// dont need to check each measurement, use ns(ud) 
+		// dont need to check each measurement, use ns(ud)
 		// (value will be null for measurement values that don't matter)
 
 		return this._calculator.correctedF(
