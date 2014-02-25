@@ -45,12 +45,12 @@ define([
 
 		describe('constructor', function () {
 			it('Is an instance of ObservationSummaryView', function () {
-				var O = new ObservationSummaryView({
+				var o = new ObservationSummaryView({
 					observation: new Observation(),
 					baselineCalculator: new ObservationBaselineCalculator()
 				});
 				/* jshint -W030 */
-				expect(O).to.be.an.instanceOf(ObservationSummaryView);
+				expect(o).to.be.an.instanceOf(ObservationSummaryView);
 				/* jshint +W030 */
 			});
 		});
@@ -58,13 +58,15 @@ define([
 		describe('Proper event bindings', function () {
 			it('should render when Pier temp changes', function () {
 				observation.set({'pier_temperature':40});
-				var pierTemperature = parseInt(view._el.querySelector('.pier-temp-value').innerHTML, 10);
+				var pierTemperature =
+						parseInt(view._el.querySelector('.pier-temp-value').innerHTML, 10);
 				expect(pierTemperature).to.equal(40);
 			});
 
 			it('should render when annotation changes', function () {
 				observation.set({'annotation':'This is an annotation test'});
-				var annotation = view._el.querySelector('.reviewer > textarea').innerHTML;
+				var annotation =
+						view._el.querySelector('.reviewer > textarea').innerHTML;
 				expect(annotation).to.equal('This is an annotation test');
 			});
 
