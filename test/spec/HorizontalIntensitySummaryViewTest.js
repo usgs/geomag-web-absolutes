@@ -82,7 +82,7 @@ define([
 		});
 
 		describe('event bindings', function () {
-			it('Should toggel valid state', function () {
+			it('Should toggle valid state', function () {
 				var view,
 				    checkBox,
 				    checkBoxBefore,
