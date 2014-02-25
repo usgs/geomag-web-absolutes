@@ -47,7 +47,8 @@ define([
 		this.called = false;
 		MagnetometerOrdinatesView.call(this, options);
 	};
-	TestMagnetometerOrdinatesView.prototype = Object.create(MagnetometerOrdinatesView.prototype);
+	TestMagnetometerOrdinatesView.prototype =
+			Object.create(MagnetometerOrdinatesView.prototype);
 	TestMagnetometerOrdinatesView.prototype.render = function() {
 		this.called = true;
 	};
@@ -145,9 +146,9 @@ define([
 				var calculator = testObservationBaselineCalculator;
 
 				var magnetometerOrdinatesView = new MagnetometerOrdinatesView({
-								reading: new Reading(),
-								observation: new Observation(),
-								baselineCalculator: calculator});
+						reading: new Reading(),
+						observation: new Observation(),
+						baselineCalculator: calculator});
 
 				expect(magnetometerOrdinatesView._hMean.textContent).to.equal(
 					calculator.meanH().toFixed(2));

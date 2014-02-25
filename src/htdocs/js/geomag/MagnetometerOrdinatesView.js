@@ -127,7 +127,6 @@ define([
 	};
 
 	MagnetometerOrdinatesView.prototype.render = function () {
-		// TODO :: Render current model
 		var calculator = this._calculator,
 		    reading = this._reading;
 
@@ -152,9 +151,9 @@ define([
 
 
 		this._scaleValue.innerHTML =
-			'Ordinate Mean D is calculated using (Corrected F * scaleValue / 60)' +
-			'<br> Where scale Value = ' +
-			calculator.scaleValue(reading).toFixed(4);
+				'Ordinate Mean D is calculated using (Corrected F * scaleValue / 60)' +
+				'<br> Where scale Value = ' +
+				calculator.scaleValue(reading).toFixed(4);
 
 	};
 
