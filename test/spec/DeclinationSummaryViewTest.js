@@ -80,7 +80,7 @@ define([
 				expect(renderSpy.callCount).to.equal(2);
 			});
 
-			it('should render when reading shift changes', function() {
+			it('should render when reading shift changes', function () {
 				reading.trigger('change:declination_shift');
 				expect(renderSpy.callCount).to.equal(2);
 			});
