@@ -40,7 +40,7 @@ class Reading {
 	public static function fromArray (&$p) {
 		$measurements = array();
 		if (isset($p['measurements'])) {
-			foreach ($p['measurement'] as $measurement) {
+			foreach ($p['measurements'] as $measurement) {
 				$measurements[] = Measurement::fromArray($measurement);
 			}
 		}
