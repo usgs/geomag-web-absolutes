@@ -27,7 +27,7 @@ define([
 		this._el.innerHTML = [
 				'<h2 class="title">Observations</h2>',
 				'<section class="observations-new"></section>',
-				'<section class="observations-all"></section>',
+				'<section class="observations-all"></section>'
 				// '<section class="observations-pending"></section>', // TODO
 				// '<section class="observations-completed"></section>' // TODO
 		].join('');
@@ -103,7 +103,7 @@ define([
 
 
 	// TODO, get all pending observations
-	// ObservationsView.prototype.getPendingObservations = 
+	// ObservationsView.prototype.getPendingObservations =
 	// 		function (observations) {
 	// 	var el = this._el.querySelector('.observations-pending'),
 	// 	    pending = [],
@@ -122,7 +122,7 @@ define([
 	// };
 
 	// TODO, get all completed observations
-	// ObservationsView.prototype.getCompletedObservations = 
+	// ObservationsView.prototype.getCompletedObservations =
 	// 		function (observations) {
 	// 	var el = this._el.querySelector('.observations-completed'),
 	// 	    completed = [],
