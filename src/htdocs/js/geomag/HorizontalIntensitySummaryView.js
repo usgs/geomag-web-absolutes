@@ -81,7 +81,7 @@ define([
 		this._onChange = this._onChange.bind(this);
 		this._valid.addEventListener('change', this._onChange);
 
-		this._reading.on('change', this.render, this);
+		this._reading.on('change:horizontal_intensity_valid', this.render, this);
 
 		this._calculator.on('change', this.render, this);
 
