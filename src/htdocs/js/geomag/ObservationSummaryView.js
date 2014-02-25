@@ -26,11 +26,8 @@ define([
 	var ObservationSummaryView = function (options) {
 		this._options = Util.extend({}, DEFAULTS, options);
 		View.call(this, this._options);
-
-
 	};
 	ObservationSummaryView.prototype = Object.create(View.prototype);
-
 
 	ObservationSummaryView.prototype.render = function () {
 		this._renderDeclination();
@@ -162,7 +159,6 @@ define([
 					calculator:calculator
 				});
 			}
-
 			// insert view
 			verticalIntensitySummaryView.appendChild
 					(reading._verticalIntensitySummary._el);
