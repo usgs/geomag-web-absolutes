@@ -1,2 +1,14 @@
-MOUNT_PATH='/baseline';
-MOUNT_DIR='/some/path';
+; Absolute path to application root directory
+APP_DIR = src
+
+; Absolute path to application data directory
+DATA_DIR = data
+
+; Url path to application
+MOUNT_PATH = /application
+
+; Name of Sqlite Database file (within data directory)
+SQLITE_DB = sqlite.db
+
+; Name of htpassword authorization file
+AUTH_FILE = users.htpasswd
