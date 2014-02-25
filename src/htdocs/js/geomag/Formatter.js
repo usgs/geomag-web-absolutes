@@ -12,26 +12,6 @@ define([
 
 	var Formatter = {};
 
-	/*Formatter._degreeUnits = function (degrees) {
-		var buf = [];
-
-		buf.push(degrees, '<span class="units">°</span>');
-
-		return buf.join('');
-	};
-
-	Formatter._minuteUnits = function (minutes) {
-		var buf = [];
-
-		buf.push(minutes, '<span class="units">\'</span>');
-
-		return buf.join('');
-	};
-
-	Formatter._ntUnits = function (nt_value) {
-		return [nt_value, this._units(NANOTESLAS)].join('');
-	};*/
-
 	Formatter._units = function (units){
 		return ['<span class="units">', units, '</span>'].join('');
 	};
