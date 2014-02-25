@@ -27,7 +27,15 @@ define([
 	var anyErrors = false;
 
 
-	describe('Unit tests for observation_data.php', function () {
+	/*
+	 * This test depends on describe and it being processed sequentially.
+	 * It also depends on test data that is not guaranteed to exist,
+	 *     (observatory_id=3, mark_id=3, in server side testdata.db),
+	 *     and so is being skipped.
+	 * When these dependencies are in place, these tests pass.
+	 */
+
+	describe.skip('Unit tests for observation_data.php', function () {
 		var observation,
 		    measurementTime = new Date().getTime(),
 		    measurementAngle = 123.4,
