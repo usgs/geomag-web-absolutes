@@ -51,8 +51,7 @@ define([
 		if (time === null) {
 			timeString = '';
 		} else {
-			//timeString = this._timeToString(time);
-			timeString = Format.timeToString(time);
+			timeString = Format.time(time);
 		}
 
 		// Deconstruct the decimal degrees back to Dms
@@ -113,7 +112,7 @@ define([
 			    seconds = parseInt(_this._secondsInput.value||'0', 10);
 
 			_this._measurement.set({
-				'time': Format.stringToTime(time),
+				'time': Format.parseRelativeTime(time),
 				'angle': Format.dmsToDecimal(degrees, minutes, seconds)
 			});
 		};
