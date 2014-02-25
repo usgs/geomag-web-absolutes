@@ -54,7 +54,7 @@ define([
 		    i = null,
 			  len = null;
 		el.innerHTML = [
-			'<th class="name" scope="row">&nbsp;</th>',
+			'<th class="name" scope="row"></th>',
 			'<td class="valid"><input type="checkbox" /></td>',
 			'<td class="start-time"></td>',
 			'<td class="end-time"></td>',
