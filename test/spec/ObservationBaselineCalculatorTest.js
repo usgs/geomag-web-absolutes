@@ -203,7 +203,8 @@ define([
 
 				console.log(expected + ' | ' + calc.magneticSouthMeridian(READING));
 
-				expect(Math.abs(calc.magneticSouthMeridian(READING) - expected)).to.be.below(EPSILON);
+				expect(Math.abs(calc.magneticSouthMeridian(READING) -
+						expected)).to.be.below(EPSILON);
 
 			});
 
@@ -216,7 +217,8 @@ define([
 
 				console.log(expected + ' | ' + calc.magneticAzimuthMark(READING));
 
-				expect(Math.abs(calc.magneticAzimuthMark(READING) - expected)).to.below(EPSILON);
+				expect(Math.abs(calc.magneticAzimuthMark(READING) -
+						expected)).to.below(EPSILON);
 			});
 
 		}); // END :: magneticAzimuthMark
@@ -228,7 +230,8 @@ define([
 
 				console.log(expected + ' | ' + calc.geographicMeridian(READING));
 
-				expect(Math.abs(calc.geographicMeridian(READING) - expected)).to.be.below(EPSILON);
+				expect(Math.abs(calc.geographicMeridian(READING) -
+						expected)).to.be.below(EPSILON);
 			});
 
 		}); // END :: geographicMeridian
@@ -240,7 +243,8 @@ define([
 
 				console.log(expected + ' | ' + calc.magneticDeclination(READING));
 
-				expect(Math.abs(calc.magneticDeclination(READING) - expected)).to.be.below(EPSILON);
+				expect(Math.abs(calc.magneticDeclination(READING) -
+						expected)).to.be.below(EPSILON);
 			});
 
 		}); // END ::  magneticDeclination
@@ -276,7 +280,8 @@ define([
 
 				console.log(expected + ' | ' + calc.correctedF(READING));
 
-				expect(Math.abs(calc.correctedF(READING) - expected)).to.be.below(EPSILON);
+				expect(Math.abs(calc.correctedF(READING) -
+						expected)).to.be.below(EPSILON);
 			});
 
 		}); // END :: corrected F
@@ -288,7 +293,8 @@ define([
 
 				console.log(expected + ' | ' + calc.inclination(READING));
 
-				expect(Math.abs(calc.inclination(READING) - expected)).to.be.below(EPSILON);
+				expect(Math.abs(calc.inclination(READING) -
+						expected)).to.be.below(EPSILON);
 			});
 
 		}); // END :: inclination
@@ -300,7 +306,8 @@ define([
 
 				console.log(expected + ' | ' + calc.horizontalComponent(READING));
 
-				expect(Math.abs(calc.horizontalComponent(READING) - expected)).to.be.below(EPSILON);
+				expect(Math.abs(calc.horizontalComponent(READING) -
+						expected)).to.be.below(EPSILON);
 			});
 
 		}); // END :: horiztonal Component
@@ -312,7 +319,8 @@ define([
 
 				console.log(expected + ' | ' + calc.verticalComponent(READING));
 
-				expect(Math.abs(calc.verticalComponent(READING) - expected)).to.be.below(EPSILON);
+				expect(Math.abs(calc.verticalComponent(READING) -
+						expected)).to.be.below(EPSILON);
 			});
 
 		}); // END :: verticalComponent
@@ -350,7 +358,8 @@ define([
 
 				console.log(expected + ' | ' + calc.scaleValue(READING));
 
-				expect(Math.abs(calc.scaleValue(READING)) - expected).to.be.below(EPSILON);
+				expect(Math.abs(calc.scaleValue(READING)) -
+						expected).to.be.below(EPSILON);
 			});
 
 		}); // END :: scaleValue
@@ -358,11 +367,12 @@ define([
 		describe('computedE()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				var expected = -0.7413333333333333;  //  464.5604 min, converted to degrees
+				var expected = -0.7413333333333333;// 464.5604 min, converted to degrees
 
 				console.log(expected + ' | ' + calc.computedE(READING));
 
-				expect(Math.abs(calc.computedE(READING) - expected)).to.be.below(EPSILON);
+				expect(Math.abs(calc.computedE(READING) -
+						expected)).to.be.below(EPSILON);
 			});
 
 		}); // END :: computedE
@@ -374,7 +384,8 @@ define([
 
 				console.log(expected + ' | ' + calc.baselineD(READING));
 
-				expect(Math.abs(calc.baselineD(READING) - expected)).to.be.below(EPSILON);
+				expect(Math.abs(calc.baselineD(READING) -
+						expected)).to.be.below(EPSILON);
 			});
 
 		}); // END :: baselineD
@@ -387,7 +398,8 @@ define([
 
 				console.log(expected + ' | ' + calc.baselineH(READING));
 
-				expect(Math.abs(calc.baselineH(READING) - expected)).to.be.below(EPSILON);
+				expect(Math.abs(calc.baselineH(READING) -
+						expected)).to.be.below(EPSILON);
 			});
 
 		}); // END :: baselineH
@@ -400,7 +412,8 @@ define([
 
 				console.log(expected + ' | ' + calc.baselineZ(READING));
 
-				expect(Math.abs(calc.baselineZ(READING) - expected)).to.be.below(EPSILON);
+				expect(Math.abs(calc.baselineZ(READING) -
+						expected)).to.be.below(EPSILON);
 			});
 
 		}); // END :: baselineZ
