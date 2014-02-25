@@ -83,8 +83,8 @@ require([
 		'spec/ObservationMetaViewTest',
 		'spec/mvcutil/CollectionSelectBoxTest',
 		'spec/ObservatoryViewTest',
-		'spec/FormatterTest',
 		'spec/ObservationsViewTest',
+		'spec/FormatterTest',
 		'spec/MagnetometerOrdinatesViewTest'
 	], function () {
 		if (window.mochaPhantomJS) {
