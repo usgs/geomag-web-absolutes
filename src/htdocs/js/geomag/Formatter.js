@@ -5,9 +5,14 @@ define([
 	'use strict';
 
 
+	var NANOTESLAS = 'nT',
+		DEGREES = '°',
+		MINUTES = '\'',
+		DEFAULT_DIGITS = 2;
+
 	var Formatter = {};
 
-	Formatter._degreeUnits = function (degrees) {
+	/*Formatter._degreeUnits = function (degrees) {
 		var buf = [];
 
 		buf.push(degrees, '<span class="units">°</span>');
@@ -24,12 +29,18 @@ define([
 	};
 
 	Formatter._ntUnits = function (nt_value) {
-		var buf = [];
+		return [nt_value, this._units(NANOTESLAS)].join('');
+	};*/
 
-		buf.push(nt_value, '<span class="units">nT</span>');
-
-		return buf.join('');
+	Formatter._units = function (units){
+		return ['<span class="units">', units, '</span>'].join('');
 	};
+
+
+	/////////////////////////////////////////////////////////////////////////////
+	// CONVERSIONS
+	/////////////////////////////////////////////////////////////////////////////
+
 
 	/**
 	 * Decimal angle to degrees, minutes, seconds
@@ -55,100 +66,6 @@ define([
 	};
 
 	/**
-	 * Degrees, as an angle
-	 *
-	 * @param angle {Number} Decimal degrees
-	 *
-	 * @return formatted number with units
-	 *    {Float} Angle degrees, 2 decimal places
-	 */
-	Formatter.degrees = function (angle) {
-		var buf = [];
-
-		buf.push(
-				'<span class="deg">',
-					this._degreeUnits(angle.toFixed(2)),
-				'</span>');
-
-		return buf.join('');
-	};
-
-	/**
-	 * Degrees, as an angle, no rounding
-	 *
-	 * @param angle {Number} Decimal degrees
-	 *
-	 * @return formatted number with units
-	 *    {Float} Angle degrees
-	 */
-	Formatter.degreesNoRounding = function (angle) {
-		var buf = [];
-
-		buf.push(
-				'<span class="deg">',
-					this._degreeUnits(angle),
-				'</span>');
-
-		return buf.join('');
-	};
-
-	/**
-	 * Degrees and Degrees Minutes, as an angle
-	 *
-	 * @param angle {Number} Decimal degrees
-	 *
-	 * @return 3 formatted numbers with units
-	 *    {Float} Decimal angle degrees, 2 decimal places
-	 *    {Int} Angle degrees
-	 *    {Float} Decimal angle minutes, 2 decimal places
-	 */
-	Formatter.degreesAndDegreesMinutes = function (angle) {
-		var buf = [],
-		    degrees,
-		    minutes;
-
-		degrees = parseInt(angle, 10);
-		minutes = (angle - degrees) * 60;
-
-		buf.push(
-				this.degrees(angle),
-				this.degreesMinutes(angle));
-
-		return buf.join('');
-	};
-
-	/**
-	 * Degrees Minutes, as an angle
-	 *
-	 * @param angle {Number} Decimal degrees
-	 *
-	 * @return 2 formatted numbers with units
-	 *    {Int} Angle degrees
-	 *    {Float} Decimal angle minutes, 2 decimal places
-	 */
-	Formatter.degreesMinutes = function (angle) {
-		var buf = [],
-		    degrees,
-		    minutes;
-
-		degrees = parseInt(angle, 10);
-		minutes = (angle - degrees) * 60;
-
-		buf.push(
-				'<span class="repeat">',
-					'<span class="deg">',
-						this._degreeUnits(degrees),
-					'</span>',
-					'&nbsp;',
-					'<span class="minutes">',
-						this._minuteUnits(minutes.toFixed(2)),
-					'</span>',
-				'</span>');
-
-		return buf.join('');
-	};
-
-	/**
 	 * Degrees, minutes, seconds to decimal angle
 	 *
 	 * @param degs {Number}
@@ -171,63 +88,6 @@ define([
 	};
 
 	/**
-	 * Minutes, as an angle
-	 *
-	 * @param angle {Number} Decimal minutes
-	 *
-	 * @return formatted number with units
-	 *    {Float} Angle minutes, 2 decimal places
-	 */
-	Formatter.minutes = function (angle_minutes) {
-		var buf = [];
-
-		buf.push(
-				'<span class="minutes">',
-					this._minuteUnits(angle_minutes.toFixed(2)),
-				'</span>');
-
-		return buf.join('');
-	};
-
-	/**
-	 * nT (nano-teslas)
-	 *
-	 * @param {Number} nT
-	 *
-	 * @return formatted number with units
-	 *    {Float} nT, 2 decimal places
-	 */
-	Formatter.nt = function (nt_value) {
-		var buf = [];
-
-		buf.push(
-				'<span class="nano-teslas">',
-					this._ntUnits(nt_value.toFixed(2)),
-				'</span>');
-
-		return buf.join('');
-	};
-
-	/**
-	 * nT (nano-teslas), no rounding
-	 *
-	 * @param {Number} nT
-	 *
-	 * @return formatted number with units
-	 *    {Float} nT
-	 */
-	Formatter.ntNoRounding = function (nt_value) {
-		var buf = [];
-
-		buf.push(
-				'<span class="nano-teslas">',
-					this._ntUnits(nt_value),
-				'</span>');
-
-		return buf.join('');
-	};
-
-	/**
 	 * Parse a date string into an epoch timestamp.
 	 *
 	 * @param date {String}
@@ -245,7 +105,7 @@ define([
 	};
 
 	/**
-	 * String to Time
+	 * Relative Time
 	 *
 	 * @param time {String}
 	 *      The formatted time string to parse. The date for the returned time
@@ -254,43 +114,213 @@ define([
 	 * @return {Integer}
 	 *      The millisecond timestamp since the epoch.
 	 */
-	Formatter.stringToTime = function (time, offset) {
-		var observationOffset = this._observation.get('begin');
-		var timeString = time.replace(/[^\d]/g, '');
+	Formatter.parseRelativeTime = function (time, offset) {
+		var timeString = time.replace(/[^\d]/g, ''),
+		    hours = 0,
+		    minutes = 0,
+		    seconds = 0;
 
 		// Offset should default to 0 if it doesn't exist
-		if (!offset || offset === null){offset = 0;}
-
-		if (observationOffset) {
-			observationOffset = new Date(observationOffset);
-		} else {
-			observationOffset = new Date();
+		if (typeof offset === 'undefined' || offset === null) {
+			offset = new Date();
 		}
 
 		if (timeString.length === 4) {
 			// HHMM
-			offset = Date.UTC(observationOffset.getUTCFullYear(),
-					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
-					parseInt(timeString.substr(0, 2), 10),
-					parseInt(timeString.substr(2, 2), 10),
-					0, 0);
+			hours = parseInt(timeString.substr(0, 2), 10);
+			minutes = parseInt(timeString.substr(2, 2), 10);
 		} else if (timeString.length === 5) {
 			// HMMSS
-			offset = Date.UTC(observationOffset.getUTCFullYear(),
-					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
-					parseInt(timeString.substr(0, 1), 10),
-					parseInt(timeString.substr(1, 2), 10),
-					parseInt(timeString.substr(3, 2), 10), 0);
+			hours = parseInt(timeString.substr(0, 1), 10);
+			minutes = parseInt(timeString.substr(1, 2), 10);
+			seconds = parseInt(timeString.substr(3, 2), 10);
 		} else if (timeString.length === 6) {
 			// HHMMSS
-			offset = Date.UTC(observationOffset.getUTCFullYear(),
-					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
-					parseInt(timeString.substr(0, 2), 10),
-					parseInt(timeString.substr(2, 2), 10),
-					parseInt(timeString.substr(4, 2), 10), 0);
+			hours = parseInt(timeString.substr(0, 2), 10);
+			minutes = parseInt(timeString.substr(2, 2), 10);
+			seconds = parseInt(timeString.substr(4, 2), 10);
+		} else {
+			throw new Error('Unexpected time string');
 		}
+		offset = Date.UTC(offset.getUTCFullYear(),
+					offset.getUTCMonth(), offset.getUTCDate(),
+					hours, minutes, seconds, 0);
 
 		return offset;
+	};
+
+
+	/////////////////////////////////////////////////////////////////////////////
+	// FORMATS
+	/////////////////////////////////////////////////////////////////////////////
+
+
+	/**
+	 * Degrees, as an angle
+	 *
+	 * @param angle {Number} Decimal degrees
+	 *
+	 * @return formatted number with units
+	 *    {Float} Angle degrees, 2 decimal places
+	 */
+	Formatter.degrees = function (angle, digits) {
+		if (typeof decimal_places === 'undefined') {
+			digits = DEFAULT_DIGITS;
+		}
+		return this.rawDegrees(angle.toFixed(digits));
+	};
+
+	/**
+	 * Degrees, as an angle, no rounding
+	 *
+	 * @param angle {Number|String}
+	 *
+	 * @return formatted number with units
+	 *    {Float} Angle degrees
+	 */
+	Formatter.rawDegrees = function (angle) {
+		var buf = [];
+
+		buf.push(
+				'<span class="deg">',
+					angle, this._units(DEGREES),
+				'</span>');
+
+		return buf.join('');
+	};
+
+	/**
+	 * Minutes, as an angle
+	 *
+	 * @param angle {Number} Decimal minutes
+	 *
+	 * @return formatted number with units
+	 *    {Float} Angle minutes, 2 decimal places
+	 */
+	Formatter.minutes = function (angle, digits) {
+		if (typeof decimal_places === 'undefined') {
+			digits = DEFAULT_DIGITS;
+		}
+		return this.rawMinutes(angle.toFixed(digits));
+	};
+
+	/**
+	 * Minutes, as an angle
+	 *
+	 * @param angle {Number|String}
+	 *
+	 * @return formatted number with units
+	 *    {Float} Angle minutes, 2 decimal places
+	 */
+	Formatter.rawMinutes = function (angle) {
+		var buf = [];
+
+		buf.push(
+				'<span class="minutes">',
+					angle, this._units(MINUTES),
+				'</span>');
+
+		return buf.join('');
+	};
+
+	/**
+	 * Degrees Minutes, as an angle
+	 *
+	 * @param angle {Number} Decimal degrees
+	 *
+	 * @return 2 formatted numbers with units
+	 *    {Int} Angle degrees
+	 *    {Float} Decimal angle minutes, 2 decimal places
+	 */
+	Formatter.degreesMinutes = function (angle) {
+		var buf = [],
+		    degrees,
+		    minutes;
+
+		degrees = parseInt(angle, 10);
+		minutes = (angle - degrees) * 60;
+
+		buf.push(
+				this.rawDegrees(degrees),
+				'&nbsp;',
+				this.minutes(minutes));
+
+		return buf.join('');
+	};
+
+	/**
+	 * Degrees and Degrees Minutes, as an angle
+	 *
+	 * @param angle {Number} Decimal degrees
+	 *
+	 * @return 3 formatted numbers with units
+	 *    {Float} Decimal angle degrees, 2 decimal places
+	 *    {Int} Angle degrees
+	 *    {Float} Decimal angle minutes, 2 decimal places
+	 */
+	Formatter.degreesAndDegreesMinutes = function (angle) {
+		var buf = [];
+
+		buf.push(
+				this.degrees(angle),
+				'<span class="degrees-minutes">',
+					this.degreesMinutes(angle),
+				'</span>');
+
+		return buf.join('');
+	};
+
+	/**
+	 * nT (nano-teslas)
+	 *
+	 * @param {Number} nT
+	 *
+	 * @return formatted number with units
+	 *    {Float} nT, 2 decimal places
+	 */
+	Formatter.nanoteslas = function (nT, digits) {
+		if (typeof decimal_places === 'undefined') {
+			digits = DEFAULT_DIGITS;
+		}
+
+		return this.rawNanoteslas(nT.toFixed(digits));
+	};
+
+	/**
+	 * nT (nano-teslas), no rounding
+	 *
+	 * @param {Number} nT
+	 *
+	 * @return formatted number with units
+	 *    {Float} nT
+	 */
+	Formatter.rawNanoteslas = function (nT) {
+		var buf = [];
+
+		buf.push(
+				'<span class="nano-teslas">',
+					nT, this._units(NANOTESLAS),
+				'</span>');
+
+		return buf.join('');
+	};
+
+	/**
+	 * Date to String
+	 *
+	 * @param date {Integer}
+	 *      Timestamp (in milliseconds) since the epoch.
+	 *
+	 * @return {String}
+	 *      A string formatted as "YYYY-MM-DD" representing the input time.
+	 */
+	Formatter.date = function (time) {
+		var offset = new Date(time),
+		    y = offset.getUTCFullYear(),
+		    m = offset.getUTCMonth() + 1,
+		    d = offset.getUTCDate();
+
+		return [y, (m<10?'-0':'-'), m, (d<10?'-0':'-'), d].join('');
 	};
 
 	/**
@@ -302,13 +332,27 @@ define([
 	 * @return {String}
 	 *      A string formatted as "HH:mm:ss" representing the input time.
 	 */
-	Formatter.timeToString = function (time) {
+	Formatter.time = function (time) {
 		var offset = new Date(time),
 		    h = offset.getUTCHours(),
 		    m = offset.getUTCMinutes(),
 		    s = offset.getUTCSeconds();
 
-		return '' + (h<10?'0':'') + h + (m<10?':0':':') + m + (s<10?':0':':') + s;
+		return [(h<10?'0':''), h, (m<10?':0':':'), m, (s<10?':0':':'), s].join('');
+	};
+
+	/**
+	 * Date Time to String
+	 *
+	 * @param date time {Integer}
+	 *      Timestamp (in milliseconds) since the epoch.
+	 *
+	 * @return {String}
+	 *      A string formatted as "YYYY-MM-DD HH:mm:ss"
+	 *      representing the input time.
+	 */
+	Formatter.dateTime = function (time) {
+		return this.date(time) + ' ' + this.time(time);
 	};
 
 	return Formatter;
