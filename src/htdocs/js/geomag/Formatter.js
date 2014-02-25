@@ -7,6 +7,30 @@ define([
 
 	var Formatter = {};
 
+	Formatter._degreeUnits = function (degrees) {
+		var buf = [];
+
+		buf.push(degrees, '<span class="units">°</span>');
+
+		return buf.join('');
+	};
+
+	Formatter._minuteUnits = function (minutes) {
+		var buf = [];
+
+		buf.push(minutes, '<span class="units">\'</span>');
+
+		return buf.join('');
+	};
+
+	Formatter._ntUnits = function (nt_value) {
+		var buf = [];
+
+		buf.push(nt_value, '<span class="units">nT</span>');
+
+		return buf.join('');
+	};
+
 	/**
 	 * Decimal angle to degrees, minutes, seconds
 	 *
@@ -43,7 +67,7 @@ define([
 
 		buf.push(
 				'<span class="deg">',
-					angle.toFixed(2), '<span class="units">&deg;</span>',
+					this._degreeUnits(angle.toFixed(2)),
 				'</span>');
 
 		return buf.join('');
@@ -62,7 +86,7 @@ define([
 
 		buf.push(
 				'<span class="deg">',
-					angle, '<span class="units">&deg;</span>',
+					this._degreeUnits(angle),
 				'</span>');
 
 		return buf.join('');
@@ -88,15 +112,15 @@ define([
 
 		buf.push(
 				'<span class="deg">',
-					angle.toFixed(2), '<span class="units">&deg;</span>',
+					this._degreeUnits(angle.toFixed(2)),
 				'</span>',
 				'<span class="repeat">',
 					'<span class="deg">',
-						degrees, '<span class="units">&deg;</span>',
+						this._degreeUnits(degrees),
 					'</span>',
 					'&nbsp;',
 					'<span class="minutes">',
-						minutes.toFixed(2), '<span class="units">\'</span>',
+						this._minuteUnits(minutes.toFixed(2)),
 					'</span>',
 				'</span>');
 
@@ -133,12 +157,12 @@ define([
 	 * @return formatted number with units
 	 *    {Float} Angle minutes, 2 decimal places
 	 */
-	Formatter.minutes = function (angle) {
+	Formatter.minutes = function (angle_minutes) {
 		var buf = [];
 
 		buf.push(
 				'<span class="minutes">',
-					angle.toFixed(2), '<span class="units">\'</span>',
+					this._minuteUnits(angle_minutes.toFixed(2)),
 				'</span>');
 
 		return buf.join('');
@@ -152,12 +176,12 @@ define([
 	 * @return formatted number with units
 	 *    {Float} nT, 2 decimal places
 	 */
-	Formatter.nt = function (value) {
+	Formatter.nt = function (nt_value) {
 		var buf = [];
 
 		buf.push(
 				'<span class="nano-teslas">',
-					value.toFixed(2), '<span class="units">nT</span>',
+					this._ntUnits(nt_value.toFixed(2)),
 				'</span>');
 
 		return buf.join('');
@@ -171,12 +195,12 @@ define([
 	 * @return formatted number with units
 	 *    {Float} nT
 	 */
-	Formatter.ntNoRounding = function (value) {
+	Formatter.ntNoRounding = function (nt_value) {
 		var buf = [];
 
 		buf.push(
 				'<span class="nano-teslas">',
-					value, '<span class="units">nT</span>',
+					this._ntUnits(nt_value),
 				'</span>');
 
 		return buf.join('');
