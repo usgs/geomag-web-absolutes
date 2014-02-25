@@ -25,7 +25,7 @@ define([
 		'observer': null,
 		'annotation': null,
 		'measurements': null,
-		'shift': 0
+		'declination_shift': 0
 	};
 
 
