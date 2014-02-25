@@ -52,5 +52,34 @@ define([
 	Observation.prototype = Object.create(Model.prototype);
 
 
+	/**
+	 * Utility method to call a function on each reading in this observation.
+	 *
+	 * @param callback {Function}
+	 *        function to call with each reading.
+	 */
+	Observation.prototype.eachReading = function (callback) {
+		var readings = this.get('readings').data(),
+		    i,
+		    len;
+		for (i = 0, len = readings.length; i < len; i++) {
+			callback(readings[i]);
+		}
+	};
+
+	/**
+	 * Utility method to call a function on each measurement on each reading
+	 * in this observation.
+	 *
+	 * @param callback {Function}
+	 *        function to call with each measurement.
+	 */
+	Observation.prototype.eachMeasurement = function (callback) {
+		this.eachReading(function (reading) {
+			reading.eachMeasurement(callback);
+		});
+	};
+
+
 	return Observation;
 });

@@ -98,7 +98,11 @@ define([
 		});
 
 		// bind realtime data factory and measurements.
-		this._bindRealtimeDataFactory();
+		var getRealtimeData = this._getRealtimeData.bind(this);
+		this._realtimeDataFactory.on('change:observatory', getRealtimeData);
+		observation.eachMeasurement(function (measurement) {
+			measurement.on('change:time', getRealtimeData);
+		});
 	};
 
 
@@ -151,55 +155,50 @@ define([
 	};
 
 	/**
-	 * Bind measurements to realtimedata factory.
+	 * Get realtime data for all measurements.
 	 */
-	ObservationView.prototype._bindRealtimeDataFactory = function () {
-		var realtimeDataFactory = this._realtimeDataFactory,
-		    observation = this._observation,
-		    readings,
-		    reading,
-		    r,
-		    rlen,
-		    measurements,
-		    measurement,
-		    m,
-		    mlen,
-		    callback;
-
-		readings = observation.get('readings').data();
-		for (r = 0, rlen = readings.length; r < rlen; r++) {
-			reading = readings[r];
-			measurements = reading.get('measurements').data();
-			for (m = 0, mlen = measurements.length; m < mlen; m++) {
-				measurement = measurements[m];
-				callback = this._getRealtimeData.bind(this, measurement);
-				measurement.on('change:time', callback);
-				realtimeDataFactory.on('change:observatory', callback);
-			}
-		}
-	};
-
-	/**
-	 * Get realtime data for one measurement.
-	 *
-	 * @param measurement {Measurement}
-	 *        the measurement object.
-	 */
-	ObservationView.prototype._getRealtimeData = function (measurement) {
+	ObservationView.prototype._getRealtimeData = function () {
 		var realtimeDataFactory = this._realtimeDataFactory,
 		    observatory = realtimeDataFactory.get('observatory'),
-		    timeMs = measurement.get('time'),
-		    time;
+		    observation = this._observation,
+		    starttime = null,
+		    endtime = null;
 
-		if (observatory === null || timeMs === null) {
+		if (observatory === null) {
 			// need more information
 			return;
 		}
-		time = Math.round(timeMs / 1000);
+
+		// find times to request
+		observation.eachMeasurement(function (measurement) {
+			var time = measurement.get('time');
+			if (time === null) {
+				return;
+			}
+			if (starttime === null || time < starttime) {
+				starttime = time;
+			}
+			if (endtime === null || time > endtime) {
+				endtime = time;
+			}
+		});
+		if (starttime === null || endtime === null) {
+			// need more information
+			return;
+		}
+
+		// request realtime data
+		starttime = Math.round(starttime / 1000);
+		endtime = Math.round(endtime / 1000);
 		realtimeDataFactory.getRealtimeData({
-			starttime: time,
-			endtime: time,
-			success: measurement.setRealtimeData.bind(measurement)
+			starttime: starttime,
+			endtime: endtime,
+			success: function (realtimeData) {
+				// update measurement data
+				observation.eachMeasurement(function (measurement) {
+					measurement.setRealtimeData(realtimeData);
+				});
+			}
 		});
 	};
 
