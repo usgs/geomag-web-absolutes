@@ -54,7 +54,7 @@ require.config({
 });
 
 require([
-	'mocha'
+	'mocha',
 ], function (mocha) {
 	'use strict';
 
@@ -80,7 +80,9 @@ require([
 		'spec/RealtimeDataFactoryTest',
 		'spec/ObservationBaselineCalculatorTest',
 		'spec/ObservationMetaViewTest',
-		'spec/mvcutil/CollectionSelectBoxTest'
+		'spec/mvcutil/CollectionSelectBoxTest',
+		'spec/ObservatoryViewTest',
+		'spec/ObservationsViewTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();

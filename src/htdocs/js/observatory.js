@@ -1,5 +1,7 @@
+/* global observatoryId, MOUNT_PATH */
+
 require.config({
-	baseUrl: 'js',
+	baseUrl: MOUNT_PATH + '/js',
 	paths: {
 		'mvc': '/hazdev-webutils/src/mvc',
 		'util': '/hazdev-webutils/src/util'
@@ -12,5 +14,8 @@ require([
 	'geomag/ObservatoryView'
 ], function (ObservatoryView) {
 	'use strict';
-	new ObservatoryView({el: document.querySelector('.observatory-view')});
+	new ObservatoryView({
+		el: document.querySelector('.observatory-view'),
+		observatoryId: observatoryId
+	});
 });

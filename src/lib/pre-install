@@ -48,6 +48,7 @@ file_put_contents($APACHE_CONFIG_FILE, '
 	RewriteRule ^${MOUNT_PATH}/observatory_detail_feed/(.*)\$ /observatory_detail_feed.php?id=\$1 [L,PT]
 	RewriteRule ^${MOUNT_PATH}/observatory_summary_feed\$ /observatory_summary_feed.php [L,PT]
 	RewriteRule ^${MOUNT_PATH}/observation/\$ /observation.php?id=\$1 [L,PT]
+	RewriteRule ^${MOUNT_PATH}/observatory/\$ /observatory.php?id=\$1 [L,PT]
 ');
 
 
