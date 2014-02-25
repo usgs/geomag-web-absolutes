@@ -73,10 +73,12 @@ define([
 	 *        url for observatory summary feed.
 	 *        default 'observatory_summary_feed.php'.
 	 * @param options.observatoryDetailUrl {String}
-	 *        url for observatory detail feed, should expect id as a GET parameter.
+	 *        url for observatory detail feed, should expect id as a GET
+	 *        parameter.
 	 *        default 'observatory_detail_feed.php'.
 	 * @param options.observationDetailUrl {String}
-	 *        url for observation detail feed, should expect id as a GET parameter.
+	 *        url for observation detail feed, should expect id as a GET
+	 *        parameter.
 	 *        default 'observation_data.php'.
 	 */
 	var ObservatoryFactory = function (options) {

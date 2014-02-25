@@ -67,7 +67,8 @@ define([
 				_this.render(observatory);
 			},
 			error: function () {
-				_this._el.innerHTML = '<p>The observatory (id = ' + observatoryId + ') that you requested does not exists in the database.</p>';
+				_this._el.innerHTML = '<p>The observatory (id = ' + observatoryId +
+						') that you requested does not exists in the database.</p>';
 			}
 		});
 	};
@@ -102,7 +103,8 @@ define([
 
 
 	// TODO, get all pending observations
-	// ObservationsView.prototype.getPendingObservations = function (observations) {
+	// ObservationsView.prototype.getPendingObservations = 
+	// 		function (observations) {
 	// 	var el = this._el.querySelector('.observations-pending'),
 	// 	    pending = [],
 	// 	    observation;
@@ -120,7 +122,8 @@ define([
 	// };
 
 	// TODO, get all completed observations
-	// ObservationsView.prototype.getCompletedObservations = function (observations) {
+	// ObservationsView.prototype.getCompletedObservations = 
+	// 		function (observations) {
 	// 	var el = this._el.querySelector('.observations-completed'),
 	// 	    completed = [],
 	// 	    observation;

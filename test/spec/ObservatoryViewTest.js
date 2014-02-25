@@ -35,7 +35,8 @@ define([
 				options.success(observatories);
 			});
 
-			ignore = sinon.stub(ObservatoryView.prototype, '_getObservations', function () {
+			ignore = sinon.stub(ObservatoryView.prototype, '_getObservations',
+					function () {
 				// Do nothing.
 			});
 
@@ -66,7 +67,7 @@ define([
 
 			it('can get all observatories', function () {
 				var all = observatoryView._el.querySelector('.observatories');
-				   observatories = all.querySelectorAll('li');
+				    observatories = all.querySelectorAll('li');
 				expect(observatories.length).to.equal(15);
 			});
 

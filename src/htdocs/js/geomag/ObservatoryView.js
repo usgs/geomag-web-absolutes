@@ -50,8 +50,7 @@ define([
 		// Overview of a single observatory, one column layout
 		if (id) {
 			el.innerHTML = [
-					//'<section class="observatories"></section>',
-					'<section class="observations-view"></section>',
+				'<section class="observations-view"></section>',
 			].join('');
 
 			this._getObservations(id);
@@ -59,12 +58,12 @@ define([
 		// Overview of all observatories/ observations, two column layout
 		} else {
 			el.innerHTML = [
-					'<section class="observatories column one-of-two"></section>',
-					'<section class="observations-view column one-of-two"></section>',
+				'<section class="observatories column one-of-two"></section>',
+				'<section class="observations-view column one-of-two"></section>',
 			].join('');
 
 			// TODO, find better way to render first observatory
-			this._options.observatoryId = (hash) ? hash : 2; // render the first observatory
+			this._options.observatoryId = (hash) ? hash : 2;
 			this._getObservatories();
 			this.render(this._options.observatoryId);
 		}
@@ -73,7 +72,6 @@ define([
 		Events.on('hashchange', function() {
 			_this.render(_this._getHash());
 		});
-
 	};
 
 
@@ -97,7 +95,7 @@ define([
 
 		var el = this._el.querySelector('.observatories'),
 		    observatoryList = document.createElement('ul'),
-		    markup = [], observatory;//, listItem, link;
+		    markup = [], observatory;
 
 		for (var i = 0; i < data.length; i++) {
 			observatory = data[i];
@@ -115,7 +113,6 @@ define([
 
 		el.innerHTML = '<h2>Observatory</h2>';
 		el.appendChild(observatoryList);
-
 	};
 
 
@@ -145,7 +142,6 @@ define([
 				el: el.querySelector('.observations-view'),
 				observatoryId: id
 		});
-
 	};
 
 
