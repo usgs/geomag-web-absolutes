@@ -254,11 +254,12 @@ define([
 	 * @return {Integer}
 	 *      The millisecond timestamp since the epoch.
 	 */
-	Formatter.stringToTime = function (time) {
+	Formatter.stringToTime = function (time, offset) {
 		var observationOffset = this._observation.get('begin');
+		var timeString = time.replace(/[^\d]/g, '');
 
-		var timeString = time.replace(/[^\d]/g, ''),
-		    offset = null;
+		// Offset should default to 0 if it doesn't exist
+		if (!offset || offset === null){offset = 0;}
 
 		if (observationOffset) {
 			observationOffset = new Date(observationOffset);
