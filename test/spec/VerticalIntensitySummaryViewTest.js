@@ -65,9 +65,10 @@ define([
 				}
 			});
 
-			it('should render when reading vertical_intensity_valid changes', function () {
-					reading.trigger('change:vertical_intensity_valid');
-					expect(renderSpy.callCount).to.equal(2);
+			it('should render when reading vertical_intensity_valid changes',
+					function () {
+				reading.trigger('change:vertical_intensity_valid');
+				expect(renderSpy.callCount).to.equal(2);
 			});
 
 			it('should render when calculator changes', function () {
