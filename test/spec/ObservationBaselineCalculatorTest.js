@@ -421,7 +421,36 @@ define([
 
 		}); // END :: d
 
+		describe('get stats', function () {
+			it('computes correctly 1,1,1,1', function () {
+				var input = [1,1,1,1],
+				    stats = calc.getStats(input);
 
+				expect(stats.mean).to.equal(1);
+				expect(stats.min).to.equal(1);
+				expect(stats.max).to.equal(1);
+				expect(stats.stdDev).to.equal(0);
+			});
 
+			it('computes correctly 1,2,3,4', function () {
+				var input = [1,2,3,4],
+				    stats = calc.getStats(input);
+
+				expect(stats.mean).to.equal(2.5);
+				expect(stats.min).to.equal(1);
+				expect(stats.max).to.equal(4);
+				expect(stats.stdDev).to.be.closeTo(1.118,0.0001);
+			});
+
+			it('computes correctly 10,26,37,108', function () {
+				var input = [10,26,37,108],
+				    stats = calc.getStats(input);
+
+				expect(stats.mean).to.equal(45.25);
+				expect(stats.min).to.equal(10);
+				expect(stats.max).to.equal(108);
+				expect(stats.stdDev).to.be.closeTo(37.479,0.001);
+			});
+		});
 	}); // END :: Unit tests for BaselineCalculator
 });
