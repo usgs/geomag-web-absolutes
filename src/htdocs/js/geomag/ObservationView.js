@@ -227,12 +227,69 @@ define([
 		controls.appendChild(saveButton);
 	};
 
+
 	ObservationView.prototype._saveObservation = function () {
 		var factory = this._options.factory,
-		    controls = this._el.querySelector('.observation-view-controls');
+		    controls = this._el.querySelector('.observation-view-controls'),
+		    errorList = controls.querySelector('.error'),
+		    errors, errorOutput= [];
 
-		factory.saveObservation(this._observation);
+		if (errorList) {
+			errorList.remove();
+		}
 
+		// validate user input
+		errors = this._validateInput();
+
+		if (errors.length === 0) {
+			factory.saveObservation(this._observation);
+		} else {
+			// build validation output
+			for(var i = 0; i < errors.length; i++) {
+				errorOutput.push('<li>' + errors[i] + '</li>');
+			}
+
+			errorList = document.createElement('ul');
+			errorList.className = 'alert error';
+			errorList.innerHTML = '<header>Errors</header>' + errorOutput.join('');
+
+			controls.appendChild(errorList);
+		}
+	};
+
+	ObservationView.prototype._validateInput = function () {
+		var errors = [],
+		    observation = this._observation.get()//,
+		    //readings = observation.readings.get(),
+		    //measurements = readings.measurements.get()
+		    ;
+
+		//TODO, validate Observation details
+		errors = errors.concat(this._validateObservation(observation));
+
+		//TODO, validate Readings
+
+		//TODO, validate Measurements
+
+		console.log(errors);
+
+		return errors;
+	};
+
+	ObservationView.prototype._validateObservation = function (observation) {
+		var errors = [];
+
+		console.log(observation);
+
+		if (observation.observatory_id === null) {
+			errors.push('No Observatory is selected.');
+		}
+
+		if (isNaN(observation.pier_temperature)) {
+			errors.push('Pier Temperature is not a number.');
+		}
+
+		return errors;
 	};
 
 
