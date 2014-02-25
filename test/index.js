@@ -84,6 +84,7 @@ require([
 		'spec/mvcutil/CollectionSelectBoxTest',
 		'spec/ObservatoryViewTest',
 		'spec/ObservationsViewTest'
+		'spec/FormatterTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();
