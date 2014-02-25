@@ -6,25 +6,33 @@ include_once '../conf/config.inc.php';
 $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] :
 		 'GET';
 
-// id is used for get, update, delete
-$id = 0;
-if (isset($_REQUEST['id'])) {
-	$id = intval($_REQUEST['id']);
-}
-
 // process request
 try {
 	// 09/04/12 -- EMM: This exception is for testing client-side error handling.
 	//                  Remove it for production.
 	//throw new Exception('foo');
-	if ($method == 'GET') {
+	if ($method === 'GET') {
+		// validate id parameter
+		if (!isset($_GET['id'])) {
+			header('HTTP/1.1 400 Bad Request');
+			echo 'id is a required parameter';
+			exit();
+		}
+		$id = intval($_GET['id']);
 		if ($id <= 0) {
 			header('HTTP/1.1 400 Bad Request');
 			echo 'id must be a positive integer';
 			exit();
 		}
-		$json = str_replace('\"', '"', json_encode($OBSERVATION_FACTORY->
-				getObservation($id)));
+		// find matching observation
+		$observation = $OBSERVATION_FACTORY->getObservation($id);
+		if ($observation === null) {
+			header('HTTP/1.1 404 Not Found');
+			echo 'no matching observation found';
+			exit();
+		}
+		// serve response
+		$json = str_replace('\"', '"', json_encode($observation));
 		if (isset($_REQUEST['callback'])) {
 			header('Content-Type: text/javascript');
 			echo $_REQUEST['callback'] . '(' . $json . ');';
@@ -33,18 +41,61 @@ try {
 			header('Content-Type: application/json');
 			echo $json;
 		}
-	} else if ($method == 'DELETE') {
+	} else if ($method === 'DELETE') {
+		// php doesn't populate $_POST when method is DELETE.
+		$params = array();
+		parse_str(file_get_contents('php://input'), $params);
+		// validate id parameter
+		if (!isset($params['id'])) {
+			header('HTTP/1.1 400 Bad Request');
+			echo 'id is a required parameter';
+			exit();
+		}
+		$id = intval($params['id']);
 		if ($id <= 0) {
 			header('HTTP/1.1 400 Bad Request');
 			echo 'id must be a positive integer';
 			exit();
 		}
+		// find matching observation
+		$observation = $OBSERVATION_FACTORY->getObservation($id);
+		if ($observation === null) {
+			header('HTTP/1.1 400 Bad Request');
+			echo 'no matching observation found';
+			exit();	
+		}
+		// delete
+		$OBSERVATION_FACTORY->deleteObservation($observation);
+		// notify it worked
+		echo 'deleted';
 	} else {
 		// read json from client
 		$json = file_get_contents('php://input');
-		if ($method == 'POST') {
-		} else if ($method == 'PUT') {
+		$json = json_decode($json, true /* associative */);
+		$observation = ObservationDetail::fromArray($json);
+
+		if ($method === 'POST') {
+			// create
+			if ($observation->id !== null) {
+				header('HTTP/1.1 400 Bad Request');
+				echo 'cannot create an observation that already has an id';
+				exit();	
+			}
+			$observation = $OBSERVATION_FACTORY->createObservation($observation);
+		} else if ($method === 'PUT') {
+			// update
+			if ($observation->id === null) {
+				header('HTTP/1.1 400 Bad Request');
+				echo 'cannot update an observation without an id';
+				exit();	
+			}
+			$observation = $OBSERVATION_FACTORY->updateObservation($observation);
 		}
+
+		// output resulting observation
+		$json = str_replace('\"', '"', json_encode($observation));
+		header('Content-Type: application/json');
+		echo $json;		
 	}
 } catch (Exception $e) {
 	// fail noisily
