@@ -93,12 +93,36 @@ define([
 	};
 
 	/**
-	 * Degrees Minutes, as an angle
+	 * Degrees and Degrees Minutes, as an angle
 	 *
 	 * @param angle {Number} Decimal degrees
 	 *
 	 * @return 3 formatted numbers with units
 	 *    {Float} Decimal angle degrees, 2 decimal places
+	 *    {Int} Angle degrees
+	 *    {Float} Decimal angle minutes, 2 decimal places
+	 */
+	Formatter.degreesAndDegreesMinutes = function (angle) {
+		var buf = [],
+		    degrees,
+		    minutes;
+
+		degrees = parseInt(angle, 10);
+		minutes = (angle - degrees) * 60;
+
+		buf.push(
+				this.degrees(angle),
+				this.degreesMinutes(angle));
+
+		return buf.join('');
+	};
+
+	/**
+	 * Degrees Minutes, as an angle
+	 *
+	 * @param angle {Number} Decimal degrees
+	 *
+	 * @return 2 formatted numbers with units
 	 *    {Int} Angle degrees
 	 *    {Float} Decimal angle minutes, 2 decimal places
 	 */
@@ -111,9 +135,6 @@ define([
 		minutes = (angle - degrees) * 60;
 
 		buf.push(
-				'<span class="deg">',
-					this._degreeUnits(angle.toFixed(2)),
-				'</span>',
 				'<span class="repeat">',
 					'<span class="deg">',
 						this._degreeUnits(degrees),
