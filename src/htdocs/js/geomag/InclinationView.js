@@ -108,9 +108,9 @@ define([
 				Format.degreesMinutes(calculator.inclination(reading));
 
 		this._horizontalComponent.innerHTML =
-				Format.nt(calculator.horizontalComponent(reading));
+				Format.nanoteslas(calculator.horizontalComponent(reading));
 		this._verticalComponent.innerHTML =
-				Format.nt(calculator.verticalComponent(reading));
+				Format.nanoteslas(calculator.verticalComponent(reading));
 
 		this._southDownMinusNorthUp.innerHTML =
 				Format.minutes(calculator.southDownMinusNorthUp(reading));
