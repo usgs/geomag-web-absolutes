@@ -8,6 +8,29 @@ define([
 	var Formatter = {};
 
 	/**
+	 * Decimal angle to degrees, minutes, seconds
+	 *
+	 * @param angle {Number} Decimal degrees
+	 *
+	 * @return {Array of Integers}
+	 *
+	 * @see MeasurementViewTest#degree_inversion_check
+	 */
+	Formatter.decimalToDms = function (angle) {
+		var degrees = parseInt(angle, 10),
+		    minutes = (angle - degrees) * 60,
+		    seconds = Math.round((minutes - parseInt(minutes, 10)) * 60, 10);
+
+		minutes = parseInt(minutes, 10);
+
+		// Correct any errors due to floating point
+		minutes += parseInt(seconds / 60, 10);
+		seconds = seconds % 60;
+
+		return [degrees, minutes, seconds];
+	};
+
+	/**
 	 * Degrees, as an angle
 	 *
 	 * @param angle {Number} Decimal degrees
@@ -103,29 +126,6 @@ define([
 	};
 
 	/**
-	 * Decimal angle to degrees, minutes, seconds
-	 *
-	 * @param angle {Number} Decimal degrees
-	 *
-	 * @return {Array of Integers}
-	 *
-	 * @see MeasurementViewTest#degree_inversion_check
-	 */
-	Formatter.decimalToDms = function (angle) {
-		var degrees = parseInt(angle, 10),
-		    minutes = (angle - degrees) * 60,
-		    seconds = Math.round((minutes - parseInt(minutes, 10)) * 60, 10);
-
-		minutes = parseInt(minutes, 10);
-
-		// Correct any errors due to floating point
-		minutes += parseInt(seconds / 60, 10);
-		seconds = seconds % 60;
-
-		return [degrees, minutes, seconds];
-	};
-
-	/**
 	 * Minutes, as an angle
 	 *
 	 * @param angle {Number} Decimal minutes
@@ -137,8 +137,9 @@ define([
 		var buf = [];
 
 		buf.push(
-				angle.toFixed(2),
-				'<span class="units">\'</span>');
+				'<span class="minutes">',
+					angle.toFixed(2), '<span class="units">\'</span>',
+				'</span>');
 
 		return buf.join('');
 	};
@@ -155,8 +156,9 @@ define([
 		var buf = [];
 
 		buf.push(
-				value.toFixed(2),
-				'<span class="units">nT</span>');
+				'<span class="nano-teslas">',
+					value.toFixed(2), '<span class="units">nT</span>',
+				'</span>');
 
 		return buf.join('');
 	};
@@ -173,27 +175,11 @@ define([
 		var buf = [];
 
 		buf.push(
-				value,
-				'<span class="units">nT</span>');
+				'<span class="nano-teslas">',
+					value, '<span class="units">nT</span>',
+				'</span>');
 
 		return buf.join('');
-	};
-
-	/**
-	 * Parse a date string into an epoch timestamp.
-	 *
-	 * @param date {String}
-	 *        UTC date in format 'YYYY-MM-DD'.
-	 * @return {Number} corresponding epoch timestamp (for 00:00:00), or null.
-	 */
-	Formatter.parseDate = function(date) {
-		if (date !== '') {
-			var parts = date.split('-');
-			return Date.UTC(parseInt(parts[0], 10),
-					parseInt(parts[1], 10) - 1,
-					parseInt(parts[2], 10));
-		}
-		return null;
 	};
 
 	/**
