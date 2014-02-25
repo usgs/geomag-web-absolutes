@@ -82,7 +82,8 @@ define([
 		this._onChange = this._onChange.bind(this);
 		this._valid.addEventListener('change', this._onChange);
 
-		this._reading.on('change', this.render, this);
+		this._reading.on('change:vertical_intensity_valid', this.render, this);
+
 		this._calculator.on('change', this.render, this);
 
 		for (i = 0, len = this._measurements.length; i < len; i++) {
@@ -132,8 +133,8 @@ define([
 		m = time.getUTCMinutes();
 		s = time.getUTCSeconds();
 		return (h < 10?'0':'') + h + ':' +
-	         (m < 10?'0':'') + m + ':' +
-	         (s < 10?'0':'') + s;
+		       (m < 10?'0':'') + m + ':' +
+		       (s < 10?'0':'') + s;
 	};
 
 	VerticalIntensitySummaryView.prototype._onChange = function () {
