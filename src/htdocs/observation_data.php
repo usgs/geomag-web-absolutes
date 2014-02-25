@@ -1,6 +1,14 @@
 <?php
 
-include_once '../conf/config.inc.php';
+if (!isset($TEMPLATE)) {
+	include_once '../conf/config.inc.php';
+	include_once 'functions.inc.php';
+}
+
+$id = param('id', null);
+if ($id !== null) {
+	$id = intval($id, 10);
+}
 
 // POST,GET,PUT,DELETE => Create,Read,Update,Delete
 $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] :
@@ -69,6 +77,7 @@ try {
 		// notify it worked
 		echo 'deleted';
 	} else {
+
 		// read json from client
 		$json = file_get_contents('php://input');
 		$json = json_decode($json, true /* associative */);
@@ -107,6 +116,7 @@ try {
 
 	// log the error
 	error_log($e->getMessage());
+	echo $e->getMessage();
 
 	exit();
 }

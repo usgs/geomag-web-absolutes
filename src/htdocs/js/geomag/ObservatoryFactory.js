@@ -3,6 +3,7 @@ define([
 	'util/Util',
 	'util/Xhr',
 	'mvc/Collection',
+	'mvc/ModalView',
 
 	'geomag/Observatory',
 	'geomag/Instrument',
@@ -15,6 +16,7 @@ define([
 	Util,
 	Xhr,
 	Collection,
+	ModalView,
 
 	Observatory,
 	Instrument,
@@ -180,6 +182,38 @@ define([
 	 */
 	ObservatoryFactory.prototype.newObservation = function () {
 		return new ObservationDetail(this);
+	};
+
+
+	ObservatoryFactory.prototype.saveObservation = function (observation) {
+		var observationDetailUrl = this._options.observationDetailUrl,
+		    data;
+
+		// serialize the observation object
+		data = JSON.stringify(observation);
+
+		// post/put observation data to observation_data.php
+		Xhr.ajax({
+			url: observationDetailUrl,
+			rawdata: data,
+			method: (observation.id) ? 'PUT' : 'POST',
+			success: function (response){
+				console.log('success');
+				console.log(response);
+			},
+			error: function (response) {
+				console.log('error');
+				console.log(response);
+				// open modal view with success or error message
+				(new ModalView(
+					'Error', // modal dialog message
+					{
+						title: 'Save Failed',
+						classes: ['error']
+					}
+				)).show();
+			}
+		});
 	};
 
 

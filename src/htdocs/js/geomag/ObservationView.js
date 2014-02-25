@@ -3,6 +3,7 @@ define([
 	'mvc/View',
 	'mvc/Collection',
 	'util/Util',
+	'util/Xhr',
 
 	'geomag/ObservatoryFactory',
 	'geomag/Observation',
@@ -14,6 +15,7 @@ define([
 	View,
 	Collection,
 	Util,
+	Xhr,
 
 	ObservatoryFactory,
 	Observation,
@@ -57,6 +59,7 @@ define([
 			'<section class="observation-view">',
 				'<section class="observation-meta-wrapper"></section>',
 				'<section class="reading-group-view-wrapper"></section>',
+				'<section class="observation-view-controls"></section>',
 			'</section>'
 		].join('');
 
@@ -200,7 +203,39 @@ define([
 				});
 			}
 		});
+
+		this._createControls();
 	};
+
+	/**
+	 * Create a panel at the bottom of the Observation view to create or delete
+	 * the observation
+	 * 
+	 */
+	ObservationView.prototype._createControls = function () {
+		var controls = this._el.querySelector('.observation-view-controls'),
+		    saveButton = document.createElement('button'),
+		    _this = this;
+
+		saveButton.id = 'saveButton';
+		saveButton.innerHTML = 'Save Observation';
+
+		Util.addEvent(saveButton, 'click', function () {
+			_this._saveObservation();
+		});
+
+		controls.appendChild(saveButton);
+	};
+
+	ObservationView.prototype._saveObservation = function () {
+		var factory = this._options.factory,
+		    controls = this._el.querySelector('.observation-view-controls');
+
+		factory.saveObservation(this._observation);
+
+	};
+
+
 
 
 	// return constructor
