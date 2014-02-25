@@ -138,7 +138,7 @@ define([
 		this._magneticAzimuthOfMark.innerHTML =
 				Format.degrees(calculator.magneticAzimuthMark(reading));
 		this._trueAzimuthOfMark.innerHTML =
-				Format.degreesNoRounding(calculator.trueAzimuthOfMark());
+				Format.rawDegrees(calculator.trueAzimuthOfMark());
 		this._magneticDeclination.innerHTML =
 				Format.degreesMinutes(calculator.magneticDeclination(reading));
 
@@ -147,10 +147,10 @@ define([
 		this._eastUpMinusWestDown.innerHTML =
 				Format.minutes(calculator.eastUpMinusWestDown(reading));
 
-		this._fMean.innerHTML = Format.nt(calculator.meanF(reading));
+		this._fMean.innerHTML = Format.nanoteslas(calculator.meanF(reading));
 		this._pierCorrection.innerHTML =
-				Format.ntNoRounding(calculator.pierCorrection());
-		this._correctedF.innerHTML = Format.nt(calculator.correctedF(reading));
+				Format.rawNanoteslas(calculator.pierCorrection());
+		this._correctedF.innerHTML = Format.nanoteslas(calculator.correctedF(reading));
 	};
 
 	return DeclinationView;
