@@ -18,7 +18,7 @@ define([
 
 	describe('Formatter Unit Tests', function () {
 
-		describe('decimalToDms', function () {
+		describe('decimalToDms()', function () {
 			it('parses decimals properly', function () {
 				// Edge case
 				expect(Format.decimalToDms(0.0)).to.deep.equal([0, 0, 0]);
@@ -33,7 +33,7 @@ define([
 			});
 		});
 
-		describe('degrees', function () {
+		describe('degrees()', function () {
 			it('are formatted properly', function () {
 				expect(Format.degrees(0.0)).to.equal(
 						'<span class="deg">0.00<span class="units">°</span></span>');
@@ -48,26 +48,26 @@ define([
 
 		describe('degrees with no rounding', function () {
 			it('are formatted properly', function () {
-				expect(Format.degreesNoRounding(0.1)).to.equal(
+				expect(Format.rawDegrees(0.1)).to.equal(
 						'<span class="deg">0.1<span class="units">°</span></span>');
-				expect(Format.degreesNoRounding(30.0123456789)).to.equal(
+				expect(Format.rawDegrees(30.0123456789)).to.equal(
 						'<span class="deg">' +
 							'30.0123456789<span class="units">°</span>' +
 						'</span>');
-				expect(Format.degreesNoRounding(30.5555555555)).to.equal(
+				expect(Format.rawDegrees(30.5555555555)).to.equal(
 						'<span class="deg">' +
 							'30.5555555555<span class="units">°</span>' +
 						'</span>');
 			});
 		});
 
-		describe('degrees/minutes angles', function () {
+		describe('degreesMinutes()', function () {
 			it('are formatted properly', function () {
 				expect(Format.degreesAndDegreesMinutes(0)).to.equal(
 						'<span class="deg">' +
 							'0.00<span class="units">°</span>' +
 						'</span>' +
-						'<span class="repeat">' +
+						'<span class="degrees-minutes">' +
 							'<span class="deg">' +
 								'0<span class="units">°</span>' +
 							'</span>' +
@@ -80,7 +80,7 @@ define([
 						'<span class="deg">' +
 							'179.95<span class="units">°</span>' +
 						'</span>' +
-						'<span class="repeat">' +
+						'<span class="degrees-minutes">' +
 							'<span class="deg">' +
 								'179<span class="units">°</span>' +
 							'</span>' +
@@ -94,7 +94,7 @@ define([
 						'<span class="deg">' +
 							'179.95<span class="units">°</span>' +
 						'</span>' +
-						'<span class="repeat">' +
+						'<span class="degrees-minutes">' +
 							'<span class="deg">' +
 								'179<span class="units">°</span>' +
 							'</span>' +
@@ -106,7 +106,7 @@ define([
 			});
 		});
 
-		describe('dmsToDecimal', function () {
+		describe('dmsToDecimal()', function () {
 			it('parses DMS properly', function () {
 				// Edge case
 				expect(Format.dmsToDecimal(0, 0, 0)).to.equal(0.0);
@@ -128,7 +128,7 @@ define([
 			});
 		});
 
-		describe('minutes', function () {
+		describe('minutes()', function () {
 			it('are formatted properly', function () {
 				expect(Format.minutes(0.0)).to.equal(
 						'<span class="minutes">0.00<span class="units">\'</span></span>');
@@ -141,52 +141,52 @@ define([
 			});
 		});
 
-		describe('nanoTeslas', function () {
+		describe('nanoteslas()', function () {
 			it('are formatted properly', function () {
-				expect(Format.nt(0.0)).to.equal(
+				expect(Format.nanoteslas(0.0)).to.equal(
 						'<span class="nano-teslas">' +
 							'0.00<span class="units">nT</span>' +
 						'</span>');
 				// Rounds down properly
-				expect(Format.nt(30.0123456789)).to.equal(
+				expect(Format.nanoteslas(30.0123456789)).to.equal(
 						'<span class="nano-teslas">' +
 							'30.01<span class="units">nT</span>' +
 							'</span>');
 				// Rounds up properly
-				expect(Format.nt(30.5555555555)).to.equal(
+				expect(Format.nanoteslas(30.5555555555)).to.equal(
 						'<span class="nano-teslas">' +
 							'30.56<span class="units">nT</span>' +
 						'</span>');
 				// A number closer to an actual F value
-				expect(Format.nt(54599.6237843)).to.equal(
+				expect(Format.nanoteslas(54599.6237843)).to.equal(
 						'<span class="nano-teslas">' +
 							'54599.62<span class="units">nT</span>' +
 						'</span>');
 			});
 		});
 
-		describe('nanoTeslas with no rounding', function () {
+		describe('rawNanoteslas()', function () {
 			it('are formatted properly', function () {
-				expect(Format.ntNoRounding(0)).to.equal(
+				expect(Format.rawNanoteslas(0)).to.equal(
 						'<span class="nano-teslas">' +
 							'0<span class="units">nT</span>' +
 						'</span>');
-				expect(Format.ntNoRounding(30.0123456789)).to.equal(
+				expect(Format.rawNanoteslas(30.0123456789)).to.equal(
 						'<span class="nano-teslas">' +
 							'30.0123456789<span class="units">nT</span>' +
 						'</span>');
-				expect(Format.ntNoRounding(30.5555555555)).to.equal(
+				expect(Format.rawNanoteslas(30.5555555555)).to.equal(
 						'<span class="nano-teslas">' +
 							'30.5555555555<span class="units">nT</span>' +
 						'</span>');
-				expect(Format.ntNoRounding(54599.6237843)).to.equal(
+				expect(Format.rawNanoteslas(54599.6237843)).to.equal(
 						'<span class="nano-teslas">' +
 							'54599.6237843<span class="units">nT</span>' +
 						'</span>');
 			});
 		});
 
-		describe('parseDate', function () {
+		describe('parseDate()', function () {
 			it('parses Date properly', function () {
 				expect(Format.parseDate('2000-01-01')).to.equal(946684800000);
 				// add 1 day, should add 24h*60min*60sec*1000 = 86400000
@@ -196,7 +196,7 @@ define([
 			});
 		});
 
-		describe('stringToTime', function () {
+		describe('parseRelativeTime()', function () {
 			var today = new Date();
 
 			it.skip('parses start of day properly', function () {
@@ -204,19 +204,19 @@ define([
 						today.getUTCMonth(), today.getUTCDate(), 0, 0, 0, 0);
 
 				// hhmmss
-				expect(Format.stringToTime('00:00:00')).to.equal(startOfDay);
-				expect(Format.stringToTime('00 00 00')).to.equal(startOfDay);
-				expect(Format.stringToTime('000000')).to.equal(startOfDay);
+				expect(Format.parseRelativeTime('00:00:00')).to.equal(startOfDay);
+				expect(Format.parseRelativeTime('00 00 00')).to.equal(startOfDay);
+				expect(Format.parseRelativeTime('000000')).to.equal(startOfDay);
 
 				// hmmss
-				expect(Format.stringToTime('0:00:00')).to.equal(startOfDay);
-				expect(Format.stringToTime('0 00 00')).to.equal(startOfDay);
-				expect(Format.stringToTime('00000')).to.equal(startOfDay);
+				expect(Format.parseRelativeTime('0:00:00')).to.equal(startOfDay);
+				expect(Format.parseRelativeTime('0 00 00')).to.equal(startOfDay);
+				expect(Format.parseRelativeTime('00000')).to.equal(startOfDay);
 
 				// hhmm
-				expect(Format.stringToTime('00:00')).to.equal(startOfDay);
-				expect(Format.stringToTime('00 00')).to.equal(startOfDay);
-				expect(Format.stringToTime('0000')).to.equal(startOfDay);
+				expect(Format.parseRelativeTime('00:00')).to.equal(startOfDay);
+				expect(Format.parseRelativeTime('00 00')).to.equal(startOfDay);
+				expect(Format.parseRelativeTime('0000')).to.equal(startOfDay);
 			});
 
 			it.skip('parses end of day properly', function () {
@@ -224,9 +224,9 @@ define([
 						today.getUTCMonth(), today.getUTCDate(), 23, 59, 59, 0);
 
 				// hhmmss
-				expect(Format.stringToTime('23:59:59')).to.equal(endOfDay);
-				expect(Format.stringToTime('23 59 59')).to.equal(endOfDay);
-				expect(Format.stringToTime('235959')).to.equal(endOfDay);
+				expect(Format.parseRelativeTime('23:59:59')).to.equal(endOfDay);
+				expect(Format.parseRelativeTime('23 59 59')).to.equal(endOfDay);
+				expect(Format.parseRelativeTime('235959')).to.equal(endOfDay);
 			});
 
 			it.skip('parses one minute properly', function () {
@@ -234,19 +234,19 @@ define([
 						today.getUTCMonth(), today.getUTCDate(), 0, 1, 0, 0);
 
 				// hhmmss
-				expect(Format.stringToTime('00:01:00')).to.equal(oneMinute);
-				expect(Format.stringToTime('00 01 00')).to.equal(oneMinute);
-				expect(Format.stringToTime('000100')).to.equal(oneMinute);
+				expect(Format.parseRelativeTime('00:01:00')).to.equal(oneMinute);
+				expect(Format.parseRelativeTime('00 01 00')).to.equal(oneMinute);
+				expect(Format.parseRelativeTime('000100')).to.equal(oneMinute);
 
 				// hmmss
-				expect(Format.stringToTime('0:01:00')).to.equal(oneMinute);
-				expect(Format.stringToTime('0 01 00')).to.equal(oneMinute);
-				expect(Format.stringToTime('00100')).to.equal(oneMinute);
+				expect(Format.parseRelativeTime('0:01:00')).to.equal(oneMinute);
+				expect(Format.parseRelativeTime('0 01 00')).to.equal(oneMinute);
+				expect(Format.parseRelativeTime('00100')).to.equal(oneMinute);
 
 				// hhmm
-				expect(Format.stringToTime('00:01')).to.equal(oneMinute);
-				expect(Format.stringToTime('00 01')).to.equal(oneMinute);
-				expect(Format.stringToTime('0001')).to.equal(oneMinute);
+				expect(Format.parseRelativeTime('00:01')).to.equal(oneMinute);
+				expect(Format.parseRelativeTime('00 01')).to.equal(oneMinute);
+				expect(Format.parseRelativeTime('0001')).to.equal(oneMinute);
 			});
 
 			it.skip('parses one hour properly', function () {
@@ -254,19 +254,19 @@ define([
 						today.getUTCMonth(), today.getUTCDate(), 1, 0, 0, 0);
 
 				// hhmmss
-				expect(Format.stringToTime('01:00:00')).to.equal(oneHour);
-				expect(Format.stringToTime('01 00 00')).to.equal(oneHour);
-				expect(Format.stringToTime('010000')).to.equal(oneHour);
+				expect(Format.parseRelativeTime('01:00:00')).to.equal(oneHour);
+				expect(Format.parseRelativeTime('01 00 00')).to.equal(oneHour);
+				expect(Format.parseRelativeTime('010000')).to.equal(oneHour);
 
 				// hmmss
-				expect(Format.stringToTime('1:00:00')).to.equal(oneHour);
-				expect(Format.stringToTime('1 00 00')).to.equal(oneHour);
-				expect(Format.stringToTime('10000')).to.equal(oneHour);
+				expect(Format.parseRelativeTime('1:00:00')).to.equal(oneHour);
+				expect(Format.parseRelativeTime('1 00 00')).to.equal(oneHour);
+				expect(Format.parseRelativeTime('10000')).to.equal(oneHour);
 
 				// hhmm
-				expect(Format.stringToTime('01:00')).to.equal(oneHour);
-				expect(Format.stringToTime('01 00')).to.equal(oneHour);
-				expect(Format.stringToTime('0100')).to.equal(oneHour);
+				expect(Format.parseRelativeTime('01:00')).to.equal(oneHour);
+				expect(Format.parseRelativeTime('01 00')).to.equal(oneHour);
+				expect(Format.parseRelativeTime('0100')).to.equal(oneHour);
 			});
 
 			it.skip('parses noon properly', function () {
@@ -274,14 +274,14 @@ define([
 						today.getUTCMonth(), today.getUTCDate(), 12, 0, 0, 0);
 
 				// hhmmss
-				expect(Format.stringToTime('12:00:00')).to.equal(noon);
-				expect(Format.stringToTime('12 00 00')).to.equal(noon);
-				expect(Format.stringToTime('120000')).to.equal(noon);
+				expect(Format.parseRelativeTime('12:00:00')).to.equal(noon);
+				expect(Format.parseRelativeTime('12 00 00')).to.equal(noon);
+				expect(Format.parseRelativeTime('120000')).to.equal(noon);
 
 				// hhmm
-				expect(Format.stringToTime('12:00')).to.equal(noon);
-				expect(Format.stringToTime('12 00')).to.equal(noon);
-				expect(Format.stringToTime('1200')).to.equal(noon);
+				expect(Format.parseRelativeTime('12:00')).to.equal(noon);
+				expect(Format.parseRelativeTime('12 00')).to.equal(noon);
+				expect(Format.parseRelativeTime('1200')).to.equal(noon);
 			});
 
 			it.skip('parses a mixed offset properly', function () {
@@ -289,37 +289,37 @@ define([
 						today.getUTCMonth(), today.getUTCDate(), 11, 11, 8, 0);
 
 				// hhmmss
-				expect(Format.stringToTime('11:11:08')).to.equal(mixed);
-				expect(Format.stringToTime('11 11 08')).to.equal(mixed);
-				expect(Format.stringToTime('111108')).to.equal(mixed);
+				expect(Format.parseRelativeTime('11:11:08')).to.equal(mixed);
+				expect(Format.parseRelativeTime('11 11 08')).to.equal(mixed);
+				expect(Format.parseRelativeTime('111108')).to.equal(mixed);
 			});
 
 		});
 
-		describe('timeToString', function () {
+		describe('time()', function () {
 
 			it('parses start of day properly', function () {
-				expect(Format.timeToString(0)).to.equal('00:00:00');
+				expect(Format.time(0)).to.equal('00:00:00');
 			});
 
 			it('parses end of day properly', function () {
-				expect(Format.timeToString(86399999)).to.equal('23:59:59');
+				expect(Format.time(86399999)).to.equal('23:59:59');
 			});
 
 			it('parses one minute properly', function () {
-				expect(Format.timeToString(60000)).to.equal('00:01:00');
+				expect(Format.time(60000)).to.equal('00:01:00');
 			});
 
 			it('parses one hour properly', function () {
-				expect(Format.timeToString(3600000)).to.equal('01:00:00');
+				expect(Format.time(3600000)).to.equal('01:00:00');
 			});
 
 			it('parses noon properly', function () {
-				expect(Format.timeToString(43200000)).to.equal('12:00:00');
+				expect(Format.time(43200000)).to.equal('12:00:00');
 			});
 
 			it('parses a mixed offset properly', function () {
-				expect(Format.timeToString(40268000)).to.equal('11:11:08');
+				expect(Format.time(40268000)).to.equal('11:11:08');
 			});
 
 		});
