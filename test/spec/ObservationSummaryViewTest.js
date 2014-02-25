@@ -54,7 +54,6 @@ define([
 				/* jshint +W030 */
 			});
 		});
-	});
 
 		describe('Proper event bindings', function () {
 			it('should render when Pier temp changes', function () {
