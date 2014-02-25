@@ -91,32 +91,34 @@ define([
 		this.render();
 	};
 
-	HorizontalIntensitySummaryView.prototype._getHorizontalIntensityMeasurements = function () {
-			var allMeasurements = this._reading.getMeasurements(),
-			    measurements = [];
+	HorizontalIntensitySummaryView.prototype._getHorizontalIntensityMeasurements =
+			function () {
+		var allMeasurements = this._reading.getMeasurements(),
+		    measurements = [];
 
-			measurements.push(allMeasurements[Measurement.SOUTH_DOWN][0]);
-			measurements.push(allMeasurements[Measurement.NORTH_UP][0]);
-			measurements.push(allMeasurements[Measurement.SOUTH_UP][0]);
-			measurements.push(allMeasurements[Measurement.NORTH_DOWN][0]);
+		measurements.push(allMeasurements[Measurement.SOUTH_DOWN][0]);
+		measurements.push(allMeasurements[Measurement.NORTH_UP][0]);
+		measurements.push(allMeasurements[Measurement.SOUTH_UP][0]);
+		measurements.push(allMeasurements[Measurement.NORTH_DOWN][0]);
 
-			return measurements;
+		return measurements;
 	};
 
-	HorizontalIntensitySummaryView.prototype._getMeasurementValues = function (name) {
-			var measurements = this._measurements,
-			    i = null,
-			    len = null,
-			    values = [],
-			    value;
+	HorizontalIntensitySummaryView.prototype._getMeasurementValues =
+			function (name) {
+		var measurements = this._measurements,
+		    i = null,
+		    len = null,
+		    values = [],
+		    value;
 
-			for (i = 0, len = measurements.length; i < len; i++) {
-				value = measurements[i].get(name);
-				if (value !== null) {
-					values.push(measurements[i].get(name));
-				}
+		for (i = 0, len = measurements.length; i < len; i++) {
+			value = measurements[i].get(name);
+			if (value !== null) {
+				values.push(measurements[i].get(name));
 			}
-			return values;
+		}
+		return values;
 	};
 HorizontalIntensitySummaryView.prototype._formatTime = function (time) {
 	var h,
