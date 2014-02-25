@@ -85,7 +85,8 @@ define([
 		this._baselineMinMean.innerHTML = baselineDStats.mean;
 		this._baselineNtMean.innerHTML = baselineDNtStats.mean;
 
-		this._baselineMinRange.innerHTML ='[' +  baselineDStats.min + ', ' + baselineDStats.max + ']';
+		this._baselineMinRange.innerHTML ='[' +  baselineDStats.min + ', ' +
+			baselineDStats.max + ']';
 		this._baselineNtRange.innerHTML = '[' + baselineDNtStats.min + ', ' + baselineDNtStats.max + ']';
 
 		this._baselineMinStdDev.innerHTML = baselineDStats.stdDev;
@@ -97,81 +98,87 @@ define([
 		this._renderVerticalIntensitySummaryView();
 	};
 
-	ObservationSummaryView.prototype._renderHorizontalIntensitySummaryView = function () {
-				var readings = this._readings.data(),
-				    horizontalIntensitySummaryView = this._horizontalIntensitySummaryView,
-				    calculator = this._calculator,
-				    i = null,
-				    len = null,
-				    reading,
-				    baselineH = [],
-				    baselineHStats;
+	ObservationSummaryView.prototype._renderHorizontalIntensitySummaryView =
+			function () {
+		var readings = this._readings.data(),
+		    horizontalIntensitySummaryView = this._horizontalIntensitySummaryView,
+		    calculator = this._calculator,
+		    i = null,
+		    len = null,
+		    reading,
+		    baselineH = [],
+		    baselineHStats;
 
-				Util.empty(horizontalIntensitySummaryView);
+		Util.empty(horizontalIntensitySummaryView);
 
-				for (i = 0, len = readings.length; i < len; i++) {
-					reading = readings[i];
+		for (i = 0, len = readings.length; i < len; i++) {
+			reading = readings[i];
 
-					if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
-						reading._horizontalIntensitySummary = new HorizontalIntensitySummaryView({
-								el:document.createElement('tr'),
-								reading:reading,
-								calculator:calculator
-							});
-					}
-					// insert view
-					horizontalIntensitySummaryView.appendChild(reading._horizontalIntensitySummary._el);
+			if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
+				reading._horizontalIntensitySummary =
+						new HorizontalIntensitySummaryView({
+					el:document.createElement('tr'),
+					reading:reading,
+					calculator:calculator
+				});
+			}
+			// insert view
+			horizontalIntensitySummaryView.appendChild(
+				reading._horizontalIntensitySummary._el);
 
-					if (reading.get('horizontal_intensity_valid') === 'Y') {
-						baselineH.push(calculator.baselineH(reading));
-					}
-				}
-				baselineHStats = calculator.getStats(baselineH);
+			if (reading.get('horizontal_intensity_valid') === 'Y') {
+				baselineH.push(calculator.baselineH(reading));
+			}
+		}
+		baselineHStats = calculator.getStats(baselineH);
 
-				this._baselineValuesMean.innerHTML = baselineHStats.mean;
+		this._baselineValuesMean.innerHTML = baselineHStats.mean;
 
-				this._baselineValuesRange.innerHTML = '[' + baselineHStats.min + ', ' + baselineHStats.max + ']';
+		this._baselineValuesRange.innerHTML = '[' + baselineHStats.min + ', ' + baselineHStats.max + ']';
 
-				this._baselineValuesStdDev.innerHTML = baselineHStats.stdDev;
+		this._baselineValuesStdDev.innerHTML = baselineHStats.stdDev;
 	};
 
-	ObservationSummaryView.prototype._renderVerticalIntensitySummaryView = function () {
-			var readings = this._readings.data(),
-				  verticalIntensitySummaryView = this._verticalIntensitySummaryView,
-				  calculator = this._calculator,
-				  i = null,
-				  len = null,
-				  reading,
-				  baselineZ = [],
-				  baselineZStats;
+	ObservationSummaryView.prototype._renderVerticalIntensitySummaryView =
+			function () {
+		var readings = this._readings.data(),
+			  verticalIntensitySummaryView = this._verticalIntensitySummaryView,
+			  calculator = this._calculator,
+			  i = null,
+			  len = null,
+			  reading,
+			  baselineZ = [],
+			  baselineZStats;
 
-			Util.empty(verticalIntensitySummaryView);
-			for (i = 0, len = readings.length; i < len; i++) {
-				reading = readings[i];
+		Util.empty(verticalIntensitySummaryView);
+		for (i = 0, len = readings.length; i < len; i++) {
+			reading = readings[i];
 
-				// Create view if it does not exits
-				if (!reading.hasOwnProperty('_verticalIntensitySummary')) {
-					reading._verticalIntensitySummary = new VerticalIntensitySummaryView({
-						el:document.createElement('tr'),
-						reading:reading,
-						calculator:calculator
-					});
-				}
-
-				// insert view
-				verticalIntensitySummaryView.appendChild(reading._verticalIntensitySummary._el);
-
-				if (reading.get('vertical_intensity_valid') === 'Y') {
-					baselineZ.push(calculator.baselineZ(reading));
-				}
+			// Create view if it does not exits
+			if (!reading.hasOwnProperty('_verticalIntensitySummary')) {
+				reading._verticalIntensitySummary = new VerticalIntensitySummaryView({
+					el:document.createElement('tr'),
+					reading:reading,
+					calculator:calculator
+				});
 			}
-			baselineZStats = calculator.getStats(baselineZ);
 
-			this._verticalBaselineValuesMean.innerHTML = baselineZStats.mean;
+			// insert view
+			verticalIntensitySummaryView.appendChild
+					(reading._verticalIntensitySummary._el);
 
-			this._verticalBaselineValuesRange.innerHTML = '[' + baselineZStats.min + ', ' + baselineZStats.max + ']';
+			if (reading.get('vertical_intensity_valid') === 'Y') {
+				baselineZ.push(calculator.baselineZ(reading));
+			}
+		}
+		baselineZStats = calculator.getStats(baselineZ);
 
-			this._verticalBaselineValuesStdDev.innerHTML = baselineZStats.stdDev;
+		this._verticalBaselineValuesMean.innerHTML = baselineZStats.mean;
+
+		this._verticalBaselineValuesRange.innerHTML =
+				'[' + baselineZStats.min + ', ' + baselineZStats.max + ']';
+
+		this._verticalBaselineValuesStdDev.innerHTML = baselineZStats.stdDev;
 	};
 
 	ObservationSummaryView.prototype._renderSummaryBottom = function () {
@@ -208,9 +215,11 @@ define([
 								'<th scope="col" class="valid">Valid</th>',
 								'<th scope="col" class="start-time">Start Time</th>',
 								'<th scope="col" class="end-time">End Time</th>',
-								'<th scope="col" colspan="2"class="absolute-declination">Absolute Declination</th>',
+								'<th scope="col" colspan="2" class="absolute-declination">',
+										'Absolute Declination</th>',
 								'<th scope="col" class="ord-min">Ordinate</th>',
-								'<th scope="col" colspan="2" class="baseline-values">Baseline Values</th>',
+								'<th scope="col" colspan="2" class="baseline-values">',
+										'Baseline Values</th>',
 								'<th scope="col" class="observer">Observer</th>',
 								'<th scope="col" class="shift">180&#176; Shift</th>',
 							'</tr>',
@@ -252,7 +261,8 @@ define([
 									'<th scope="col" class="end-time">End Time</th>',
 									'<th scope="col" class="abs-value">Abs. Value (nT)</th>',
 									'<th scope="col" class="ord">Ordinate</th>',
-									'<th scope="col" class="baseline-values">Baseline Values (nT)</th>',
+									'<th scope="col" class="baseline-values">',
+											'Baseline Values (nT)</th>',
 									'<th scope="col" class="observer">Observer</th>',
 								'</tr>',
 							'</thead>',
@@ -262,7 +272,8 @@ define([
 						'<table>',
 							'<thead>',
 								'<th scope="col"></th>',
-								'<th scope="col" class="baseline-values">Baseline Values (nT)</th>',
+								'<th scope="col" class="baseline-values">',
+										'Baseline Values (nT)</th>',
 							'</thead>',
 							'<tbody>',
 								'<tr>',
@@ -289,7 +300,8 @@ define([
 									'<th scope="col" class="end-time">End Time</th>',
 									'<th scope="col" class="abs-value">Abs. Value (nT)</th>',
 									'<th scope="col" class="ord">Ordinate</th>',
-									'<th scope="col" class="baseline-values">Baseline Values (nT)</th>',
+									'<th scope="col" class="baseline-values">',
+											'Baseline Values (nT)</th>',
 									'<th scope="col" class="observer">Observer</th>',
 								'</tr>',
 							'</thead>',
@@ -299,7 +311,8 @@ define([
 						'<table>',
 							'<thead>',
 								'<th scope="col"></th>',
-								'<th scope="col" class="baseline-values">Baseline Values (nT)</th>',
+								'<th scope="col" class="baseline-values">',
+										'Baseline Values (nT)</th>',
 							'</thead>',
 							'<tbody>',
 								'<tr>',
@@ -346,7 +359,8 @@ define([
 			'</section>'
 		].join('');
 		// Declination summary view
-		this._declinationSummaryView = el.querySelector('.declination-summary-view');
+		this._declinationSummaryView =
+				el.querySelector('.declination-summary-view');
 
 		this._baselineMinMean = el.querySelector('.baseline-min-mean');
 		this._baselineNtMean = el.querySelector('.baseline-nt-mean');
@@ -358,7 +372,8 @@ define([
 		this._baselineNtStdDev = el.querySelector('.baseline-nt-std-dev');
 
 		// Horizontal Intensity summary view
-		this._horizontalIntensitySummaryView = el.querySelector('.horizontal-intensity-summary-view');
+		this._horizontalIntensitySummaryView =
+				el.querySelector('.horizontal-intensity-summary-view');
 
 		this._baselineValuesMean = el.querySelector('.baseline-values-mean');
 
@@ -367,7 +382,8 @@ define([
 		this._baselineValuesStdDev = el.querySelector('.baseline-values-std-dev');
 
 		// Vertical intensity summary view
-		this._verticalIntensitySummaryView = el.querySelector('.vertical-intensity-summary-view');
+		this._verticalIntensitySummaryView =
+				el.querySelector('.vertical-intensity-summary-view');
 
 		this._observation.on('change', this.render, this);
 		this._pierTemperature = el.querySelector('.pier-temp-value');
@@ -381,11 +397,14 @@ define([
 		this._onChange = this._onChange.bind(this);
 		this._remarks.addEventListener('change', this._onChange);
 
-		this._verticalBaselineValuesMean = el.querySelector('.vertical-baseline-values-mean');
+		this._verticalBaselineValuesMean =
+				el.querySelector('.vertical-baseline-values-mean');
 
-		this._verticalBaselineValuesRange = el.querySelector('.vertical-baseline-values-range');
+		this._verticalBaselineValuesRange =
+				el.querySelector('.vertical-baseline-values-range');
 
-		this._verticalBaselineValuesStdDev = el.querySelector('.vertical-baseline-values-std-dev');
+		this._verticalBaselineValuesStdDev =
+				el.querySelector('.vertical-baseline-values-std-dev');
 
 		this._calculator.on('change', this.render, this);
 
@@ -395,21 +414,33 @@ define([
 			reading = readings[i];
 			reading.on('change', this.render, this);
 			measurements = reading.getMeasurements();
-			measurements[Measurement.WEST_DOWN][0].on('change', this._renderDeclination, this);
-			measurements[Measurement.EAST_DOWN][0].on('change', this._renderDeclination, this);
-			measurements[Measurement.WEST_UP][0].on('change', this._renderDeclination, this);
-			measurements[Measurement.EAST_UP][0].on('change', this._renderDeclination, this);
+			measurements[Measurement.WEST_DOWN][0].on
+					('change', this._renderDeclination, this);
+			measurements[Measurement.EAST_DOWN][0].on
+					('change', this._renderDeclination, this);
+			measurements[Measurement.WEST_UP][0].on
+					('change', this._renderDeclination, this);
+			measurements[Measurement.EAST_UP][0].on
+					('change', this._renderDeclination, this);
 
-			measurements[Measurement.SOUTH_DOWN][0].on('change', this._renderInclination, this);
-			measurements[Measurement.NORTH_UP][0].on('change', this._renderInclination, this);
-			measurements[Measurement.SOUTH_UP][0].on('change', this._renderInclination, this);
-			measurements[Measurement.NORTH_DOWN][0].on('change', this._renderInclination, this);
+			measurements[Measurement.SOUTH_DOWN][0].on
+					('change', this._renderInclination, this);
+			measurements[Measurement.NORTH_UP][0].on
+					('change', this._renderInclination, this);
+			measurements[Measurement.SOUTH_UP][0].on
+					('change', this._renderInclination, this);
+			measurements[Measurement.NORTH_DOWN][0].on
+					('change', this._renderInclination, this);
 
 
-			measurements[Measurement.FIRST_MARK_UP][0].on('change', this._renderInclination, this);
-			measurements[Measurement.FIRST_MARK_DOWN][0].on('change', this._renderInclination, this);
-			measurements[Measurement.SECOND_MARK_UP][0].on('change', this._renderInclination, this);
-			measurements[Measurement.SECOND_MARK_DOWN][0].on('change', this._renderInclination, this);
+			measurements[Measurement.FIRST_MARK_UP][0].on
+					('change', this._renderInclination, this);
+			measurements[Measurement.FIRST_MARK_DOWN][0].on
+					('change', this._renderInclination, this);
+			measurements[Measurement.SECOND_MARK_UP][0].on
+					('change', this._renderInclination, this);
+			measurements[Measurement.SECOND_MARK_DOWN][0].on
+					('change', this._renderInclination, this);
 		}
 		this.render();
 	};
