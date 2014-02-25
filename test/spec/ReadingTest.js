@@ -2,11 +2,23 @@
 
 define([
 	'chai',
-	'geomag/Reading',
+	'sinon',
+
 	'mvc/Model',
 	'mvc/Collection',
+
+	'geomag/Reading',
 	'geomag/Measurement'
-], function (chai, Reading, Model, Collection, Measurement ) {
+], function (
+	chai,
+	sinon,
+
+	Model,
+	Collection,
+
+	Reading,
+	Measurement
+) {
 	'use strict';
 	var expect = chai.expect;
 
@@ -80,9 +92,9 @@ define([
 
 		});
 
-		describe('getMeasurements()',function(){
+		describe('getMeasurements()',function () {
 
-			it('initializes with TESTOBJECT, gets back type:array pairs', function(){
+			it('gets back type:array pairs', function () {
 				var reading = new Reading(TESTOBJECT);
 				expect(reading.getMeasurements()).to.deep.equal(TESTMEASUREMENTS);
 			});
@@ -95,6 +107,26 @@ define([
 				measurements = reading.get('measurements');
 				var data = measurements.data();
 				expect(data[data.length-1]).to.deep.equal(testmeasure);
+			});
+
+		});
+
+		describe('eachMeasurement()', function () {
+
+			it ('calls callback for each measurement', function () {
+				var callback = sinon.spy(),
+				    reading = new Reading(),
+				    measurements = reading.get('measurements').data(),
+				    m,
+				    mlen;
+
+				reading.eachMeasurement(callback);
+				// called once for each measurement
+				expect(callback.callCount).to.equal(measurements.length);
+				// called in the correct order
+				for (m = 0, mlen = measurements.length; m < mlen; m++) {
+					expect(callback.getCall(m).args[0]).to.equal(measurements[m]);
+				}
 			});
 
 		});
