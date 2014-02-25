@@ -36,53 +36,53 @@ define([
 		describe('degrees', function () {
 			it('are formatted properly', function () {
 				expect(Format.degrees(0.0)).to.equal(
-						'<span class="deg">0.00<span class="units">&deg;</span></span>');
+						'<span class="deg">0.00<span class="units">°</span></span>');
 				// Rounds down properly
 				expect(Format.degrees(30.0123456789)).to.equal(
-						'<span class="deg">30.01<span class="units">&deg;</span></span>');
+						'<span class="deg">30.01<span class="units">°</span></span>');
 				// Rounds up properly
 				expect(Format.degrees(30.5555555555)).to.equal(
-						'<span class="deg">30.56<span class="units">&deg;</span></span>');
+						'<span class="deg">30.56<span class="units">°</span></span>');
 			});
 		});
 
 		describe('degrees with no rounding', function () {
 			it('are formatted properly', function () {
 				expect(Format.degreesNoRounding(0.1)).to.equal(
-						'<span class="deg">0.1<span class="units">&deg;</span></span>');
+						'<span class="deg">0.1<span class="units">°</span></span>');
 				expect(Format.degreesNoRounding(30.0123456789)).to.equal(
 						'<span class="deg">' +
-							'30.0123456789<span class="units">&deg;</span>' +
+							'30.0123456789<span class="units">°</span>' +
 						'</span>');
 				expect(Format.degreesNoRounding(30.5555555555)).to.equal(
 						'<span class="deg">' +
-							'30.5555555555<span class="units">&deg;</span>' +
+							'30.5555555555<span class="units">°</span>' +
 						'</span>');
 			});
 		});
 
 		describe('degrees/minutes angles', function () {
 			it('are formatted properly', function () {
-				expect(Format.degreesMinutes(0)).to.equal(
+				expect(Format.degreesAndDegreesMinutes(0)).to.equal(
 						'<span class="deg">' +
-							'0.00<span class="units">&deg;</span>' +
+							'0.00<span class="units">°</span>' +
 						'</span>' +
 						'<span class="repeat">' +
 							'<span class="deg">' +
-								'0<span class="units">&deg;</span>' +
+								'0<span class="units">°</span>' +
 							'</span>' +
 							'&nbsp;' +
 							'<span class="minutes">' +
 								'0.00<span class="units">\'</span>' +
 							'</span>' +
 						'</span>');
-				expect(Format.degreesMinutes(179.95)).to.equal(
+				expect(Format.degreesAndDegreesMinutes(179.95)).to.equal(
 						'<span class="deg">' +
-							'179.95<span class="units">&deg;</span>' +
+							'179.95<span class="units">°</span>' +
 						'</span>' +
 						'<span class="repeat">' +
 							'<span class="deg">' +
-								'179<span class="units">&deg;</span>' +
+								'179<span class="units">°</span>' +
 							'</span>' +
 							'&nbsp;' +
 							'<span class="minutes">' +
@@ -90,13 +90,13 @@ define([
 							'</span>' +
 						'</span>');
 				// Still works when rounding is required
-				expect(Format.degreesMinutes(179.94583)).to.equal(
+				expect(Format.degreesAndDegreesMinutes(179.94583)).to.equal(
 						'<span class="deg">' +
-							'179.95<span class="units">&deg;</span>' +
+							'179.95<span class="units">°</span>' +
 						'</span>' +
 						'<span class="repeat">' +
 							'<span class="deg">' +
-								'179<span class="units">&deg;</span>' +
+								'179<span class="units">°</span>' +
 							'</span>' +
 							'&nbsp;' +
 							'<span class="minutes">' +
