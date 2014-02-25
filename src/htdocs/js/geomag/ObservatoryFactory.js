@@ -205,12 +205,6 @@ define([
 	 * @return {Observatory}
 	 */
 	ObservatoryFactory.prototype._getObservatory = function (observatory) {
-		// observatory.instruments = this._getInstruments(observatory.instruments);
-		// observatory.piers = this._getPiers(observatory.piers);
-		// _selectById(observatory.piers, observatory.default_pier_id);
-		// observatory.observations = this._getObservations(observatory.observations);
-		// return new Observatory(observatory);
-
 		var data = Util.extend({}, observatory);
 		data.instruments = this._getInstruments(observatory.instruments);
 		data.piers = this._getPiers(observatory.piers);
