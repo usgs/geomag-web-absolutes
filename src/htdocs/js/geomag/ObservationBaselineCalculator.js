@@ -446,6 +446,7 @@ define([
 
 		return total / count;
 	};
+
 	ObservationBaselineCalculator.prototype.getStats = function (data) {
 		var mean = this._calculator._mean.apply(this._calculator, data),
 		    min = Math.min.apply(Math, data),
@@ -455,7 +456,7 @@ define([
 		    variance = 0,
 		    difference = null;
 
-		for ( i = 0, len = data.length; i < len; i++) {
+		for (i = 0, len = data.length; i < len; i++) {
 			difference = mean - data[i];
 			variance += difference * difference;
 		}
