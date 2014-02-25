@@ -29,8 +29,9 @@ define([
 
 
 	MagnetometerOrdinatesView.prototype._initialize = function () {
+		var measurements = this._options.reading.getMeasurements();
+
 		this._reading = this._options.reading;
-		this._measurements = this._reading.getMeasurements();
 		this._calculator = this._options.baselineCalculator;
 
 		this._el.innerHTML = [
@@ -102,21 +103,21 @@ define([
 
 		// hook up to measurements on change.
 		// Only need time/angles not markup/markdown
-		this._measurements[Measurement.WEST_DOWN][0].
+		measurements[Measurement.WEST_DOWN][0].
 				on('change', this.render, this);
-		this._measurements[Measurement.EAST_DOWN][0].
+		measurements[Measurement.EAST_DOWN][0].
 				on('change', this.render, this);
-		this._measurements[Measurement.WEST_UP][0].
+		measurements[Measurement.WEST_UP][0].
 				on('change', this.render, this);
-		this._measurements[Measurement.EAST_UP][0].
+		measurements[Measurement.EAST_UP][0].
 				on('change', this.render, this);
-		this._measurements[Measurement.SOUTH_DOWN][0].
+		measurements[Measurement.SOUTH_DOWN][0].
 				on('change', this.render, this);
-		this._measurements[Measurement.NORTH_UP][0].
+		measurements[Measurement.NORTH_UP][0].
 				on('change', this.render, this);
-		this._measurements[Measurement.SOUTH_UP][0].
+		measurements[Measurement.SOUTH_UP][0].
 				on('change', this.render, this);
-		this._measurements[Measurement.NORTH_DOWN][0].
+		measurements[Measurement.NORTH_DOWN][0].
 				on('change', this.render, this);
 		// hook up to calculator on change.
 		// for changes to pier and mark. 
