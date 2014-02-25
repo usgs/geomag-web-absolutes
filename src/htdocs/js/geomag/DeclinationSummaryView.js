@@ -44,7 +44,7 @@ define([
 		this._startTime.innerHTML = this._formatTime(startTime);
 		this._endTime.innerHTML = this._formatTime(endTime);
 
-		this._shift.value = reading.get('shift');
+		this._shift.value = reading.get('declination_shift');
 
 		degree = this._calculator.magneticDeclination(reading);
 		dms = this._decimalToDms(degree);
@@ -107,7 +107,8 @@ define([
 		this._valid.addEventListener('change', this._onChange);
 		this._shift.addEventListener('change', this._onChange);
 
-		this._reading.on('change', this.render, this);
+		this._reading.on('change:declination_valid', this.render, this);
+		this._reading.on('change:declination_shift', this.render, this);
 
 		this._calculator.on('change', this.render, this);
 
@@ -126,6 +127,11 @@ define([
 		measurements.push(allMeasurements[Measurement.EAST_DOWN][0]);
 		measurements.push(allMeasurements[Measurement.WEST_UP][0]);
 		measurements.push(allMeasurements[Measurement.EAST_UP][0]);
+
+		measurements.push(allMeasurements[Measurement.FIRST_MARK_UP][0]);
+		measurements.push(allMeasurements[Measurement.FIRST_MARK_DOWN][0]);
+		measurements.push(allMeasurements[Measurement.SECOND_MARK_UP][0]);
+		measurements.push(allMeasurements[Measurement.SECOND_MARK_DOWN][0]);
 
 		return measurements;
 	};
@@ -166,7 +172,7 @@ define([
 	DeclinationSummaryView.prototype._onChange = function () {
 		this._reading.set({
 			declination_valid: (this._valid.checked ? 'Y' : 'N'),
-			shift: parseInt(this._shift.value, 10)
+			declination_shift: parseInt(this._shift.value, 10)
 		});
 	};
 
