@@ -149,16 +149,18 @@ define([
 				});
 
 				// These are equal, this is probably bs.
-				//expect(view._magneticSouthMeridian.textContent+).to.equal(
-				//		calculator.magneticSouthMeridian().toFixed(2) + '°1° 0.00\'');
+				expect(view._magneticSouthMeridian.innerHTML).to.equal(
+						Format.degreesAndDegreesMinutes(
+								calculator.magneticSouthMeridian()));
 				expect(view._meanMark.textContent).to.equal(
 						calculator.meanMark().toFixed(2) + '°');
 				expect(view._magneticAzimuthOfMark.textContent).to.equal(
 						calculator.magneticAzimuthMark().toFixed(2) + '°');
 				expect(view._trueAzimuthOfMark.textContent).to.equal('' +
 						calculator.trueAzimuthOfMark() + '°');
-				//expect(view._magneticDeclination.innerHTML).to.equal(
-				//		Format.degreesMinutes(calculator.magneticDeclination()));
+				expect(view._magneticDeclination.innerHTML).to.equal(
+						Format.degreesAndDegreesMinutes(
+								calculator.magneticDeclination()));
 
 				expect(view._westUpMinusEastDown.textContent).to.equal(
 						calculator.westUpMinusEastDown().toFixed(2) + '\'');

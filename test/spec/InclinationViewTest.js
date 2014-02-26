@@ -135,8 +135,8 @@ define([
 					baselineCalculator: calculator
 				});
 
-				//expect(view._inclinationAngle.innerHTML).to.equal(
-				//		Format.degreesMinutes(calculator.inclination()));
+				expect(view._inclinationAngle.innerHTML).to.equal(
+						Format.degreesAndDegreesMinutes(calculator.inclination()));
 				expect(view._horizontalComponent.textContent).to.equal(
 						calculator.horizontalComponent().toFixed(2) + 'nT');
 				expect(view._verticalComponent.textContent).to.equal(
