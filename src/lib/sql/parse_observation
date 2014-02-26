@@ -1,0 +1,710 @@
+#!/usr/bin/perl
+#
+#
+# Revision history:
+#  Aug. 28, 2013 - Version 1.00
+#  Feb. 12, 2014 - Version 1.01
+#    1. modified sub get_meas_sql to
+#      a) strip 'Time' from measurement type tags so
+#         that NorthDownTime becomes NorthDown
+#      b) Corrected the formula to turn degrees/minutes/seconds to decimal degrees
+#  Feb. 13, 2014 - Version 1.02
+#    1. added code to support processing the "Adjust Declination" and
+#       "Adjust Declination Up" lines in the data files.  There are values for each
+#       reading, and they combine to set a declination_shift column in the
+#       reading table.
+#
+#
+use Getopt::Std;
+use strict;
+use vars qw ($progname $version $version_date
+             $opt_h $opt_f $opt_s $opt_o $opt_q $opt_e $opt_t
+             @files
+             $cmd
+             );
+#
+$| = 1;    #flush stdout
+$progname = "parse_observation";
+$version = "Version 1.02";
+$version_date = "Feb. 13, 2014";
+
+# parse command line
+getopts "he:f:s:oqt:" or PrintUsage();
+if ( defined $opt_h || (! defined $opt_f && ! defined $opt_s && ! defined $opt_e) || ! defined $opt_t) {
+  PrintUsage();
+}
+
+# make sure -t option is mysql or sqlite
+if ($opt_t ne "mysql" && $opt_t ne "sqlite") {
+  print "Invalid -t option\n";
+  exit 1;
+}
+
+# get list of files
+if (defined $opt_f) {
+  $cmd = "ls $opt_f";
+} elsif (defined $opt_s) {
+  $cmd = "ls ${opt_s}???????????.???";
+} elsif (defined $opt_e) {
+  $cmd = "ls *.${opt_e}";
+} else {
+  $cmd = "ls ??????????????.???";
+}
+@files = `$cmd`;
+chomp @files;
+
+# process each file/observation
+FILE: for (my $i = 0; $i < @files; $i++) {
+  my ($name, $ext) = split('\.', $files[$i]);
+  if ($ext eq "bns") {
+    bns_process_observation($files[$i]);
+  } else {
+    print "Don't yet know how to parse $ext files\n";
+  }
+}
+
+exit 0;
+
+#======================== start of subroutines ===========
+#########################################################
+# Usage subroutine
+sub PrintUsage {
+  print "\n$progname $version $version_date\n\n";
+  print "\tPurpose: Purpose: Crack data files for GeoMag Web Absolutes data, create SQL to load database\n";
+  print "\tUsage:   $progname [-h] [-o] [-q] -t mysql|sqlite -e extension || -f filename || -s StationCode \n";
+  print "\tWhere:\n";  
+  print "\t  -h               print help and exit\n";
+  print "\t  -o               Option to output filename.sql file\n";
+  print "\t  -q               Option for quiet mode - no sql is output to screen\n";
+  print "\t  -t mysql|sqlite  Required.  Use one or the other\n";
+  print "\t  -e               Process files with this extension\n";
+  print "\t  -f filename      Process datafile identified by filename\n";
+  print "\t  -s StationCode   Process datafiles for station identified in three character StationCode\n";
+  print "\tNote:  run with no options to process all observation files\n";
+  print "\n";
+  exit 0;
+} # end sub PrintUsage
+
+
+#########################################################
+sub trim {
+    my @out = @_;
+    for (@out) {
+        s/^\s+//;
+        s/\s+$//;
+    }
+    return wantarray ? @out : $out[0];
+}
+
+
+#########################################################
+sub run {
+  my $command = $_[0];
+  system($command);
+  my $exit_return = $? >> 8;
+  return $exit_return;
+}
+
+
+#########################################################
+sub get_timestamp {
+  my $cmd = "date +\%Y-\%m-\%d' '\%H:\%M";
+  my $ts = `$cmd`;
+  chomp $ts;
+  return $ts;
+}  # matches sub get_timestamp
+
+
+#########################################################
+# convert timestamp from mm/dd/yyyy hh:mm format to
+# yyyy-mm-dd hh:mm:00 format
+sub date_convert {
+  my $date_time = $_[0];
+  my ($date, $time) = split(" ", $date_time);
+  my ($mon, $day, $year) = split("/", $date);
+
+  my $retval = "$year-$mon-$day $time:00";
+  return $retval;
+}  # matches sub date_convert
+
+
+#########################################################
+sub get_observation_sql {
+  my $code = $_[0];
+  my $obs_begin = $_[1];
+  my $pier = $_[2];
+  my $mark = $_[3];
+  my $elec_serial_number = $_[4];
+  my $theo_serial_number = $_[5];
+  my $pier_temp = $_[6];
+  my $elec_temp = $_[7];
+  my $flux_temp = $_[8];
+  my $prot_temp = $_[9];
+  my $checked_by = $_[10];
+  my $filename = $_[11];
+
+  my $date = get_timestamp();
+  my $annot = "loaded from $filename on $date";
+
+  # examine the checked by to see if it was reviewed
+  my $reviewer_clause = "NULL";
+  if ($checked_by ne "0") {
+    #BRW20123612310.bns:Checked By, EWW  1-8-2013
+    my @fields = split(" ", $checked_by);
+    $reviewer_clause = "(SELECT id FROM USER WHERE username=\'$fields[0]\')";
+    $annot = "$annot - Checked by: $checked_by";
+  }
+
+  # convert obs_begin into time function call associated with given DB
+  if ($opt_t eq "sqlite") {
+    $obs_begin = "1000*strftime(\'\%s\', \'$obs_begin\')";
+  } else {
+    $obs_begin = "1000*unix_timestamp(\'$obs_begin\')";
+  }
+
+  my $sql =
+"INSERT INTO observation
+ (observatory_id, begin, end,
+  reviewer_user_id,
+  mark_id,
+  electronics_id,
+  theodolite_id,
+  pier_temperature, elect_temperature, flux_temperature, proton_temperature, annotation)
+ VALUES
+ ( (SELECT id FROM observatory WHERE code=\'$code\'), $obs_begin, NULL,
+   $reviewer_clause,
+   (SELECT id FROM mark WHERE name=\'$mark\' AND pier_id = (SELECT id FROM pier WHERE observatory_id=(SELECT id FROM observatory obs WHERE obs.code=\'${code}\')
+                                                                                 AND name=\'$pier\'
+                                                                                 AND ( (begin <= $obs_begin AND end >= $obs_begin)
+                                                                                       OR
+                                                                                        (begin <= $obs_begin AND end IS NULL)
+                                                                                 )
+                                                           )
+   ),
+   (SELECT id FROM instrument WHERE serial_number=\'$elec_serial_number\'
+                                AND observatory_id=(SELECT id FROM observatory obs WHERE obs.code=\'${code}\')
+                                AND  ( (begin <= $obs_begin AND end >= $obs_begin)
+                                       OR
+                                       (begin <= $obs_begin AND end IS NULL)
+                                     )
+   ),
+   (SELECT id FROM instrument WHERE serial_number=\'$theo_serial_number\'
+                                AND observatory_id=(SELECT id FROM observatory obs WHERE obs.code=\'${code}\')
+                                AND  ( (begin <= $obs_begin AND end >= $obs_begin)
+                                       OR
+                                       (begin <= $obs_begin AND end IS NULL)
+                                     )
+   ),
+  \'$pier_temp\',  \'$elec_temp\',
+  \'$flux_temp\',  \'$prot_temp\', \'$annot\'
+ );";
+  return $sql;
+} # matches sub get_observation_sql
+
+
+#########################################################
+sub get_reading_sql {
+  my $code = $_[0];
+  my $obs_begin = $_[1];
+  my $set_number = $_[2];
+  my $user = $_[3];
+  my $declination_valid = $_[4];
+  my $horizontal_intensity_valid = $_[4];
+  my $vertical_intensity_valid = $_[6];
+  my $filename = $_[7];
+  my $adj_declination = $_[8];
+  my $adj_declination_up = $_[9];
+  my $date = get_timestamp();
+
+  # convert obs_begin into time function call associated with given DB
+  if ($opt_t eq "sqlite") {
+    $obs_begin = "1000*strftime(\'\%s\', \'$obs_begin\')";
+  } else {
+    $obs_begin = "1000*unix_timestamp(\'$obs_begin\')";
+  }
+
+  # determine value of declination_shift
+  my $declination_shift = -1;
+  if ( ($adj_declination eq '0' && $adj_declination_up eq '0')
+       || ($adj_declination eq '1' && $adj_declination_up eq '1') ) {
+    $declination_shift = 0;
+  } elsif ($adj_declination eq '1' && $adj_declination_up eq '0') {
+    $declination_shift = -180;
+  } elsif ($adj_declination eq '0' && $adj_declination_up eq '1') {
+    $declination_shift = 180;
+  }
+
+  my $sql =
+"INSERT INTO reading
+ (observation_id,
+  set_number,
+  observer_user_id,
+  declination_valid, declination_shift, horizontal_intensity_valid, vertical_intensity_valid, annotation)
+  VALUES
+ ( (SELECT id FROM observation WHERE begin = $obs_begin AND observatory_id=(SELECT id FROM observatory obs WHERE obs.code=\'${code}\')),
+   \'$set_number\',
+   (SELECT id FROM USER WHERE username=\'$user\'),
+   \'$declination_valid\', $declination_shift, \'$horizontal_intensity_valid\', \'$vertical_intensity_valid\', \'loaded from $filename on $date\'
+ );";
+  return $sql;
+
+}  # matches sub get_reading_sql
+
+
+#########################################################
+sub get_meas_sql {
+  my $data = $_[0];
+  my $setnum = $_[1];
+  my $tag = $_[2];
+  my $code = $_[3];
+  my $obs_begin = $_[4];
+  my $h_line = $_[5];
+  my $e_line = $_[6];
+  my $z_line = $_[7];
+  my $f_line = $_[8];
+  my $sql = "";
+
+  # these hashes are used to locate the H,D,Z,F values
+  # for the given measurement.  The datafile lists
+  # these values all in the same line, represented
+  # as time:value pairs. Use the measurement time
+  # to find the right one, but there may not be
+  # a match
+  my %hash_H = {};
+  my %hash_E = {};
+  my %hash_Z = {};
+  my %hash_F = {};
+  my ($h, $e, $z, $f);
+
+  # parse line from file and clean up all the fields
+  my @fields = split(",", $data);
+  for (my $i = 0; $i < @fields; $i++) {
+    $fields[$i] = trim($fields[$i]);
+  }
+
+  # make sure tags match - if they do, then use it for value of the type column
+  if ($fields[0] ne $tag) {
+    print "get_meas_sql: Error expected $tag, got $fields[0]\n";
+    return $sql;
+  }
+
+  # load the H,D,Z,F hashes - the time:value pairs (4 of them)
+  # preceeded by two unused values (so index starts at 2)
+  @fields = split(",", $h_line);
+  for (my $i = 2; $i < @fields; $i++) {
+    my ($hms, $value) = split(":", $fields[$i]);
+    $hms = trim($hms);
+    $value = trim($value);
+    $hash_H{$hms} = $value;
+  }
+  @fields = split(",", $e_line);
+  for (my $i = 2; $i < @fields; $i++) {
+    my ($hms, $value) = split(":", $fields[$i]);
+    $hms = trim($hms);
+    $value = trim($value);
+    $hash_E{$hms} = $value;
+  }
+  @fields = split(",", $z_line);
+  for (my $i = 2; $i < @fields; $i++) {
+    my ($hms, $value) = split(":", $fields[$i]);
+    $hms = trim($hms);
+    $value = trim($value);
+    $hash_Z{$hms} = $value;
+  }
+  @fields = split(",", $f_line);
+  for (my $i = 2; $i < @fields; $i++) {
+    my ($hms, $value) = split(":", $fields[$i]);
+    $hms = trim($hms);
+    $value = trim($value);
+    $hash_F{$hms} = $value;
+  }
+
+  # all measurements include angle (degrees, minutes, seconds)
+  my $degrees = 0;
+  my $minutes = 0;
+  my $seconds = 0;
+  # [*]Mark[Up,Down] don't have a time, but the others do (format: hhmmss)
+  # for all measurements, the day (format: YYYY-MM-DD) comes from obs_begin
+  # If the measurement has a time, it is reformated and used in the time column.
+  # Otherwise, the time from obs_begin is used.
+  my $ts_day = "";    # format yyyy-mm-dd
+  my $ts_time = "";   # format hh:mm:ss
+  ($ts_day, $ts_time) = split(" ", $obs_begin);
+  # setup default value from hhmmss using ts_time (remove the :'s)
+  my $hhmmss = $ts_time;
+  $hhmmss =~ s/://g;
+
+  my ($yyyymmdd, $hhmmss) = split(" ", $obs_begin);
+  if ($tag eq "FirstMarkUp" || $tag eq "FirstMarkDown" ||
+      $tag eq "SecondMarkUp"|| $tag eq "SecondMarkDown") {
+    # these don't have explicit timestamps and use the default setup above
+    @fields = split(",", $data);
+    $degrees = trim($fields[1]);
+    $minutes = trim($fields[2]);
+    $seconds = trim($fields[3]);
+  } else {
+    # these DO have a time (hhmmss) in the first component
+    @fields = split(",", $data);
+    $hhmmss = trim($fields[1]);
+    $degrees = trim($fields[2]);
+    $minutes = trim($fields[3]);
+    $seconds = trim($fields[4]);
+    # reformat hhmmss as ts_time
+    $ts_time = substr($hhmmss,0,2) . ":" . substr($hhmmss,2,2) . ":" . substr($hhmmss,4,2);
+  }
+
+  # convert angle from degrees,minutes,seconds to decimal degrees
+  my $angle = $degrees + $minutes/60 + $seconds/3600;
+
+  # look in the H,D,Z,F hashes to get the value using time (in $hhmmss)
+  # as an index.  It's okay/expected that there won't be a match on
+  # all of them.
+  $h = $e = $z = $f = "NULL";
+  if (exists $hash_H{$hhmmss}) {
+    $h = $hash_H{$hhmmss};
+    $h = "\'$h\'";
+  }
+  if (exists $hash_E{$hhmmss}) {
+    $e = $hash_E{$hhmmss};
+    $e = "\'$e\'";
+  }
+  if (exists $hash_Z{$hhmmss}) {
+    $z = $hash_Z{$hhmmss};
+    $z = "\'$z\'";
+  }
+  if (exists $hash_F{$hhmmss}) {
+    $f = $hash_F{$hhmmss};
+    $f = "\'$f\'";
+  }
+
+
+  # convert obs_begin into time function call associated with given DB
+  if ($opt_t eq "sqlite") {
+    $obs_begin = "1000*strftime(\'\%s\', \'$obs_begin\')";
+  } else {
+    $obs_begin = "1000*unix_timestamp(\'$obs_begin\')";
+  }
+
+  # ditto for time, with provision to NULL out time for *Mark* events
+  my $time = "";
+  if ($tag eq "FirstMarkUp" || $tag eq "FirstMarkDown" ||
+      $tag eq "SecondMarkUp"|| $tag eq "SecondMarkDown") {
+    $time = "NULL";
+  } elsif ($opt_t eq "sqlite") {
+    $time = "1000*strftime(\'\%s\', \'$ts_day $ts_time\')";
+  } else {
+    $time = "1000*unix_timestamp(\'$ts_day $ts_time\')";
+  }
+
+  # Feb. 12, 2014 - strip TIME from tag
+  $tag  =~ s/Time//g;
+  $sql =
+"INSERT INTO measurement (reading_id, type, time, angle, h, e, z, f) VALUES
+( (SELECT id FROM reading
+             WHERE set_number = $setnum
+               AND observation_id = (SELECT id 
+                                     FROM observation obsn
+                                     WHERE obsn.begin=$obs_begin
+                                       AND obsn.observatory_id = (SELECT id FROM observatory obs WHERE obs.code=\'$code\'))),
+  \'$tag\', $time, \'$angle\', $h, $e, $z, $f
+);";
+
+  return $sql;
+}  # matches sub get_meas_sql
+
+
+#########################################################
+sub bns_process_observation {
+  my $filename = $_[0];
+  if (! -e $filename) {
+    print "process_observation - Error: $filename does not exist\n";
+    return;
+  }
+
+  my $query = "";
+  my @SQL = ();
+  my @fields = ();
+
+  # parse the filename and get the station code from 1st line
+  my ($name, $ext) = split('\.', $filename);
+  my $code = substr($name, 0, 3);
+
+  # these are for the OBSERVATION table
+  my ($obs_begin, $obs_end, $reviewer_user_id, $pier_temperature, $elect_temperature, $flux_temperature, $proton_temperature, $checked_by);
+
+  # this will hold the first reference to the station id (aka code)
+  my $station_id = "";
+
+  # these relate to the READING table
+  my ($set_number, $mark, $pier, $elec_serial_number, $theo_serial_number, $user,
+      $declination_valid, $horizontal_intensity_valid,
+      $vertical_intensity_valid);
+
+  # these are for the MEASUREMENT table
+  my ($reading_id, $type, $time, $angle);
+
+  # read the file into a local array
+  my $cmd = "cat $filename";
+  my @data = `$cmd`;
+  chomp @data;
+
+  # make sure there are exactly 203 lines
+  my $num_lines = @data;
+  if ($num_lines != 203) {
+    print "$filename is of type $ext, and should have 203 lines, but has $num_lines - skip processing\n";
+    return;
+  }
+
+  # setup OBSERVATION table entry
+  #  get date
+  @fields = split(",", $data[4]);
+  $obs_begin = date_convert($fields[1]);
+  # fix obs_begin, which may not be of form YYYY-MM-DD (form YYYY-M-DD observed)
+  my ($date, $time) = split(" ", $obs_begin);
+  my ($yyyy, $mm, $dd) = split("-", $date);
+  $date = sprintf "%04d-%02d-%02d", $yyyy, $mm, $dd;
+  $obs_begin = "$date $time";
+
+  # get the Checked by line
+  @fields = split(",", $data[196]);
+  $checked_by = trim($fields[1]);
+
+  # get temperatures from bottom of file
+  @fields = split(",", $data[197]);
+  $pier_temperature = trim($fields[1]);
+  @fields = split(",", $data[198]);
+  $elect_temperature = trim($fields[1]);
+  @fields = split(",", $data[199]);
+  $flux_temperature = trim($fields[1]);
+  @fields = split(",", $data[200]);
+  $proton_temperature = trim($fields[1]);
+
+  # use the instruments from Set 1
+  @fields = split(",", $data[14]);
+  @fields = split("/", $fields[1]);
+  if (@fields == 1) {
+    # no theodolite
+    $elec_serial_number = trim($fields[0]);
+    $theo_serial_number = "NULL";
+  } else {
+    $elec_serial_number = trim($fields[0]);
+    $theo_serial_number = trim($fields[1]);
+  }
+
+  # use the pier from Set 1
+  @fields = split(",", $data[16]);
+  $pier = trim($fields[1]);
+
+  # use the mark from Set 1
+  @fields = split(",", $data[17]);
+  $mark = trim($fields[1]);
+
+  $query = get_observation_sql($code, $obs_begin, $pier, $mark, $elec_serial_number, $theo_serial_number,
+                               $pier_temperature, $elect_temperature, $flux_temperature, $proton_temperature, $checked_by, $filename);
+  @SQL = (@SQL, "$query");
+
+
+  # the rest of the file contains readings by set.  There are 43 lines in each set
+  # and the layout is the same.  The SET loop does all 4 sets.  For each set, output
+  # one INSERT INTO READING statment, and a series of related INSERT INTO
+  # MEASUREMENT statements
+  my @set_start = (12, 55, 98, 141);
+  SET: for (my $setnum = 0; $setnum < @set_start; $setnum++) {
+    my $start = $set_start[$set_number];
+
+    # detect sets not done.  All files contain lines for 4 sets, but
+    # some sets are not measured and should be skipped.  Condition is detected
+    # when the line for first up mark looks like:
+    if (trim($data[$start+11]) eq "FirstMarkUp, 0, 0, 0") {
+     next SET;
+    }
+
+    # Set Number is in 1st line of each set;
+    @fields = split(",", $data[$start]);
+    $set_number = trim($fields[1]);
+    if ($setnum+1 != $set_number) {
+      print "setnum: $setnum+1 ne set_number: $set_number\n";
+      exit 1;
+    }
+
+    # start+3 has observer
+    @fields = split(",", $data[$start+3]);
+    $user = trim($fields[1]);
+
+    # start+9 has 'Adjust Declination' value - format is 'Adjust Declination, 0'
+    @fields = split(",", $data[$start+9]);
+    if ($fields[0] ne "Adjust Declination") {
+      print "Expected Adjust Declination on line $start + 9\n";
+      print "Got: $data[$start+9]\n";
+      exit 1;
+    }
+    my $adjust_declination = trim($fields[1]);
+
+    # start+10 has 'Adjust Declination Up' value - format is 'Adjust Declination Up, 0'
+    @fields = split(",", $data[$start+10]);
+    if ($fields[0] ne "Adjust Declination Up") {
+      print "Expected Adjust Declination Up on line $start + 10\n";
+      print "Got: $data[$start+10]\n";
+      exit 1;
+    }
+    my $adjust_declination_up = trim($fields[1]);
+
+    # values of declination_valid, horizontal_intensity_valid, and vertical_intensity_valid
+    # are at the botton of the file and are not associated with any particular set.
+    # "Inlude D Set n, Yes/No" starts at data[184]
+    my $line_num = 184 + $set_number - 1;
+    @fields = split(" ", $data[$line_num]);
+    if ($fields[1] != "D" || $fields[3] != "${set_number}," ) {
+      print "dec_valid - data[$line_num] is not for D Set $set_number\n";
+      exit 1;
+    }
+    $declination_valid = trim(substr($fields[4], 0, 1));
+
+    # "Inlude H Set n, Yes/No" starts at data[188]
+    $line_num = 188 + $set_number - 1;
+    @fields = split(" ", $data[$line_num]);
+    if ($fields[1] != "H" || $fields[3] != "${set_number}," ) {
+      print "dec_valid - data[$line_num] is not for H Set $set_number\n";
+      exit 1;
+    }
+    $horizontal_intensity_valid = trim(substr($fields[4], 0, 1));
+
+    # "Inlude V Set n, Yes/No" starts at data[192]
+    $line_num = 192 + $set_number - 1;
+    @fields = split(" ", $data[$line_num]);
+    if ($fields[1] != "V" || $fields[3] != "${set_number}," ) {
+      print "dec_valid - data[$line_num] is not for V Set $set_number\n";
+      exit 1;
+    }
+    $vertical_intensity_valid = trim(substr($fields[4], 0, 1));
+
+
+    $query = get_reading_sql($code, $obs_begin, $set_number, $user,
+                             $declination_valid, $horizontal_intensity_valid,
+                             $vertical_intensity_valid, $filename,
+                             $adjust_declination, $adjust_declination_up);
+
+    @SQL = (@SQL, "$query");
+#print "$query\n";
+
+    # the following is for the MEASUREMENT table
+    # first, load up the time series data lines for later reference
+    $line_num = $start + 31;
+    my $H_line = $data[$line_num];
+    $line_num++;
+    my $E_line = $data[$line_num];
+    $line_num++;
+    my $Z_line = $data[$line_num];
+    $line_num++;
+    my $F_line = $data[$line_num];
+
+    # process the 12 measurements in the current set
+    # these are to hold the appropriate H, D, Z, or F value (or NULL)
+    my ($h, $d, $z, $f);
+    $line_num = $start + 11;  # offset to first measurement
+    # FirstMarkUp, 10, 20, 37
+    $query = get_meas_sql($data[$line_num], $set_number, "FirstMarkUp", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+#print "$query\n"; exit 1;
+    @SQL = (@SQL, "$query");
+
+
+    # FirstMarkDown, 190, 20, 32
+    $line_num++;
+    $query = get_meas_sql($data[$line_num], $set_number, "FirstMarkDown", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+    @SQL = (@SQL, "$query");
+
+    # NorthDownTime, 203821, 270, 25, 4
+    $line_num++;
+    $query = get_meas_sql($data[$line_num], $set_number, "NorthDownTime", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+    @SQL = (@SQL, "$query");
+
+    # NorthDownOffsetValue, 0
+    $line_num++;  # skip
+
+    # NorthUpTime, 204136, 270, 30, 52
+    $line_num++;
+    $query = get_meas_sql($data[$line_num], $set_number, "NorthUpTime", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+    @SQL = (@SQL, "$query");
+
+    # NorthUpOffsetValue, 0
+    $line_num++;  # skip
+
+    # SouthDownTime, 203918, 90, 29, 3
+    $line_num++;
+    $query = get_meas_sql($data[$line_num], $set_number, "SouthDownTime", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+    @SQL = (@SQL, "$query");
+
+    # SouthDownOffsetValue, 0
+    $line_num++;  # skip
+
+    # SouthUpTime, 204037, 90, 22, 44
+    $line_num++;
+    $query = get_meas_sql($data[$line_num], $set_number, "SouthUpTime", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+    @SQL = (@SQL, "$query");
+
+    # SouthUpOffsetValue, 0
+    $line_num++;  # skip
+
+    # WestDownTime, 204432, 246, 44, 42
+    $line_num++;
+    $query = get_meas_sql($data[$line_num], $set_number, "WestDownTime", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+    @SQL = (@SQL, "$query");
+
+    # WestDownOffsetValue, 0
+    $line_num++;  # skip
+
+    # WestUpTime, 204526, 66, 42, 20
+    $line_num++;
+    $query = get_meas_sql($data[$line_num], $set_number, "WestUpTime", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+    @SQL = (@SQL, "$query");
+
+    # WestUpOffsetValue, 0
+    $line_num++;  # skip
+
+    # EastDownTime, 204726, 293, 16, 48
+    $line_num++;
+    $query = get_meas_sql($data[$line_num], $set_number, "EastDownTime", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+    @SQL = (@SQL, "$query");
+
+    # EastDownOffsetValue, 0
+    $line_num++;  # skip
+
+    # EastUpTime, 204634, 113, 14, 27
+    $line_num++;
+    $query = get_meas_sql($data[$line_num], $set_number, "EastUpTime", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+    @SQL = (@SQL, "$query");
+
+    # EastUpOffsetValue, 0
+    $line_num++;  # skip
+
+    # SecondMarkUp, 10, 20, 38
+    $line_num++;
+    $query = get_meas_sql($data[$line_num], $set_number, "SecondMarkUp", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+    @SQL = (@SQL, "$query");
+
+    # SecondMarkDown, 190, 20, 31
+    $line_num++;
+    $query = get_meas_sql($data[$line_num], $set_number, "SecondMarkDown", $code, $obs_begin, $H_line, $E_line, $Z_line, $F_line);
+    @SQL = (@SQL, "$query");
+
+  }  # matches SET
+
+  if (! defined $opt_q) {
+    for (my $i = 0; $i < @SQL; $i++) {
+      print "$SQL[$i]\n";
+    }
+  }
+
+  # create SQL file if needed
+  if (defined $opt_o) {
+    my $fname = "${filename}.sql";
+    open SQLFILE, ">$fname" or die $!;
+    for (my $i = 0; $i < @SQL; $i++) {
+      print SQLFILE "$SQL[$i]\n";
+    }
+    close SQLFILE;
+  }
+
+  return;
+
+}  # matches sub bns_process observation
