@@ -54,7 +54,7 @@ define([
 		this._ordMin.innerHTML = this._calculator.computedE(reading);
 		this._baselineMin.innerHTML = this._calculator.baselineD(reading);
 		this._baselineNt.innerHTML = this._calculator.d(reading);
-		this._observer.innerHTML = this._reading.get('observer');
+		this._observer.innerHTML = this._reading.get('observer') || '';
 	};
 
 	DeclinationSummaryView.prototype._initialize = function () {
