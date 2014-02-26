@@ -77,6 +77,7 @@ define([
 			id: this._options.observationId || null,
 			success: this._setObservation.bind(this)
 		});
+		this._createControls();
 	};
 
 	/**
@@ -206,7 +207,6 @@ define([
 			}
 		});
 
-		this._createControls();
 	};
 
 	/**
