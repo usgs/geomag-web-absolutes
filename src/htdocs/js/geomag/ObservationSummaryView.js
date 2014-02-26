@@ -5,7 +5,8 @@ define([
 
 	'geomag/DeclinationSummaryView',
 	'geomag/HorizontalIntensitySummaryView',
-	'geomag/VerticalIntensitySummaryView'
+	'geomag/VerticalIntensitySummaryView',
+	'geomag/Formatter'
 	//'geomag/Measurement'
 ], function (
 	View,
@@ -13,7 +14,8 @@ define([
 
 	DeclinationSummaryView,
 	HorizontalIntensitySummaryView,
-	VerticalIntensitySummaryView
+	VerticalIntensitySummaryView,
+	Formatter
 	//Measurement
 ) {
 	'use strict';
@@ -42,6 +44,7 @@ define([
 				i = null,
 				len = null,
 				reading,
+				range,
 				baselineD = [],
 				baselineDNt = [],
 				baselineDStats,
@@ -72,13 +75,20 @@ define([
 		baselineDStats = calculator.getStats(baselineD);
 		baselineDNtStats = calculator.getStats(baselineDNt);
 
-		this._baselineMinMean.innerHTML = baselineDStats.mean;
-		this._baselineNtMean.innerHTML = baselineDNtStats.mean;
-		this._baselineMinRange.innerHTML ='[' +  baselineDStats.min + ', ' +
-			baselineDStats.max + ']';
-		this._baselineNtRange.innerHTML = '[' + baselineDNtStats.min + ', ' + baselineDNtStats.max + ']';
-		this._baselineMinStdDev.innerHTML = baselineDStats.stdDev;
-		this._baselineNtStdDev.innerHTML = baselineDNtStats.stdDev;
+		this._baselineMinMean.innerHTML = Formatter.minutes(baselineDStats.mean);
+		this._baselineNtMean.innerHTML =
+				Formatter.nanoteslas(baselineDNtStats.mean);
+
+		range = baselineDStats.max - baselineDStats.min;
+		this._baselineMinRange.innerHTML = Formatter.minutes(range);
+
+		range = baselineDNtStats.max - baselineDNtStats.min;
+		this._baselineNtRange.innerHTML = Formatter.nanoteslas(range);
+
+		this._baselineMinStdDev.innerHTML =
+				Formatter.minutes(baselineDStats.stdDev);
+		this._baselineNtStdDev.innerHTML =
+				Formatter.nanoteslas(baselineDNtStats.stdDev);
 	};
 
 	ObservationSummaryView.prototype._renderInclination = function () {
@@ -94,6 +104,7 @@ define([
 		    i = null,
 		    len = null,
 		    reading,
+		    range,
 		    baselineH = [],
 		    baselineHStats;
 
@@ -119,9 +130,14 @@ define([
 			}
 		}
 		baselineHStats = calculator.getStats(baselineH);
-		this._baselineValuesMean.innerHTML = baselineHStats.mean;
-		this._baselineValuesRange.innerHTML = '[' + baselineHStats.min + ', ' + baselineHStats.max + ']';
-		this._baselineValuesStdDev.innerHTML = baselineHStats.stdDev;
+		this._baselineValuesMean.innerHTML =
+				Formatter.nanoteslas(baselineHStats.mean);
+
+		range = baselineHStats.max - baselineHStats.min;
+		this._baselineValuesRange.innerHTML = Formatter.nanoteslas(range);
+
+		this._baselineValuesStdDev.innerHTML =
+				Formatter.nanoteslas(baselineHStats.stdDev);
 	};
 
 	ObservationSummaryView.prototype._renderVerticalIntensitySummaryView =
@@ -132,6 +148,7 @@ define([
 			  i = null,
 			  len = null,
 			  reading,
+			  range,
 			  baselineZ = [],
 			  baselineZStats;
 
@@ -157,12 +174,14 @@ define([
 		}
 		baselineZStats = calculator.getStats(baselineZ);
 
-		this._verticalBaselineValuesMean.innerHTML = baselineZStats.mean;
+		this._verticalBaselineValuesMean.innerHTML =
+				Formatter.nanoteslas(baselineZStats.mean);
 
-		this._verticalBaselineValuesRange.innerHTML =
-				'[' + baselineZStats.min + ', ' + baselineZStats.max + ']';
+		range = baselineZStats.max - baselineZStats.min;
+		this._verticalBaselineValuesRange.innerHTML = Formatter.nanoteslas(range);
 
-		this._verticalBaselineValuesStdDev.innerHTML = baselineZStats.stdDev;
+		this._verticalBaselineValuesStdDev.innerHTML =
+				Formatter.nanoteslas(baselineZStats.stdDev);
 	};
 
 	ObservationSummaryView.prototype._renderSummaryBottom = function () {
@@ -392,16 +411,6 @@ define([
 		this._observation.eachReading(function (reading) {
 			reading.on('change', _this.render, _this);
 			reading.eachMeasurement(function (measurement) {
-				// var type = measurement.get('type');
-
-				// if (type === Measurement.WEST_DOWN ||
-				// 		type === Measurement.EAST_DOWN ||
-				// 		type === Measurement.WEST_UP ||
-				// 		type === Measurement.EAST_UP) {
-				// 	measurement.on('change', _this._renderDeclination, _this);
-				// } else {
-				// 	measurement.on('change', _this._renderInclination, _this);
-				// }
 				measurement.on('change', _this.render, _this);
 			});
 		});
