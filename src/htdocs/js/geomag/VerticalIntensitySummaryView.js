@@ -3,12 +3,14 @@ define([
 	'mvc/View',
 	'util/Util',
 
-	'geomag/Measurement'
+	'geomag/Measurement',
+	'geomag/Formatter'
 ], function (
 	View,
 	Util,
 
-	Measurement
+	Measurement,
+	Formatter
 ) {
 	'use strict';
 
@@ -39,12 +41,14 @@ define([
 			startTime = Math.min.apply(null, times);
 			endTime = Math.max.apply(null, times);
 		}
-		this._startTime.innerHTML = this._formatTime(startTime);
-		this._endTime.innerHTML = this._formatTime(endTime);
+		this._startTime.innerHTML = Formatter.time(startTime);
+		this._endTime.innerHTML = Formatter.time(endTime);
 
-		this._absValue.innerHTML = this._calculator.verticalComponent(reading);
-		this._ord.innerHTML = this._calculator.meanZ(reading);
-		this._baselineValue.innerHTML = this._calculator.baselineZ(reading);
+		this._absValue.innerHTML =
+				Formatter.nanoteslas(this._calculator.verticalComponent(reading));
+		this._ord.innerHTML = Formatter.nanoteslas(this._calculator.meanZ(reading));
+		this._baselineValue.innerHTML =
+				Formatter.nanoteslas(this._calculator.baselineZ(reading));
 		this._observer.innerHTML = this._reading.get('observer') || '';
 	};
 
@@ -118,23 +122,6 @@ define([
 			}
 		}
 		return values;
-	};
-
-	VerticalIntensitySummaryView.prototype._formatTime = function (time) {
-		var h,
-	      m,
-	      s;
-		if (time === null) {
-			return '';
-		}
-
-		time = new Date(time);
-		h = time.getUTCHours();
-		m = time.getUTCMinutes();
-		s = time.getUTCSeconds();
-		return (h < 10?'0':'') + h + ':' +
-		       (m < 10?'0':'') + m + ':' +
-		       (s < 10?'0':'') + s;
 	};
 
 	VerticalIntensitySummaryView.prototype._onChange = function () {
