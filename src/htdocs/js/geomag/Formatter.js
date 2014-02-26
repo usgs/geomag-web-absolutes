@@ -6,9 +6,9 @@ define([
 
 
 	var NANOTESLAS = 'nT',
-		DEGREES = '°',
-		MINUTES = '\'',
-		DEFAULT_DIGITS = 2;
+	    DEGREES = '°',
+	    MINUTES = '\'',
+	    DEFAULT_DIGITS = 2;
 
 	var Formatter = {};
 
