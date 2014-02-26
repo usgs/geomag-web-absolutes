@@ -5,16 +5,16 @@ define([
 
 	'geomag/DeclinationSummaryView',
 	'geomag/HorizontalIntensitySummaryView',
-	'geomag/VerticalIntensitySummaryView',
-	'geomag/Measurement'
+	'geomag/VerticalIntensitySummaryView'
+	//'geomag/Measurement'
 ], function (
 	View,
 	Util,
 
 	DeclinationSummaryView,
 	HorizontalIntensitySummaryView,
-	VerticalIntensitySummaryView,
-	Measurement
+	VerticalIntensitySummaryView
+	//Measurement
 ) {
 	'use strict';
 
