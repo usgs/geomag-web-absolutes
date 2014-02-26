@@ -5,16 +5,14 @@ define([
 
 	'geomag/ObservationSummaryView',
 	'geomag/Observation',
-	'geomag/ObservationBaselineCalculator',
-	'geomag/Reading'
+	'geomag/ObservationBaselineCalculator'
 ], function (
 	chai,
 	sinon,
 
 	ObservationSummaryView,
 	Observation,
-	ObservationBaselineCalculator,
-	Reading
+	ObservationBaselineCalculator
 ) {
 	'use strict';
 
@@ -55,7 +53,7 @@ define([
 			});
 		});
 
-		describe('Proper event bindings', function () {
+		describe.only('Proper event bindings', function () {
 			it('should render when Pier temp changes', function () {
 				observation.set({'pier_temperature':40});
 				var pierTemperature =
@@ -70,7 +68,15 @@ define([
 				expect(annotation).to.equal('This is an annotation test');
 			});
 
-			it('should render when calculator changes', function () {
+			it('should render when measurement changes', function () {
+				var changeCount = 1;
+
+				observation.eachMeasurement(function (measurement) {
+					measurement.trigger('change');
+					expect(renderSpy.callCount).to.equal(++changeCount);
+				});
+			});
+				/*
 				var i = null,
 				    len = null,
 				    readings = new Reading(),
@@ -118,7 +124,7 @@ define([
 					measurements[Measurements.SECOND_MARK_DOWN][0].trigger('change');
 					expect(renderSpy.callCount).to.equal(3 + (i * 12));
 				}
-			});
+				*/
 		});
 	});
 });
