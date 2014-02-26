@@ -382,51 +382,27 @@ define([
 		this._remarks = el.querySelector('.reviewer > textarea');
 	};
 
-	ObservationSummaryView.prototype._bindings = function() {
-		var i = null,
-		    len = null,
-		    reading,
-		    measurements,
-		    readings;
+	ObservationSummaryView.prototype._bindings = function () {
+		var _this = this;
 
 		this._onChange = this._onChange.bind(this);
 		this._remarks.addEventListener('change', this._onChange);
 		this._calculator.on('change', this.render, this);
 
-		readings = this._readings.data();
-		for (i = 0, len = readings.length; i < len; i++) {
-
-			reading = readings[i];
-
-			reading.on('change', this.render, this);
-			measurements = reading.getMeasurements();
-			measurements[Measurement.WEST_DOWN][0].on
-					('change', this._renderDeclination, this);
-			measurements[Measurement.EAST_DOWN][0].on
-					('change', this._renderDeclination, this);
-			measurements[Measurement.WEST_UP][0].on
-					('change', this._renderDeclination, this);
-			measurements[Measurement.EAST_UP][0].on
-					('change', this._renderDeclination, this);
-
-			measurements[Measurement.SOUTH_DOWN][0].on
-					('change', this._renderInclination, this);
-			measurements[Measurement.NORTH_UP][0].on
-					('change', this._renderInclination, this);
-			measurements[Measurement.SOUTH_UP][0].on
-					('change', this._renderInclination, this);
-			measurements[Measurement.NORTH_DOWN][0].on
-					('change', this._renderInclination, this);
-
-			measurements[Measurement.FIRST_MARK_UP][0].on
-					('change', this._renderInclination, this);
-			measurements[Measurement.FIRST_MARK_DOWN][0].on
-					('change', this._renderInclination, this);
-			measurements[Measurement.SECOND_MARK_UP][0].on
-					('change', this._renderInclination, this);
-			measurements[Measurement.SECOND_MARK_DOWN][0].on
-					('change', this._renderInclination, this);
-		}
+		this._observation.eachReading(function (reading) {
+			reading.on('change', _this.render, _this);
+			reading.eachMeasurement(function (measurement) {
+				var type = measurement.get('type');
+				if (type === Measurement.WEST_DOWN ||
+						type === Measurement.EAST_DOWN ||
+						type === Measurement.WEST_UP ||
+						type === Measurement.EAST_UP) {
+					measurement.on('change', _this._renderDeclination, _this);
+				} else {
+					measurement.on('change', _this._renderInclination, _this);
+				}
+			});
+		});
 	};
 
 	ObservationSummaryView.prototype._onChange = function () {
