@@ -91,12 +91,13 @@ define([
 		});
 
 		describe('Values', function () {
-			it('updates view elements', function () {
+			
 				var reading,
 				    calculator,
 				    view,
 				    observation;
 				function format (number) {return number.toFixed(2);}
+				function format4 (number) {return number.toFixed(4);}
 
 				//Stub function in ObservationBaselineCalculator.
 				sinon.stub(ObservationBaselineCalculator.prototype,
@@ -125,6 +126,8 @@ define([
 						'd', function () {return 11;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
 						'baselineZ', function () {return 12;});
+				sinon.stub(ObservationBaselineCalculator.prototype,
+						'scaleValue', function () {return 14;});
 
 				reading = new Reading();
 				observation = new Observation();
@@ -136,23 +139,65 @@ define([
 					baselineCalculator: calculator
 				});
 
+			it('updates view elements for hMean', function () {
 				expect(view._hMean.textContent).to.equal(format(1));
-				expect(view._eMean.textContent).to.equal(format(2));
-				expect(view._zMean.textContent).to.equal(format(3));
-				expect(view._fMean.textContent).to.equal(format(4));
-
-				expect(view._absoluteH.textContent).to.equal(format(5));
-				expect(view._absoluteD.textContent).to.equal(format(6*60));
-				expect(view._absoluteZ.textContent).to.equal(format(7));
-				expect(view._absoluteF.textContent).to.equal(format(8));
-
-				expect(view._hBaseline.textContent).to.equal(format(9));
-				expect(view._eBaseline.textContent).to.equal(format(10));
-				expect(view._dBaseline.textContent).to.equal(format(11));
-				expect(view._zBaseline.textContent).to.equal(format(12));
-
-				//TODO restore stubed functions,  if needed for later testing.
 			});
+			it('updates view elements for eMean', function () {
+				expect(view._eMean.textContent).to.equal(format(2));
+				});
+			it('updates view elements for zMean', function () {
+				expect(view._zMean.textContent).to.equal(format(3));
+				});
+			it('updates view elements for fMean', function () {
+				expect(view._fMean.textContent).to.equal(format(4));
+				});
+
+			it('updates view elements for absoluteH', function () {
+				expect(view._absoluteH.textContent).to.equal(format(5));
+				});
+			it('updates view elements for absoluteD', function () {
+				expect(view._absoluteD.textContent).to.equal(format(6*60));
+				});
+			it('updates view elements for absoluteZ', function () {
+				expect(view._absoluteZ.textContent).to.equal(format(7));
+				});
+			it('updates view elements for absoluteF', function () {
+				expect(view._absoluteF.textContent).to.equal(format(8));
+				});
+
+			it('updates view elements for hBaseline', function () {
+				expect(view._hBaseline.textContent).to.equal(format(9));
+				});
+			it('updates view elements for eBaseline', function () {
+				expect(view._eBaseline.textContent).to.equal(format(10));
+				});
+			it('updates view elements for dBaseline', function () {
+				expect(view._dBaseline.textContent).to.equal(format(11));
+				});
+			it('updates view elements for zBaseline', function () {
+				expect(view._zBaseline.textContent).to.equal(format(12));
+				});
+
+			it('updates view elements for scaleValue', function () {
+				expect(view._scaleValue.textContent).to.equal(
+					'Ordinate Mean D is calculated using ' +
+					'(Corrected F * scaleValue / 60) Where scale Value = ' +
+					format4(14));
+			});
+
+			ObservationBaselineCalculator.prototype.meanH.restore();
+			ObservationBaselineCalculator.prototype.meanE.restore();
+			ObservationBaselineCalculator.prototype.meanZ.restore();
+			ObservationBaselineCalculator.prototype.meanF.restore();
+			ObservationBaselineCalculator.prototype.horizontalComponent.restore();
+			ObservationBaselineCalculator.prototype.magneticDeclination.restore();
+			ObservationBaselineCalculator.prototype.verticalComponent.restore();
+			ObservationBaselineCalculator.prototype.correctedF.restore();
+			ObservationBaselineCalculator.prototype.baselineH.restore();
+			ObservationBaselineCalculator.prototype.baselineE.restore();
+			ObservationBaselineCalculator.prototype.d.restore();
+			ObservationBaselineCalculator.prototype.baselineZ.restore();
+			ObservationBaselineCalculator.prototype.scaleValue.restore();
 		});
 
 	});
