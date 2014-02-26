@@ -392,15 +392,17 @@ define([
 		this._observation.eachReading(function (reading) {
 			reading.on('change', _this.render, _this);
 			reading.eachMeasurement(function (measurement) {
-				var type = measurement.get('type');
-				if (type === Measurement.WEST_DOWN ||
-						type === Measurement.EAST_DOWN ||
-						type === Measurement.WEST_UP ||
-						type === Measurement.EAST_UP) {
-					measurement.on('change', _this._renderDeclination, _this);
-				} else {
-					measurement.on('change', _this._renderInclination, _this);
-				}
+				// var type = measurement.get('type');
+
+				// if (type === Measurement.WEST_DOWN ||
+				// 		type === Measurement.EAST_DOWN ||
+				// 		type === Measurement.WEST_UP ||
+				// 		type === Measurement.EAST_UP) {
+				// 	measurement.on('change', _this._renderDeclination, _this);
+				// } else {
+				// 	measurement.on('change', _this._renderInclination, _this);
+				// }
+				measurement.on('change', _this.render, _this);
 			});
 		});
 	};
