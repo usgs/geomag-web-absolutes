@@ -176,12 +176,7 @@ define([
 	};
 
 	ObservationSummaryView.prototype._initialize = function () {
-		var el = this._el,
-		    i = null,
-		    len = null,
-		    reading,
-		    measurements,
-		    readings;
+		var el = this._el;
 
 		this._observation = this._options.observation;
 		this._calculator = this._options.baselineCalculator;
@@ -340,24 +335,43 @@ define([
 					'</section>',
 			'</section>'
 		].join('');
+
+		this._querySelectors();
+		this._bindings();
+		this.render();
+};
+
+	ObservationSummaryView.prototype._querySelectors = function () {
+		var el = this._el;
+
 		// Declination summary view
 		this._declinationSummaryView =
-				el.querySelector('.declination-summary-view');
+			el.querySelector('.declination-summary-view');
 		this._baselineMinMean = el.querySelector('.baseline-min-mean');
 		this._baselineNtMean = el.querySelector('.baseline-nt-mean');
 		this._baselineMinRange = el.querySelector('.baseline-min-range');
 		this._baselineNtRange = el.querySelector('.baseline-nt-range');
 		this._baselineMinStdDev = el.querySelector('.baseline-min-std-dev');
 		this._baselineNtStdDev = el.querySelector('.baseline-nt-std-dev');
-		// Horizontal Intensity summary view
+
+		// Horizontal Intensity Summary view
 		this._horizontalIntensitySummaryView =
-				el.querySelector('.horizontal-intensity-summary-view');
+			el.querySelector('.horizontal-intensity-summary-view');
 		this._baselineValuesMean = el.querySelector('.baseline-values-mean');
 		this._baselineValuesRange = el.querySelector('.baseline-values-range');
 		this._baselineValuesStdDev = el.querySelector('.baseline-values-std-dev');
-		// Vertical intensity summary view
+
+		// Vertical Intensity Summary View
 		this._verticalIntensitySummaryView =
-				el.querySelector('.vertical-intensity-summary-view');
+			el.querySelector('.vertical-intensity-summary-view');
+		this._verticalBaselineValuesMean =
+			el.querySelector('.vertical-baseline-values-mean');
+		this._verticalBaselineValuesRange =
+			el.querySelector('.vertical-baseline-values-range');
+		this._verticalBaselineValuesStdDev =
+			el.querySelector('.vertical-baseline-values-std-dev');
+
+		// Bottom Summary View
 		this._observation.on('change', this.render, this);
 		this._pierTemperature = el.querySelector('.pier-temp-value');
 		this._electronicsTemperature = el.querySelector('.electronics-temp-value');
@@ -366,23 +380,24 @@ define([
 		this._outsideTemperature = el.querySelector('.outside-temp-value');
 		this._checkedBy = el.querySelector('.checked-by-value');
 		this._remarks = el.querySelector('.reviewer > textarea');
+	};
+
+	ObservationSummaryView.prototype._bindings = function() {
+		var i = null,
+		    len = null,
+		    reading,
+		    measurements,
+		    readings;
 
 		this._onChange = this._onChange.bind(this);
 		this._remarks.addEventListener('change', this._onChange);
-
-		this._verticalBaselineValuesMean =
-				el.querySelector('.vertical-baseline-values-mean');
-		this._verticalBaselineValuesRange =
-				el.querySelector('.vertical-baseline-values-range');
-		this._verticalBaselineValuesStdDev =
-				el.querySelector('.vertical-baseline-values-std-dev');
-
 		this._calculator.on('change', this.render, this);
 
 		readings = this._readings.data();
 		for (i = 0, len = readings.length; i < len; i++) {
 
 			reading = readings[i];
+
 			reading.on('change', this.render, this);
 			measurements = reading.getMeasurements();
 			measurements[Measurement.WEST_DOWN][0].on
@@ -412,7 +427,6 @@ define([
 			measurements[Measurement.SECOND_MARK_DOWN][0].on
 					('change', this._renderInclination, this);
 		}
-		this.render();
 	};
 
 	ObservationSummaryView.prototype._onChange = function () {
