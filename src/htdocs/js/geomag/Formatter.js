@@ -139,9 +139,10 @@ define([
 	 * Degrees, as an angle
 	 *
 	 * @param angle {Number} Decimal degrees
+	 * @param digits {Integer} Numbers after decimal place
 	 *
 	 * @return formatted number with units
-	 *    {Float} Angle degrees, 2 decimal places
+	 *    {Float} Angle degrees with (digits) decimal places
 	 */
 	Formatter.degrees = function (angle, digits) {
 		if (typeof decimal_places === 'undefined') {
@@ -173,9 +174,10 @@ define([
 	 * Minutes, as an angle
 	 *
 	 * @param angle {Number} Decimal minutes
+	 * @param digits {Integer} Numbers after decimal place
 	 *
 	 * @return formatted number with units
-	 *    {Float} Angle minutes, 2 decimal places
+	 *    {Float} Angle minutes with (digits) decimal places
 	 */
 	Formatter.minutes = function (angle, digits) {
 		if (typeof decimal_places === 'undefined') {
@@ -207,15 +209,20 @@ define([
 	 * Degrees Minutes, as an angle
 	 *
 	 * @param angle {Number} Decimal degrees
+	 * @param digits {Integer} Numbers after decimal place
 	 *
-	 * @return 2 formatted numbers with units
+	 * @return 2 formatted numbers with units separated by a space
 	 *    {Int} Angle degrees
-	 *    {Float} Decimal angle minutes, 2 decimal places
+	 *    {Float} Decimal angle minutes with (digits) decimal places
 	 */
-	Formatter.degreesMinutes = function (angle) {
+	Formatter.degreesMinutes = function (angle, digits) {
 		var buf = [],
 		    degrees,
 		    minutes;
+
+		if (typeof decimal_places === 'undefined') {
+			digits = DEFAULT_DIGITS;
+		}
 
 		degrees = parseInt(angle, 10);
 		minutes = (angle - degrees) * 60;
@@ -223,7 +230,7 @@ define([
 		buf.push(
 				this.rawDegrees(degrees),
 				'&nbsp;',
-				this.minutes(minutes));
+				this.minutes(minutes, digits));
 
 		return buf.join('');
 	};
@@ -232,19 +239,24 @@ define([
 	 * Degrees and Degrees Minutes, as an angle
 	 *
 	 * @param angle {Number} Decimal degrees
+	 * @param digits {Integer} Numbers after decimal place
 	 *
 	 * @return 3 formatted numbers with units
-	 *    {Float} Decimal angle degrees, 2 decimal places
+	 *    {Float} Decimal angle degrees with (digits) decimal places
 	 *    {Int} Angle degrees
-	 *    {Float} Decimal angle minutes, 2 decimal places
+	 *    {Float} Decimal angle minutes with (digits) decimal places
 	 */
-	Formatter.degreesAndDegreesMinutes = function (angle) {
+	Formatter.degreesAndDegreesMinutes = function (angle, digits) {
 		var buf = [];
 
+		if (typeof decimal_places === 'undefined') {
+			digits = DEFAULT_DIGITS;
+		}
+
 		buf.push(
-				this.degrees(angle),
+				this.degrees(angle, digits),
 				'<span class="degrees-minutes">',
-					this.degreesMinutes(angle),
+					this.degreesMinutes(angle, digits),
 				'</span>');
 
 		return buf.join('');
@@ -254,9 +266,10 @@ define([
 	 * nT (nano-teslas)
 	 *
 	 * @param {Number} nT
+	 * @param digits {Integer} Numbers after decimal place
 	 *
 	 * @return formatted number with units
-	 *    {Float} nT, 2 decimal places
+	 *    {Float} nT with (digits) decimal places
 	 */
 	Formatter.nanoteslas = function (nT, digits) {
 		if (typeof decimal_places === 'undefined') {
