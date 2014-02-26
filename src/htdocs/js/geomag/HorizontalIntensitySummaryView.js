@@ -43,10 +43,9 @@ define([
 		this._endTime.innerHTML = this._formatTime(endTime);
 
 		this._absValue.innerHTML = this._calculator.horizontalComponent(reading);
-
 		this._ord.innerHTML = this._calculator.meanH(reading);
-
 		this._baselineValues.innerHTML = this._calculator.baselineH(reading);
+		this._observer.innerHTML = this._reading.get('observer') || '';
 	};
 
 	HorizontalIntensitySummaryView.prototype._initialize = function () {
