@@ -39,8 +39,10 @@ define([
 		minutes = parseInt(minutes, 10);
 
 		// Correct any errors due to floating point
-		minutes += parseInt(seconds / 60, 10);
-		seconds = seconds % 60;
+		if (seconds >= 60) {
+			minutes += parseInt(seconds / 60, 10);
+			seconds = seconds % 60;
+		}
 
 		return [degrees, minutes, seconds];
 	};
@@ -90,12 +92,14 @@ define([
 	 * @param time {String}
 	 *      The formatted time string to parse. The date for the returned time
 	 *      is inherited from the observation "begin" attribute.
+	 * @param offset {Date}
 	 *
 	 * @return {Integer}
 	 *      The millisecond timestamp since the epoch.
 	 */
 	Formatter.parseRelativeTime = function (time, offset) {
 		var timeString = time.replace(/[^\d]/g, ''),
+		    calculated_time = 0,
 		    hours = 0,
 		    minutes = 0,
 		    seconds = 0;
@@ -122,11 +126,11 @@ define([
 		} else {
 			throw new Error('Unexpected time string');
 		}
-		offset = Date.UTC(offset.getUTCFullYear(),
+		calculated_time = Date.UTC(offset.getUTCFullYear(),
 					offset.getUTCMonth(), offset.getUTCDate(),
 					hours, minutes, seconds, 0);
 
-		return offset;
+		return calculated_time;
 	};
 
 
