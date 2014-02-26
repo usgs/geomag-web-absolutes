@@ -92,14 +92,17 @@ define([
 	 * @param time {String}
 	 *      The formatted time string to parse. The date for the returned time
 	 *      is inherited from the observation "begin" attribute.
-	 * @param offset {Date}
+	 * @param offset {Date|Number}
+	 *      Base time as Date object or millisecond epoch time stamp.
+	 *      Default is new date if not specified.
+	 *      Only uses UTC year month and day from this offset.
 	 *
 	 * @return {Integer}
 	 *      The millisecond timestamp since the epoch.
 	 */
-	Formatter.parseRelativeTime = function (time, offset) {
-		var timeString = time.replace(/[^\d]/g, ''),
-		    calculated_time = 0,
+	Formatter.parseRelativeTime = function (relativeTime, offset) {
+		var timeString = relativeTime.replace(/[^\d]/g, ''),
+		    calculatedTime = 0,
 		    hours = 0,
 		    minutes = 0,
 		    seconds = 0;
@@ -107,8 +110,11 @@ define([
 		// Offset should default to 0 if it doesn't exist
 		if (typeof offset === 'undefined' || offset === null) {
 			offset = new Date();
+		} else if (!(offset instanceof Date)) {
+			offset = new Date(offset);
 		}
 
+		// Parse time string
 		if (timeString.length === 4) {
 			// HHMM
 			hours = parseInt(timeString.substr(0, 2), 10);
@@ -126,11 +132,12 @@ define([
 		} else {
 			throw new Error('Unexpected time string');
 		}
-		calculated_time = Date.UTC(offset.getUTCFullYear(),
+
+		calculatedTime = Date.UTC(offset.getUTCFullYear(),
 					offset.getUTCMonth(), offset.getUTCDate(),
 					hours, minutes, seconds, 0);
 
-		return calculated_time;
+		return calculatedTime;
 	};
 
 
@@ -305,17 +312,22 @@ define([
 	/**
 	 * Date to String
 	 *
-	 * @param date {Integer}
-	 *      Timestamp (in milliseconds) since the epoch.
+	 * @param time {Date|Integer}
+	 *      Date or millisecond epoch timestamp.
 	 *
 	 * @return {String}
-	 *      A string formatted as "YYYY-MM-DD" representing the input time.
+	 *      A string formatted as UTC "YYYY-MM-DD".
 	 */
 	Formatter.date = function (time) {
-		var offset = new Date(time),
-		    y = offset.getUTCFullYear(),
-		    m = offset.getUTCMonth() + 1,
-		    d = offset.getUTCDate();
+		var y, m, d;
+
+		if (!(time instanceof Date)) {
+			time = new Date(time);
+		}
+
+		y = time.getUTCFullYear();
+		m = time.getUTCMonth() + 1;
+		d = time.getUTCDate();
 
 		return [y, (m<10?'-0':'-'), m, (d<10?'-0':'-'), d].join('');
 	};
@@ -323,17 +335,22 @@ define([
 	/**
 	 * Time to String
 	 *
-	 * @param time {Integer}
-	 *      Timestamp (in milliseconds) since the epoch.
+	 * @param time {Date|Integer}
+	 *      Date or millisecond epoch timestamp.
 	 *
 	 * @return {String}
-	 *      A string formatted as "HH:mm:ss" representing the input time.
+	 *      A string formatted as UTC "HH:MM:SS".
 	 */
 	Formatter.time = function (time) {
-		var offset = new Date(time),
-		    h = offset.getUTCHours(),
-		    m = offset.getUTCMinutes(),
-		    s = offset.getUTCSeconds();
+		var h, m, s;
+
+		if (!(time instanceof Date)) {
+			time = new Date(time);
+		}
+
+		h = time.getUTCHours();
+		m = time.getUTCMinutes();
+		s = time.getUTCSeconds();
 
 		return [(h<10?'0':''), h, (m<10?':0':':'), m, (s<10?':0':':'), s].join('');
 	};
@@ -341,14 +358,17 @@ define([
 	/**
 	 * Date Time to String
 	 *
-	 * @param date time {Integer}
-	 *      Timestamp (in milliseconds) since the epoch.
+	 * @param date time {Date|Integer}
+	 *      Date or millisecond epoch timestamp.
 	 *
 	 * @return {String}
-	 *      A string formatted as "YYYY-MM-DD HH:mm:ss"
-	 *      representing the input time.
+	 *      A string formatted as UTC "YYYY-MM-DD HH:mm:ss".
 	 */
 	Formatter.dateTime = function (time) {
+		if (!(time instanceof Date)) {
+			time = new Date(time);
+		}
+
 		return this.date(time) + ' ' + this.time(time);
 	};
 
