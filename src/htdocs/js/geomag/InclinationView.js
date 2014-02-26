@@ -105,7 +105,7 @@ define([
 		    reading = this._reading;
 
 		this._inclinationAngle.innerHTML =
-				Format.degreesMinutes(calculator.inclination(reading));
+				Format.degreesAndDegreesMinutes(calculator.inclination(reading));
 
 		this._horizontalComponent.innerHTML =
 				Format.nanoteslas(calculator.horizontalComponent(reading));

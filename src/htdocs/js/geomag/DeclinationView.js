@@ -133,14 +133,14 @@ define([
 		    reading = this._reading;
 
 		this._magneticSouthMeridian.innerHTML =
-				Format.degreesMinutes(calculator.magneticSouthMeridian(reading));
+				Format.degreesAndDegreesMinutes(calculator.magneticSouthMeridian(reading));
 		this._meanMark.innerHTML = Format.degrees(calculator.meanMark(reading));
 		this._magneticAzimuthOfMark.innerHTML =
 				Format.degrees(calculator.magneticAzimuthMark(reading));
 		this._trueAzimuthOfMark.innerHTML =
 				Format.rawDegrees(calculator.trueAzimuthOfMark());
 		this._magneticDeclination.innerHTML =
-				Format.degreesMinutes(calculator.magneticDeclination(reading));
+				Format.degreesAndDegreesMinutes(calculator.magneticDeclination(reading));
 
 		this._westUpMinusEastDown.innerHTML =
 				Format.minutes(calculator.westUpMinusEastDown(reading));
