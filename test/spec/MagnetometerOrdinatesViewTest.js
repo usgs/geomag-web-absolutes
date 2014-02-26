@@ -32,7 +32,7 @@ define([
 
 	describe('Unit tests for MagnetometerOrdinatesView', function () {
 
-		describe('View', function(){
+		describe('View', function () {
 			var renderSpy,
 			    reading,
 			    calculator,
@@ -41,7 +41,7 @@ define([
 			    readingMeasurements,
 			    measurements;
 
-			beforeEach(function(){
+			beforeEach(function () {
 				renderSpy = sinon.spy(MagnetometerOrdinatesView.prototype, 'render');
 				reading = new Reading();
 				observation = new Observation();
@@ -66,7 +66,7 @@ define([
 				];
 			});
 
-			afterEach(function() {
+			afterEach(function () {
 				renderSpy.restore();
 				reading = null;
 				view = null;
@@ -86,7 +86,7 @@ define([
 				}
 			});
 
-			it('should render when calculator changes', function (){
+			it('should render when calculator changes', function () {
 				calculator.trigger('change');
 				expect(renderSpy.callCount).to.equal(2);
 			});
