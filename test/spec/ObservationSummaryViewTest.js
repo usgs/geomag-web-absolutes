@@ -53,7 +53,7 @@ define([
 			});
 		});
 
-		describe.only('Proper event bindings', function () {
+		describe('Proper event bindings', function () {
 			it('should render when Pier temp changes', function () {
 				observation.set({'pier_temperature':40});
 				var pierTemperature =
@@ -76,55 +76,11 @@ define([
 					expect(renderSpy.callCount).to.equal(++changeCount);
 				});
 			});
-				/*
-				var i = null,
-				    len = null,
-				    readings = new Reading(),
-				    measurements,
-				    Measurements;
+
+			it('should render when calculator changes', function () {
 				calculator.trigger('change');
 				expect(renderSpy.callCount).to.equal(2);
-
-				for (i = 0, len = readings.length; i < len; i++) {
-					measurements.reading.getMeasurements();
-
-					measurements[Measurements.WEST_DOWN][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-
-					measurements[Measurements.EAST_DOWN][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-
-					measurements[Measurements.WEST_UP][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-
-					measurements[Measurements.EAST_UP][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-
-					measurements[Measurements.SOUTH_DOWN][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-
-					measurements[Measurements.NORTH_UP][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-
-					measurements[Measurements.SOUTH_UP][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-
-					measurements[Measurements.NORTH_DOWN][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-
-					measurements[Measurements.FIRST_MARK_UP][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-
-					measurements[Measurements.FIRST_MARK_DOWN][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-
-					measurements[Measurements.SECOND_MARK_UP][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-
-					measurements[Measurements.SECOND_MARK_DOWN][0].trigger('change');
-					expect(renderSpy.callCount).to.equal(3 + (i * 12));
-				}
-				*/
+			});
 		});
 	});
 });
