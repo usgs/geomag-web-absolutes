@@ -43,8 +43,8 @@ define([
 			startTime = Math.min.apply(null, times);
 			endTime = Math.max.apply(null, times);
 		}
-		this._startTime.innerHTML = this._formatTime(startTime);
-		this._endTime.innerHTML = this._formatTime(endTime);
+		this._startTime.innerHTML = Formatter.time(startTime);
+		this._endTime.innerHTML = Formatter.time(endTime);
 
 		this._shift.value = reading.get('declination_shift');
 
@@ -153,38 +153,11 @@ define([
 		return values;
 	};
 
-	DeclinationSummaryView.prototype._formatTime = function (time) {
-		var h,
-		    m,
-		    s;
-		if (time === null) {
-			return '';
-		}
-
-		time = new Date(time);
-		h = time.getUTCHours();
-		m = time.getUTCMinutes();
-		s = time.getUTCSeconds();
-		return (h < 10?'0':'') + h + ':' +
-					 (m < 10?'0':'') + m + ':' +
-					 (s < 10?'0':'') + s;
-	};
-
 	DeclinationSummaryView.prototype._onChange = function () {
 		this._reading.set({
 			declination_valid: (this._valid.checked ? 'Y' : 'N'),
 			declination_shift: parseInt(this._shift.value, 10)
 		});
 	};
-/*
-	DeclinationSummaryView.prototype._decimalToDms = function (angle) {
-		var degrees = parseInt(angle, 10),
-		    minutes = (angle - degrees) * 60;
-
-		minutes = parseInt(minutes, 10);
-
-		return [degrees, minutes];
-	};
-*/
 	return DeclinationSummaryView;
 });
