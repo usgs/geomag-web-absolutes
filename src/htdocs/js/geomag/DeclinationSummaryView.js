@@ -3,12 +3,14 @@ define([
 	'mvc/View',
 	'util/Util',
 
-	'geomag/Measurement'
+	'geomag/Measurement',
+	'geomag/Formatter'
 ], function (
 	View,
 	Util,
 
-	Measurement
+	Measurement,
+	Formatter
 ) {
 	'use strict';
 
@@ -47,13 +49,16 @@ define([
 		this._shift.value = reading.get('declination_shift');
 
 		degree = this._calculator.magneticDeclination(reading);
-		dms = this._decimalToDms(degree);
-		this._degrees.innerHTML = dms[0];
-		this._minutes.innerHTML = dms[1];
+		dms = Formatter.decimalToDms(degree);
+		this._degrees.innerHTML = Formatter.degrees(dms[0], 0);
+		this._minutes.innerHTML = Formatter.minutes(dms[1]);
 
-		this._ordMin.innerHTML = this._calculator.computedE(reading);
-		this._baselineMin.innerHTML = this._calculator.baselineD(reading);
-		this._baselineNt.innerHTML = this._calculator.d(reading);
+		this._ordMin.innerHTML =
+				Formatter.minutes(this._calculator.computedE(reading));
+		this._baselineMin.innerHTML =
+				Formatter.minutes(this._calculator.baselineD(reading));
+		this._baselineNt.innerHTML =
+				Formatter.nanoteslas(this._calculator.d(reading));
 		this._observer.innerHTML = this._reading.get('observer') || '';
 	};
 
@@ -171,7 +176,7 @@ define([
 			declination_shift: parseInt(this._shift.value, 10)
 		});
 	};
-
+/*
 	DeclinationSummaryView.prototype._decimalToDms = function (angle) {
 		var degrees = parseInt(angle, 10),
 		    minutes = (angle - degrees) * 60;
@@ -180,6 +185,6 @@ define([
 
 		return [degrees, minutes];
 	};
-
+*/
 	return DeclinationSummaryView;
 });
