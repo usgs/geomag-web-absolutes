@@ -43,11 +43,9 @@ define([
 		this._endTime.innerHTML = this._formatTime(endTime);
 
 		this._absValue.innerHTML = this._calculator.verticalComponent(reading);
-
 		this._ord.innerHTML = this._calculator.meanZ(reading);
-
 		this._baselineValue.innerHTML = this._calculator.baselineZ(reading);
-
+		this._observer.innerHTML = this._reading.get('observer') || '';
 	};
 
 	VerticalIntensitySummaryView.prototype._initialize = function () {
