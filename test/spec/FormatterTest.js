@@ -199,7 +199,7 @@ define([
 		describe('parseRelativeTime()', function () {
 			var today = new Date();
 
-			it.skip('parses start of day properly', function () {
+			it('parses start of day properly', function () {
 				var startOfDay = Date.UTC(today.getUTCFullYear(),
 						today.getUTCMonth(), today.getUTCDate(), 0, 0, 0, 0);
 
@@ -219,7 +219,7 @@ define([
 				expect(Format.parseRelativeTime('0000')).to.equal(startOfDay);
 			});
 
-			it.skip('parses end of day properly', function () {
+			it('parses end of day properly', function () {
 				var endOfDay = Date.UTC(today.getUTCFullYear(),
 						today.getUTCMonth(), today.getUTCDate(), 23, 59, 59, 0);
 
@@ -229,7 +229,7 @@ define([
 				expect(Format.parseRelativeTime('235959')).to.equal(endOfDay);
 			});
 
-			it.skip('parses one minute properly', function () {
+			it('parses one minute properly', function () {
 				var oneMinute = Date.UTC(today.getUTCFullYear(),
 						today.getUTCMonth(), today.getUTCDate(), 0, 1, 0, 0);
 
@@ -249,7 +249,7 @@ define([
 				expect(Format.parseRelativeTime('0001')).to.equal(oneMinute);
 			});
 
-			it.skip('parses one hour properly', function () {
+			it('parses one hour properly', function () {
 				var oneHour = Date.UTC(today.getUTCFullYear(),
 						today.getUTCMonth(), today.getUTCDate(), 1, 0, 0, 0);
 
@@ -269,7 +269,7 @@ define([
 				expect(Format.parseRelativeTime('0100')).to.equal(oneHour);
 			});
 
-			it.skip('parses noon properly', function () {
+			it('parses noon properly', function () {
 				var noon = Date.UTC(today.getUTCFullYear(),
 						today.getUTCMonth(), today.getUTCDate(), 12, 0, 0, 0);
 
@@ -284,7 +284,7 @@ define([
 				expect(Format.parseRelativeTime('1200')).to.equal(noon);
 			});
 
-			it.skip('parses a mixed offset properly', function () {
+			it('parses a mixed offset properly', function () {
 				var mixed = Date.UTC(today.getUTCFullYear(),
 						today.getUTCMonth(), today.getUTCDate(), 11, 11, 8, 0);
 
