@@ -90,6 +90,11 @@ try {
 				echo 'cannot create an observation that already has an id';
 				exit();
 			}
+			if ($observation->observatory_id === null) {
+				header('HTTP/1.1 400 Bad Request');
+				echo 'cannot create an observation without an observatory';
+				exit();
+			}
 			$observation = $OBSERVATION_FACTORY->createObservation($observation);
 		} else if ($method === 'PUT') {
 			// update

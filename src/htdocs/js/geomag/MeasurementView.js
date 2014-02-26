@@ -185,7 +185,7 @@ define([
 		    value = input.value,
 		    parentElement = input.parentElement,
 		    type = parentElement.className,
-		    helpText;
+		    helpText, begin;
 
 		// null is a valid value?
 		if (value === null) {
@@ -193,30 +193,26 @@ define([
 		}
 
 		if (type.indexOf('time') !== -1) {
+
+			begin = this._observation.get('begin');
+
+			if (this._stringToTime(value) < begin) {
+				valid = false;
+				helpText = 'Time is before start time.';
+			}
+
 			valid = Validate.validTime(value);
 			helpText = 'Invalid Time. HH24:MI:SS';
 
-			var begin = this._observation.get('begin');
-			value = this._stringToTime(value);
-
-			if (value < begin) {
-				valid = false;
-				helpText = 'Time is before start time.';
-			}
-
-			if(value > (begin + 86400000)) {
-				valid = false;
-				helpText = 'Time is before start time.';
-			}
 		} else if (type.indexOf('degrees')) {
 			valid = Validate.validDegrees(value);
-			helpText = 'Invalid Degrees. 0-359';
+			helpText = 'Invalid Degrees. Must be between, 0-360.';
 		} else if (type.indexOf('minutes')) {
 			valid = Validate.validMinutes(value);
-			helpText = 'Invalid Minutes. 0-59';
+			helpText = 'Invalid Minutes. Must be between, 0-60.';
 		} else if (type.indexOf('seconds')) {
 			valid = Validate.validSeconds(value);
-			helpText = 'Invalid Seconds. 0-59';
+			helpText = 'Invalid Seconds. Must be between, 0-60.';
 		}
 
 		if (valid){
