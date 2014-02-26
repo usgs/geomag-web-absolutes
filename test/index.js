@@ -37,7 +37,8 @@ require.config({
 		sinon: 'sinon/pkg/sinon',
 		mvc: '/hazdev-webutils/src/mvc',
 		util: '/hazdev-webutils/src/util',
-		tablist: '/hazdev-tablist/src/tablist'
+		tablist: '/hazdev-tablist/src/tablist',
+		sinon: 'sinon/pkg/sinon'
 	},
 	shim: {
 		mocha: {
@@ -86,6 +87,9 @@ require([
 		'spec/ObservationsViewTest',
 		'spec/FormatterTest',
 		'spec/MagnetometerOrdinatesViewTest',
+		'spec/DeclinationSummaryViewTest',
+		'spec/HorizontalIntensitySummaryViewTest',
+		'spec/VerticalIntensitySummaryViewTest',
 		'spec/ObservationSummaryViewTest'
 	], function () {
 		if (window.mochaPhantomJS) {
