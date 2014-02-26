@@ -68,13 +68,6 @@ define([
 				baselineDNt.push(calculator.d(reading));
 			}
 		}
-		this._pierTemperature.innerHTML = this._observation.get('pier_temperature');
-		this._electronicsTemperature.innerHTML = 'elec temp';
-		this._fluxgateTemperature.innerHTML = 'flux temp';
-		this._protonTemperature.innerHTML = 'prot temp';
-		this._outsideTemperature.innerHTML = 'outs temp';
-		this._checkedBy.innerHTML = 'user name';
-		this._remarks.innerHTML = this._observation.get('annotation');
 
 		baselineDStats = calculator.getStats(baselineD);
 		baselineDNtStats = calculator.getStats(baselineDNt);
@@ -192,7 +185,6 @@ define([
 
 		this._observation = this._options.observation;
 		this._calculator = this._options.baselineCalculator;
-
 		this._readings = this._observation.get('readings');
 
 		el.innerHTML = [
