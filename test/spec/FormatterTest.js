@@ -230,10 +230,10 @@ define([
 				expect(Format.minutes(0.0, 3)).to.equal(
 						'<span class="minutes">0.000<span class="units">\'</span></span>');
 				// Rounds down properly
-				expect(Format.minutes(30.0123456789), 5).to.equal(
-						'<span class="minutes">30.01345<span class="units">\'</span></span>');
+				expect(Format.minutes(30.0123456789, 5)).to.equal(
+						'<span class="minutes">30.01235<span class="units">\'</span></span>');
 				// Rounds up properly
-				expect(Format.minutes(30.5555555555), 1).to.equal(
+				expect(Format.minutes(30.5555555555, 1)).to.equal(
 						'<span class="minutes">30.6<span class="units">\'</span></span>');
 			});
 
@@ -260,35 +260,29 @@ define([
 
 			it('are formatted properly', function () {
 				expect(Format.degreesMinutes(0)).to.equal(
-						'<span class="degrees-minutes">' +
-							'<span class="deg">' +
-								'0<span class="units">°</span>' +
-							'</span>' +
-							'&nbsp;' +
-							'<span class="minutes">' +
-								'0.00<span class="units">\'</span>' +
-							'</span>' +
+						'<span class="deg">' +
+							'0<span class="units">°</span>' +
+						'</span>' +
+						'&nbsp;' +
+						'<span class="minutes">' +
+							'0.00<span class="units">\'</span>' +
 						'</span>');
 				expect(Format.degreesMinutes(179.95)).to.equal(
-						'<span class="degrees-minutes">' +
-							'<span class="deg">' +
-								'179<span class="units">°</span>' +
-							'</span>' +
-							'&nbsp;' +
-							'<span class="minutes">' +
-								'57.00<span class="units">\'</span>' +
-							'</span>' +
+						'<span class="deg">' +
+							'179<span class="units">°</span>' +
+						'</span>' +
+						'&nbsp;' +
+						'<span class="minutes">' +
+							'57.00<span class="units">\'</span>' +
 						'</span>');
 				// Still works when rounding is required
 				expect(Format.degreesMinutes(179.94583)).to.equal(
-						'<span class="degrees-minutes">' +
-							'<span class="deg">' +
-								'179<span class="units">°</span>' +
-							'</span>' +
-							'&nbsp;' +
-							'<span class="minutes">' +
-								'56.75<span class="units">\'</span>' +
-							'</span>' +
+						'<span class="deg">' +
+							'179<span class="units">°</span>' +
+						'</span>' +
+						'&nbsp;' +
+						'<span class="minutes">' +
+							'56.75<span class="units">\'</span>' +
 						'</span>');
 			});
 
@@ -373,7 +367,7 @@ define([
 				// Rounds down properly
 				expect(Format.nanoteslas(30.0123456789, 5)).to.equal(
 						'<span class="nano-teslas">' +
-							'30.01234<span class="units">nT</span>' +
+							'30.01235<span class="units">nT</span>' +
 							'</span>');
 				// Rounds up properly
 				expect(Format.nanoteslas(30.5555555555, 1)).to.equal(
@@ -412,61 +406,40 @@ define([
 
 		describe('date()', function () {
 
-			it('parses start of day properly', function () {
-				expect(Format.time(0)).to.equal('00:00:00');
+			it('parses start of epoch properly', function () {
+				expect(Format.date(0)).to.equal('1970-01-01');
 			});
 
-			it('parses end of day properly', function () {
-				expect(Format.time(86399999)).to.equal('23:59:59');
+			it('parses 1 day properly', function () {
+				// 1 second before new day is still old day
+				expect(Format.date(86399999)).to.equal('1970-01-01');
+				// exact day
+				expect(Format.date(86400000)).to.equal('1970-01-02');
 			});
 
-			it('parses one minute properly', function () {
-				expect(Format.time(60000)).to.equal('00:01:00');
+			it('parses 1 month properly', function () {
+				// 30 days
+				expect(Format.date(2592000000)).to.equal('1970-01-31');
+				// 31 days
+				expect(Format.date(2678400000)).to.equal('1970-02-01');
+				// 32 days
+				expect(Format.date(2764800000)).to.equal('1970-02-02');
+				// 33 more day
+				expect(Format.date(2851200000)).to.equal('1970-02-03');
 			});
 
-			it('parses one hour properly', function () {
-				expect(Format.time(3600000)).to.equal('01:00:00');
-			});
-
-			it('parses noon properly', function () {
-				expect(Format.time(43200000)).to.equal('12:00:00');
-			});
-
-			it('parses a mixed offset properly', function () {
-				expect(Format.time(40268000)).to.equal('11:11:08');
+			it('parses 1 year properly', function () {
+				// ~364 days
+				expect(Format.date(31363200000)).to.equal('1970-12-30');
+				// ~365 days
+				expect(Format.date(31449600000)).to.equal('1970-12-31');
+				// ~366 days
+				expect(Format.date(31536000000)).to.equal('1971-01-01');
 			});
 
 		});
 
 		describe('time()', function () {
-
-			it('parses start of day properly', function () {
-				expect(Format.time(0)).to.equal('00:00:00');
-			});
-
-			it('parses end of day properly', function () {
-				expect(Format.time(86399999)).to.equal('23:59:59');
-			});
-
-			it('parses one minute properly', function () {
-				expect(Format.time(60000)).to.equal('00:01:00');
-			});
-
-			it('parses one hour properly', function () {
-				expect(Format.time(3600000)).to.equal('01:00:00');
-			});
-
-			it('parses noon properly', function () {
-				expect(Format.time(43200000)).to.equal('12:00:00');
-			});
-
-			it('parses a mixed offset properly', function () {
-				expect(Format.time(40268000)).to.equal('11:11:08');
-			});
-
-		});
-
-		describe('dateTime()', function () {
 
 			it('parses start of day properly', function () {
 				expect(Format.time(0)).to.equal('00:00:00');
