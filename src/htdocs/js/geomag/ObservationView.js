@@ -10,8 +10,7 @@ define([
 	'geomag/ObservationMetaView',
 	'geomag/ReadingGroupView',
 	'geomag/ObservationBaselineCalculator',
-	'geomag/RealtimeDataFactory',
-	'geomag/Validate'
+	'geomag/RealtimeDataFactory'
 ], function (
 	View,
 	Collection,
@@ -23,8 +22,7 @@ define([
 	ObservationMetaView,
 	ReadingGroupView,
 	ObservationBaselineCalculator,
-	RealtimeDataFactory,
-	Validate
+	RealtimeDataFactory
 ) {
 	'use strict';
 
