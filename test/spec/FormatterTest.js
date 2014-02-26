@@ -14,6 +14,7 @@ define([
 ) {
 	'use strict';
 
+
 	var expect = chai.expect;
 
 	describe('Formatter Unit Tests', function () {
@@ -33,80 +34,8 @@ define([
 			});
 		});
 
-		describe('degrees()', function () {
-			it('are formatted properly', function () {
-				expect(Format.degrees(0.0)).to.equal(
-						'<span class="deg">0.00<span class="units">°</span></span>');
-				// Rounds down properly
-				expect(Format.degrees(30.0123456789)).to.equal(
-						'<span class="deg">30.01<span class="units">°</span></span>');
-				// Rounds up properly
-				expect(Format.degrees(30.5555555555)).to.equal(
-						'<span class="deg">30.56<span class="units">°</span></span>');
-			});
-		});
-
-		describe('degrees with no rounding', function () {
-			it('are formatted properly', function () {
-				expect(Format.rawDegrees(0.1)).to.equal(
-						'<span class="deg">0.1<span class="units">°</span></span>');
-				expect(Format.rawDegrees(30.0123456789)).to.equal(
-						'<span class="deg">' +
-							'30.0123456789<span class="units">°</span>' +
-						'</span>');
-				expect(Format.rawDegrees(30.5555555555)).to.equal(
-						'<span class="deg">' +
-							'30.5555555555<span class="units">°</span>' +
-						'</span>');
-			});
-		});
-
-		describe('degreesMinutes()', function () {
-			it('are formatted properly', function () {
-				expect(Format.degreesAndDegreesMinutes(0)).to.equal(
-						'<span class="deg">' +
-							'0.00<span class="units">°</span>' +
-						'</span>' +
-						'<span class="degrees-minutes">' +
-							'<span class="deg">' +
-								'0<span class="units">°</span>' +
-							'</span>' +
-							'&nbsp;' +
-							'<span class="minutes">' +
-								'0.00<span class="units">\'</span>' +
-							'</span>' +
-						'</span>');
-				expect(Format.degreesAndDegreesMinutes(179.95)).to.equal(
-						'<span class="deg">' +
-							'179.95<span class="units">°</span>' +
-						'</span>' +
-						'<span class="degrees-minutes">' +
-							'<span class="deg">' +
-								'179<span class="units">°</span>' +
-							'</span>' +
-							'&nbsp;' +
-							'<span class="minutes">' +
-								'57.00<span class="units">\'</span>' +
-							'</span>' +
-						'</span>');
-				// Still works when rounding is required
-				expect(Format.degreesAndDegreesMinutes(179.94583)).to.equal(
-						'<span class="deg">' +
-							'179.95<span class="units">°</span>' +
-						'</span>' +
-						'<span class="degrees-minutes">' +
-							'<span class="deg">' +
-								'179<span class="units">°</span>' +
-							'</span>' +
-							'&nbsp;' +
-							'<span class="minutes">' +
-								'56.75<span class="units">\'</span>' +
-							'</span>' +
-						'</span>');
-			});
-		});
-
 		describe('dmsToDecimal()', function () {
+
 			it('parses DMS properly', function () {
 				// Edge case
 				expect(Format.dmsToDecimal(0, 0, 0)).to.equal(0.0);
@@ -126,67 +55,11 @@ define([
 				expect(Format.dmsToDecimal(259, 6, 50).toFixed(4))
 						.to.equal('' + 259.1139);
 			});
-		});
 
-		describe('minutes()', function () {
-			it('are formatted properly', function () {
-				expect(Format.minutes(0.0)).to.equal(
-						'<span class="minutes">0.00<span class="units">\'</span></span>');
-				// Rounds down properly
-				expect(Format.minutes(30.0123456789)).to.equal(
-						'<span class="minutes">30.01<span class="units">\'</span></span>');
-				// Rounds up properly
-				expect(Format.minutes(30.5555555555)).to.equal(
-						'<span class="minutes">30.56<span class="units">\'</span></span>');
-			});
-		});
-
-		describe('nanoteslas()', function () {
-			it('are formatted properly', function () {
-				expect(Format.nanoteslas(0.0)).to.equal(
-						'<span class="nano-teslas">' +
-							'0.00<span class="units">nT</span>' +
-						'</span>');
-				// Rounds down properly
-				expect(Format.nanoteslas(30.0123456789)).to.equal(
-						'<span class="nano-teslas">' +
-							'30.01<span class="units">nT</span>' +
-							'</span>');
-				// Rounds up properly
-				expect(Format.nanoteslas(30.5555555555)).to.equal(
-						'<span class="nano-teslas">' +
-							'30.56<span class="units">nT</span>' +
-						'</span>');
-				// A number closer to an actual F value
-				expect(Format.nanoteslas(54599.6237843)).to.equal(
-						'<span class="nano-teslas">' +
-							'54599.62<span class="units">nT</span>' +
-						'</span>');
-			});
-		});
-
-		describe('rawNanoteslas()', function () {
-			it('are formatted properly', function () {
-				expect(Format.rawNanoteslas(0)).to.equal(
-						'<span class="nano-teslas">' +
-							'0<span class="units">nT</span>' +
-						'</span>');
-				expect(Format.rawNanoteslas(30.0123456789)).to.equal(
-						'<span class="nano-teslas">' +
-							'30.0123456789<span class="units">nT</span>' +
-						'</span>');
-				expect(Format.rawNanoteslas(30.5555555555)).to.equal(
-						'<span class="nano-teslas">' +
-							'30.5555555555<span class="units">nT</span>' +
-						'</span>');
-				expect(Format.rawNanoteslas(54599.6237843)).to.equal(
-						'<span class="nano-teslas">' +
-							'54599.6237843<span class="units">nT</span>' +
-						'</span>');
-			});
 		});
 
 		describe('parseDate()', function () {
+
 			it('parses Date properly', function () {
 				expect(Format.parseDate('2000-01-01')).to.equal(946684800000);
 				// add 1 day, should add 24h*60min*60sec*1000 = 86400000
@@ -194,6 +67,7 @@ define([
 				// add 1 month, should add 31d*24h*60min*60sec*1000 = 2678400000
 				expect(Format.parseDate('2000-02-01')).to.equal(949363200000);
 			});
+
 		});
 
 		describe('parseRelativeTime()', function () {
@@ -292,6 +166,275 @@ define([
 				expect(Format.parseRelativeTime('11:11:08')).to.equal(mixed);
 				expect(Format.parseRelativeTime('11 11 08')).to.equal(mixed);
 				expect(Format.parseRelativeTime('111108')).to.equal(mixed);
+			});
+
+		});
+
+		describe('degrees()', function () {
+
+			it('are formatted properly', function () {
+				expect(Format.degrees(0.0)).to.equal(
+						'<span class="deg">0.00<span class="units">°</span></span>');
+				// Rounds down properly
+				expect(Format.degrees(30.0123456789)).to.equal(
+						'<span class="deg">30.01<span class="units">°</span></span>');
+				// Rounds up properly
+				expect(Format.degrees(30.5555555555)).to.equal(
+						'<span class="deg">30.56<span class="units">°</span></span>');
+			});
+
+			it('round correctly when specified', function () {
+				expect(Format.degrees(0.0, 3)).to.equal(
+						'<span class="deg">0.000<span class="units">°</span></span>');
+				// Rounds down properly
+				expect(Format.degrees(30.0123456789, 5)).to.equal(
+						'<span class="deg">30.01235<span class="units">°</span></span>');
+				// Rounds up properly
+				expect(Format.degrees(30.5555555555, 1)).to.equal(
+						'<span class="deg">30.6<span class="units">°</span></span>');
+			});
+
+		});
+
+		describe('rawDegrees()', function () {
+
+			it('are formatted properly', function () {
+				expect(Format.rawDegrees(0.1)).to.equal(
+						'<span class="deg">0.1<span class="units">°</span></span>');
+				expect(Format.rawDegrees(30.0123456789)).to.equal(
+						'<span class="deg">' +
+							'30.0123456789<span class="units">°</span>' +
+						'</span>');
+				expect(Format.rawDegrees(30.5555555555)).to.equal(
+						'<span class="deg">' +
+							'30.5555555555<span class="units">°</span>' +
+						'</span>');
+			});
+
+		});
+
+		describe('minutes()', function () {
+
+			it('are formatted properly', function () {
+				expect(Format.minutes(0.0)).to.equal(
+						'<span class="minutes">0.00<span class="units">\'</span></span>');
+				// Rounds down properly
+				expect(Format.minutes(30.0123456789)).to.equal(
+						'<span class="minutes">30.01<span class="units">\'</span></span>');
+				// Rounds up properly
+				expect(Format.minutes(30.5555555555)).to.equal(
+						'<span class="minutes">30.56<span class="units">\'</span></span>');
+			});
+
+			it('round correctly when specified', function () {
+				expect(Format.minutes(0.0, 3)).to.equal(
+						'<span class="minutes">0.000<span class="units">\'</span></span>');
+				// Rounds down properly
+				expect(Format.minutes(30.0123456789, 5)).to.equal(
+						'<span class="minutes">30.01235<span class="units">\'</span></span>');
+				// Rounds up properly
+				expect(Format.minutes(30.5555555555, 1)).to.equal(
+						'<span class="minutes">30.6<span class="units">\'</span></span>');
+			});
+
+		});
+
+		describe('rawMinutes()', function () {
+
+			it('are formatted properly', function () {
+				expect(Format.rawMinutes(0.1)).to.equal(
+						'<span class="minutes">0.1<span class="units">\'</span></span>');
+				expect(Format.rawMinutes(30.0123456789)).to.equal(
+						'<span class="minutes">' +
+							'30.0123456789<span class="units">\'</span>' +
+						'</span>');
+				expect(Format.rawMinutes(30.5555555555)).to.equal(
+						'<span class="minutes">' +
+							'30.5555555555<span class="units">\'</span>' +
+						'</span>');
+			});
+
+		});
+
+		describe('degreesMinutes()', function () {
+
+			it('are formatted properly', function () {
+				expect(Format.degreesMinutes(0)).to.equal(
+						'<span class="deg">' +
+							'0<span class="units">°</span>' +
+						'</span>' +
+						'&nbsp;' +
+						'<span class="minutes">' +
+							'0.00<span class="units">\'</span>' +
+						'</span>');
+				expect(Format.degreesMinutes(179.95)).to.equal(
+						'<span class="deg">' +
+							'179<span class="units">°</span>' +
+						'</span>' +
+						'&nbsp;' +
+						'<span class="minutes">' +
+							'57.00<span class="units">\'</span>' +
+						'</span>');
+				// Still works when rounding is required
+				expect(Format.degreesMinutes(179.94583)).to.equal(
+						'<span class="deg">' +
+							'179<span class="units">°</span>' +
+						'</span>' +
+						'&nbsp;' +
+						'<span class="minutes">' +
+							'56.75<span class="units">\'</span>' +
+						'</span>');
+			});
+
+		});
+
+		describe('degreesAndDegreesMinutes()', function () {
+
+			it('are formatted properly', function () {
+				expect(Format.degreesAndDegreesMinutes(0)).to.equal(
+						'<span class="deg">' +
+							'0.00<span class="units">°</span>' +
+						'</span>' +
+						'<span class="degrees-minutes">' +
+							'<span class="deg">' +
+								'0<span class="units">°</span>' +
+							'</span>' +
+							'&nbsp;' +
+							'<span class="minutes">' +
+								'0.00<span class="units">\'</span>' +
+							'</span>' +
+						'</span>');
+				expect(Format.degreesAndDegreesMinutes(179.95)).to.equal(
+						'<span class="deg">' +
+							'179.95<span class="units">°</span>' +
+						'</span>' +
+						'<span class="degrees-minutes">' +
+							'<span class="deg">' +
+								'179<span class="units">°</span>' +
+							'</span>' +
+							'&nbsp;' +
+							'<span class="minutes">' +
+								'57.00<span class="units">\'</span>' +
+							'</span>' +
+						'</span>');
+				// Still works when rounding is required
+				expect(Format.degreesAndDegreesMinutes(179.94583)).to.equal(
+						'<span class="deg">' +
+							'179.95<span class="units">°</span>' +
+						'</span>' +
+						'<span class="degrees-minutes">' +
+							'<span class="deg">' +
+								'179<span class="units">°</span>' +
+							'</span>' +
+							'&nbsp;' +
+							'<span class="minutes">' +
+								'56.75<span class="units">\'</span>' +
+							'</span>' +
+						'</span>');
+			});
+
+		});
+
+		describe('nanoteslas()', function () {
+
+			it('are formatted properly', function () {
+				expect(Format.nanoteslas(0.0)).to.equal(
+						'<span class="nano-teslas">' +
+							'0.00<span class="units">nT</span>' +
+						'</span>');
+				// Rounds down properly
+				expect(Format.nanoteslas(30.0123456789)).to.equal(
+						'<span class="nano-teslas">' +
+							'30.01<span class="units">nT</span>' +
+							'</span>');
+				// Rounds up properly
+				expect(Format.nanoteslas(30.5555555555)).to.equal(
+						'<span class="nano-teslas">' +
+							'30.56<span class="units">nT</span>' +
+						'</span>');
+				// A number closer to an actual F value
+				expect(Format.nanoteslas(54599.6237843)).to.equal(
+						'<span class="nano-teslas">' +
+							'54599.62<span class="units">nT</span>' +
+						'</span>');
+			});
+
+			it('round correctly when specified', function () {
+				expect(Format.nanoteslas(0.0, 3)).to.equal(
+						'<span class="nano-teslas">' +
+							'0.000<span class="units">nT</span>' +
+						'</span>');
+				// Rounds down properly
+				expect(Format.nanoteslas(30.0123456789, 5)).to.equal(
+						'<span class="nano-teslas">' +
+							'30.01235<span class="units">nT</span>' +
+							'</span>');
+				// Rounds up properly
+				expect(Format.nanoteslas(30.5555555555, 1)).to.equal(
+						'<span class="nano-teslas">' +
+							'30.6<span class="units">nT</span>' +
+						'</span>');
+				// A number closer to an actual F value
+				expect(Format.nanoteslas(54599.6237843, 4)).to.equal(
+						'<span class="nano-teslas">' +
+							'54599.6238<span class="units">nT</span>' +
+						'</span>');
+			});
+
+		});
+
+		describe('rawNanoteslas()', function () {
+			it('are formatted properly', function () {
+				expect(Format.rawNanoteslas(0)).to.equal(
+						'<span class="nano-teslas">' +
+							'0<span class="units">nT</span>' +
+						'</span>');
+				expect(Format.rawNanoteslas(30.0123456789)).to.equal(
+						'<span class="nano-teslas">' +
+							'30.0123456789<span class="units">nT</span>' +
+						'</span>');
+				expect(Format.rawNanoteslas(30.5555555555)).to.equal(
+						'<span class="nano-teslas">' +
+							'30.5555555555<span class="units">nT</span>' +
+						'</span>');
+				expect(Format.rawNanoteslas(54599.6237843)).to.equal(
+						'<span class="nano-teslas">' +
+							'54599.6237843<span class="units">nT</span>' +
+						'</span>');
+			});
+		});
+
+		describe('date()', function () {
+
+			it('parses start of epoch properly', function () {
+				expect(Format.date(0)).to.equal('1970-01-01');
+			});
+
+			it('parses 1 day properly', function () {
+				// 1 second before new day is still old day
+				expect(Format.date(86399999)).to.equal('1970-01-01');
+				// exact day
+				expect(Format.date(86400000)).to.equal('1970-01-02');
+			});
+
+			it('parses 1 month properly', function () {
+				// 30 days
+				expect(Format.date(2592000000)).to.equal('1970-01-31');
+				// 31 days
+				expect(Format.date(2678400000)).to.equal('1970-02-01');
+				// 32 days
+				expect(Format.date(2764800000)).to.equal('1970-02-02');
+				// 33 more day
+				expect(Format.date(2851200000)).to.equal('1970-02-03');
+			});
+
+			it('parses 1 year properly', function () {
+				// ~364 days
+				expect(Format.date(31363200000)).to.equal('1970-12-30');
+				// ~365 days
+				expect(Format.date(31449600000)).to.equal('1970-12-31');
+				// ~366 days
+				expect(Format.date(31536000000)).to.equal('1971-01-01');
 			});
 
 		});
