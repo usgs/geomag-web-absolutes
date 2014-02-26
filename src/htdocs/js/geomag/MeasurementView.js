@@ -4,13 +4,15 @@ define([
 	'util/Util',
 
 	'geomag/Formatter',
-	'geomag/Measurement'
+	'geomag/Measurement',
+	'geomag/Validate'
 ], function (
 	View,
 	Util,
 
 	Format,
-	Measurement
+	Measurement,
+	Validate
 ) {
 	'use strict';
 
@@ -110,16 +112,61 @@ define([
 		this._zValue = this._el.querySelector('.measurement-z');
 		this._fValue = this._el.querySelector('.measurement-f');
 
-		onInputChange = function (/*evt*/) {
+		onInputChange = function (evt) {
 			var time = _this._timeInput.value || '00:00:00',
 			    degrees = parseFloat(_this._degreesInput.value||'0.0'),
 			    minutes = parseFloat(_this._minutesInput.value||'0.0'),
-			    seconds = parseInt(_this._secondsInput.value||'0', 10);
+			    seconds = parseInt(_this._secondsInput.value||'0', 10),
+			    numberErrors, saveButton, observationViewControls, errorMessage;
+
+
+			// validate all measurement inputs
+			_this._validate(evt);
+
+			numberErrors = document.querySelectorAll('input.error').length;
+			observationViewControls = document.querySelector('.observation-view-controls');
+			saveButton = observationViewControls.querySelector('#saveButton');
+			errorMessage = observationViewControls.querySelector('p.alert');
+
+			// no errors exist, set measurement
+			if (numberErrors === 0) {
+
+				// only set measurement values if they pass validation
+				_this._measurement.set({
+					'time': _this._stringToTime(time),
+					'angle': _this._dmsToDecimal(degrees, minutes, seconds)
+				});
+
+				// remove error count
+				if (errorMessage) {
+					errorMessage.remove();
+				}
+
+				// enable save button
+				saveButton.disabled = false;
+
+				// no more errors exist
+				return;
+			}
+
+			// errors still exist, update error count
+			if(!errorMessage) {
+				errorMessage = document.createElement('p');
+				errorMessage.className = 'alert error';
+				observationViewControls.appendChild(errorMessage);
+			}
+
+			errorMessage.innerHTML = numberErrors +
+					' error(s), please fix all errors before saving.';
+
+			// disable the submit button
+			saveButton.disabled = true;
 
 			_this._measurement.set({
 				'time': Format.parseRelativeTime(time),
 				'angle': Format.dmsToDecimal(degrees, minutes, seconds)
 			});
+
 		};
 
 		this._timeInput.addEventListener('blur', onInputChange);
@@ -130,6 +177,156 @@ define([
 		this._measurement.on('change', this.render, this);
 
 		this.render();
+	};
+
+	MeasurementView.prototype._validate = function (evt) {
+		var valid = false,
+		    input = evt.currentTarget,
+		    value = input.value,
+		    parentElement = input.parentElement,
+		    type = parentElement.className,
+		    helpText;
+
+		// null is a valid value?
+		if (value === null) {
+			return;
+		}
+
+		if (type.indexOf('time') !== -1) {
+			valid = Validate.validTime(value);
+			helpText = 'Invalid Time. HH24:MI:SS';
+
+			var begin = this._observation.get('begin');
+			value = this._stringToTime(value);
+
+			if (value < begin) {
+				valid = false;
+				helpText = 'Time is before start time.';
+			}
+
+			if(value > (begin + 86400000)) {
+				valid = false;
+				helpText = 'Time is before start time.';
+			}
+		} else if (type.indexOf('degrees')) {
+			valid = Validate.validDegrees(value);
+			helpText = 'Invalid Degrees. 0-359';
+		} else if (type.indexOf('minutes')) {
+			valid = Validate.validMinutes(value);
+			helpText = 'Invalid Minutes. 0-59';
+		} else if (type.indexOf('seconds')) {
+			valid = Validate.validSeconds(value);
+			helpText = 'Invalid Seconds. 0-59';
+		}
+
+		if (valid){
+			// passes validation
+			Util.removeClass(input, 'error');
+			input.removeAttribute('title');
+		} else {
+			// does not pass validation
+			input.className = 'error';
+			input.title = helpText;
+		}
+	};
+
+	/**
+	 * @param time {Integer}
+	 *      Timestamp (in milliseconds) since the epoch.
+	 *
+	 * @return {String}
+	 *      A string formatted as "HH:mm:ss" representing the input time.
+	 */
+	MeasurementView.prototype._timeToString = function (time) {
+		var offset = new Date(time),
+		    h = offset.getUTCHours(),
+		    m = offset.getUTCMinutes(),
+		    s = offset.getUTCSeconds();
+
+		return '' + (h<10?'0':'') + h + (m<10?':0':':') + m + (s<10?':0':':') + s;
+	};
+
+	/**
+	 * @param time {String}
+	 *      The formatted time string to parse. The date for the returned time
+	 *      is inherited from the observation "begin" attribute.
+	 *
+	 * @return {Integer}
+	 *      The millisecond timestamp since the epoch.
+	 */
+	MeasurementView.prototype._stringToTime = function (time) {
+		var observationOffset = this._observation.get('begin');
+
+		var timeString = time.replace(/[^\d]/g, ''),
+		    offset = null;
+
+		if (observationOffset) {
+			observationOffset = new Date(observationOffset);
+		} else {
+			observationOffset = new Date();
+		}
+
+		if (timeString.length === 4) {
+			// HHMM
+			offset = Date.UTC(observationOffset.getUTCFullYear(),
+					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
+					parseInt(timeString.substr(0, 2), 10),
+					parseInt(timeString.substr(2, 2), 10),
+					0, 0);
+		} else if (timeString.length === 5) {
+			// HMMSS
+			offset = Date.UTC(observationOffset.getUTCFullYear(),
+					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
+					parseInt(timeString.substr(0, 1), 10),
+					parseInt(timeString.substr(1, 2), 10),
+					parseInt(timeString.substr(3, 2), 10), 0);
+		} else if (timeString.length === 6) {
+			// HHMMSS
+			offset = Date.UTC(observationOffset.getUTCFullYear(),
+					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
+					parseInt(timeString.substr(0, 2), 10),
+					parseInt(timeString.substr(2, 2), 10),
+					parseInt(timeString.substr(4, 2), 10), 0);
+		}
+
+		return offset;
+	};
+
+	/**
+	 * @param degs {Number}
+	 *        The degree portion of the angle value. If this is a decimal, then
+	 *        the fractional portion is converted to minutes.
+	 * @param mins {Number}
+	 *        The minutes portion of the angle value. If this is a decimal, then
+	 *        the fractional portion is converted to seconds.
+	 * @param secs {Integer}
+	 *        The seconds portion of the angle value.
+	 *
+	 * @return {Decimal}
+	 *        The decimal degrees for the given DMS value.
+	 *
+	 * @see MeasurementViewTest#degree_inversion_check
+	 */
+	MeasurementView.prototype._dmsToDecimal = function (degs, mins, secs) {
+		return (parseInt(secs, 10) / 3600) + (parseFloat(mins) / 60) +
+				parseFloat(degs);
+	};
+
+	/**
+	 * @see MeasurementViewTest#degree_inversion_check
+	 */
+	MeasurementView.prototype._decimalToDms = function (angle) {
+		var degrees = parseInt(angle, 10),
+		    minutes = (angle - degrees) * 60,
+		    seconds = Math.round((minutes - parseInt(minutes, 10)) * 60, 10);
+
+		minutes = parseInt(minutes, 10);
+
+		// Correct any errors due to floating point
+		minutes += parseInt(seconds / 60, 10);
+		seconds = seconds % 60;
+
+		return [degrees, minutes, seconds];
 	};
 
 	return MeasurementView;

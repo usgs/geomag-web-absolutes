@@ -197,19 +197,26 @@ define([
 			url: observationDetailUrl,
 			rawdata: data,
 			method: (observation.id) ? 'PUT' : 'POST',
-			success: function (response){
-				console.log('success');
-				console.log(response);
-			},
-			error: function (response) {
-				console.log('error');
-				console.log(response);
-				// open modal view with success or error message
+			success: function (){
 				(new ModalView(
-					'Error', // modal dialog message
+					'<h3>Success!</h3><p>Your observations has been saved.</p>',
 					{
-						title: 'Save Failed',
-						classes: ['error']
+						title: 'Save Successful',
+						buttons: [{
+							classes: ['center'],
+							text: 'View Observations',
+							callback: function () {
+								window.location = '/observatory/' + observation.get('observatory_id');
+							}
+						}]
+					}
+				)).show();
+			},
+			error: function (status, xhr) {
+				(new ModalView(
+					'<h3>' + status + ' Error.</h3><p>' + xhr.response + '</p>',
+					{
+						title: 'Save Failed'
 					}
 				)).show();
 			}
