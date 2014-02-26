@@ -156,7 +156,7 @@ define([
 	 *    {Float} Angle degrees with (digits) decimal places
 	 */
 	Formatter.degrees = function (angle, digits) {
-		if (typeof decimal_places === 'undefined') {
+		if (typeof digits === 'undefined') {
 			digits = DEFAULT_DIGITS;
 		}
 		return this.rawDegrees(angle.toFixed(digits));
@@ -191,7 +191,7 @@ define([
 	 *    {Float} Angle minutes with (digits) decimal places
 	 */
 	Formatter.minutes = function (angle, digits) {
-		if (typeof decimal_places === 'undefined') {
+		if (typeof digits === 'undefined') {
 			digits = DEFAULT_DIGITS;
 		}
 		return this.rawMinutes(angle.toFixed(digits));
@@ -231,7 +231,7 @@ define([
 		    degrees,
 		    minutes;
 
-		if (typeof decimal_places === 'undefined') {
+		if (typeof digits === 'undefined') {
 			digits = DEFAULT_DIGITS;
 		}
 
@@ -260,7 +260,7 @@ define([
 	Formatter.degreesAndDegreesMinutes = function (angle, digits) {
 		var buf = [];
 
-		if (typeof decimal_places === 'undefined') {
+		if (typeof digits === 'undefined') {
 			digits = DEFAULT_DIGITS;
 		}
 
@@ -283,7 +283,7 @@ define([
 	 *    {Float} nT with (digits) decimal places
 	 */
 	Formatter.nanoteslas = function (nT, digits) {
-		if (typeof decimal_places === 'undefined') {
+		if (typeof digits === 'undefined') {
 			digits = DEFAULT_DIGITS;
 		}
 
