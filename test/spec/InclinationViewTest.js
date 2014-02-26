@@ -6,6 +6,7 @@ define([
 	'mvc/Model',
 	'util/Util',
 
+	'geomag/Formatter',
 	'geomag/InclinationView',
 	'geomag/Measurement',
 	'geomag/Observation',
@@ -15,6 +16,7 @@ define([
 	Model,
 	Util,
 
+	Format,
 	InclinationView,
 	Measurement,
 	Observation,
@@ -134,17 +136,16 @@ define([
 				});
 
 				expect(view._inclinationAngle.innerHTML).to.equal(
-						view._formatDegreesMinutes(
-								calculator.inclination()));
+						Format.degreesAndDegreesMinutes(calculator.inclination()));
 				expect(view._horizontalComponent.textContent).to.equal(
-						calculator.horizontalComponent().toFixed(2));
+						calculator.horizontalComponent().toFixed(2) + 'nT');
 				expect(view._verticalComponent.textContent).to.equal(
-						calculator.verticalComponent().toFixed(2));
+						calculator.verticalComponent().toFixed(2) + 'nT');
 
 				expect(view._southDownMinusNorthUp.textContent).to.equal(
-						calculator.southDownMinusNorthUp().toFixed(2));
+						calculator.southDownMinusNorthUp().toFixed(2) + '\'');
 				expect(view._northDownMinusSouthUp.textContent).to.equal(
-						calculator.northDownMinusSouthUp().toFixed(2));
+						calculator.northDownMinusSouthUp().toFixed(2) + '\'');
 			});
 
 		});

@@ -7,6 +7,7 @@ define([
 	'util/Util',
 
 	'geomag/DeclinationView',
+	'geomag/Formatter',
 	'geomag/Measurement',
 	'geomag/Observation',
 	'geomag/Reading'
@@ -16,6 +17,7 @@ define([
 	Util,
 
 	DeclinationView,
+	Format,
 	Measurement,
 	Observation,
 	Reading
@@ -136,41 +138,41 @@ define([
 		});
 
 		describe('Render', function () {
-
-			it('updates view elements', function () {
-				var calculator = testObservationBaselineCalculator,
+			var calculator = testObservationBaselineCalculator,
 				    view;
 
+			it('updates view elements', function () {
 				view = new DeclinationView({
 					reading: new Reading(),
 					observation: new Observation(),
 					baselineCalculator: calculator
 				});
 
+				// These are equal, this is probably bs.
 				expect(view._magneticSouthMeridian.innerHTML).to.equal(
-						view._formatDegreesMinutes(
+						Format.degreesAndDegreesMinutes(
 								calculator.magneticSouthMeridian()));
 				expect(view._meanMark.textContent).to.equal(
-						calculator.meanMark().toFixed(2));
+						calculator.meanMark().toFixed(2) + '°');
 				expect(view._magneticAzimuthOfMark.textContent).to.equal(
-						calculator.magneticAzimuthMark().toFixed(2));
+						calculator.magneticAzimuthMark().toFixed(2) + '°');
 				expect(view._trueAzimuthOfMark.textContent).to.equal('' +
-						calculator.trueAzimuthOfMark());
+						calculator.trueAzimuthOfMark() + '°');
 				expect(view._magneticDeclination.innerHTML).to.equal(
-						view._formatDegreesMinutes(
+						Format.degreesAndDegreesMinutes(
 								calculator.magneticDeclination()));
 
 				expect(view._westUpMinusEastDown.textContent).to.equal(
-						calculator.westUpMinusEastDown().toFixed(2));
+						calculator.westUpMinusEastDown().toFixed(2) + '\'');
 				expect(view._eastUpMinusWestDown.textContent).to.equal(
-						calculator.eastUpMinusWestDown().toFixed(2));
+						calculator.eastUpMinusWestDown().toFixed(2) + '\'');
 
 				expect(view._fMean.textContent).to.equal(
-						calculator.meanF().toFixed(2));
+						calculator.meanF().toFixed(2) + 'nT');
 				expect(view._pierCorrection.textContent).to.equal('' +
-						calculator.pierCorrection());
+						calculator.pierCorrection() + 'nT');
 				expect(view._correctedF.textContent).to.equal(
-						calculator.correctedF().toFixed(2));
+						calculator.correctedF().toFixed(2) + 'nT');
 			});
 
 		});
