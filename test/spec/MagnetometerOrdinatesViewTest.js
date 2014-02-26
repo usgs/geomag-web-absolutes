@@ -11,6 +11,7 @@ define([
 	'geomag/Reading',
 	'geomag/Observation',
 	'geomag/Measurement',
+	'geomag/Formatter',
 	'geomag/ObservationBaselineCalculator',
 	'geomag/MagnetometerOrdinatesView'
 ], function (
@@ -22,6 +23,7 @@ define([
 	Reading,
 	Observation,
 	Measurement,
+	Format,
 	ObservationBaselineCalculator,
 	MagnetometerOrdinatesView
 ){
@@ -96,7 +98,6 @@ define([
 				    calculator,
 				    view,
 				    observation;
-				function format (number) {return number.toFixed(2);}
 				function format4 (number) {return number.toFixed(4);}
 
 				//Stub function in ObservationBaselineCalculator.
@@ -104,6 +105,8 @@ define([
 						'meanH', function () {return 1;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
 						'meanE', function () {return 2;});
+				sinon.stub(ObservationBaselineCalculator.prototype,
+						'computedE', function () {return 2;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
 						'meanZ', function () {return 3;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
@@ -140,42 +143,45 @@ define([
 				});
 
 			it('updates view elements for hMean', function () {
-				expect(view._hMean.textContent).to.equal(format(1));
+				expect(view._hMean.innerHTML).to.equal(Format.nanoteslas(1));
 			});
 			it('updates view elements for eMean', function () {
-				expect(view._eMean.textContent).to.equal(format(2));
-				});
+				expect(view._eMean.innerHTML).to.equal(Format.nanoteslas(2));
+			});
+			it('updates view elements for dMean', function () {
+				expect(view._dMean.innerHTML).to.equal(Format.minutes(2));
+			});
 			it('updates view elements for zMean', function () {
-				expect(view._zMean.textContent).to.equal(format(3));
-				});
+				expect(view._zMean.innerHTML).to.equal(Format.nanoteslas(3));
+			});
 			it('updates view elements for fMean', function () {
-				expect(view._fMean.textContent).to.equal(format(4));
-				});
+				expect(view._fMean.innerHTML).to.equal(Format.nanoteslas(4));
+			});
 
 			it('updates view elements for absoluteH', function () {
-				expect(view._absoluteH.textContent).to.equal(format(5));
+				expect(view._absoluteH.innerHTML).to.equal(Format.nanoteslas(5));
 				});
 			it('updates view elements for absoluteD', function () {
-				expect(view._absoluteD.textContent).to.equal(format(6*60));
+				expect(view._absoluteD.innerHTML).to.equal(Format.minutes(6*60));
 				});
 			it('updates view elements for absoluteZ', function () {
-				expect(view._absoluteZ.textContent).to.equal(format(7));
+				expect(view._absoluteZ.innerHTML).to.equal(Format.nanoteslas(7));
 				});
 			it('updates view elements for absoluteF', function () {
-				expect(view._absoluteF.textContent).to.equal(format(8));
+				expect(view._absoluteF.innerHTML).to.equal(Format.nanoteslas(8));
 				});
 
 			it('updates view elements for hBaseline', function () {
-				expect(view._hBaseline.textContent).to.equal(format(9));
+				expect(view._hBaseline.innerHTML).to.equal(Format.nanoteslas(9));
 				});
 			it('updates view elements for eBaseline', function () {
-				expect(view._eBaseline.textContent).to.equal(format(10));
+				expect(view._eBaseline.innerHTML).to.equal(Format.nanoteslas(10));
 				});
 			it('updates view elements for dBaseline', function () {
-				expect(view._dBaseline.textContent).to.equal(format(11));
+				expect(view._dBaseline.innerHTML).to.equal(Format.minutes(11));
 				});
 			it('updates view elements for zBaseline', function () {
-				expect(view._zBaseline.textContent).to.equal(format(12));
+				expect(view._zBaseline.innerHTML).to.equal(Format.nanoteslas(12));
 				});
 
 			it('updates view elements for scaleValue', function () {
@@ -187,6 +193,7 @@ define([
 
 			ObservationBaselineCalculator.prototype.meanH.restore();
 			ObservationBaselineCalculator.prototype.meanE.restore();
+			ObservationBaselineCalculator.prototype.computedE.restore();
 			ObservationBaselineCalculator.prototype.meanZ.restore();
 			ObservationBaselineCalculator.prototype.meanF.restore();
 			ObservationBaselineCalculator.prototype.horizontalComponent.restore();

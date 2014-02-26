@@ -3,11 +3,13 @@ define([
 	'mvc/View',
 	'util/Util',
 
+	'geomag/Formatter',
 	'geomag/Measurement'
 ], function (
 	View,
 	Util,
 
+	Format,
 	Measurement
 ) {
 	'use strict';
@@ -55,7 +57,7 @@ define([
 						'<tr>',
 							'<th class="e">E</th>',
 							'<td class="mean eMean"></td>',
-							'<td class="absolute absoluteH"></td>',
+							'<td class="absolute absoluteE"></td>',
 							'<td class="baseline eBaseline"></td>',
 						'</tr>',
 						'<tr>',
@@ -130,24 +132,34 @@ define([
 		var calculator = this._calculator,
 		    reading = this._reading;
 
-		this._hMean.innerHTML = calculator.meanH(reading).toFixed(2);
-		this._eMean.innerHTML = calculator.meanE(reading).toFixed(2);
-		this._dMean.innerHTML = calculator.computedE(reading).toFixed(2);
-		this._zMean.innerHTML = calculator.meanZ(reading).toFixed(2);
-		this._fMean.innerHTML = calculator.meanF(reading).toFixed(2);
+		this._hMean.innerHTML =
+				Format.nanoteslas(calculator.meanH(reading));
+		this._eMean.innerHTML =
+				Format.nanoteslas(calculator.meanE(reading));
+		this._dMean.innerHTML =
+				Format.minutes(calculator.computedE(reading));
+		this._zMean.innerHTML =
+				Format.nanoteslas(calculator.meanZ(reading));
+		this._fMean.innerHTML =
+				Format.nanoteslas(calculator.meanF(reading));
 
 		this._absoluteH.innerHTML =
-			calculator.horizontalComponent(reading).toFixed(2);
+			Format.nanoteslas(calculator.horizontalComponent(reading));
 		this._absoluteD.innerHTML =
-			(calculator.magneticDeclination(reading) * 60).toFixed(2);
+			Format.minutes((calculator.magneticDeclination(reading) * 60));
 		this._absoluteZ.innerHTML =
-			calculator.verticalComponent(reading).toFixed(2);
-		this._absoluteF.innerHTML = calculator.correctedF(reading).toFixed(2);
+			Format.nanoteslas(calculator.verticalComponent(reading));
+		this._absoluteF.innerHTML =
+			Format.nanoteslas(calculator.correctedF(reading));
 
-		this._hBaseline.innerHTML = calculator.baselineH(reading).toFixed(2);
-		this._eBaseline.innerHTML = calculator.baselineE(reading).toFixed(2);
-		this._dBaseline.innerHTML = calculator.d(reading).toFixed(2);
-		this._zBaseline.innerHTML = calculator.baselineZ(reading).toFixed(2);
+		this._hBaseline.innerHTML =
+			Format.nanoteslas(calculator.baselineH(reading));
+		this._eBaseline.innerHTML =
+			Format.nanoteslas(calculator.baselineE(reading));
+		this._dBaseline.innerHTML =
+			Format.minutes(calculator.d(reading));
+		this._zBaseline.innerHTML =
+			Format.nanoteslas(calculator.baselineZ(reading));
 
 		this._scaleValue.innerHTML =
 				'Ordinate Mean D is calculated using (Corrected F * scaleValue / 60)' +
