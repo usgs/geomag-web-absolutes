@@ -29,7 +29,9 @@ define([
 				'z': null,
 				'f': null,
 			}),
-		observation: new Observation()
+		observation: new Observation({
+			'begin': 1393432420000
+		})
 	};
 
 	describe('MeasurementView Unit Tests', function () {
