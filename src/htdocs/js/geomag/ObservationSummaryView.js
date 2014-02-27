@@ -185,7 +185,8 @@ define([
 	};
 
 	ObservationSummaryView.prototype._renderSummaryBottom = function () {
-		this._pierTemperature.innerHTML = this._observation.get('pier_temperature');
+		this._pierTemperature.innerHTML =
+				Formatter.celsius(this._observation.get('pier_temperature'),1);
 		this._electronicsTemperature.innerHTML = 'elec temp';
 		this._fluxgateTemperature.innerHTML = 'flux temp';
 		this._protonTemperature.innerHTML = 'prot temp';
