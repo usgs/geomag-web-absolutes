@@ -51,6 +51,7 @@ define([
 	 */
 	ObservationView.prototype._initialize = function () {
 		var el = this._el,
+		    _this = this,
 		    factory = this._options.factory,
 		    calculator = this._options.baselineCalculator,
 		    realtimeDataFactory = this._options.realtimeDataFactory;
@@ -76,7 +77,15 @@ define([
 			success: this._setObservation.bind(this)
 		});
 		this._createControls();
+
+		// bind to measurement change
+		var _updateErrorCount = this._updateErrorCount.bind(this);
+		this._observation.eachMeasurement(function (measurement) {
+			measurement.on('change', _updateErrorCount);
+		});
+
 	};
+
 
 	/**
 	 * Called when observation has been loaded.
@@ -234,6 +243,77 @@ define([
 		factory.saveObservation(this._observation);
 	};
 
+	ObservationView.prototype._updateErrorCount = function () {
+		var errors = [],
+		    el = this._el.querySelector('.observation-view-controls'),
+		    errorDiv,
+		    measurementErrors,
+		    saveButton = el.querySelector('#saveButton'),
+		    readingErrors, setNumber, list, header;
+
+
+		this._observation.eachReading(function (reading) {
+
+			setNumber = reading.get('set_number');
+			readingErrors = [];
+
+			reading.eachMeasurement(function (measurement) {
+
+				// get all errors for the measurement
+				measurementErrors = measurement.getErrors();
+
+				// check for number of measurement errors
+				if (measurementErrors.length > 0) {
+					// if there are errors add to total number of errors
+					readingErrors = readingErrors.concat(measurementErrors);
+				}
+
+			});
+
+			// organize all errors by reading set
+			if (readingErrors.length > 0) {
+				errors.push('<li>' +
+						'Set ' + setNumber + ' has ' + readingErrors.length + ' error(s)' +
+					'</li>'
+				);
+			}
+		});
+
+		errorDiv = el.querySelector('.alert');
+
+		// errors exist, append details
+		if (errors.length > 0) {
+
+			list = el.querySelector('.alert > ul');
+
+			if (list) {
+				list.innerHTML = errors.join('');
+			} else {
+				errorDiv = document.createElement('div');
+				errorDiv.className = 'alert error';
+				el.appendChild(errorDiv);
+
+				header = document.createElement('header');
+				header.innerHTML = 'Errors';
+				errorDiv.appendChild(header);
+
+				list = document.createElement('ul');
+				list.innerHTML = errors.join('');
+				errorDiv.appendChild(list);
+
+				// disable the save button
+				saveButton.disabled = true;
+			}
+		} else {
+				// enable the save button
+				saveButton.disabled = false;
+				if(errorDiv) {
+					errorDiv.remove();
+				}
+		}
+
+
+	};
 
 	// return constructor
 	return ObservationView;

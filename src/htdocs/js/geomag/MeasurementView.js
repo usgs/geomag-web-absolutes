@@ -112,61 +112,38 @@ define([
 		this._zValue = this._el.querySelector('.measurement-z');
 		this._fValue = this._el.querySelector('.measurement-f');
 
-		onInputChange = function (evt) {
+
+		onInputChange = function (/*evt*/) {
 			var time = _this._timeInput.value || '00:00:00',
 			    degrees = parseFloat(_this._degreesInput.value||'0.0'),
 			    minutes = parseFloat(_this._minutesInput.value||'0.0'),
 			    seconds = parseInt(_this._secondsInput.value||'0', 10),
-			    numberErrors, saveButton, observationViewControls, errorMessage;
-
+			    isTimeChange;
 
 			// validate all measurement inputs
-			_this._validate(evt);
+			//_this._validate(evt);
 
-			numberErrors = document.querySelectorAll('input.error').length;
-			observationViewControls = document.querySelector('.observation-view-controls');
-			saveButton = observationViewControls.querySelector('#saveButton');
-			errorMessage = observationViewControls.querySelector('p.alert');
+			isTimeChange = (this.parentElement.className.indexOf('time') !== -1) ? true : false;
+			if (isTimeChange) {
+				_this._validateTime(time);
+			} else {
+				_this._validateAngle(degrees, minutes, seconds);
+			}
 
-			// no errors exist, set measurement
-			if (numberErrors === 0) {
-
-				// only set measurement values if they pass validation
+			// only set measurement values if they pass validation
+			if (_this._measurement.get('time_error') === null) {
+				// no errors on measurement, set measurement values
 				_this._measurement.set({
-					'time': _this._stringToTime(time),
-					'angle': _this._dmsToDecimal(degrees, minutes, seconds)
+					'time': Format.parseRelativeTime(time)
 				});
-
-				// remove error count
-				if (errorMessage) {
-					errorMessage.remove();
-				}
-
-				// enable save button
-				saveButton.disabled = false;
-
-				// no more errors exist
-				return;
 			}
 
-			// errors still exist, update error count
-			if(!errorMessage) {
-				errorMessage = document.createElement('p');
-				errorMessage.className = 'alert error';
-				observationViewControls.appendChild(errorMessage);
+			if (_this._measurement.get('angle_error') === null) {
+				// no errors on measurement, set measurement values
+				_this._measurement.set({
+					'angle': Format.dmsToDecimal(degrees, minutes, seconds)
+				});
 			}
-
-			errorMessage.innerHTML = numberErrors +
-					' error(s), please fix all errors before saving.';
-
-			// disable the submit button
-			saveButton.disabled = true;
-
-			_this._measurement.set({
-				'time': Format.parseRelativeTime(time),
-				'angle': Format.dmsToDecimal(degrees, minutes, seconds)
-			});
-
 		};
 
 		this._timeInput.addEventListener('blur', onInputChange);
@@ -174,57 +151,177 @@ define([
 		this._minutesInput.addEventListener('blur', onInputChange);
 		this._secondsInput.addEventListener('blur', onInputChange);
 
-		this._measurement.on('change', this.render, this);
-
 		this.render();
 	};
 
-	MeasurementView.prototype._validate = function (evt) {
-		var valid = false,
-		    input = evt.currentTarget,
-		    value = input.value,
-		    parentElement = input.parentElement,
-		    type = parentElement.className,
-		    helpText, begin;
 
-		// null is a valid value?
-		if (value === null) {
-			return;
+	MeasurementView.prototype._validateTime = function (time) {
+		var validTime = true,
+				helpText, begin;
+
+		// TIME
+		begin = this._observation.get('begin');
+
+		if (!Validate.validTime(time)) {
+			validTime = false;
+			helpText = 'Invalid Time. HH24:MI:SS';
+		} else if (this._stringToTime(time) < begin) {
+			validTime = false;
+			helpText = 'Time is before start time.';
 		}
 
-		if (type.indexOf('time') !== -1) {
+		if (validTime) {
+			this._measurement.set({'time_error': null});
+		} else {
+			this._measurement.set({'time_error': helpText});
+		}
 
-			begin = this._observation.get('begin');
+		this._updateErrorState(this._timeInput, validTime, helpText);
+	};
 
-			if (this._stringToTime(value) < begin) {
-				valid = false;
-				helpText = 'Time is before start time.';
-			}
+	MeasurementView.prototype._validateAngle = function (degrees, minutes, seconds) {
+		var validDegrees = true,
+				validMinutes = true,
+				validSeconds = true,
+				helpText;
 
-			valid = Validate.validTime(value);
-			helpText = 'Invalid Time. HH24:MI:SS';
-
-		} else if (type.indexOf('degrees')) {
-			valid = Validate.validDegrees(value);
+		// DEGREES
+		if (!Validate.validDegrees(degrees)) {
+			validDegrees = false;
 			helpText = 'Invalid Degrees. Must be between, 0-360.';
-		} else if (type.indexOf('minutes')) {
-			valid = Validate.validMinutes(value);
+		}
+
+		if (validDegrees) {
+			this._measurement.set({'degrees_error': null});
+		} else {
+			this._measurement.set({'degrees_error': helpText});
+		}
+
+		this._updateErrorState(this._degreesInput, validDegrees, helpText);
+
+
+		// MINUTES
+		if (!Validate.validMinutes(minutes)) {
+			validMinutes = false;
 			helpText = 'Invalid Minutes. Must be between, 0-60.';
-		} else if (type.indexOf('seconds')) {
-			valid = Validate.validSeconds(value);
+		}
+
+		if (validMinutes) {
+			this._measurement.set({'minutes_error': null});
+		} else {
+			this._measurement.set({'minutes_error': helpText});
+		}
+
+		this._updateErrorState(this._minutesInput, validMinutes, helpText);
+
+
+		// SECONDS
+
+		if (!Validate.validSeconds(seconds)) {
+			validSeconds = Validate.validSeconds(seconds);
 			helpText = 'Invalid Seconds. Must be between, 0-60.';
 		}
 
+		if (validSeconds) {
+			this._measurement.set({'seconds_error': null});
+		} else {
+			this._measurement.set({'seconds_error': helpText});
+		}
+
+		this._updateErrorState(this._secondsInput, validSeconds, helpText);
+
+		// update angle_error from deg, min, sec errors
+		this._measurement.setAngleError();
+	};
+
+	MeasurementView.prototype._updateErrorState = function (el, valid, helpText) {
 		if (valid){
 			// passes validation
-			Util.removeClass(input, 'error');
-			input.removeAttribute('title');
+			Util.removeClass(el, 'error');
+			el.removeAttribute('title');
 		} else {
 			// does not pass validation
-			input.className = 'error';
-			input.title = helpText;
+			el.className = 'error';
+			el.title = helpText;
 		}
 	};
+
+	// MeasurementView.prototype._validate = function (evt) {
+	// 	var valid = false,
+	// 	    input = evt.currentTarget,
+	// 	    value = input.value,
+	// 	    parentElement = input.parentElement,
+	// 	    type = parentElement.className,
+	// 	    helpText, begin;
+
+	// 	// null is a valid value?
+	// 	if (value === null) {
+	// 		return;
+	// 	}
+
+	// 	if (type.indexOf('time') !== -1) {
+
+	// 		begin = this._observation.get('begin');
+
+	// 		if (this._stringToTime(value) < begin) {
+	// 			valid = false;
+	// 			helpText = 'Time is before start time.';
+	// 		}
+
+	// 		valid = Validate.validTime(value);
+	// 		helpText = 'Invalid Time. HH24:MI:SS';
+
+	// 		if (valid) {
+	// 			this._measurement.set({'time_error': null});
+	// 		} else {
+	// 			this._measurement.set({'time_error': helpText});
+	// 		}
+
+	// 	} else if (type.indexOf('degrees') !== -1) {
+	// 		valid = Validate.validDegrees(value);
+	// 		helpText = 'Invalid Degrees. Must be between, 0-360.';
+
+	// 		if (valid) {
+	// 			this._measurement.set({'degrees_error': null});
+	// 		} else {
+	// 			this._measurement.set({'degrees_error': helpText});
+	// 		}
+
+	// 	} else if (type.indexOf('minutes') !== -1) {
+	// 		valid = Validate.validMinutes(value);
+	// 		helpText = 'Invalid Minutes. Must be between, 0-60.';
+
+	// 		if (valid) {
+	// 			this._measurement.set({'minutes_error': null});
+	// 		} else {
+	// 			this._measurement.set({'minutes_error': helpText});
+	// 		}
+
+	// 	} else if (type.indexOf('seconds') !== -1) {
+	// 		valid = Validate.validSeconds(value);
+	// 		helpText = 'Invalid Seconds. Must be between, 0-60.';
+
+	// 		if (valid) {
+	// 			this._measurement.set({'seconds_error': null});
+	// 		} else {
+	// 			this._measurement.set({'seconds_error': helpText});
+	// 		}
+
+	// 	}
+
+	// 	if (valid){
+	// 		// passes validation
+	// 		Util.removeClass(input, 'error');
+	// 		input.removeAttribute('title');
+	// 	} else {
+	// 		// does not pass validation
+	// 		input.className = 'error';
+	// 		input.title = helpText;
+	// 	}
+
+	// 	this._measurement.setAngleError();
+
+	// };
 
 	/**
 	 * @param time {Integer}
