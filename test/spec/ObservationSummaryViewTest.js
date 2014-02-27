@@ -18,7 +18,7 @@ define([
 
 	var expect = chai.expect;
 
-	describe('OvservationSummaryViewTest', function () {
+	describe('ObservationSummaryViewTest', function () {
 		var renderSpy;
 		var calculator;
 		var view;
@@ -57,8 +57,11 @@ define([
 			it('should render when Pier temp changes', function () {
 				observation.set({'pier_temperature':40});
 				var pierTemperature =
-						parseInt(view._el.querySelector('.pier-temp-value').innerHTML, 10);
-				expect(pierTemperature).to.equal(40);
+						view._el.querySelector('.pier-temp-value').innerHTML;
+				expect(pierTemperature).to.equal(
+						'<span class="temperature">' +
+							'40.0<span class="units">°C</span>' +
+						'</span>');
 			});
 
 			it('should render when annotation changes', function () {
