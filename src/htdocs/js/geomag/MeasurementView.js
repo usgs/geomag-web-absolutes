@@ -114,35 +114,40 @@ define([
 
 
 		onInputChange = function (/*evt*/) {
-			var time = _this._timeInput.value || '00:00:00',
-			    degrees = parseFloat(_this._degreesInput.value||'0.0'),
-			    minutes = parseFloat(_this._minutesInput.value||'0.0'),
-			    seconds = parseInt(_this._secondsInput.value||'0', 10),
+			var time = _this._timeInput.value,
+			    degrees = _this._degreesInput.value,
+			    minutes = _this._minutesInput.value,
+			    seconds = _this._secondsInput.value,
 			    isTimeChange;
 
 			// is it the angle or time value that changed?
 			isTimeChange = (this.parentElement.className.indexOf('time') !== -1) ?
 					true : false;
+
 			if (isTimeChange) {
+				// validate time change
 				_this._validateTime(time);
+				// only set measurement values if they pass validation
+				if (_this._measurement.get('time_error') === null) {
+					// no errors on measurement, set measurement values
+					_this._measurement.set({
+						'time': Format.parseRelativeTime(time)
+					});
+				}
 			} else {
+				// validate angle change
 				_this._validateAngle(degrees, minutes, seconds);
+				if (_this._measurement.get('angle_error') === null) {
+					// no errors on measurement, set measurement values
+					_this._measurement.set({
+						'angle': Format.dmsToDecimal(degrees, minutes, seconds)
+					});
+				}
 			}
 
-			// only set measurement values if they pass validation
-			if (_this._measurement.get('time_error') === null) {
-				// no errors on measurement, set measurement values
-				_this._measurement.set({
-					'time': Format.parseRelativeTime(time)
-				});
-			}
 
-			if (_this._measurement.get('angle_error') === null) {
-				// no errors on measurement, set measurement values
-				_this._measurement.set({
-					'angle': Format.dmsToDecimal(degrees, minutes, seconds)
-				});
-			}
+
+
 		};
 
 		this._timeInput.addEventListener('blur', onInputChange);
