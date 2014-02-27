@@ -67,10 +67,35 @@ define([
 		this._minutesInput.value = dms[1];
 		this._secondsInput.value = dms[2];
 
-		this._hValue.innerHTML = this._measurement.get('h') || '--';
-		this._eValue.innerHTML = this._measurement.get('e') || '--';
-		this._zValue.innerHTML = this._measurement.get('z') || '--';
-		this._fValue.innerHTML = this._measurement.get('f') || '--';
+
+		if(this._measurement.get('h')) {
+			this._hValue.innerHTML =
+				Format.nanoteslas(this._measurement.get('h'));
+		}
+		else {
+			this._hValue.innerHTML = '--';
+		}
+		if(this._measurement.get('e')) {
+			this._eValue.innerHTML =
+				Format.nanoteslas(this._measurement.get('e'));
+		}
+		else {
+			this._eValue.innerHTML = '--';
+		}
+		if(this._measurement.get('z')) {
+			this._zValue.innerHTML =
+				Format.nanoteslas(this._measurement.get('z'));
+		}
+		else {
+			this._zValue.innerHTML = '--';
+		}
+		if(this._measurement.get('f')) {
+			this._fValue.innerHTML =
+				Format.nanoteslas(this._measurement.get('f'));
+		}
+		else {
+			this._fValue.innerHTML = '--';
+		}
 	};
 
 	MeasurementView.prototype._initialize = function () {
