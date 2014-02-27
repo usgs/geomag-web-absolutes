@@ -228,10 +228,14 @@ define([
 		describe.only('validation', function () {
 
 			var m = new MeasurementView(viewOptions),
-			    time = m._el.querySelector('.measurement-time').querySelector('input'),
-			    degrees = m._el.querySelector('.measurement-degrees').querySelector('input'),
-			    minutes = m._el.querySelector('.measurement-minutes').querySelector('input'),
-			    seconds = m._el.querySelector('.measurement-seconds').querySelector('input');
+			    time = m._el.querySelector('.measurement-time').
+							querySelector('input'),
+			    degrees = m._el.querySelector('.measurement-degrees').
+							querySelector('input'),
+			    minutes = m._el.querySelector('.measurement-minutes').
+							querySelector('input'),
+			    seconds = m._el.querySelector('.measurement-seconds').
+							querySelector('input');
 
 			var getBlurEvent = function () {
 				var blurEvent = document.createEvent('FocusEvent');
@@ -314,8 +318,8 @@ define([
 				expect(measurement.get('time')).to.be.equal(1393532420000);
 			});
 
-			// TODO, check that the model updates when ONLY valid time data is entered
-			it('updates model with valid time data, even though angle data is invalid', function () {
+			it('updates model with valid time, even when angle data is invalid',
+					function () {
 				var measurement = m._measurement;
 
 				time.value = '20:20:20';
@@ -329,9 +333,8 @@ define([
 				expect(measurement.get('time')).to.be.equal(1393532420000);
 			});
 
-
-			// TODO, check that the model updates when ONLY valid angle data is entered
-			it('updates model with valid angle data, even though time data is invalid', function () {
+			it('updates model with valid angle, even when time data is invalid',
+					function () {
 				var measurement = m._measurement;
 
 				time.value = 'f';

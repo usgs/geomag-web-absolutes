@@ -120,10 +120,9 @@ define([
 			    seconds = parseInt(_this._secondsInput.value||'0', 10),
 			    isTimeChange;
 
-			// validate all measurement inputs
-			//_this._validate(evt);
-
-			isTimeChange = (this.parentElement.className.indexOf('time') !== -1) ? true : false;
+			// is it the angle or time value that changed?
+			isTimeChange = (this.parentElement.className.indexOf('time') !== -1) ?
+					true : false;
 			if (isTimeChange) {
 				_this._validateTime(time);
 			} else {
@@ -179,7 +178,8 @@ define([
 		this._updateErrorState(this._timeInput, validTime, helpText);
 	};
 
-	MeasurementView.prototype._validateAngle = function (degrees, minutes, seconds) {
+	MeasurementView.prototype._validateAngle =
+			function (degrees, minutes, seconds) {
 		var validDegrees = true,
 				validMinutes = true,
 				validSeconds = true,
@@ -245,83 +245,6 @@ define([
 			el.title = helpText;
 		}
 	};
-
-	// MeasurementView.prototype._validate = function (evt) {
-	// 	var valid = false,
-	// 	    input = evt.currentTarget,
-	// 	    value = input.value,
-	// 	    parentElement = input.parentElement,
-	// 	    type = parentElement.className,
-	// 	    helpText, begin;
-
-	// 	// null is a valid value?
-	// 	if (value === null) {
-	// 		return;
-	// 	}
-
-	// 	if (type.indexOf('time') !== -1) {
-
-	// 		begin = this._observation.get('begin');
-
-	// 		if (this._stringToTime(value) < begin) {
-	// 			valid = false;
-	// 			helpText = 'Time is before start time.';
-	// 		}
-
-	// 		valid = Validate.validTime(value);
-	// 		helpText = 'Invalid Time. HH24:MI:SS';
-
-	// 		if (valid) {
-	// 			this._measurement.set({'time_error': null});
-	// 		} else {
-	// 			this._measurement.set({'time_error': helpText});
-	// 		}
-
-	// 	} else if (type.indexOf('degrees') !== -1) {
-	// 		valid = Validate.validDegrees(value);
-	// 		helpText = 'Invalid Degrees. Must be between, 0-360.';
-
-	// 		if (valid) {
-	// 			this._measurement.set({'degrees_error': null});
-	// 		} else {
-	// 			this._measurement.set({'degrees_error': helpText});
-	// 		}
-
-	// 	} else if (type.indexOf('minutes') !== -1) {
-	// 		valid = Validate.validMinutes(value);
-	// 		helpText = 'Invalid Minutes. Must be between, 0-60.';
-
-	// 		if (valid) {
-	// 			this._measurement.set({'minutes_error': null});
-	// 		} else {
-	// 			this._measurement.set({'minutes_error': helpText});
-	// 		}
-
-	// 	} else if (type.indexOf('seconds') !== -1) {
-	// 		valid = Validate.validSeconds(value);
-	// 		helpText = 'Invalid Seconds. Must be between, 0-60.';
-
-	// 		if (valid) {
-	// 			this._measurement.set({'seconds_error': null});
-	// 		} else {
-	// 			this._measurement.set({'seconds_error': helpText});
-	// 		}
-
-	// 	}
-
-	// 	if (valid){
-	// 		// passes validation
-	// 		Util.removeClass(input, 'error');
-	// 		input.removeAttribute('title');
-	// 	} else {
-	// 		// does not pass validation
-	// 		input.className = 'error';
-	// 		input.title = helpText;
-	// 	}
-
-	// 	this._measurement.setAngleError();
-
-	// };
 
 	/**
 	 * @param time {Integer}
