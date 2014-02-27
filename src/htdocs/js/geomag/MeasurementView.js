@@ -169,7 +169,7 @@ define([
 		if (!Validate.validTime(time)) {
 			validTime = false;
 			helpText = 'Invalid Time. HH24:MI:SS';
-		} else if (this._stringToTime(time) < begin) {
+		} else if (Format.parseRelativeTime(time) < begin) {
 			validTime = false;
 			helpText = 'Time is before start time.';
 		}
@@ -249,68 +249,6 @@ define([
 			el.className = 'error';
 			el.title = helpText;
 		}
-	};
-
-	/**
-	 * @param time {Integer}
-	 *      Timestamp (in milliseconds) since the epoch.
-	 *
-	 * @return {String}
-	 *      A string formatted as "HH:mm:ss" representing the input time.
-	 */
-	MeasurementView.prototype._timeToString = function (time) {
-		var offset = new Date(time),
-		    h = offset.getUTCHours(),
-		    m = offset.getUTCMinutes(),
-		    s = offset.getUTCSeconds();
-
-		return '' + (h<10?'0':'') + h + (m<10?':0':':') + m + (s<10?':0':':') + s;
-	};
-
-	/**
-	 * @param time {String}
-	 *      The formatted time string to parse. The date for the returned time
-	 *      is inherited from the observation "begin" attribute.
-	 *
-	 * @return {Integer}
-	 *      The millisecond timestamp since the epoch.
-	 */
-	MeasurementView.prototype._stringToTime = function (time) {
-		var observationOffset = this._observation.get('begin');
-
-		var timeString = time.replace(/[^\d]/g, ''),
-		    offset = null;
-
-		if (observationOffset) {
-			observationOffset = new Date(observationOffset);
-		} else {
-			observationOffset = new Date();
-		}
-
-		if (timeString.length === 4) {
-			// HHMM
-			offset = Date.UTC(observationOffset.getUTCFullYear(),
-					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
-					parseInt(timeString.substr(0, 2), 10),
-					parseInt(timeString.substr(2, 2), 10),
-					0, 0);
-		} else if (timeString.length === 5) {
-			// HMMSS
-			offset = Date.UTC(observationOffset.getUTCFullYear(),
-					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
-					parseInt(timeString.substr(0, 1), 10),
-					parseInt(timeString.substr(1, 2), 10),
-					parseInt(timeString.substr(3, 2), 10), 0);
-		} else if (timeString.length === 6) {
-			// HHMMSS
-			offset = Date.UTC(observationOffset.getUTCFullYear(),
-					observationOffset.getUTCMonth(), observationOffset.getUTCDate(),
-					parseInt(timeString.substr(0, 2), 10),
-					parseInt(timeString.substr(2, 2), 10),
-					parseInt(timeString.substr(4, 2), 10), 0);
-		}
-
-		return offset;
 	};
 
 	/**
