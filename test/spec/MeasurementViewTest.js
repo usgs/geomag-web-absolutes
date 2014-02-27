@@ -227,7 +227,7 @@ define([
 			});
 		});
 
-		describe.only('validation', function () {
+		describe('validation', function () {
 
 			var m = new MeasurementView(viewOptions),
 			    time = m._el.querySelector('.measurement-time').

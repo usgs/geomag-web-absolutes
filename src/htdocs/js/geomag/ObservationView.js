@@ -51,7 +51,6 @@ define([
 	 */
 	ObservationView.prototype._initialize = function () {
 		var el = this._el,
-		    _this = this,
 		    factory = this._options.factory,
 		    calculator = this._options.baselineCalculator,
 		    realtimeDataFactory = this._options.realtimeDataFactory;
