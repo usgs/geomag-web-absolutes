@@ -8,7 +8,9 @@ define([
 	var NANOTESLAS = 'nT',
 	    DEGREES = '°',
 	    MINUTES = '\'',
-	    DEFAULT_DIGITS = 2;
+	    DEFAULT_DIGITS = 2,
+	    CELSIUS = '°C',
+	    FAHRENHEIT = '°F';
 
 	var Formatter = {};
 
@@ -370,6 +372,94 @@ define([
 		}
 
 		return this.date(time) + ' ' + this.time(time);
+	};
+
+		/**
+	 * Degrees, as a temperature
+	 *
+	 * @param temperature {Number} Decimal degrees
+	 * @param digits {Integer} Numbers after decimal place
+	 *
+	 * @return formatted number with units
+	 *    {Float} Temperature degrees with (digits) decimal places
+	 */
+	Formatter.celsius = function (temperature, digits) {
+		if (typeof digits === 'undefined') {
+			digits = DEFAULT_DIGITS;
+		}
+
+		if (typeof temperature === null) {
+			return '-';
+		}
+
+		return this.rawCelsius(temperature.toFixed(digits));
+	};
+
+	/**
+	 * Degrees, as a temperature, no rounding
+	 *
+	 * @param temperature {Number|String}
+	 *
+	 * @return formatted number with units
+	 *    {Float} Temperature degrees
+	 */
+	Formatter.rawCelsius = function (temperature) {
+		var buf = [];
+
+		if (typeof temperature === null) {
+			return '-';
+		}
+
+		buf.push(
+				'<span class="temperature">',
+					temperature, this._units(CELSIUS),
+				'</span>');
+
+		return buf.join('');
+	};
+
+		/**
+	 * Degrees, as a temperature
+	 *
+	 * @param temperature {Number} Decimal degrees
+	 * @param digits {Integer} Numbers after decimal place
+	 *
+	 * @return formatted number with units
+	 *    {Float} Temperature degrees with (digits) decimal places
+	 */
+	Formatter.fahrenheit = function (temperature, digits) {
+		if (typeof digits === 'undefined') {
+			digits = DEFAULT_DIGITS;
+		}
+
+		if (typeof temperature === null) {
+			return '-';
+		}
+
+		return this.rawCelsius(temperature.toFixed(digits));
+	};
+
+	/**
+	 * Degrees, as a temperature, no rounding
+	 *
+	 * @param temperature {Number|String}
+	 *
+	 * @return formatted number with units
+	 *    {Float} Temperature degrees
+	 */
+	Formatter.rawFahrenheit = function (temperature) {
+		var buf = [];
+
+		if (typeof temperature === null) {
+			return '-';
+		}
+
+		buf.push(
+				'<span class="temperature">',
+					temperature, this._units(FAHRENHEIT),
+				'</span>');
+
+		return buf.join('');
 	};
 
 	return Formatter;
