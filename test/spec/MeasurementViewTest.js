@@ -112,22 +112,22 @@ define([
 							querySelector('input');
 
 			var getBlurEvent = function () {
-				var blurEvent = document.createEvent('FocusEvent');
-				blurEvent.initUIEvent('blur', true, true, window, 1);
+				var blurEvent = document.createEvent('HTMLEvents');
+				blurEvent.initEvent('blur', false, false);
 				return blurEvent;
 			};
 
 
 			it('correctly validates all invalid measurement values', function () {
 				time.value = 'f';
-				time.dispatchEvent(getBlurEvent());
 				degrees.value = 'f';
-				degrees.dispatchEvent(getBlurEvent());
 				minutes.value = 'f';
-				minutes.dispatchEvent(getBlurEvent());
 				seconds.value = 'f';
 
 				// trigger blur on each element
+				time.dispatchEvent(getBlurEvent());
+				degrees.dispatchEvent(getBlurEvent());
+				minutes.dispatchEvent(getBlurEvent());
 				seconds.dispatchEvent(getBlurEvent());
 
 				expect(time.className).to.equal('error');
