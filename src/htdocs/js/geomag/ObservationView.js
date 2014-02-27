@@ -219,7 +219,7 @@ define([
 	/**
 	 * Create a panel at the bottom of the Observation view to create or delete
 	 * the observation
-	 * 
+	 *
 	 */
 	ObservationView.prototype._createControls = function () {
 		var controls = this._el.querySelector('.observation-view-controls'),
