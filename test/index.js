@@ -37,8 +37,7 @@ require.config({
 		sinon: 'sinon/pkg/sinon',
 		mvc: '/hazdev-webutils/src/mvc',
 		util: '/hazdev-webutils/src/util',
-		tablist: '/hazdev-tablist/src/tablist',
-		sinon: 'sinon/pkg/sinon'
+		tablist: '/hazdev-tablist/src/tablist'
 	},
 	shim: {
 		mocha: {
