@@ -34,7 +34,8 @@ define([
 			    measurements;
 
 			beforeEach(function () {
-				renderSpy = sinon.spy(HorizontalIntensitySummaryView.prototype, 'render');
+				renderSpy =
+						sinon.spy(HorizontalIntensitySummaryView.prototype, 'render');
 				reading = new Reading();
 				calculator = new ObservationBaselineCalculator();
 				view = new HorizontalIntensitySummaryView({
@@ -65,9 +66,10 @@ define([
 				}
 			});
 
-			it('should render when reading horizontal_intensity_valid changes', function () {
-					reading.trigger('change:horizontal_intensity_valid');
-					expect(renderSpy.callCount).to.equal(2);
+			it('should render when reading horizontal_intensity_valid changes',
+					function () {
+				reading.trigger('change:horizontal_intensity_valid');
+				expect(renderSpy.callCount).to.equal(2);
 			});
 
 			it('should render when calculator changes', function () {
