@@ -374,7 +374,7 @@ define([
 		return this.date(time) + ' ' + this.time(time);
 	};
 
-		/**
+	/**
 	 * Degrees, as a temperature
 	 *
 	 * @param temperature {Number} Decimal degrees
@@ -384,12 +384,12 @@ define([
 	 *    {Float} Temperature degrees with (digits) decimal places
 	 */
 	Formatter.celsius = function (temperature, digits) {
-		if (typeof digits === 'undefined') {
-			digits = DEFAULT_DIGITS;
+		if (temperature === null) {
+			return '-';
 		}
 
-		if (typeof temperature === null) {
-			return '-';
+		if (typeof digits === 'undefined') {
+			digits = DEFAULT_DIGITS;
 		}
 
 		return this.rawCelsius(temperature.toFixed(digits));
@@ -406,19 +406,19 @@ define([
 	Formatter.rawCelsius = function (temperature) {
 		var buf = [];
 
-		if (typeof temperature === null) {
+		if (temperature === null) {
 			return '-';
 		}
 
 		buf.push(
-				'<span class="temperature">',
-					temperature, this._units(CELSIUS),
-				'</span>');
+			'<span class="temperature">',
+			temperature, this._units(CELSIUS),
+			'</span>');
 
 		return buf.join('');
 	};
 
-		/**
+	/**
 	 * Degrees, as a temperature
 	 *
 	 * @param temperature {Number} Decimal degrees
@@ -428,12 +428,12 @@ define([
 	 *    {Float} Temperature degrees with (digits) decimal places
 	 */
 	Formatter.fahrenheit = function (temperature, digits) {
-		if (typeof digits === 'undefined') {
-			digits = DEFAULT_DIGITS;
+		if (temperature === null) {
+			return '-';
 		}
 
-		if (typeof temperature === null) {
-			return '-';
+		if (typeof digits === 'undefined') {
+			digits = DEFAULT_DIGITS;
 		}
 
 		return this.rawCelsius(temperature.toFixed(digits));
@@ -450,14 +450,14 @@ define([
 	Formatter.rawFahrenheit = function (temperature) {
 		var buf = [];
 
-		if (typeof temperature === null) {
+		if (temperature === null) {
 			return '-';
 		}
 
 		buf.push(
-				'<span class="temperature">',
-					temperature, this._units(FAHRENHEIT),
-				'</span>');
+			'<span class="temperature">',
+			temperature, this._units(FAHRENHEIT),
+			'</span>');
 
 		return buf.join('');
 	};
