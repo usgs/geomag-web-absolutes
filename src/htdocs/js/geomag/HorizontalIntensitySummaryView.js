@@ -56,7 +56,7 @@ define([
 	HorizontalIntensitySummaryView.prototype._initialize = function () {
 		var el = this._el,
 		    i = null,
-			  len = null;
+		    len = null;
 		el.innerHTML = [
 			'<th class="name" scope="row"></th>',
 			'<td class="valid"><input type="checkbox" /></td>',
@@ -125,10 +125,10 @@ define([
 		return values;
 	};
 
-HorizontalIntensitySummaryView.prototype._onChange = function () {
-	this._reading.set({
-		horizontal_intensity_valid: (this._valid.checked ? 'Y' : 'N')
-	});
-};
+	HorizontalIntensitySummaryView.prototype._onChange = function () {
+		this._reading.set({
+			horizontal_intensity_valid: (this._valid.checked ? 'Y' : 'N')
+		});
+	};
 	return HorizontalIntensitySummaryView;
 });
