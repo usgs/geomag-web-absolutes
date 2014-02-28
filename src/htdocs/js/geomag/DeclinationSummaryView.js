@@ -64,8 +64,8 @@ define([
 
 	DeclinationSummaryView.prototype._initialize = function () {
 		var el = this._el,
-				i = null,
-				len = null;
+		    i = null,
+		    len = null;
 
 		el.innerHTML = [
 			'<th class="name" scope="row"></th>',
