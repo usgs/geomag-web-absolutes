@@ -598,6 +598,16 @@ VALUES ( ( SELECT id FROM observatory WHERE code='GUA' ), 'West', 1000*strftime(
          ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='808075' AND begin=1000*strftime('%s','1970-01-01 00:00:00') ),
          ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='030' AND begin=1000*strftime('%s','1970-01-01 00:00:00') )
 );
+INSERT INTO PIER (observatory_id, name, begin, end, correction, default_mark_id, default_electronics_id, default_theodolite_id)
+VALUES ( ( SELECT id FROM observatory WHERE code='GUA' ), 'Main', 1000*strftime('%s','2007-09-25 04:58:00'), 1000*strftime('%s','2013-04-01 00:00:00'), 9.6, NULL,
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='808075' AND begin=1000*strftime('%s','1970-01-01 00:00:00') ),
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='030' AND begin=1000*strftime('%s','1970-01-01 00:00:00') )
+);
+INSERT INTO PIER (observatory_id, name, begin, end, correction, default_mark_id, default_electronics_id, default_theodolite_id)
+VALUES ( ( SELECT id FROM observatory WHERE code='GUA' ), 'Main', 1000*strftime('%s','2013-04-01 00:00:00'), NULL, 7.9, NULL,
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='808075' AND begin=1000*strftime('%s','1970-01-01 00:00:00') ),
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='030' AND begin=1000*strftime('%s','1970-01-01 00:00:00') )
+);
 
 /* set observatory.default_pier_id to West */
 UPDATE observatory
@@ -615,6 +625,13 @@ VALUES (
                          AND name='West'
                          AND begin = 1000*strftime('%s','2013-04-01 00:00:00') ),
    'South Monument', 1000*strftime('%s','1970-01-01 00:00:00'), NULL, 2.5233
+);
+INSERT INTO mark (pier_id, name, begin, end, azimuth)
+VALUES (
+  (SELECT id FROM pier WHERE observatory_id=(SELECT id FROM observatory WHERE observatory.code='GUA')
+                         AND name='Main'
+                         AND begin = 1000*strftime('%s','2013-04-01 00:00:00') ),
+   'Azimuth', 1000*strftime('%s','1970-01-01 00:00:00'), NULL, 2.5233
 );
 
 /* update pier.default_mark_id */
