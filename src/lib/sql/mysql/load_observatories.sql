@@ -121,6 +121,11 @@ VALUES ( @observatory_id, 'Main', 1000*unix_timestamp('2005-07-07 18:00:00'), NU
          ( SELECT id FROM instrument WHERE observatory_id=@observatory_id AND serial_number='814503' AND begin=1000*unix_timestamp('2012-01-01 00:00:00') ),
          ( SELECT id FROM instrument WHERE observatory_id=@observatory_id AND serial_number='110' AND begin=1000*unix_timestamp('2012-01-01 00:00:00') )
 );
+INSERT INTO PIER (observatory_id, name, begin, end, correction, default_mark_id, default_electronics_id, default_theodolite_id)
+VALUES ( @observatory_id, 'AUX', 1000*unix_timestamp('2005-07-07 18:00:00'), NULL, -20.7, NULL,
+         ( SELECT id FROM instrument WHERE observatory_id=@observatory_id AND serial_number='814503' AND begin=1000*unix_timestamp('2012-01-01 00:00:00') ),
+         ( SELECT id FROM instrument WHERE observatory_id=@observatory_id AND serial_number='110' AND begin=1000*unix_timestamp('2012-01-01 00:00:00') )
+);
 
 /* set observatory.default_pier_id to Main */
 /* Note: MySQL's prohibits using 'SELECT FROM' clauses for the target table in the SET and/or */
@@ -143,6 +148,13 @@ VALUES (
                          AND name='Main'
                          AND begin = 1000*unix_timestamp('2005-07-07 18:00:00') ),
    'AZ', 1000*unix_timestamp('1970-01-01 00:00:00'), NULL, 199.1383
+);
+INSERT INTO mark (pier_id, name, begin, end, azimuth)
+VALUES (
+  (SELECT id FROM pier WHERE observatory_id=@observatory_id
+                         AND name='Aux'
+                         AND begin = 1000*unix_timestamp('2005-07-07 18:00:00') ),
+   'Aux', 1000*unix_timestamp('1970-01-01 00:00:00'), NULL, 199.0933
 );
 
 /* update pier.default_mark_id */
