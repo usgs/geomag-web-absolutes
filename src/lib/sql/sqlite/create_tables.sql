@@ -80,6 +80,7 @@ CREATE TABLE [observation] (
 [mark_id] INTEGER NOT NULL,
 [electronics_id] INTEGER,
 [theodolite_id] INTEGER,
+[reviewed] CHAR(1) NOT NULL DEFAULT 'N',
 [annotation] TEXT NULL,
 CONSTRAINT observation_uniq UNIQUE (observatory_id, begin) ON CONFLICT ABORT,
 FOREIGN KEY(observatory_id) REFERENCES observatory(id),
@@ -97,6 +98,7 @@ CREATE TABLE [reading] (
 [set_number] INTEGER NOT NULL, 
 [observer_user_id]  INTEGER,
 [declination_valid] CHAR(1) NOT NULL DEFAULT 'Y',
+[declination_shift] INTEGER NOT NULL,
 [horizontal_intensity_valid] CHAR(1) NOT NULL DEFAULT 'Y',
 [vertical_intensity_valid] CHAR(1) NOT NULL DEFAULT 'Y',
 [annotation] TEXT NULL,
@@ -111,11 +113,11 @@ DROP TABLE IF EXISTS [measurement];
 CREATE TABLE [measurement] (
 [ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
 [reading_id] INTEGER NOT NULL,
-[type] CHAR(20) NOT NULL CHECK(type IN ('FirstMarkUp','FirstMarkDown','SecondMarkUp','SecondMarkDown','NorthDownTime','NorthUpTime','SouthDownTime','SouthUpTime','EastDownTime','EastUpTime','WestDownTime','WestUpTime')), 
+[type] CHAR(20) NOT NULL CHECK(type IN ('FirstMarkUp','FirstMarkDown','SecondMarkUp','SecondMarkDown','NorthDown','NorthUp','SouthDown','SouthUp','EastDown','EastUp','WestDown','WestUp')), 
 [time] INTEGER,
-[angle] INTEGER NOT NULL,
+[angle] REAL NOT NULL,
 [h] NUMERIC,
-[d] NUMERIC,
+[e] NUMERIC,
 [z] NUMERIC,
 [f] NUMERIC,
 FOREIGN KEY(reading_id) REFERENCES reading(id)
@@ -157,3 +159,4 @@ FOREIGN KEY(role_id) REFERENCES role(id)
 );
 
 PRAGMA foreign_keys = ON;
+
