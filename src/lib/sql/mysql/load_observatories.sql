@@ -784,6 +784,20 @@ VALUES (
                          AND begin = 1000*unix_timestamp('2010-01-01 00:00:00') ),
    'Main Azimuth', 1000*unix_timestamp('1970-01-01 00:00:00'), NULL, 142.6483
 );
+INSERT INTO mark (pier_id, name, begin, end, azimuth)
+VALUES (
+  (SELECT id FROM pier WHERE observatory_id=@observatory_id
+                         AND name='Main'
+                         AND begin = 1000*unix_timestamp('2010-01-01 00:00:00') ),
+   'Main', 1000*unix_timestamp('1970-01-01 00:00:00'), NULL, 142.6483
+);
+INSERT INTO mark (pier_id, name, begin, end, azimuth)
+VALUES (
+  (SELECT id FROM pier WHERE observatory_id=@observatory_id
+                         AND name='Main'
+                         AND begin = 1000*unix_timestamp('2010-01-01 00:00:00') ),
+   'Main', 1000*unix_timestamp('1970-01-01 00:00:00'), NULL, 142.3217
+);
 
 /* update pier.default_mark_id */
 /* See note above explaining why user-defined variables are needed */
