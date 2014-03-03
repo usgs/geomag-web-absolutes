@@ -82,7 +82,7 @@ define([
 				'<select>',
 					'<option value="-180">-180</option>',
 					'<option value="0" selected="selected">0</option>',
-					'<option value="+180">+180</option>',
+					'<option value="180">+180</option>',
 				'</select>',
 			'</td>'
 
