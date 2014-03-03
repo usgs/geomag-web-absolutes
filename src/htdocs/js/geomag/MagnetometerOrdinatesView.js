@@ -37,52 +37,49 @@ define([
 		this._calculator = this._options.baselineCalculator;
 
 		this._el.innerHTML = [
-			'<div class="ordinatesHEZF">',
-				'<table>',
-					'<thead class="magnetometerOrdinatesHead">',
-						'<tr>',
-							'<th>&nbsp</th>',
-							'<th scope="col" class="mean">Ordinate Mean</th>',
-							'<th scope="col" class="absolute">Absolute</th>',
-							'<th scope="col" class="baseline">Baseline</th>',
-						'</tr>',
-					'</thead>',
-					'<tbody class="magnetometerOrdinatesCells">',
-						'<tr>',
-							'<th class="h">H</th>',
-							'<td class="mean hMean"></td>',
-							'<td class="absolute absoluteH"></td>',
-							'<td class="baseline hBaseline"></td>',
-						'</tr>',
-						'<tr>',
-							'<th class="e">E</th>',
-							'<td class="mean eMean"></td>',
-							'<td class="absolute absoluteE"></td>',
-							'<td class="baseline eBaseline"></td>',
-						'</tr>',
-						'<tr>',
-							'<th class="d">D</th>',
-							'<td class="mean dMean"></td>',
-							'<td class="absolute absoluteD"></td>',
-							'<td class="baseline dBaseline"></td>',
-						'</tr>',
-						'<tr>',
-							'<th class="z">Z</th>',
-							'<td class="mean zMean"></td>',
-							'<td class="absolute absoluteZ"></td>',
-							'<td class="baseline zBaseline"></td>',
-						'</tr>',
-						'<tr>',
-							'<th class="f">F</th>',
-							'<td class="mean fMean"></td>',
-							'<td class="absolute absoluteF"></td>',
-							'<td class="baseline fBaseline"></td>',
-						'</tr>',
-					'</tbody>',
-				'</table>',
-				'<p class="scaleValue">',
-				'</p>',
-			'</div>',
+			'<table>',
+				'<thead>',
+					'<tr>',
+						'<th scope="col" class="channel">Channel</th>',
+						'<th scope="col" class="mean">Ordinate Mean</th>',
+						'<th scope="col" class="absolute">Absolute</th>',
+						'<th scope="col" class="baseline">Baseline</th>',
+					'</tr>',
+				'</thead>',
+				'<tbody>',
+					'<tr>',
+						'<th class="channel h">H</th>',
+						'<td class="mean hMean"></td>',
+						'<td class="absolute absoluteH"></td>',
+						'<td class="baseline hBaseline"></td>',
+					'</tr>',
+					'<tr>',
+						'<th class="channel e">E</th>',
+						'<td class="mean eMean"></td>',
+						'<td class="absolute absoluteE"></td>',
+						'<td class="baseline eBaseline"></td>',
+					'</tr>',
+					'<tr>',
+						'<th class="channel d">D</th>',
+						'<td class="mean dMean"></td>',
+						'<td class="absolute absoluteD"></td>',
+						'<td class="baseline dBaseline"></td>',
+					'</tr>',
+					'<tr>',
+						'<th class="channel z">Z</th>',
+						'<td class="mean zMean"></td>',
+						'<td class="absolute absoluteZ"></td>',
+						'<td class="baseline zBaseline"></td>',
+					'</tr>',
+					'<tr>',
+						'<th class="channel f">F</th>',
+						'<td class="mean fMean"></td>',
+						'<td class="absolute absoluteF"></td>',
+						'<td class="baseline fBaseline"></td>',
+					'</tr>',
+				'</tbody>',
+			'</table>',
+			'<p class="scaleValue"></p>'
 		].join('');
 
 		this._hMean = this._el.querySelector('.hMean');
@@ -122,7 +119,7 @@ define([
 		measurements[Measurement.NORTH_DOWN][0].
 				on('change', this.render, this);
 		// hook up to calculator on change.
-		// for changes to pier and mark. 
+		// for changes to pier and mark.
 		this._calculator.on('change', this.render, this);
 
 		this.render();
@@ -161,10 +158,12 @@ define([
 		this._zBaseline.innerHTML =
 			Format.nanoteslas(calculator.baselineZ(reading));
 
-		this._scaleValue.innerHTML =
-				'Ordinate Mean D is calculated using (Corrected F * scaleValue / 60)' +
-				'<br> Where scale Value = ' +
-				calculator.scaleValue(reading).toFixed(4);
+		this._scaleValue.innerHTML = [
+				'Ordinate Mean D is calculated using ',
+				'<code>(Corrected F * scaleValue / 60)</code>',
+				', where <code>',
+						'scaleValue = ', calculator.scaleValue(reading).toFixed(4),
+				'</code>'].join('');
 	};
 
 

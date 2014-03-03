@@ -1,34 +1,21 @@
 .magnetometer-ordinates-output {
 
+	.channel,
 	.mean,
 	.absolute,
 	.baseline {
-		text-align:right;
-	}
-
-	th.h,
-	th.e,
-	th.d,
-	th.z,
-	th.f {
-		text-align:right;
 		padding-right:16px;
-
-		&:after {
-			content:':';
-		}
 	}
 
 	td.mean,
 	td.absolute,
 	td.baseline {
-		padding-right:10px;
-		width:10em;
+		text-align:right;
 	}
 
 	.dMean,
 	.scaleValue {
-	font-family:script;
-	font-style:oblique;
+		font-style:italic;
 	}
+
 }
