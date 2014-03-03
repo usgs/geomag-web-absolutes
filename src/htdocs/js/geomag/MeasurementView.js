@@ -83,7 +83,8 @@ define([
 	MeasurementView.prototype._initialize = function () {
 		var _this = this,
 		    onTimeChange = null,
-		    onAngleChange = null;
+		    onAngleChange = null,
+		    begin;
 
 		this._measurement = this._options.measurement;
 		this._observation = this._options.observation;
@@ -119,11 +120,13 @@ define([
 
 			// validate time change
 			error = _this._validateTime(time);
+			begin = _this._observation.get('begin');
 
 			if (error === null) {
 				// no errors on measurement, set measurement values
 				_this._measurement.set({
-					'time': Format.parseRelativeTime(time),
+					// TODO, add offset
+					'time': Format.parseRelativeTime(time, begin),
 					'time_error': null
 				});
 			} else {
@@ -173,7 +176,8 @@ define([
 		if (!Validate.validTime(time)) {
 			validTime = false;
 			helpText = 'Invalid Time. HH24:MI:SS';
-		} else if (Format.parseRelativeTime(time) < begin) {
+			//TODO add offset
+		} else if (Format.parseRelativeTime(time, begin) < begin) {
 			validTime = false;
 			helpText = 'Time is before start time.';
 		}
