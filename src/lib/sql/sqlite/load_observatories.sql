@@ -112,6 +112,11 @@ VALUES ( ( SELECT id FROM observatory WHERE code='BOU' ), 'Main', 1000*strftime(
          ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='BOU') AND serial_number='814503' AND begin=1000*strftime('%s','2012-01-01 00:00:00') ),
          ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='BOU') AND serial_number='110' AND begin=1000*strftime('%s','2012-01-01 00:00:00') )
 );
+INSERT INTO PIER (observatory_id, name, begin, end, correction, default_mark_id, default_electronics_id, default_theodolite_id)
+VALUES ( ( SELECT id FROM observatory WHERE code='BOU' ), 'AUX', 1000*strftime('%s','2005-07-07 18:00:00'), NULL, -20.7, NULL,
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='BOU') AND serial_number='814503' AND begin=1000*strftime('%s','2012-01-01 00:00:00') ),
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='BOU') AND serial_number='110' AND begin=1000*strftime('%s','2012-01-01 00:00:00') )
+);
 
 /* set observatory.default_pier_id to Main */
 UPDATE observatory 
@@ -131,6 +136,15 @@ VALUES (
    'AZ', 1000*strftime('%s','1970-01-01 00:00:00'), NULL, 199.1383 
 );
 
+/* add Mark=AUX */
+INSERT INTO mark (pier_id, name, begin, end, azimuth) 
+VALUES ( 
+  (SELECT id FROM pier WHERE observatory_id=(SELECT id FROM observatory WHERE observatory.code='BOU') 
+                         AND name='AUX' 
+                         AND 1000*strftime('%s','2005-07-07 18:00:00')),
+   'AUX', 1000*strftime('%s','1970-01-01 00:00:00'), NULL, 199.0933 
+);
+
 /* update pier.default_mark_id */
 UPDATE PIER SET default_mark_id = (SELECT id FROM mark WHERE name = 'AZ'
                                      AND begin = 1000*strftime('%s','1970-01-01 00:00:00')
@@ -142,6 +156,20 @@ UPDATE PIER SET default_mark_id = (SELECT id FROM mark WHERE name = 'AZ'
                                    )
 WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observatory obs WHERE obs.code='BOU' )
                                   AND name='Main'
+                                  AND begin=1000*strftime('%s','2005-07-07 18:00:00')
+            )                                   
+;
+
+UPDATE PIER SET default_mark_id = (SELECT id FROM mark WHERE name = 'AUX'
+                                     AND begin = 1000*strftime('%s','1970-01-01 00:00:00')
+                                     AND pier_id = (SELECT id FROM pier 
+                                                    WHERE observatory_id = (SELECT id FROM observatory obs WHERE obs.code='BOU')
+                                                      AND name = 'Main'
+                                                      AND begin = begin=1000*strftime('%s','2005-07-07 18:00:00')
+                                                    )
+                                   )
+WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observatory obs WHERE obs.code='BOU' )
+                                  AND name='AUX'
                                   AND begin=1000*strftime('%s','2005-07-07 18:00:00')
             )                                   
 ;
@@ -527,7 +555,11 @@ VALUES ( ( SELECT id FROM observatory WHERE code='FRN' ), 'Main', 1000*strftime(
          ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='FRN') AND serial_number='154181' AND begin=1000*strftime('%s','1970-01-01 00:00:00') ),
          ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='FRN') AND serial_number='140' AND begin=1000*strftime('%s','1970-01-01 00:00:00') )
 );
-
+INSERT INTO PIER (observatory_id, name, begin, end, correction, default_mark_id, default_electronics_id, default_theodolite_id)
+VALUES ( ( SELECT id FROM observatory WHERE code='FRN' ), 'Default', 1000*strftime('%s','2009-04-01 00:00:00'), NULL, -15.5, NULL,
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='FRN') AND serial_number='154181' AND begin=1000*strftime('%s','1970-01-01 00:00:00') ),
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='FRN') AND serial_number='140' AND begin=1000*strftime('%s','1970-01-01 00:00:00') )
+);
 
 /* set observatory.default_pier_id to Main */
 UPDATE observatory 
@@ -546,6 +578,13 @@ VALUES (
                          AND begin = 1000*strftime('%s','2009-04-01 00:00:00') ),
    'Azimuth Pin', 1000*strftime('%s','1970-01-01 00:00:00'), NULL, 16.75
 );
+INSERT INTO mark (pier_id, name, begin, end, azimuth) 
+VALUES ( 
+  (SELECT id FROM pier WHERE observatory_id=(SELECT id FROM observatory WHERE observatory.code='FRN') 
+                         AND name='Default' 
+                         AND begin = 1000*strftime('%s','2009-04-01 00:00:00') ),
+   'Default', 1000*strftime('%s','1970-01-01 00:00:00'), NULL, 16.75
+);
 
 /* update pier.default_mark_id */
 UPDATE PIER SET default_mark_id = (SELECT id FROM mark WHERE name = 'Azimuth Pin'
@@ -562,7 +601,19 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
             )                                   
 ;
 
-/* GUA - add observatory entry */ 
+UPDATE PIER SET default_mark_id = (SELECT id FROM mark WHERE name = 'Azimuth Pin'
+                                     AND begin = 1000*strftime('%s','1970-01-01 00:00:00')
+                                     AND pier_id = (SELECT id FROM pier 
+                                                    WHERE observatory_id = (SELECT id FROM observatory obs WHERE obs.code='FRN')
+                                                      AND name = 'Default'
+                                                      AND begin = 1000*strftime('%s','2009-04-01 00:00:00')
+                                                    )
+                                   )
+WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observatory obs WHERE obs.code='FRN' )
+                                  AND name='Default'
+                                  AND begin = 1000*strftime('%s','2009-04-01 00:00:00')
+            )                                   
+;/* GUA - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
  VALUES ('Guam (GUA)','GUA','Dededo, Guam','13.5895' ,'144.8694' ,'5.30' ,'215.64' ,'140' ,'HDZF');
  
@@ -595,6 +646,17 @@ VALUES ( ( SELECT id FROM observatory WHERE code='GUA' ), 'West', 1000*strftime(
 );
 INSERT INTO PIER (observatory_id, name, begin, end, correction, default_mark_id, default_electronics_id, default_theodolite_id)
 VALUES ( ( SELECT id FROM observatory WHERE code='GUA' ), 'West', 1000*strftime('%s','2013-04-01 00:00:00'), NULL, 7.9, NULL,
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='808075' AND begin=1000*strftime('%s','1970-01-01 00:00:00') ),
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='030' AND begin=1000*strftime('%s','1970-01-01 00:00:00') )
+);
+
+INSERT INTO PIER (observatory_id, name, begin, end, correction, default_mark_id, default_electronics_id, default_theodolite_id)
+VALUES ( ( SELECT id FROM observatory WHERE code='GUA' ), 'Main', 1000*strftime('%s','2007-09-25 04:58:00'), 1000*strftime('%s','2013-04-01 00:00:00'), 9.6, NULL,
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='808075' AND begin=1000*strftime('%s','1970-01-01 00:00:00') ),
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='030' AND begin=1000*strftime('%s','1970-01-01 00:00:00') )
+);
+INSERT INTO PIER (observatory_id, name, begin, end, correction, default_mark_id, default_electronics_id, default_theodolite_id)
+VALUES ( ( SELECT id FROM observatory WHERE code='GUA' ), 'Main', 1000*strftime('%s','2013-04-01 00:00:00'), NULL, 7.9, NULL,
          ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='808075' AND begin=1000*strftime('%s','1970-01-01 00:00:00') ),
          ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='GUA') AND serial_number='030' AND begin=1000*strftime('%s','1970-01-01 00:00:00') )
 );
@@ -632,7 +694,19 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
             )                                   
 ;
 
-/* HON - add observatory entry */ 
+UPDATE PIER SET default_mark_id = (SELECT id FROM mark WHERE name = 'South Monument'
+                                     AND begin = 1000*strftime('%s','1970-01-01 00:00:00')
+                                     AND pier_id = (SELECT id FROM pier 
+                                                    WHERE observatory_id = (SELECT id FROM observatory obs WHERE obs.code='GUA')
+                                                      AND name = 'Main'
+                                                      AND begin = 1000*strftime('%s','2013-04-01 00:00:00')
+                                                    )
+                                   )
+WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observatory obs WHERE obs.code='GUA' )
+                                  AND name='Main'
+                                  AND begin = 1000*strftime('%s','2013-04-01 00:00:00')
+            )                                   
+;/* HON - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
  VALUES ('Honolulu (HON)','HON','Ewa Beach, HI','21.3166' ,'157.9996' ,'21.64' ,'269.74' ,'4' ,'HDZF');
  
@@ -922,6 +996,12 @@ VALUES ( ( SELECT id FROM observatory WHERE code='SJG' ), 'Main', 1000*strftime(
          ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='SJG') AND serial_number='0126' AND begin=1000*strftime('%s','1970-01-01 00:00:00') )
 );
 
+INSERT INTO PIER (observatory_id, name, begin, end, correction, default_mark_id, default_electronics_id, default_theodolite_id)
+VALUES ( ( SELECT id FROM observatory WHERE code='SJG' ), 'N', 1000*strftime('%s','1970-01-01 00:00:00'), NULL, -55, NULL,
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='SJG') AND serial_number='154162' AND begin=1000*strftime('%s','1970-01-01 00:00:00') ),
+         ( SELECT id FROM instrument WHERE observatory_id=(SELECT id FROM observatory WHERE code='SJG') AND serial_number='0126' AND begin=1000*strftime('%s','1970-01-01 00:00:00') )
+);
+
 /* set observatory.default_pier_id to Main */
 UPDATE observatory 
 SET default_pier_id = (SELECT id FROM pier
@@ -940,6 +1020,14 @@ VALUES (
    'Main', 1000*strftime('%s','1970-01-01 00:00:00'), NULL, 117.3116
 );
 
+INSERT INTO mark (pier_id, name, begin, end, azimuth) 
+VALUES ( 
+  (SELECT id FROM pier WHERE observatory_id=(SELECT id FROM observatory WHERE observatory.code='SJG') 
+                         AND name='N' 
+                         AND begin = 1000*strftime('%s','1970-01-01 00:00:00') ),
+   'Main', 1000*strftime('%s','1970-01-01 00:00:00'), NULL, 63.6506
+);
+
 /* update pier.default_mark_id */
 UPDATE PIER SET default_mark_id = (SELECT id FROM mark WHERE name = 'Main'
                                      AND begin = 1000*strftime('%s','1970-01-01 00:00:00')
@@ -951,6 +1039,20 @@ UPDATE PIER SET default_mark_id = (SELECT id FROM mark WHERE name = 'Main'
                                    )
 WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observatory obs WHERE obs.code='SJG' )
                                   AND name='Main'
+                                  AND begin = 1000*strftime('%s','2008-01-18 14:00:00')
+            )                                   
+;
+
+UPDATE PIER SET default_mark_id = (SELECT id FROM mark WHERE name = 'Main'
+                                     AND begin = 1000*strftime('%s','1970-01-01 00:00:00')
+                                     AND pier_id = (SELECT id FROM pier 
+                                                    WHERE observatory_id = (SELECT id FROM observatory obs WHERE obs.code='SJG')
+                                                      AND name = 'N'
+                                                      AND begin = 1000*strftime('%s','2008-01-18 14:00:00')
+                                                    )
+                                   )
+WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observatory obs WHERE obs.code='SJG' )
+                                  AND name='N'
                                   AND begin = 1000*strftime('%s','2008-01-18 14:00:00')
             )                                   
 ;
@@ -1210,3 +1312,4 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
                                   AND begin = 1000*strftime('%s','1970-01-01 00:00:00')
             )                                   
 ;
+
