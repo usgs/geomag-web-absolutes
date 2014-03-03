@@ -201,7 +201,7 @@ define([
 
 		// SECONDS
 		if (!Validate.validSeconds(seconds)) {
-			validSeconds = Validate.validSeconds(seconds);
+			validSeconds = false;
 			helpText = 'Invalid Seconds. Must be between, 0-60.';
 		}
 		this._updateErrorState(this._secondsInput, validSeconds, helpText);
