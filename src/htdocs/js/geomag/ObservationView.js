@@ -77,11 +77,7 @@ define([
 		});
 		this._createControls();
 
-		// bind to measurement change
-		var _updateErrorCount = this._updateErrorCount.bind(this);
-		this._observation.eachMeasurement(function (measurement) {
-			measurement.on('change', _updateErrorCount);
-		});
+
 
 	};
 
@@ -114,6 +110,12 @@ define([
 		this._realtimeDataFactory.on('change:observatory', getRealtimeData);
 		observation.eachMeasurement(function (measurement) {
 			measurement.on('change:time', getRealtimeData);
+		});
+
+		// bind to measurement change
+		var _updateErrorCount = this._updateErrorCount.bind(this);
+		this._observation.eachMeasurement(function (measurement) {
+			measurement.on('change', _updateErrorCount);
 		});
 	};
 

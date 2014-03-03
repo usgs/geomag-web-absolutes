@@ -20,10 +20,7 @@ define([
 		'z': null,
 		'f': null,
 		'time_error':null,
-		'angle_error':null,
-		'degrees_error':null,
-		'minutes_error':null,
-		'seconds_error':null
+		'angle_error':null
 	};
 
 	/**
@@ -79,39 +76,11 @@ define([
 			errors.push(this.get('time_error'));
 		}
 
-		if (this.get('degrees_error') !== null) {
-			errors.push(this.get('degrees_error'));
-		}
-
-		if (this.get('minutes_error') !== null) {
-			errors.push(this.get('minutes_error'));
-		}
-
-		if (this.get('seconds_error') !== null) {
-			errors.push(this.get('seconds_error'));
+		if (this.get('angle_error') !== null) {
+			errors.push(this.get('angle_error'));
 		}
 
 		return errors;
-	};
-
-	// this is separate so that the number of errors is based off of
-	// the number of invalid user-entered values
-	Measurement.prototype.setAngleError = function () {
-		var error = false;
-
-		if (this.get('degrees_error') !== null) {
-			error = true;
-		} else if (this.get('minutes_error') !== null) {
-			error = true;
-		} else if (this.get('seconds_error') !== null) {
-			error = true;
-		}
-
-		if (error) {
-			this.set({'angle_error': 'Invalid Angle. Check Deg, Min, Sec values.'});
-		} else {
-			this.set({'angle_error': null });
-		}
 	};
 
 	// These are in the same order as appear on the paper form.
