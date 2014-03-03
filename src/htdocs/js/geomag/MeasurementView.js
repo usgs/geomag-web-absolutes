@@ -43,14 +43,15 @@ define([
 	MeasurementView.prototype = Object.create(View.prototype);
 
 	MeasurementView.prototype.render = function () {
-		var time = this._measurement.get('time'),
-		    angle = this._measurement.get('angle'),
+		var measurement = this._measurement,
+		    time = measurement.get('time'),
+		    angle = measurement.get('angle'),
 		    timeString = null,
 		    dms = null,
-		    hMeasurement = this._measurement.get('h'),
-		    eMeasurement = this._measurement.get('e'),
-		    zMeasurement = this._measurement.get('z'),
-		    fMeasurement = this._measurement.get('f');
+		    h = measurement.get('h'),
+		    e = measurement.get('e'),
+		    z = measurement.get('z'),
+		    f = measurement.get('f');
 
 		if (time === null) {
 			timeString = '';
@@ -71,35 +72,10 @@ define([
 		this._minutesInput.value = dms[1];
 		this._secondsInput.value = dms[2];
 
-
-		if(hMeasurement !== null) {
-			this._hValue.innerHTML =
-				Format.nanoteslas(hMeasurement);
-		}
-		else {
-			this._hValue.innerHTML = '--';
-		}
-		if(eMeasurement !== null) {
-			this._eValue.innerHTML =
-				Format.nanoteslas(eMeasurement);
-		}
-		else {
-			this._eValue.innerHTML = '--';
-		}
-		if(zMeasurement !== null) {
-			this._zValue.innerHTML =
-				Format.nanoteslas(zMeasurement);
-		}
-		else {
-			this._zValue.innerHTML = '--';
-		}
-		if(fMeasurement !== null) {
-			this._fValue.innerHTML =
-				Format.nanoteslas(fMeasurement);
-		}
-		else {
-			this._fValue.innerHTML = '--';
-		}
+		this._hValue.innerHTML = (h === null ? '--' : Format.nanoteslas(h));
+		this._eValue.innerHTML = (e === null ? '--' : Format.nanoteslas(e));
+		this._zValue.innerHTML = (z === null ? '--' : Format.nanoteslas(z));
+		this._fValue.innerHTML = (f === null ? '--' : Format.nanoteslas(f));
 	};
 
 	MeasurementView.prototype._initialize = function () {
