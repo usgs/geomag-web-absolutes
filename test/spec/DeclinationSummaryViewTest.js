@@ -136,7 +136,7 @@ define([
 				expect(reading.get('declination_shift')).to.equal(0);
 				changeSelectValue(view._shift, '-180');
 				expect(reading.get('declination_shift')).to.equal(-180);
-				changeSelectValue(view._shift, '+180');
+				changeSelectValue(view._shift, '180');
 				expect(reading.get('declination_shift')).to.equal(180);
 			});
 		});
