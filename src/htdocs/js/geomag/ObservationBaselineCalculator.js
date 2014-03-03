@@ -77,7 +77,7 @@ define([
 	 * @return {Number} magneticSouthMeridian
 	 */
 	ObservationBaselineCalculator.prototype.magneticSouthMeridian =
-		function (reading) {
+			function (reading) {
 		var measurements = reading.getMeasurements();
 
 		// measurement.type
@@ -200,7 +200,7 @@ define([
 	 */
 	ObservationBaselineCalculator.prototype.correctedF =
 			function (reading) {
-		// dont need to check each measurement, use ns(ud) 
+		// dont need to check each measurement, use ns(ud)
 		// (value will be null for measurement values that don't matter)
 
 		return this._calculator.correctedF(
@@ -447,6 +447,36 @@ define([
 		return total / count;
 	};
 
+	ObservationBaselineCalculator.prototype.getStats = function (data) {
+		var mean = this._calculator._mean.apply(this._calculator, data),
+		    min = Math.min.apply(Math, data),
+		    max = Math.max.apply(Math, data),
+		    i = null,
+		    len = null,
+		    variance = 0,
+		    difference = null;
+
+		for (i = 0, len = data.length; i < len; i++) {
+			difference = mean - data[i];
+			variance += difference * difference;
+		}
+		if (len === 0) {
+			return {
+				mean:NaN,
+				min:NaN,
+				max:NaN,
+				stdDev: NaN
+			};
+		}
+		variance /= len;
+
+		return {
+			mean: mean,
+			min: min,
+			max: max,
+			stdDev: Math.sqrt(variance)
+		};
+	};
 
 	return ObservationBaselineCalculator;
 

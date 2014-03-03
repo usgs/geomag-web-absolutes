@@ -85,7 +85,11 @@ require([
 		'spec/ObservatoryViewTest',
 		'spec/ObservationsViewTest',
 		'spec/FormatterTest',
-		'spec/MagnetometerOrdinatesViewTest'
+		'spec/MagnetometerOrdinatesViewTest',
+		'spec/DeclinationSummaryViewTest',
+		'spec/HorizontalIntensitySummaryViewTest',
+		'spec/VerticalIntensitySummaryViewTest',
+		'spec/ObservationSummaryViewTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();
