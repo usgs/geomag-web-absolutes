@@ -20,17 +20,9 @@ include_once $APP_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR .
 		'lib.inc.php';
 
 // connect to database
-$DB = new PDO($dburl);
+$DB = new PDO($CONFIG['DB_DSN'], $CONFIG['DB_USER'], $CONFIG['DB_PASS']);
 // use php exceptions for query problems
 $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-// verify database has schema
-try {
-	$rs = $DB->query('select count(*) from observatory');
-} catch (PDOException $e) {
-	// database doesn't have schema, load
-	$DB->exec(file_get_contents($dbschema));
-}
 
 // create factories
 $OBSERVATORY_FACTORY = new ObservatoryFactory($DB);
