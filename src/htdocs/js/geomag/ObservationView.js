@@ -250,7 +250,8 @@ define([
 		    errorDiv,
 		    measurementErrors,
 		    saveButton = el.querySelector('#saveButton'),
-		    readingErrors, setNumber, list, header;
+		    readingErrors, setNumber, list, header,
+		    _this = this;
 
 
 		this._observation.eachReading(function (reading) {
@@ -261,12 +262,12 @@ define([
 			reading.eachMeasurement(function (measurement) {
 
 				// get all errors for the measurement
-				measurementErrors = measurement.getErrors();
+				measurementErrors = _this._formatMeasurementErrors(measurement);
 
 				// check for number of measurement errors
-				if (measurementErrors.length > 0) {
+				if (measurementErrors !== null) {
 					// if there are errors add to total number of errors
-					readingErrors = readingErrors.concat(measurementErrors);
+					readingErrors.push(measurementErrors);
 				}
 
 			});
@@ -274,7 +275,10 @@ define([
 			// organize all errors by reading set
 			if (readingErrors.length > 0) {
 				errors.push('<li>' +
-						'Set ' + setNumber + ' has ' + readingErrors.length + ' error(s)' +
+						'Set ' + setNumber + ' has error(s)' +
+							'<ul>' +
+								readingErrors.join('') +
+							'</ul>' +
 					'</li>'
 				);
 			}
@@ -312,8 +316,28 @@ define([
 					errorDiv.remove();
 				}
 		}
+	};
 
 
+
+	ObservationView.prototype._formatMeasurementErrors = function (measurement) {
+		var time_error = measurement.get('time_error'),
+		    angle_error = measurement.get('angle_error'),
+		    markup = [];
+
+		if (time_error !== null) {
+			markup.push(measurement.get('type') + ' - ' + time_error);
+		}
+
+		if (angle_error !== null) {
+			markup.push(measurement.get('type') + ' - ' + angle_error);
+		}
+
+		if (markup.length === 0) {
+			return null;
+		}
+
+		return '<li>' + markup.join('</li><li>') + '</li>';
 	};
 
 	// return constructor
