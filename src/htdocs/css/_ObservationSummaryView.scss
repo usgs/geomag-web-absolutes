@@ -9,11 +9,13 @@
 		> tfoot {
 			> tr {
 				&:first-child {
-					th, td {
+					> th,
+					> td {
 						padding-top:1em;
 					}
 				}
-				th, td {
+				> th,
+				> td {
 					text-align:right;
 				}
 			}
