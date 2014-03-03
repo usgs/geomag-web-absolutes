@@ -229,42 +229,5 @@ define([
 		}
 	};
 
-	/**
-	 * @param degs {Number}
-	 *        The degree portion of the angle value. If this is a decimal, then
-	 *        the fractional portion is converted to minutes.
-	 * @param mins {Number}
-	 *        The minutes portion of the angle value. If this is a decimal, then
-	 *        the fractional portion is converted to seconds.
-	 * @param secs {Integer}
-	 *        The seconds portion of the angle value.
-	 *
-	 * @return {Decimal}
-	 *        The decimal degrees for the given DMS value.
-	 *
-	 * @see MeasurementViewTest#degree_inversion_check
-	 */
-	MeasurementView.prototype._dmsToDecimal = function (degs, mins, secs) {
-		return (parseInt(secs, 10) / 3600) + (parseFloat(mins) / 60) +
-				parseFloat(degs);
-	};
-
-	/**
-	 * @see MeasurementViewTest#degree_inversion_check
-	 */
-	MeasurementView.prototype._decimalToDms = function (angle) {
-		var degrees = parseInt(angle, 10),
-		    minutes = (angle - degrees) * 60,
-		    seconds = Math.round((minutes - parseInt(minutes, 10)) * 60, 10);
-
-		minutes = parseInt(minutes, 10);
-
-		// Correct any errors due to floating point
-		minutes += parseInt(seconds / 60, 10);
-		seconds = seconds % 60;
-
-		return [degrees, minutes, seconds];
-	};
-
 	return MeasurementView;
 });
