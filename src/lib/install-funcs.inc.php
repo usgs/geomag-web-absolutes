@@ -92,64 +92,20 @@
 		return array_unique($files);
 	}
 
-	function processFile ($db, $filename, $script, $type) {
-		$outfile = $filename . '.sql';
-		$result = array(
-			'status' => 0,
-			'stdout' => '',
-			'stderr' => '',
-			'filename' => $filename
-		);
-
-		// Convert .bns file to .sql file
-		$command = "$script -q -o -t $type -f " . basename($filename);
-		$cwd = dirname($filename);
-
-		$descriptor = array(
-			0 => array('pipe', 'r'), // STDIN
-			1 => array('pipe', 'r'), // STDOUT
-			2 => array('pipe', 'r')  // STDERR
-		);
-
-		$proc = proc_open($command, $descriptor, $pipes, $cwd);
-
-		if (is_resource($proc)) {
-			fclose($pipes[0]);
-
-			$stdout = stream_get_contents($pipes[1]); fclose($pipes[1]);
-			$stderr = stream_get_contents($pipes[2]); fclose($pipes[2]);
-			$retval = proc_close($proc);
-
-			$result['status'] = $retval;
-			$result['stdout'] .= $stdout . "\n";
-			$result['stdout'] .= $stderr . "\n";
-
-			if ($result['status'] !== 0) {
-				$result['stderr'] .= "Process script failed.\n";
-			}
+	function safefloatval($value=null) {
+		if ($value === null) {
+			return null;
 		} else {
-			$result['status'] = -1;
-			$result['stderr'] .= "Could not execute parser script.\n";
+			return floatval($value);
 		}
-
-		// Short-circuit if failed
-		if ($result['status'] !== 0) { return $result; }
-
-		// Run the .sql file through the database
-		if (!file_exists($outfile)) {
-			$result['status'] = -2;
-			$result['stderr'] .= "SQL file does not exist.\n";
-			return $result;
-		}
-
-		try {
-			$db->exec(file_get_contents($outfile));
-		} catch (Exception $e) {
-			$result['status'] = -2;
-			$result['stderr'] .= 'Database error ' . $e->getMessage();
-			return $result;
-		}
-
-		return $result;
 	}
+
+	function safeintval($value=null) {
+		if ($value === null) {
+			return null;
+		} else {
+			return intval($value);
+		}
+	}
+
 ?>
