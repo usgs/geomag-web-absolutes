@@ -1,5 +1,7 @@
 <?php
 
+include_once 'Observation.class.php';
+
 /**
  * Data class representing an observation with child data.
  */
