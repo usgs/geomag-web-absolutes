@@ -1,30 +1,36 @@
 $line-vertical-separation:4px;
 
 .inclination-view {
-  dt {
-    float:left;
-    clear:left;
-    width:13em;
-    font-weight:bold;
-    text-align:right;
-    margin-top:$line-vertical-separation;
-    &:after {
-      content:':';
-    }
-  }
-  dd {
-    float:left;
-    width:6em;
-    text-align:right;
-    margin-top:$line-vertical-separation;
-    margin-left:1em;
-    .degrees-minutes {
-      display:block;
-    }
-  }
 
-  .south-down-minus-north-up,
-  .south-down-minus-north-up-value {
-    padding-top:10px;
-  }
+	> dl {
+
+		margin: 0;
+
+		> dt {
+			float:left;
+			clear:left;
+			width:12em;
+			font-weight:bold;
+			text-align:right;
+			margin-top:$line-vertical-separation;
+		}
+
+		> dd {
+			float:left;
+			width:6em;
+			text-align:right;
+			margin-top:$line-vertical-separation;
+			margin-left:1em;
+
+			.degrees-minutes {
+				display:block;
+			}
+		}
+
+	}
+
+	.south-down-minus-north-up,
+	.south-down-minus-north-up-value {
+		padding-top:10px;
+	}
 }
