@@ -57,16 +57,44 @@ define([
 	};
 
 	ObservationBaselineCalculator.prototype.meanH = function (reading) {
-		return this.getMeanValue(reading, 'h');
+		var measurements = reading.getMeasurements();
+
+		return this._calculator._mean(
+			measurements[Measurement.SOUTH_DOWN][0].get('h'),
+			measurements[Measurement.NORTH_UP][0].get('h'),
+			measurements[Measurement.SOUTH_UP][0].get('h'),
+			measurements[Measurement.NORTH_DOWN][0].get('h')
+		);
 	};
 	ObservationBaselineCalculator.prototype.meanE = function (reading) {
-		return this.getMeanValue(reading, 'e');
+		var measurements = reading.getMeasurements();
+
+		return this._calculator._mean(
+			measurements[Measurement.WEST_DOWN][0].get('e'),
+			measurements[Measurement.EAST_DOWN][0].get('e'),
+			measurements[Measurement.WEST_UP][0].get('e'),
+			measurements[Measurement.EAST_UP][0].get('e')
+		);
 	};
 	ObservationBaselineCalculator.prototype.meanZ = function (reading) {
-		return this.getMeanValue(reading, 'z');
+		var measurements = reading.getMeasurements();
+
+		return this._calculator._mean(
+			measurements[Measurement.SOUTH_DOWN][0].get('z'),
+			measurements[Measurement.NORTH_UP][0].get('z'),
+			measurements[Measurement.SOUTH_UP][0].get('z'),
+			measurements[Measurement.NORTH_DOWN][0].get('z')
+		);
 	};
 	ObservationBaselineCalculator.prototype.meanF = function (reading) {
-		return this.getMeanValue(reading, 'f');
+		var measurements = reading.getMeasurements();
+
+		return this._calculator._mean(
+			measurements[Measurement.SOUTH_DOWN][0].get('f'),
+			measurements[Measurement.NORTH_UP][0].get('f'),
+			measurements[Measurement.SOUTH_UP][0].get('f'),
+			measurements[Measurement.NORTH_DOWN][0].get('f')
+		);
 	};
 
 	/**
