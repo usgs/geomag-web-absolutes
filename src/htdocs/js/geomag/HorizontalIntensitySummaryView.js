@@ -57,6 +57,7 @@ define([
 		var el = this._el,
 		    i = null,
 		    len = null;
+
 		el.innerHTML = [
 			'<th class="name" scope="row"></th>',
 			'<td class="valid"><input type="checkbox" /></td>',
