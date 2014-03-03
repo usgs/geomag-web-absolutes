@@ -114,31 +114,41 @@ define([
 		this._fValue = this._el.querySelector('.measurement-f');
 
 		onTimeChange = function (/*evt*/) {
-			var time = _this._timeInput.value;
+			var time = _this._timeInput.value,
+			    error = null;
 
 			// validate time change
-			_this._validateTime(time);
-			// only set measurement values if they pass validation
-			if (_this._measurement.get('time_error') === null) {
+			error = _this._validateTime(time);
+
+			if (error === null) {
 				// no errors on measurement, set measurement values
 				_this._measurement.set({
-					'time': Format.parseRelativeTime(time)
+					'time': Format.parseRelativeTime(time),
+					'time_error': null
 				});
+			} else {
+				_this._measurement.set({'time_error': error});
 			}
 		};
 
 		onAngleChange = function (/*evt*/) {
 			var degrees = _this._degreesInput.value,
 			    minutes = _this._minutesInput.value,
-			    seconds = _this._secondsInput.value;
+			    seconds = _this._secondsInput.value,
+			    error = null;
 
 			// validate angle change
-			_this._validateAngle(degrees, minutes, seconds);
+			error = _this._validateAngle(degrees, minutes, seconds);
 
-			if (_this._measurement.get('angle_error') === null) {
+			if (error === null) {
 				// no errors on measurement, set measurement values
 				_this._measurement.set({
-					'angle': Format.dmsToDecimal(degrees, minutes, seconds)
+					'angle': Format.dmsToDecimal(degrees, minutes, seconds),
+					'angle_error': null
+				});
+			} else {
+				_this._measurement.set({
+					'angle_error': 'Invalid Angle. Check Deg, Min, Sec values.'
 				});
 			}
 		};
@@ -154,7 +164,8 @@ define([
 
 	MeasurementView.prototype._validateTime = function (time) {
 		var validTime = true,
-				helpText, begin;
+				helpText = null,
+				begin;
 
 		// TIME
 		begin = this._observation.get('begin');
@@ -166,14 +177,9 @@ define([
 			validTime = false;
 			helpText = 'Time is before start time.';
 		}
-
-		if (validTime) {
-			this._measurement.set({'time_error': null});
-		} else {
-			this._measurement.set({'time_error': helpText});
-		}
-
 		this._updateErrorState(this._timeInput, validTime, helpText);
+
+		return helpText;
 	};
 
 	MeasurementView.prototype._validateAngle =
@@ -181,7 +187,7 @@ define([
 		var validDegrees = true,
 				validMinutes = true,
 				validSeconds = true,
-				helpText;
+				helpText = null;
 
 		// DEGREES
 		if (!Validate.validDegrees(degrees)) {
@@ -190,14 +196,12 @@ define([
 		}
 		this._updateErrorState(this._degreesInput, validDegrees, helpText);
 
-
 		// MINUTES
 		if (!Validate.validMinutes(minutes)) {
 			validMinutes = false;
 			helpText = 'Invalid Minutes. Must be between, 0-60.';
 		}
 		this._updateErrorState(this._minutesInput, validMinutes, helpText);
-
 
 		// SECONDS
 		if (!Validate.validSeconds(seconds)) {
@@ -206,15 +210,7 @@ define([
 		}
 		this._updateErrorState(this._secondsInput, validSeconds, helpText);
 
-
-		// ANGLE
-		if (!validSeconds || !validMinutes || !validDegrees) {
-			this._measurement.set({
-					'angle_error': 'Invalid Angle. Check Deg, Min, Sec values.'});
-		} else {
-			this._measurement.set({'angle_error': null});
-		}
-
+		return helpText;
 	};
 
 	MeasurementView.prototype._updateErrorState = function (el, valid, helpText) {
