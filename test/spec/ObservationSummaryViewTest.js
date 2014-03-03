@@ -19,10 +19,10 @@ define([
 	var expect = chai.expect;
 
 	describe('ObservationSummaryViewTest', function () {
-		var renderSpy;
-		var calculator;
-		var view;
-		var observation;
+		var renderSpy,
+		    calculator,
+		    view,
+		    observation;
 
 		beforeEach(function () {
 			renderSpy = sinon.spy(ObservationSummaryView.prototype, 'render');
@@ -58,6 +58,7 @@ define([
 				observation.set({'pier_temperature':40});
 				var pierTemperature =
 						view._el.querySelector('.pier-temp-value').innerHTML;
+
 				expect(pierTemperature).to.equal(
 						'<span class="temperature">' +
 							'40.0<span class="units">°C</span>' +
@@ -68,6 +69,7 @@ define([
 				observation.set({'annotation':'This is an annotation test'});
 				var annotation =
 						view._el.querySelector('.reviewer > textarea').innerHTML;
+
 				expect(annotation).to.equal('This is an annotation test');
 			});
 
