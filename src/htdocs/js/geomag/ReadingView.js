@@ -123,7 +123,7 @@ define([
 					'</section>',
 					'<section class="column one-of-two inclination-output"></section>',
 				'</section>',
-				'<section>',
+				'<section >',
 					'<h4>Magnetometer Ordinates</h4>',
 					'<section class="magnetometer-ordinates-output"></section>',
 				'</section>',
@@ -220,7 +220,9 @@ define([
 
 		this._magnetometerOrdinatesView = new MagnetometerOrdinatesView({
 			el: this._el.querySelector('.magnetometer-ordinates-output'),
-			reading: this._reading
+			reading: this._reading,
+			observation: this._observation,
+			baselineCalculator: this._calculator
 		});
 	};
 

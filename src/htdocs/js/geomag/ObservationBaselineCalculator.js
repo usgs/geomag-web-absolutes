@@ -76,7 +76,8 @@ define([
 	 *
 	 * @return {Number} magneticSouthMeridian
 	 */
-	ObservationBaselineCalculator.prototype.magneticSouthMeridian = function (reading) {
+	ObservationBaselineCalculator.prototype.magneticSouthMeridian =
+		function (reading) {
 		var measurements = reading.getMeasurements();
 
 		// measurement.type
@@ -95,7 +96,8 @@ define([
 	 *
 	 * @return {Number} magneticAzimuthMark
 	 */
-	ObservationBaselineCalculator.prototype.magneticAzimuthMark = function (reading) {
+	ObservationBaselineCalculator.prototype.magneticAzimuthMark =
+			function (reading) {
 		var measurements = reading.getMeasurements(),
 		    meanMark = null;
 
@@ -120,7 +122,8 @@ define([
 	 *
 	 * @return {Number} geographicMeridian
 	 */
-	ObservationBaselineCalculator.prototype.geographicMeridian = function (reading) {
+	ObservationBaselineCalculator.prototype.geographicMeridian =
+			function (reading) {
 		// measurement.type (markup1, markup2)
 		var measurements = reading.getMeasurements();
 
@@ -139,7 +142,8 @@ define([
 	 *
 	 * @return {Number} magneticDeclination
 	 */
-	ObservationBaselineCalculator.prototype.magneticDeclination = function (reading) {
+	ObservationBaselineCalculator.prototype.magneticDeclination =
+			function (reading) {
 		return this._calculator.magneticDeclination(
 				this.magneticSouthMeridian(reading),
 				this.geographicMeridian(reading),
@@ -162,7 +166,8 @@ define([
 				measurements[Measurement.EAST_DOWN][0].get('angle')
 		);
 	};
-	ObservationBaselineCalculator.prototype.westUpMinusEastDown = function (reading){
+	ObservationBaselineCalculator.prototype.westUpMinusEastDown =
+			function (reading){
 		return this.w(reading);
 	};
 
@@ -181,7 +186,8 @@ define([
 				measurements[Measurement.WEST_DOWN][0].get('angle')
 		);
 	};
-	ObservationBaselineCalculator.prototype.eastUpMinusWestDown = function (reading){
+	ObservationBaselineCalculator.prototype.eastUpMinusWestDown =
+			function (reading){
 		return this.e(reading);
 	};
 
@@ -192,8 +198,10 @@ define([
 	 *
 	 * @return {Number} correctedF
 	 */
-	ObservationBaselineCalculator.prototype.correctedF = function (reading) {
-		// dont need to check each measurement, use ns(ud) (value will be null for measurement values that don't matter)
+	ObservationBaselineCalculator.prototype.correctedF =
+			function (reading) {
+		// dont need to check each measurement, use ns(ud) 
+		// (value will be null for measurement values that don't matter)
 
 		return this._calculator.correctedF(
 				this.getMeanValue(reading, 'f'),
@@ -227,7 +235,8 @@ define([
 	 *
 	 * @return {Number} horizontalComponent
 	 */
-	ObservationBaselineCalculator.prototype.horizontalComponent = function (reading) {
+	ObservationBaselineCalculator.prototype.horizontalComponent =
+			function (reading) {
 		return this._calculator.horizontalComponent(
 				this.correctedF(reading),
 				this.inclination(reading)
@@ -241,7 +250,8 @@ define([
 	 *
 	 * @return {Number} verticalComponent
 	 */
-	ObservationBaselineCalculator.prototype.verticalComponent = function (reading) {
+	ObservationBaselineCalculator.prototype.verticalComponent =
+			function (reading) {
 		return this._calculator.verticalComponent(
 				this.correctedF(reading),
 				this.inclination(reading)
@@ -263,7 +273,8 @@ define([
 				measurements[Measurement.NORTH_UP][0].get('angle')
 		);
 	};
-	ObservationBaselineCalculator.prototype.southDownMinusNorthUp = function (reading) {
+	ObservationBaselineCalculator.prototype.southDownMinusNorthUp =
+			function (reading) {
 		return this.s(reading);
 	};
 
@@ -282,7 +293,8 @@ define([
 				measurements[Measurement.SOUTH_UP][0].get('angle')
 		);
 	};
-	ObservationBaselineCalculator.prototype.northDownMinusSouthUp = function (reading) {
+	ObservationBaselineCalculator.prototype.northDownMinusSouthUp =
+			function (reading) {
 		return this.n(reading);
 	};
 	/**
@@ -321,6 +333,21 @@ define([
 	 */
 	ObservationBaselineCalculator.prototype.baselineD = function (reading) {
 		return this._calculator.baselineD(
+				this.magneticDeclination(reading),
+				this.computedE(reading)
+		);
+	};
+
+	/**
+	 * baselineE
+	 Identical to baselineD, renamed as it's more appropriate.
+	 *
+	 * @param {Object} reading, a reading from an observation
+	 *
+	 * @return {Number} baselineE
+	 */
+	ObservationBaselineCalculator.prototype.baselineE = function (reading) {
+		return this._calculator.baselineE(
 				this.magneticDeclination(reading),
 				this.computedE(reading)
 		);
@@ -394,7 +421,8 @@ define([
 	 *
 	 * @return {Number} mean of the selected channel
 	 */
-	ObservationBaselineCalculator.prototype.getMeanValue = function (reading, channel) {
+	ObservationBaselineCalculator.prototype.getMeanValue =
+			function (reading, channel) {
 		var measurements = reading.get('measurements'),
 		    total = 0,
 		    count = 0,

@@ -4,20 +4,23 @@ define([
 
 	'geomag/Reading',
 	'geomag/ReadingView',
-	'geomag/Observation'
+	'geomag/Observation',
+	'geomag/ObservationBaselineCalculator'
 ], function (
 	chai,
 
 	Reading,
 	ReadingView,
-	Observation
+	Observation,
+	ObservationBaselineCalculator
 ) {
 	'use strict';
 
 	var expect = chai.expect;
 	var viewOptions = {
 		reading: new Reading(),
-		observation: new Observation()
+		observation: new Observation(),
+		baselineCalculator: new ObservationBaselineCalculator()
 	};
 
 	describe('ReadingView Unit Tests', function () {

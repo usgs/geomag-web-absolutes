@@ -46,7 +46,11 @@ define([
 		var time = this._measurement.get('time'),
 		    angle = this._measurement.get('angle'),
 		    timeString = null,
-		    dms = null;
+		    dms = null,
+		    hMeasurement = this._measurement.get('h'),
+		    eMeasurement = this._measurement.get('e'),
+		    zMeasurement = this._measurement.get('z'),
+		    fMeasurement = this._measurement.get('f');
 
 		if (time === null) {
 			timeString = '';
@@ -67,10 +71,35 @@ define([
 		this._minutesInput.value = dms[1];
 		this._secondsInput.value = dms[2];
 
-		this._hValue.innerHTML = this._measurement.get('h') || '--';
-		this._eValue.innerHTML = this._measurement.get('e') || '--';
-		this._zValue.innerHTML = this._measurement.get('z') || '--';
-		this._fValue.innerHTML = this._measurement.get('f') || '--';
+
+		if(hMeasurement !== null) {
+			this._hValue.innerHTML =
+				Format.nanoteslas(hMeasurement);
+		}
+		else {
+			this._hValue.innerHTML = '--';
+		}
+		if(eMeasurement !== null) {
+			this._eValue.innerHTML =
+				Format.nanoteslas(eMeasurement);
+		}
+		else {
+			this._eValue.innerHTML = '--';
+		}
+		if(zMeasurement !== null) {
+			this._zValue.innerHTML =
+				Format.nanoteslas(zMeasurement);
+		}
+		else {
+			this._zValue.innerHTML = '--';
+		}
+		if(fMeasurement !== null) {
+			this._fValue.innerHTML =
+				Format.nanoteslas(fMeasurement);
+		}
+		else {
+			this._fValue.innerHTML = '--';
+		}
 	};
 
 	MeasurementView.prototype._initialize = function () {
