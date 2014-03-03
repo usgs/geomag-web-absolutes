@@ -5,14 +5,16 @@ define([
 	'mvc/Model',
 	'geomag/Measurement',
 	'geomag/MeasurementView',
-	'geomag/Observation'
+	'geomag/Observation',
+	'geomag/Formatter'
 ], function (
 	chai,
 
 	Model,
 	Measurement,
 	MeasurementView,
-	Observation
+	Observation,
+	Formatter
 ) {
 	'use strict';
 
@@ -175,9 +177,10 @@ define([
 			});
 
 			it('correctly sets model when given valid input', function () {
-				var measurement = m._measurement;
+				var measurement = m._measurement,
+				    formattedTime;
 
-				time.value = '20:20:20';
+				time.value = 1393532420000;
 				degrees.value = 90;
 				minutes.value = 30;
 				seconds.value = 0;
@@ -188,15 +191,18 @@ define([
 				minutes.dispatchEvent(getBlurEvent());
 				seconds.dispatchEvent(getBlurEvent());
 
+				formattedTime = Formatter.time(measurement.get('time'));
+
 				expect(measurement.get('angle')).to.be.equal(90.5);
-				expect(measurement.get('time')).to.be.equal(1393532420000);
+				expect(formattedTime).to.be.equal(Formatter.time(1393532420000));
 			});
 
 			it('updates model with valid time, even when angle data is invalid',
 					function () {
-				var measurement = m._measurement;
+				var measurement = m._measurement,
+				    formattedTime;
 
-				time.value = '20:20:20';
+				time.value = 1393532420000;
 				degrees.value = 'f';
 				minutes.value = 'f';
 				seconds.value = 'f';
@@ -204,7 +210,9 @@ define([
 				// trigger blur on any element
 				time.dispatchEvent(getBlurEvent());
 
-				expect(measurement.get('time')).to.be.equal(1393532420000);
+				formattedTime = Formatter.time(measurement.get('time'));
+
+				expect(formattedTime).to.be.equal(Formatter.time(1393532420000));
 			});
 
 			it('updates model with valid angle, even when time data is invalid',
