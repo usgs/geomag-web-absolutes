@@ -57,16 +57,44 @@ define([
 	};
 
 	ObservationBaselineCalculator.prototype.meanH = function (reading) {
-		return this.getMeanValue(reading, 'h');
+		var measurements = reading.getMeasurements();
+
+		return this._calculator._mean(
+			measurements[Measurement.SOUTH_DOWN][0].get('h'),
+			measurements[Measurement.NORTH_UP][0].get('h'),
+			measurements[Measurement.SOUTH_UP][0].get('h'),
+			measurements[Measurement.NORTH_DOWN][0].get('h')
+		);
 	};
 	ObservationBaselineCalculator.prototype.meanE = function (reading) {
-		return this.getMeanValue(reading, 'e');
+		var measurements = reading.getMeasurements();
+
+		return this._calculator._mean(
+			measurements[Measurement.WEST_DOWN][0].get('e'),
+			measurements[Measurement.EAST_DOWN][0].get('e'),
+			measurements[Measurement.WEST_UP][0].get('e'),
+			measurements[Measurement.EAST_UP][0].get('e')
+		);
 	};
 	ObservationBaselineCalculator.prototype.meanZ = function (reading) {
-		return this.getMeanValue(reading, 'z');
+		var measurements = reading.getMeasurements();
+
+		return this._calculator._mean(
+			measurements[Measurement.SOUTH_DOWN][0].get('z'),
+			measurements[Measurement.NORTH_UP][0].get('z'),
+			measurements[Measurement.SOUTH_UP][0].get('z'),
+			measurements[Measurement.NORTH_DOWN][0].get('z')
+		);
 	};
 	ObservationBaselineCalculator.prototype.meanF = function (reading) {
-		return this.getMeanValue(reading, 'f');
+		var measurements = reading.getMeasurements();
+
+		return this._calculator._mean(
+			measurements[Measurement.SOUTH_DOWN][0].get('f'),
+			measurements[Measurement.NORTH_UP][0].get('f'),
+			measurements[Measurement.SOUTH_UP][0].get('f'),
+			measurements[Measurement.NORTH_DOWN][0].get('f')
+		);
 	};
 
 	/**
@@ -204,7 +232,7 @@ define([
 		// (value will be null for measurement values that don't matter)
 
 		return this._calculator.correctedF(
-				this.getMeanValue(reading, 'f'),
+				this.meanF(reading),
 				this.pierCorrection()
 		);
 	};
@@ -319,7 +347,7 @@ define([
 	 */
 	ObservationBaselineCalculator.prototype.computedE = function (reading) {
 		return this._calculator.computedE(
-				this.getMeanValue(reading, 'e'),
+				this.meanE(reading),
 				this.scaleValue(reading)
 		);
 	};
@@ -363,7 +391,7 @@ define([
 	ObservationBaselineCalculator.prototype.baselineH = function (reading) {
 		return this._calculator.baselineH(
 				this.horizontalComponent(reading),
-				this.getMeanValue(reading, 'h')
+				this.meanH(reading)
 		);
 	};
 
@@ -377,7 +405,7 @@ define([
 	ObservationBaselineCalculator.prototype.baselineZ = function (reading) {
 		return this._calculator.baselineZ(
 				this.verticalComponent(reading),
-				this.getMeanValue(reading, 'z')
+				this.meanZ(reading)
 		);
 	};
 

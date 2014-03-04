@@ -20,8 +20,7 @@ define([
 
 	'use strict';
 
-	var expect = chai.expect,
-	    EPSILON = 0.01;
+	var expect = chai.expect;
 
 	var calc = new ObservationBaselineCalculator({
 			calculator: new BaselineCalculator(),
@@ -35,10 +34,10 @@ define([
 			'type': Measurement.FIRST_MARK_UP,
 			'time': null,
 			'angle': 10.332222222222223,// 10.3322, // 10,19,56
-			'h': null,
-			'e': null,
-			'z': null,
-			'f': null
+			'h': 20000.8,
+			'e': -300.8,
+			'z': 45000.8,
+			'f': 55000.6
 	});
 
 	// data from BOU20132861836.bns
@@ -47,10 +46,10 @@ define([
 			'type': Measurement.FIRST_MARK_DOWN,
 			'time': null,
 			'angle': 190.3363888888889,// 190.3364, // 190 20 11
-			'h': null,
-			'e': null,
-			'z': null,
-			'f': null
+			'h': 20000.7,
+			'e': -300.7,
+			'z': 45000.7,
+			'f': 55000.5
 	});
 
 	// data from BOU20132861836.bns
@@ -58,10 +57,10 @@ define([
 			'type': Measurement.WEST_DOWN,
 			'time': 183639,
 			'angle': 270.15749999999997,// 270.1575, // 270 9 27
-			'h': null,
+			'h': 20000.6,
 			'e': -269.88,
-			'z': null,
-			'f': null
+			'z': 45000.6,
+			'f': 55000.4
 	});
 
 	// data from BOU20132861836.bns
@@ -70,10 +69,10 @@ define([
 			'type': Measurement.EAST_DOWN,
 			'time': 183733,
 			'angle': 90.22194444444445,// 90.2219, // 90 13 19
-			'h': null,
+			'h': 20000.5,
 			'e': -270.13,
-			'z': null,
-			'f':  null
+			'z': 45000.5,
+			'f': 55000.3
 	});
 
 	// data from BOU20132861836.bns
@@ -82,10 +81,10 @@ define([
 			'type': Measurement.WEST_UP,
 			'time': 183820,
 			'angle': 90.2936111111111,// 90.2936, // 90 17 37
-			'h': null,
+			'h': 20000.4,
 			'e': -269.38,
-			'z': null,
-			'f': null
+			'z': 45000.4,
+			'f': 55000.2
 	});
 
 	// data from BOU20132861836.bns
@@ -94,10 +93,10 @@ define([
 			'type': Measurement.EAST_UP,
 			'time': 183916,
 			'angle': 270.2547222222222,// 270.2547, // 270 15 17
-			'h': null,
+			'h': 20000.3,
 			'e': -269.37,
-			'z': null,
-			'f': null
+			'z': 45000.3,
+			'f': 55000.1
 	});
 
 	// data from BOU20132861836.bns
@@ -106,10 +105,10 @@ define([
 			'type': Measurement.SECOND_MARK_UP,
 			'time': null,
 			'angle': 10.330555555555556,// 10.3306, // 10 19 50
-			'h': null,
-			'e': null,
-			'z': null,
-			'f': null
+			'h': 20000.2,
+			'e': -300.6,
+			'z': 45000.2,
+			'f': 55000.0
 	});
 
 	// data from BOU20132861836.bns
@@ -118,10 +117,10 @@ define([
 			'type': Measurement.SECOND_MARK_DOWN,
 			'time': null,
 			'angle': 190.33972222222224,// 190.3369, // 190 20 23
-			'h': null,
-			'e': null,
-			'z': null,
-			'f': null
+			'h': 20000.1,
+			'e': -300.5,
+			'z': 45000.1,
+			'f': 55000.9
 	});
 
 	// data from BOU20132861836.bns
@@ -131,7 +130,7 @@ define([
 			'time': 184200,
 			'angle': 246.67388888888888,// 246.6739, // 246 40 26
 			'h': 20821.17,
-			'e': null,
+			'e': -300.4,
 			'z': 47753.38,
 			'f': 52628.85
 	});
@@ -143,7 +142,7 @@ define([
 			'time': 184247,
 			'angle': 66.66916666666667,// 66.6692, // 66 40 9
 			'h': 20821.50,
-			'e': null,
+			'e': -300.3,
 			'z': 47753.70,
 			'f': 52629.24
 	});
@@ -155,7 +154,7 @@ define([
 			'time': 184347,
 			'angle': 113.34722222222221,// 113.3472, // 113 20 50
 			'h': 20821.03,
-			'e': null,
+			'e': -300.2,
 			'z': 47753.68,
 			'f': 52629.07
 	});
@@ -167,7 +166,7 @@ define([
 			'time': 184513,
 			'angle': 293.35361111111115,// 293.3536, // 293 21 13
 			'h': 20820.68,
-			'e': null,
+			'e': -300.1,
 			'z': 47754.02,
 			'f': 52629.28
 	});
@@ -198,14 +197,8 @@ define([
 		describe('magneticSouthMeridian()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-
-				var expected = 180.2319;
-
-				console.log(expected + ' | ' + calc.magneticSouthMeridian(READING));
-
-				expect(Math.abs(calc.magneticSouthMeridian(READING) -
-						expected)).to.be.below(EPSILON);
-
+				expect(calc.magneticSouthMeridian(READING))
+						.to.be.closeTo(180.2319, 0.001);
 			});
 
 		}); // END :: magneticSouthMeridian
@@ -213,12 +206,7 @@ define([
 		describe('magneticAzimuthMark()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				var expected = 10.1021;
-
-				console.log(expected + ' | ' + calc.magneticAzimuthMark(READING));
-
-				expect(Math.abs(calc.magneticAzimuthMark(READING) -
-						expected)).to.below(EPSILON);
+				expect(calc.magneticAzimuthMark(READING)).to.be.closeTo(10.1021, 0.01);
 			});
 
 		}); // END :: magneticAzimuthMark
@@ -226,12 +214,8 @@ define([
 		describe('geographicMeridian()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				var expected = -188.8069;
-
-				console.log(expected + ' | ' + calc.geographicMeridian(READING));
-
-				expect(Math.abs(calc.geographicMeridian(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.geographicMeridian(READING))
+						.to.be.closeTo(-188.8069, 0.001);
 			});
 
 		}); // END :: geographicMeridian
@@ -239,12 +223,7 @@ define([
 		describe('magneticDeclination()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				var expected = 9.0362;
-
-				console.log(expected + ' | ' + calc.magneticDeclination(READING));
-
-				expect(Math.abs(calc.magneticDeclination(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.magneticDeclination(READING)).to.be.closeTo(9.0362, 0.01);
 			});
 
 		}); // END ::  magneticDeclination
@@ -253,10 +232,7 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.07166666666666667;   // 4.3' converted to degrees
-
-				console.log(expected + ' | ' + calc.w(READING));
-
-				expect(Math.abs(calc.w(READING) - expected)).to.be.below(EPSILON);
+				expect(calc.w(READING)).to.be.closeTo(expected, 0.0001);
 			});
 
 		}); // END ::  w
@@ -265,10 +241,7 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.09716666666666667;    // 5.83 converted to degrees
-
-				console.log(expected + ' | ' + calc.e(READING));
-
-				expect(Math.abs(calc.e(READING) - expected)).to.be.below(EPSILON);
+				expect(calc.e(READING)).to.be.closeTo(expected, 0.0001);
 			});
 
 		}); // END :: e
@@ -276,12 +249,7 @@ define([
 		describe('correctedF()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				var expected = 52606.01;
-
-				console.log(expected + ' | ' + calc.correctedF(READING));
-
-				expect(Math.abs(calc.correctedF(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.correctedF(READING)).to.be.closeTo(52606.01, 0.00001);
 			});
 
 		}); // END :: corrected F
@@ -289,12 +257,7 @@ define([
 		describe('inclination()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				var expected = 66.6606;
-
-				console.log(expected + ' | ' + calc.inclination(READING));
-
-				expect(Math.abs(calc.inclination(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.inclination(READING)).to.be.closeTo(66.6606, 0.001);
 			});
 
 		}); // END :: inclination
@@ -302,12 +265,8 @@ define([
 		describe('horizontalComponent()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				var expected = 20841.33; // 20841.33
-
-				console.log(expected + ' | ' + calc.horizontalComponent(READING));
-
-				expect(Math.abs(calc.horizontalComponent(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.horizontalComponent(READING))
+						.to.be.closeTo(20841.33, 0.01);
 			});
 
 		}); // END :: horiztonal Component
@@ -315,12 +274,7 @@ define([
 		describe('verticalComponent()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				var expected = 48301.46; // 48301.46
-
-				console.log(expected + ' | ' + calc.verticalComponent(READING));
-
-				expect(Math.abs(calc.verticalComponent(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.verticalComponent(READING)).to.be.closeTo(48301.46, 0.01);
 			});
 
 		}); // END :: verticalComponent
@@ -329,10 +283,7 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.0046666;    // 0 0.28 converted to degrees
-
-				console.log(expected + ' | ' + calc.s(READING));
-
-				expect(Math.abs(calc.s(READING) - expected)).to.be.below(EPSILON);
+				expect(calc.s(READING)).to.be.closeTo(expected, 0.0001);
 			});
 
 		}); // END :: s
@@ -342,10 +293,7 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.0063333;    //  0 0.38 converted to degrees
-
-				console.log(expected + ' | ' + calc.n(READING));
-
-				expect(Math.abs(calc.n(READING) - expected)).to.be.below(EPSILON);
+				expect(calc.n(READING)).to.be.closeTo(expected, 0.0001);
 			});
 
 		}); // END :: n
@@ -355,11 +303,7 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.16494853255526;   // 0.16494853255526
-
-				console.log(expected + ' | ' + calc.scaleValue(READING));
-
-				expect(Math.abs(calc.scaleValue(READING)) -
-						expected).to.be.below(EPSILON);
+				expect(calc.scaleValue(READING)).to.be.closeTo(expected, 0.01);
 			});
 
 		}); // END :: scaleValue
@@ -367,12 +311,8 @@ define([
 		describe('computedE()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				var expected = -0.7413333333333333;// 464.5604 min, converted to degrees
-
-				console.log(expected + ' | ' + calc.computedE(READING));
-
-				expect(Math.abs(calc.computedE(READING) -
-						expected)).to.be.below(EPSILON);
+				var expected = -0.7413333333333333;// 464.5604 min, convert to degrees
+				expect(calc.computedE(READING)).to.be.closeTo(expected, 0.0001);
 			});
 
 		}); // END :: computedE
@@ -381,11 +321,7 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 9.780333333333335;  // 586.66 min, converted to degrees
-
-				console.log(expected + ' | ' + calc.baselineD(READING));
-
-				expect(Math.abs(calc.baselineD(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.baselineE(READING)).to.be.closeTo(expected, 0.0001);
 			});
 
 		}); // END :: baselineD
@@ -394,12 +330,7 @@ define([
 		describe('baselineH()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				var expected = 20.23;
-
-				console.log(expected + ' | ' + calc.baselineH(READING));
-
-				expect(Math.abs(calc.baselineH(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.baselineH(READING)).to.be.closeTo(20.23, 0.01);
 			});
 
 		}); // END :: baselineH
@@ -408,12 +339,7 @@ define([
 		describe('baselineZ()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				var expected = 547.76;
-
-				console.log(expected + ' | ' + calc.baselineZ(READING));
-
-				expect(Math.abs(calc.baselineZ(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.baselineZ(READING)).to.be.closeTo(547.76, 0.01);
 			});
 
 		}); // END :: baselineZ
@@ -421,15 +347,9 @@ define([
 
 		describe('d()', function () {
 
-			// the rounding makes it too hard to have a better test
-			var EPSILON = 0.1;
-
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 3557.5945472773902;   // 3556.6245477416474
-
-				console.log(expected + ' | ' + calc.d(READING));
-
-				expect(Math.abs(calc.d(READING) - expected)).to.be.below(EPSILON);
+				expect(calc.d(READING)).to.be.closeTo(expected, 0.1);
 			});
 
 		}); // END :: d
