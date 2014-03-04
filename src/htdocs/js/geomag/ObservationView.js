@@ -1,4 +1,4 @@
-/* global define */
+/* global define, MOUNT_PATH */
 define([
 	'mvc/View',
 	'mvc/Collection',
@@ -246,17 +246,19 @@ define([
 
 		factory.saveObservation({
 			observation: this._observation,
-			success: function (){
+			success: function (observation) {
+				_this._observation.set({id: observation.get('id')}, {silent: true});
 				(new ModalView(
-					'<h3>Success!</h3><p>Your observations has been saved.</p>',
+					'<h3>Success!</h3><p>Your observation has been saved.</p>',
 					{
 						title: 'Save Successful',
+						classes: ['modal-success'],
+						closable: false,
 						buttons: [{
-							classes: ['center'],
-							text: 'View Observations',
+							text: 'Back to Observatory',
 							callback: function () {
-								window.location = 'observatory/' +
-										_this._observation.get('observatory_id');
+								window.location = MOUNT_PATH + '/observatory/' +
+										observation.get('observatory_id');
 							}
 						}]
 					}
