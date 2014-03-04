@@ -1,5 +1,9 @@
 <?php
 
+include_once 'ObservationDetail.class.php';
+include_once 'Measurement.class.php';
+include_once 'Reading.class.php';
+
 class ObservationFactory {
 
 	private $db;

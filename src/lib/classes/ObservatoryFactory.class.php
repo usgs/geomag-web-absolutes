@@ -1,5 +1,12 @@
 <?php
 
+include_once 'Observatory.class.php';
+include_once 'ObservatoryDetail.class.php';
+include_once 'Instrument.class.php';
+include_once 'Mark.class.php';
+include_once 'Observation.class.php';
+include_once 'Pier.class.php';
+
 class ObservatoryFactory {
 
 	private $db;
