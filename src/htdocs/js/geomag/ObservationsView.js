@@ -80,7 +80,7 @@ define([
 		    button = document.createElement('a');
 
 		button.className = 'button';
-		button.href = '/observation/';
+		button.href = 'observation/';
 		button.role = 'button';
 		button.innerHTML = 'Add New Observation';
 
@@ -154,7 +154,7 @@ define([
 			observation = observations[i];
 			markup.push(
 				'<li>' +
-					'<a href="/observation/' + observation.get('id') + '">Observation ' +
+					'<a href="observation/' + observation.get('id') + '">Observation ' +
 						this._formatDate(observation) +
 					'</a>' +
 					//TODO, add delete button to observations
