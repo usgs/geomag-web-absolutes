@@ -182,8 +182,6 @@ define([
 		return new ObservationDetail(this);
 	};
 
-
-<<<<<<< HEAD
 	/**
 	 * Serializes an observation to a string.
 	 *
