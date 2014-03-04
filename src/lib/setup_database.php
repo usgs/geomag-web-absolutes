@@ -21,7 +21,10 @@ include_once 'install-funcs.inc.php';
 
 // Initial configuration stuff
 if (!file_exists($CONFIG_FILE)) {
-	include_once 'configure.php';
+	print "$CONFIG_FILE not found. Please configure the application " .
+			'before trying to set up the database. Configuration can be ' .
+			"done as part of the installation process.\n";
+	exit(-1);
 }
 $CONFIG = parse_ini_file($CONFIG_FILE);
 
