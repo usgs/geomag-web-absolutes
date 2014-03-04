@@ -66,10 +66,14 @@ class ObservationFactory {
 				$object->reviewed, PDO::PARAM_STR);
 		$statement->bindParam(':annotation',
 				$object->annotation, PDO::PARAM_STR);
-		if (!$statement->execute()) {
+
+		try {
+			$statement->execute();
+		} catch (Exception $ex) {
 			$this->db->rollback();
 			$this->triggerError($statement);
 		}
+
 		$statement->closeCursor();
 
 		$observation_id = intval($this->db->lastInsertId());
@@ -95,10 +99,14 @@ class ObservationFactory {
 		$this->deleteReadings($object->id);
 		$statement = $this->db->prepare('DELETE FROM observation WHERE id=:id');
 		$statement->bindParam(':id', $object->id, PDO::PARAM_INT);
-		if (!$statement->execute()) {
+
+		try {
+			$statement->execute();
+		} catch (Exception $ex) {
 			$this->db->rollback();
 			$this->triggerError($statement);
 		}
+
 		$statement->closeCursor();
 		$this->db->commit();
 		return true;
@@ -121,7 +129,8 @@ class ObservationFactory {
 				'id = :id');
 		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 
-		if ($statement->execute()) {
+		try {
+			$statement->execute();
 			$row = $statement->fetch(PDO::FETCH_ASSOC);
 			if($row) {
 				$readings = $this->getReadings($id);
@@ -136,7 +145,7 @@ class ObservationFactory {
 						safefloatval($row['proton_temperature']),
 						$row['reviewed'], $row['annotation'], $readings);
 			}
-		} else {
+		} catch (Exception $ex) {
 			$this->triggerError($statement);
 		}
 		$statement->closeCursor();
@@ -194,10 +203,14 @@ class ObservationFactory {
 		$statement->bindParam(':annotation',
 				$object->annotation, PDO::PARAM_STR);
 		$statement->bindParam(':id', $object->id, PDO::PARAM_INT);
-		if (!$statement->execute()) {
+
+		try {
+			$statement->execute();
+		} catch (Exception $ex) {
 			$this->db->rollback();
 			$this->triggerError($statement);
 		}
+
 		$statement->closeCursor();
 
 		$this->deleteReadings($object->id);
@@ -234,10 +247,14 @@ class ObservationFactory {
 			$statement->bindParam(':e', $object->e, PDO::PARAM_STR);
 			$statement->bindParam(':z', $object->z, PDO::PARAM_STR);
 			$statement->bindParam(':f', $object->f, PDO::PARAM_STR);
-			if (!$statement->execute()) {
+
+			try {
+				$statement->execute();
+			} catch (Exception $ex) {
 				$this->db->rollback();
 				$this->triggerError($statement);
 			}
+
 			$statement->closeCursor();
 		}
 		return true;
@@ -284,10 +301,14 @@ class ObservationFactory {
 					$object->vertical_intensity_valid, PDO::PARAM_STR);
 			$statement->bindParam(':annotation',
 					$object->annotation, PDO::PARAM_STR);
-			if (!$statement->execute()) {
+
+			try {
+				$statement->execute();
+			} catch (Exception $ex) {
 				$this->db->rollback();
 				$this->triggerError($statement);
 			}
+
 			$statement->closeCursor();
 			$reading_id = intval($this->db->lastInsertId());
 			$this->createMeasurements($object->measurements, $reading_id);
@@ -312,10 +333,14 @@ class ObservationFactory {
 		$measurements = $this->getMeasurements($id);
 		foreach ($measurements as $object) {
 			$statement->bindParam(':id', $object->id, PDO::PARAM_INT);
-			if (!$statement->execute()) {
+
+			try {
+				$statement->execute();
+			} catch (Exception $ex) {
 				$this->db->rollback();
 				$this->triggerError($statement);
 			}
+
 			$statement->closeCursor();
 		}
 		return true;
@@ -339,10 +364,14 @@ class ObservationFactory {
 		foreach ($readings as $object) {
 			$this->deleteMeasurements($object->id);
 			$statement->bindParam(':id', $object->id, PDO::PARAM_INT);
-			if (!$statement->execute()) {
+
+			try {
+				$statement->execute();
+			} catch (Exception $ex) {
 				$this->db->rollback();
 				$this->triggerError($statement);
 			}
+
 			$statement->closeCursor();
 		}
 		return true;
@@ -365,7 +394,8 @@ class ObservationFactory {
 				'reading_id = :id ORDER BY type');
 		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 
-		if ($statement->execute()) {
+		try {
+			$statement->execute();
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$measurement = new Measurement(intval($row['ID']),
 						intval($row['reading_id']), $row['type'],
@@ -374,7 +404,7 @@ class ObservationFactory {
 						safefloatval($row['z']), safefloatval($row['f']));
 				$measurements[] = $measurement;
 			}
-		} else {
+		} catch (Exception $ex) {
 			$this->triggerError($statement);
 		}
 
@@ -399,7 +429,8 @@ class ObservationFactory {
 				'observation_id = :id ORDER by set_number');
 		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 
-		if ($statement->execute()) {
+		try {
+			$statement->execute();
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$reading_id = intval($row['ID']);
 				$measurements = $this->getMeasurements($reading_id);
@@ -414,7 +445,7 @@ class ObservationFactory {
 						$row['annotation'], $measurements );
 				$readings[] = $reading;
 			}
-		} else {
+		} catch (Exception $ex) {
 			$this->triggerError($statement);
 		}
 

@@ -34,7 +34,9 @@ class ObservatoryFactory {
 		$objects = array();
 		$statement = $this->db->prepare('SELECT * FROM observatory ' .
 				'ORDER BY name');
-		if ($statement->execute()) {
+
+		try {
+			$statement->execute();
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$observatory = new Observatory(intval($row['ID']),
 						$row['code'], $row['name'],
@@ -46,9 +48,10 @@ class ObservatoryFactory {
 						safefloatval($row['elevation']), $row['orientation']);
 				$objects[] = $observatory;
 			}
-		} else {
+		} catch (Exception $ex) {
 			$this->triggerError($statement);
 		}
+
 		$statement->closeCursor();
 
 		return $objects;
@@ -71,7 +74,8 @@ class ObservatoryFactory {
 				'id = :id');
 		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 
-		if ($statement->execute()) {
+		try {
+			$statement->execute();
 			$row = $statement->fetch(PDO::FETCH_ASSOC);
 			if($row) {
 				$instruments = $this->getInstruments($id);
@@ -87,9 +91,10 @@ class ObservatoryFactory {
 						safefloatval($row['elevation']), $row['orientation'],
 						$instruments, $observations, $piers);
 			}
-		} else {
+		} catch (Exception $ex) {
 			$this->triggerError($statement);
 		}
+
 		$statement->closeCursor();
 
 		return $observatory;
@@ -112,7 +117,8 @@ class ObservatoryFactory {
 				'WHERE observatory_id=:id ORDER BY name');
 		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 
-		if ($statement->execute()) {
+		try {
+			$statement->execute();
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$instrument = new Instrument(intval($row['ID']),
 						intval($row['observatory_id']),
@@ -121,7 +127,7 @@ class ObservatoryFactory {
 						$row['name'], $row['type']);
 				$instruments[] = $instrument;
 			}
-		} else {
+		} catch (Exception $ex) {
 			$this->triggerError($statement);
 		}
 
@@ -146,18 +152,20 @@ class ObservatoryFactory {
 				'pier_id=:id ORDER BY name');
 		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 
-		if ($statement->execute()) {
+		try {
+			$statement->execute();
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$mark = new Mark(intval($row['ID']), intval($row['pier_id']),
 						$row['name'], safeintval($row['begin']),
 						safeintval($row['end']), safefloatval($row['azimuth']));
 				$marks[] = $mark;
 			}
-		} else {
+		} catch (Exception $ex) {
 			$this->triggerError($statement);
 		}
 
 		$statement->closeCursor();
+
 		return $marks;
 	}
 
@@ -179,7 +187,8 @@ class ObservatoryFactory {
 				'observatory_id=:id ORDER BY begin DESC');
 		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 
-		if ($statement->execute()) {
+		try {
+			$statement->execute();
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$observation = new Observation(intval($row['ID']),
 						intval($row['observatory_id']), safeintval($row['begin']),
@@ -194,7 +203,7 @@ class ObservatoryFactory {
 						$row['annotation']);
 				$observations[] = $observation;
 			}
-		} else {
+		} catch (Exception $ex) {
 			$this->triggerError($statement);
 		}
 
@@ -219,7 +228,8 @@ class ObservatoryFactory {
 				'observatory_id=:id ORDER BY name');
 		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 
-		if ($statement->execute()) {
+		try {
+			$statement->execute();
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$pier_id = intval($row['ID']);
 				$marks = $this->getMarks($pier_id);
@@ -231,11 +241,12 @@ class ObservatoryFactory {
 						safeintval($row['default_theodolite_id']), $marks);
 				$piers[] = $pier;
 			}
-		} else {
+		} catch (Exception $ex) {
 			$this->triggerError($statement);
 		}
 
 		$statement->closeCursor();
+
 		return $piers;
 	}
 
