@@ -18,7 +18,9 @@ define([
 		'h': null,
 		'e': null,
 		'z': null,
-		'f': null
+		'f': null,
+		'time_error':null,
+		'angle_error':null
 	};
 
 	/**
@@ -67,6 +69,19 @@ define([
 		this.set(toset);
 	};
 
+	Measurement.prototype.getErrors = function () {
+		var errors = [];
+
+		if (this.get('time_error') !== null) {
+			errors.push(this.get('time_error'));
+		}
+
+		if (this.get('angle_error') !== null) {
+			errors.push(this.get('angle_error'));
+		}
+
+		return errors;
+	};
 
 	// These are in the same order as appear on the paper form.
 	Measurement.FIRST_MARK_UP = 'FirstMarkUp';

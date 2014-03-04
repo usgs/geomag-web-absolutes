@@ -1,6 +1,14 @@
 <?php
 
-include_once '../conf/config.inc.php';
+if (!isset($TEMPLATE)) {
+	include_once '../conf/config.inc.php';
+	include_once 'functions.inc.php';
+}
+
+$id = param('id', null);
+if ($id !== null) {
+	$id = intval($id, 10);
+}
 
 // POST,GET,PUT,DELETE => Create,Read,Update,Delete
 $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] :
@@ -69,6 +77,7 @@ try {
 		// notify it worked
 		echo 'deleted';
 	} else {
+
 		// read json from client
 		$json = file_get_contents('php://input');
 		$json = json_decode($json, true /* associative */);
@@ -79,6 +88,11 @@ try {
 			if ($observation->id !== null) {
 				header('HTTP/1.1 400 Bad Request');
 				echo 'cannot create an observation that already has an id';
+				exit();
+			}
+			if ($observation->observatory_id === null) {
+				header('HTTP/1.1 400 Bad Request');
+				echo 'cannot create an observation without an observatory';
 				exit();
 			}
 			$observation = $OBSERVATION_FACTORY->createObservation($observation);
@@ -107,6 +121,7 @@ try {
 
 	// log the error
 	error_log($e->getMessage());
+	echo $e->getMessage();
 
 	exit();
 }

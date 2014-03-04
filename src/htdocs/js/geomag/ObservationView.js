@@ -3,6 +3,7 @@ define([
 	'mvc/View',
 	'mvc/Collection',
 	'util/Util',
+	'util/Xhr',
 
 	'geomag/ObservatoryFactory',
 	'geomag/Observation',
@@ -14,6 +15,7 @@ define([
 	View,
 	Collection,
 	Util,
+	Xhr,
 
 	ObservatoryFactory,
 	Observation,
@@ -57,6 +59,7 @@ define([
 			'<section class="observation-view">',
 				'<section class="observation-meta-wrapper"></section>',
 				'<section class="reading-group-view-wrapper"></section>',
+				'<section class="observation-view-controls"></section>',
 			'</section>'
 		].join('');
 
@@ -72,7 +75,12 @@ define([
 			id: this._options.observationId || null,
 			success: this._setObservation.bind(this)
 		});
+		this._createControls();
+
+
+
 	};
+
 
 	/**
 	 * Called when observation has been loaded.
@@ -102,6 +110,12 @@ define([
 		this._realtimeDataFactory.on('change:observatory', getRealtimeData);
 		observation.eachMeasurement(function (measurement) {
 			measurement.on('change:time', getRealtimeData);
+		});
+
+		// bind to measurement change
+		var _updateErrorCount = this._updateErrorCount.bind(this);
+		this._observation.eachMeasurement(function (measurement) {
+			measurement.on('change', _updateErrorCount);
 		});
 	};
 
@@ -200,8 +214,131 @@ define([
 				});
 			}
 		});
+
 	};
 
+	/**
+	 * Create a panel at the bottom of the Observation view to create or delete
+	 * the observation
+	 *
+	 */
+	ObservationView.prototype._createControls = function () {
+		var controls = this._el.querySelector('.observation-view-controls'),
+		    saveButton = document.createElement('button'),
+		    _this = this;
+
+		saveButton.id = 'saveButton';
+		saveButton.innerHTML = 'Save Observation';
+
+		Util.addEvent(saveButton, 'click', function () {
+			_this._saveObservation();
+		});
+
+		controls.appendChild(saveButton);
+	};
+
+
+	ObservationView.prototype._saveObservation = function () {
+		var factory = this._options.factory;
+
+		factory.saveObservation(this._observation);
+	};
+
+	ObservationView.prototype._updateErrorCount = function () {
+		var errors = [],
+		    el = this._el.querySelector('.observation-view-controls'),
+		    errorDiv,
+		    measurementErrors,
+		    saveButton = el.querySelector('#saveButton'),
+		    readingErrors, setNumber, list, header,
+		    _this = this;
+
+
+		this._observation.eachReading(function (reading) {
+
+			setNumber = reading.get('set_number');
+			readingErrors = [];
+
+			reading.eachMeasurement(function (measurement) {
+
+				// get all errors for the measurement
+				measurementErrors = _this._formatMeasurementErrors(measurement);
+
+				// check for number of measurement errors
+				if (measurementErrors !== null) {
+					// if there are errors add to total number of errors
+					readingErrors.push(measurementErrors);
+				}
+
+			});
+
+			// organize all errors by reading set
+			if (readingErrors.length > 0) {
+				errors.push('<li>' +
+						'Set ' + setNumber + ' has error(s)' +
+							'<ul>' +
+								readingErrors.join('') +
+							'</ul>' +
+					'</li>'
+				);
+			}
+		});
+
+		errorDiv = el.querySelector('.alert');
+
+		// errors exist, append details
+		if (errors.length > 0) {
+
+			list = el.querySelector('.alert > ul');
+
+			if (list) {
+				list.innerHTML = errors.join('');
+			} else {
+				errorDiv = document.createElement('div');
+				errorDiv.className = 'alert error';
+				el.appendChild(errorDiv);
+
+				header = document.createElement('header');
+				header.innerHTML = 'Errors';
+				errorDiv.appendChild(header);
+
+				list = document.createElement('ul');
+				list.innerHTML = errors.join('');
+				errorDiv.appendChild(list);
+
+				// disable the save button
+				saveButton.disabled = true;
+			}
+		} else {
+				// enable the save button
+				saveButton.disabled = false;
+				if(errorDiv) {
+					errorDiv.remove();
+				}
+		}
+	};
+
+
+
+	ObservationView.prototype._formatMeasurementErrors = function (measurement) {
+		var time_error = measurement.get('time_error'),
+		    angle_error = measurement.get('angle_error'),
+		    markup = [];
+
+		if (time_error !== null) {
+			markup.push(measurement.get('type') + ' - ' + time_error);
+		}
+
+		if (angle_error !== null) {
+			markup.push(measurement.get('type') + ' - ' + angle_error);
+		}
+
+		if (markup.length === 0) {
+			return null;
+		}
+
+		return '<li>' + markup.join('</li><li>') + '</li>';
+	};
 
 	// return constructor
 	return ObservationView;
