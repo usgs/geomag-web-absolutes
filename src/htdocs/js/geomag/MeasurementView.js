@@ -83,8 +83,7 @@ define([
 	MeasurementView.prototype._initialize = function () {
 		var _this = this,
 		    onTimeChange = null,
-		    onAngleChange = null,
-		    begin;
+		    onAngleChange = null;
 
 		this._measurement = this._options.measurement;
 		this._observation = this._options.observation;
@@ -120,13 +119,13 @@ define([
 
 			// validate time change
 			error = _this._validateTime(time);
-			begin = _this._observation.get('begin');
 
 			if (error === null) {
 				// no errors on measurement, set measurement values
 				_this._measurement.set({
 					// TODO, add offset
-					'time': Format.parseRelativeTime(time, begin),
+					'time': Format.parseRelativeTime(time,
+							_this._observation.get('begin')),
 					'time_error': null
 				});
 			} else {
@@ -167,19 +166,11 @@ define([
 
 	MeasurementView.prototype._validateTime = function (time) {
 		var validTime = true,
-				helpText = null,
-				begin;
-
-		// TIME
-		begin = this._observation.get('begin');
+		    helpText = null;
 
 		if (!Validate.validTime(time)) {
 			validTime = false;
 			helpText = 'Invalid Time. HH24:MI:SS';
-			//TODO add offset
-		} else if (Format.parseRelativeTime(time, begin) < begin) {
-			validTime = false;
-			helpText = 'Time is before start time.';
 		}
 		this._updateErrorState(this._timeInput, validTime, helpText);
 
@@ -189,9 +180,9 @@ define([
 	MeasurementView.prototype._validateAngle =
 			function (degrees, minutes, seconds) {
 		var validDegrees = true,
-				validMinutes = true,
-				validSeconds = true,
-				helpText = null;
+		    validMinutes = true,
+		    validSeconds = true,
+		    helpText = null;
 
 		// DEGREES
 		if (!Validate.validDegrees(degrees)) {
