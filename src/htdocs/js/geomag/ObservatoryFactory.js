@@ -185,12 +185,55 @@ define([
 	};
 
 
-	ObservatoryFactory.prototype.saveObservation = function (observation) {
-		var observationDetailUrl = this._options.observationDetailUrl,
+	/**
+	 * Serializes an observation to a string.
+	 *
+	 * Converts millisecond timestamps to second timestamps for server.
+	 *
+	 * @param observation {Observation}
+	 *        observation to serialize.
+	 * @return {String} serialized observation.
+	 */
+	ObservatoryFactory.prototype._serializeObservation = function (observation) {
+		var json,
+		    readings,
+		    r,
+		    rlen,
+		    measurements,
+		    measurement,
+		    m,
+		    mlen,
 		    data;
 
 		// serialize the observation object
-		data = JSON.stringify(observation);
+		json = observation.toJSON();
+		// convert milliseconds to seconds
+		json.begin = this._toSeconds(json.begin);
+		json.end = this._toSeconds(json.end);
+
+		readings = json.readings;
+		for (r = 0, rlen = readings.length; r < rlen; r++) {
+			measurements = readings[r].measurements;
+			for (m = 0, mlen = measurements.length; m < mlen; m++) {
+				measurement = measurements[m];
+				measurement.time = this._toSeconds(measurement.time);
+			}
+		}
+
+		data = JSON.stringify(json);
+		return data;
+	};
+
+
+	/**
+	 * Save an observation to the server.
+	 *
+	 * @param observation {Observation}
+	 *        the observation to save.
+	 */
+	ObservatoryFactory.prototype.saveObservation = function (observation) {
+		var observationDetailUrl = this._options.observationDetailUrl,
+		    data = this._serializeObservation(observation);
 
 		// post/put observation data to observation_data.php
 		Xhr.ajax({
@@ -263,8 +306,11 @@ define([
 	 * @return {Observation}
 	 */
 	ObservatoryFactory.prototype._getObservation = function (observation) {
-		observation.readings = this._getReadings(observation.readings);
-		return new ObservationDetail(this, observation);
+		var data = Util.extend({}, observation);
+		data.begin = this._toMilliseconds(data.begin);
+		data.end = this._toMilliseconds(data.end);
+		data.readings = this._getReadings(observation.readings);
+		return new ObservationDetail(this, data);
 	};
 
 	/**
@@ -277,9 +323,13 @@ define([
 	ObservatoryFactory.prototype._getInstruments = function (instruments) {
 		var i,
 		    len,
-		    data = [];
+		    data = [],
+		    instrument;
 		for (i = 0, len = instruments.length; i < len; i++) {
-			data[i] = new Instrument(instruments[i]);
+			instrument = Util.extend({}, instruments[i]);
+			instrument.begin = this._toMilliseconds(instrument.begin);
+			instrument.end = this._toMilliseconds(instrument.end);
+			data[i] = new Instrument(instrument);
 		}
 		return new Collection(data);
 	};
@@ -297,7 +347,9 @@ define([
 		    len,
 		    data = [];
 		for (i = 0, len = piers.length; i < len; i++) {
-			pier = piers[i];
+			pier = Util.extend({}, piers[i]);
+			pier.begin = this._toMilliseconds(pier.begin);
+			pier.end = this._toMilliseconds(pier.end);
 			pier.marks = this._getMarks(pier.marks);
 			_selectById(pier.marks, pier.default_mark_id);
 			data[i] = new Pier(pier);
@@ -315,8 +367,12 @@ define([
 	ObservatoryFactory.prototype._getMarks = function (marks) {
 		var i,
 		    len,
-		    data = [];
+		    data = [],
+		    mark;
 		for (i = 0, len = marks.length; i < len; i++) {
+			mark = Util.extend({}, marks[i]);
+			mark.begin = this._toMilliseconds(mark.begin);
+			mark.end = this._toMilliseconds(mark.end);
 			data[i] = new Mark(marks[i]);
 		}
 		return new Collection(data);
@@ -332,9 +388,13 @@ define([
 	ObservatoryFactory.prototype._getObservations = function (observations) {
 		var i,
 		    len,
-		    data = [];
+		    data = [],
+		    observation;
 		for (i = 0, len = observations.length; i < len; i++) {
-			data[i] = new ObservationSummary(this, observations[i]);
+			observation = Util.extend({}, observations[i]);
+			observation.begin = this._toMilliseconds(observation.begin);
+			observation.end = this._toMilliseconds(observation.end);
+			data[i] = new ObservationSummary(this, observation);
 		}
 		return new Collection(data);
 	};
@@ -352,7 +412,7 @@ define([
 		    len,
 		    data = [];
 		for (i = 0, len = readings.length; i < len; i++) {
-			reading = readings[i];
+			reading = Util.extend({}, readings[i]);
 			reading.measurements = this._getMeasurements(reading.measurements);
 			data[i] = new Reading(reading);
 		}
@@ -369,11 +429,43 @@ define([
 	ObservatoryFactory.prototype._getMeasurements = function (measurements) {
 		var i,
 		    len,
-		    data = [];
+		    data = [],
+		    measurement;
 		for (i = 0, len = measurements.length; i < len; i++) {
-			data[i] = new Measurement(measurements[i]);
+			measurement = Util.extend({}, measurements[i]);
+			measurement.time = this._toMilliseconds(measurement.time);
+			data[i] = new Measurement(measurement);
 		}
 		return new Collection(data);
+	};
+
+
+	/**
+	 * Convert a seconds value to milliseconds.
+	 *
+	 * @param seconds {Number}
+	 *        second epoch timestamp to convert.
+	 * @return milliseconds, or null if seconds was null.
+	 */
+	ObservatoryFactory.prototype._toMilliseconds = function (seconds) {
+		if (seconds === null) {
+			return null;
+		}
+		return seconds * 1000;
+	};
+
+	/**
+	 * Convert a milliseconds value to seconds.
+	 *
+	 * @param milliseconds {Number}
+	 *        millisecond epoch timestamp to convert.
+	 * @return seconds, or null if milliseconds was null.
+	 */
+	ObservatoryFactory.prototype._toSeconds = function (milliseconds) {
+		if (milliseconds === null) {
+			return null;
+		}
+		return Math.round(milliseconds / 1000);
 	};
 
 
