@@ -105,10 +105,10 @@ if ($dbtype === 'mysql') {
 		$setupdb = new PDO(str_replace("dbname=${dbname}", '', $CONFIG['DB_DSN']),
 				$username, $password);
 
-	} finally {
-		$db->exec('CREATE DATABASE IF NOT EXISTS ' . $dbname);
-		$db->exec('USE ' . $dbname);
 	}
+
+	$db->exec('CREATE DATABASE IF NOT EXISTS ' . $dbname);
+	$db->exec('USE ' . $dbname);
 
 } else if ($dbtype === 'sqlite') {
 
