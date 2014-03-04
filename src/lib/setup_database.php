@@ -112,15 +112,14 @@ if ($dbtype === 'mysql') {
 
 } else if ($dbtype === 'sqlite') {
 
-	if (preg_match('/:([^;])+/', $CONFIG['DB_DSN'], $matches)) {
+	if (preg_match('/:([^;]+)/', $CONFIG['DB_DSN'], $matches)) {
 
 		$dbfilename = $matches[1];
 
 		if (file_exists($dbfilename)) {
-			print "SQLite database ($dbfilename). Backed up database to file " .
+			print "SQLite database ($dbfilename) exists. Backed up database to file " .
 					"${dbfilename}.bak before removing.\n";
 			rename($dbfilename, "${dbfilename}.bak");
-			unlink($dbfilename);
 		}
 	}
 
