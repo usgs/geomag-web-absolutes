@@ -1,5 +1,7 @@
 <?php
 
+include_once 'Observatory.class.php';
+
 /**
  * Data class representing an observatory with child 1 to many data.
  */

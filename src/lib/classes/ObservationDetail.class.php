@@ -1,5 +1,7 @@
 <?php
 
+include_once 'Observation.class.php';
+
 /**
  * Data class representing an observation with child data.
  */
@@ -31,7 +33,7 @@ class ObservationDetail extends Observation {
 
 		return new ObservationDetail($p['id'], $p['observatory_id'],
 					$p['begin'], $p['end'], $p['reviewer_user_id'],
-					$p['mark_id'], $p['electronics_id'], $p['theodolite_[d'],
+					$p['mark_id'], $p['electronics_id'], $p['theodolite_id'],
 					$p['pier_temperature'], $p['elect_temperature'],
 					$p['flux_temperature'], $p['proton_temperature'],
 					$p['reviewed'], $p['annotation'], $readings);
@@ -39,7 +41,7 @@ class ObservationDetail extends Observation {
 
 	public function toArray () {
 		$subclassArray = array('readings' => $this->readings);
-		return array_merge (parent::toArray(), subclassArray);
+		return array_merge (parent::toArray(), $subclassArray);
 	}
 
 }

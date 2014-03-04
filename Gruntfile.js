@@ -268,6 +268,7 @@ module.exports = function (grunt) {
 		copy: {
 			app: {
 				expand: true,
+				options: {mode: true},
 				cwd: '<%= app.dev %>/htdocs',
 				dest: '<%= app.dist %>/htdocs',
 				src: [
@@ -277,15 +278,16 @@ module.exports = function (grunt) {
 			},
 			conf: {
 				expand: true,
+				options: {mode: true},
 				cwd: '<%= app.dev %>/conf',
 				dest: '<%= app.dist %>/conf',
 				src: [
-					'**/*',
-					'!**/*.orig'
+					'config.inc.php'
 				]
 			},
 			lib: {
 				expand: true,
+				options: {mode: true},
 				cwd: '<%= app.dev  %>/lib',
 				dest: '<%= app.dist %>/lib',
 				src: [
