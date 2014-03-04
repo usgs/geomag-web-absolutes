@@ -20,8 +20,7 @@ define([
 
 	'use strict';
 
-	var expect = chai.expect,
-	    EPSILON = 0.01;
+	var expect = chai.expect;
 
 	var calc = new ObservationBaselineCalculator({
 			calculator: new BaselineCalculator(),
@@ -199,11 +198,9 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 180.2319;
-
-				console.log(expected + ' | ' + calc.magneticSouthMeridian(READING));
-
-				expect(Math.abs(calc.magneticSouthMeridian(READING) -
-						expected)).to.be.below(EPSILON);
+				//console.log(expected + ' | ' + calc.magneticSouthMeridian(READING));
+				expect(calc.magneticSouthMeridian(READING))
+						.to.be.closeTo(expected,0.001);
 			});
 
 		}); // END :: magneticSouthMeridian
@@ -212,11 +209,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 10.1021;
-
-				console.log(expected + ' | ' + calc.magneticAzimuthMark(READING));
-
-				expect(Math.abs(calc.magneticAzimuthMark(READING) -
-						expected)).to.below(EPSILON);
+				//console.log(expected + ' | ' + calc.magneticAzimuthMark(READING));
+				expect(calc.magneticAzimuthMark(READING)).to.be.closeTo(expected,0.01);
 			});
 
 		}); // END :: magneticAzimuthMark
@@ -225,11 +219,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = -188.8069;
-
-				console.log(expected + ' | ' + calc.geographicMeridian(READING));
-
-				expect(Math.abs(calc.geographicMeridian(READING) -
-						expected)).to.be.below(EPSILON);
+				//console.log(expected + ' | ' + calc.geographicMeridian(READING));
+				expect(calc.geographicMeridian(READING)).to.be.closeTo(expected,0.001);
 			});
 
 		}); // END :: geographicMeridian
@@ -238,11 +229,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 9.0362;
-
-				console.log(expected + ' | ' + calc.magneticDeclination(READING));
-
-				expect(Math.abs(calc.magneticDeclination(READING) -
-						expected)).to.be.below(EPSILON);
+				//console.log(expected + ' | ' + calc.magneticDeclination(READING));
+				expect(calc.magneticDeclination(READING)).to.be.closeTo(expected,0.01);
 			});
 
 		}); // END ::  magneticDeclination
@@ -252,7 +240,7 @@ define([
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.07166666666666667;   // 4.3' converted to degrees
 				//console.log(expected + ' | ' + calc.w(READING));
-				expect(Math.abs(calc.w(READING) - expected)).to.be.below(EPSILON);
+				expect(calc.w(READING)).to.be.closeTo(expected,0.0001);
 			});
 
 		}); // END ::  w
@@ -262,7 +250,7 @@ define([
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.09716666666666667;    // 5.83 converted to degrees
 				//console.log(expected + ' | ' + calc.e(READING));
-				expect(Math.abs(calc.e(READING) - expected)).to.be.below(EPSILON);
+				expect(calc.e(READING)).to.be.closeTo(expected,0.0001);
 			});
 
 		}); // END :: e
@@ -272,9 +260,7 @@ define([
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 52606.01;
 				console.log(expected + ' | ' + calc.correctedF(READING));
-
-				expect(Math.abs(calc.correctedF(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.correctedF(READING)).to.be.closeTo(expected,0.00001);
 			});
 
 		}); // END :: corrected F
@@ -283,11 +269,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 66.6606;
-
-				console.log(expected + ' | ' + calc.inclination(READING));
-
-				expect(Math.abs(calc.inclination(READING) -
-						expected)).to.be.below(EPSILON);
+				//console.log(expected + ' | ' + calc.inclination(READING));
+				expect(calc.inclination(READING)).to.be.closeTo(expected,0.001);
 			});
 
 		}); // END :: inclination
@@ -296,11 +279,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 20841.33; // 20841.33
-
 				console.log(expected + ' | ' + calc.horizontalComponent(READING));
-
-				expect(Math.abs(calc.horizontalComponent(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.horizontalComponent(READING)).to.be.closeTo(expected,0.0001);
 			});
 
 		}); // END :: horiztonal Component
@@ -309,11 +289,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 48301.46; // 48301.46
-
 				console.log(expected + ' | ' + calc.verticalComponent(READING));
-
-				expect(Math.abs(calc.verticalComponent(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.verticalComponent(READING)).to.be.closeTo(expected,0.0001);
 			});
 
 		}); // END :: verticalComponent
@@ -322,10 +299,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.0046666;    // 0 0.28 converted to degrees
-
-				console.log(expected + ' | ' + calc.s(READING));
-
-				expect(Math.abs(calc.s(READING) - expected)).to.be.below(EPSILON);
+				//console.log(expected + ' | ' + calc.s(READING));
+				expect(calc.s(READING)).to.be.closeTo(expected,0.0001);
 			});
 
 		}); // END :: s
@@ -335,10 +310,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.0063333;    //  0 0.38 converted to degrees
-
-				console.log(expected + ' | ' + calc.n(READING));
-
-				expect(Math.abs(calc.n(READING) - expected)).to.be.below(EPSILON);
+				//console.log(expected + ' | ' + calc.n(READING));
+				expect(calc.n(READING)).to.be.closeTo(expected,0.0001);
 			});
 
 		}); // END :: n
@@ -348,11 +321,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.16494853255526;   // 0.16494853255526
-
 				console.log(expected + ' | ' + calc.scaleValue(READING));
-
-				expect(Math.abs(calc.scaleValue(READING)) -
-						expected).to.be.below(EPSILON);
+				expect(calc.scaleValue(READING)).to.be.closeTo(expected,0.01);
 			});
 
 		}); // END :: scaleValue
@@ -361,11 +331,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = -0.7413333333333333;// 464.5604 min, converted to degrees
-
 				console.log(expected + ' | ' + calc.computedE(READING));
-
-				expect(Math.abs(calc.computedE(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.computedE(READING)).to.be.closeTo(expected,0.0001);
 			});
 
 		}); // END :: computedE
@@ -374,11 +341,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 9.780333333333335;  // 586.66 min, converted to degrees
-
 				console.log(expected + ' | ' + calc.baselineD(READING));
-
-				expect(Math.abs(calc.baselineD(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.computedD(READING)).to.be.closeTo(expected,0.0001);
 			});
 
 		}); // END :: baselineD
@@ -388,11 +352,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 20.23;
-
 				console.log(expected + ' | ' + calc.baselineH(READING));
-
-				expect(Math.abs(calc.baselineH(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.computedH(READING)).to.be.closeTo(expected,0.0001);
 			});
 
 		}); // END :: baselineH
@@ -402,11 +363,8 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 547.76;
-
 				console.log(expected + ' | ' + calc.baselineZ(READING));
-
-				expect(Math.abs(calc.baselineZ(READING) -
-						expected)).to.be.below(EPSILON);
+				expect(calc.baselineZ(READING)).to.be.closeTo(expected,0.0001);
 			});
 
 		}); // END :: baselineZ
@@ -414,15 +372,10 @@ define([
 
 		describe('d()', function () {
 
-			// the rounding makes it too hard to have a better test
-			var EPSILON = 0.1;
-
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 3557.5945472773902;   // 3556.6245477416474
-
 				console.log(expected + ' | ' + calc.d(READING));
-
-				expect(Math.abs(calc.d(READING) - expected)).to.be.below(EPSILON);
+				expect(calc.d(READING)).to.be.closeTo(expected,0.0001);
 			});
 
 		}); // END :: d
