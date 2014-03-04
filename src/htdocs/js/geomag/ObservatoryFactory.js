@@ -233,7 +233,7 @@ define([
 		var _this = this,
 		    observationDetailUrl = this._options.observationDetailUrl,
 		    observation = options.observation,
-		    data = this._serializeObservation(observation);;
+		    data = this._serializeObservation(observation);
 
 		// post/put observation data to observation_data.php
 		Xhr.ajax({
