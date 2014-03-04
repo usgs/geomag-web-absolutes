@@ -182,6 +182,7 @@ define([
 		return new ObservationDetail(this);
 	};
 
+
 	/**
 	 * Serializes an observation to a string.
 	 *
@@ -232,9 +233,7 @@ define([
 		var _this = this,
 		    observationDetailUrl = this._options.observationDetailUrl,
 		    observation = options.observation,
-		    data;
-
-		data = JSON.stringify(observation);
+		    data = this._serializeObservation(observation);;
 
 		// post/put observation data to observation_data.php
 		Xhr.ajax({
