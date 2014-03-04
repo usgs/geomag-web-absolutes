@@ -195,6 +195,7 @@ define([
 	ObservatoryFactory.prototype._serializeObservation = function (observation) {
 		var json,
 		    readings,
+		    reading,
 		    r,
 		    rlen,
 		    measurements,
@@ -209,9 +210,10 @@ define([
 		json.begin = this._toSeconds(json.begin);
 		json.end = this._toSeconds(json.end);
 
-		readings = json.readings;
+		readings = json.readings = json.readings.toJSON();
 		for (r = 0, rlen = readings.length; r < rlen; r++) {
-			measurements = readings[r].measurements;
+			reading = readings[r];
+			measurements = reading.measurements = reading.measurements.toJSON();
 			for (m = 0, mlen = measurements.length; m < mlen; m++) {
 				measurement = measurements[m];
 				measurement.time = this._toSeconds(measurement.time);
