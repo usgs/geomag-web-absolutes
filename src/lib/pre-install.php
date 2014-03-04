@@ -68,11 +68,11 @@ file_put_contents($APACHE_CONFIG_FILE, '
 		AuthUserFile ' . $CONFIG['AUTH_FILE'] . '
 		Require valid-user
 	</Location>
-	RewriteRule ^${MOUNT_PATH}/observation_data/(.*)\$ /observation_data.php?id=\$1 [L,PT]
-	RewriteRule ^${MOUNT_PATH}/observatory_detail_feed/(.*)\$ /observatory_detail_feed.php?id=\$1 [L,PT]
-	RewriteRule ^${MOUNT_PATH}/observatory_summary_feed\$ /observatory_summary_feed.php [L,PT]
-	RewriteRule ^${MOUNT_PATH}/observation/\$ /observation.php?id=\$1 [L,PT]
-	RewriteRule ^${MOUNT_PATH}/observatory/\$ /observatory.php?id=\$1 [L,PT]
+	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observation_data/(.*)$ ' . $CONFIG['MOUNT_PATH'] . '/observation_data.php?id=$1 [L,PT]
+	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observatory_detail_feed/(.*)$ ' . $CONFIG['MOUNT_PATH'] . '/observatory_detail_feed.php?id=$1 [L,PT]
+	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observatory_summary_feed/?$ ' . $CONFIG['MOUNT_PATH'] . '/observatory_summary_feed.php [L,PT]
+	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observation/(.*)$ ' . $CONFIG['MOUNT_PATH'] . '/observation.php?id=$1 [L,PT]
+	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observatory/(.*)$ ' . $CONFIG['MOUNT_PATH'] . '/observatory.php?id=$1 [L,PT]
 ');
 
 $answer = configure('DO_DB_SETUP', 'N',
