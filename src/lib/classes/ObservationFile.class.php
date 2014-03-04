@@ -780,7 +780,7 @@ class ObservationFile {
 			throw new Exception("Failed to parse time string '${time}'.");
 		}
 
-		return 1000 * strtotime(sprintf('%s %s:%s:%s', date('Y-m-d', $date),
+		return strtotime(sprintf('%s %s:%s:%s', date('Y-m-d', $date),
 				$h, $m, $s));
 	}
 
