@@ -280,8 +280,7 @@ module.exports = function (grunt) {
 				cwd: '<%= app.dev %>/conf',
 				dest: '<%= app.dist %>/conf',
 				src: [
-					'**/*',
-					'!**/*.orig'
+					'config.inc.php'
 				]
 			},
 			lib: {
