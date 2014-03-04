@@ -232,7 +232,7 @@ define([
 		// (value will be null for measurement values that don't matter)
 
 		return this._calculator.correctedF(
-				this.getMeanValue(reading, 'f'),
+				this.meanF(reading),
 				this.pierCorrection()
 		);
 	};
@@ -347,7 +347,7 @@ define([
 	 */
 	ObservationBaselineCalculator.prototype.computedE = function (reading) {
 		return this._calculator.computedE(
-				this.getMeanValue(reading, 'e'),
+				this.meanE(reading),
 				this.scaleValue(reading)
 		);
 	};
@@ -391,7 +391,7 @@ define([
 	ObservationBaselineCalculator.prototype.baselineH = function (reading) {
 		return this._calculator.baselineH(
 				this.horizontalComponent(reading),
-				this.getMeanValue(reading, 'h')
+				this.meanH(reading)
 		);
 	};
 
@@ -405,7 +405,7 @@ define([
 	ObservationBaselineCalculator.prototype.baselineZ = function (reading) {
 		return this._calculator.baselineZ(
 				this.verticalComponent(reading),
-				this.getMeanValue(reading, 'z')
+				this.meanZ(reading)
 		);
 	};
 

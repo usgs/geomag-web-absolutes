@@ -259,7 +259,12 @@ define([
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 52606.01;
-				console.log(expected + ' | ' + calc.correctedF(READING));
+				/*console.log(
+						'expected: ' + expected +
+						' meanF: ' + calc.meanF(READING) +
+						' pierCorrection: ' + calc.pierCorrection(READING) +
+						' | ' + calc.correctedF(READING)
+				);*/
 				expect(calc.correctedF(READING)).to.be.closeTo(expected,0.00001);
 			});
 
