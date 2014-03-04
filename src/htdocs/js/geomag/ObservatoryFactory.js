@@ -185,6 +185,15 @@ define([
 	};
 
 
+	/**
+	 * Serializes an observation to a string.
+	 *
+	 * Converts millisecond timestamps to second timestamps for server.
+	 *
+	 * @param observation {Observation}
+	 *        observation to serialize.
+	 * @return {String} serialized observation.
+	 */
 	ObservatoryFactory.prototype._serializeObservation = function (observation) {
 		var json,
 		    readings,
@@ -216,6 +225,12 @@ define([
 	};
 
 
+	/**
+	 * Save an observation to the server.
+	 *
+	 * @param observation {Observation}
+	 *        the observation to save.
+	 */
 	ObservatoryFactory.prototype.saveObservation = function (observation) {
 		var observationDetailUrl = this._options.observationDetailUrl,
 		    data = this._serializeObservation(observation);
@@ -425,6 +440,13 @@ define([
 	};
 
 
+	/**
+	 * Convert a seconds value to milliseconds.
+	 *
+	 * @param seconds {Number}
+	 *        second epoch timestamp to convert.
+	 * @return milliseconds, or null if seconds was null.
+	 */
 	ObservatoryFactory.prototype._toMilliseconds = function (seconds) {
 		if (seconds === null) {
 			return null;
@@ -432,6 +454,13 @@ define([
 		return seconds * 1000;
 	};
 
+	/**
+	 * Convert a milliseconds value to seconds.
+	 *
+	 * @param milliseconds {Number}
+	 *        millisecond epoch timestamp to convert.
+	 * @return seconds, or null if milliseconds was null.
+	 */
 	ObservatoryFactory.prototype._toSeconds = function (milliseconds) {
 		if (milliseconds === null) {
 			return null;
