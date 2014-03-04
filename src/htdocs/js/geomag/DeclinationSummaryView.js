@@ -30,9 +30,7 @@ define([
 		var reading = this._reading,
 		    startTime = null,
 		    endTime = null,
-		    times,
-		    degree,
-		    dms;
+		    times;
 
 		this._name.innerHTML = reading.get('set_number');
 
@@ -48,10 +46,8 @@ define([
 
 		this._shift.value = reading.get('declination_shift');
 
-		degree = this._calculator.magneticDeclination(reading);
-		dms = Formatter.decimalToDms(degree);
-		this._degrees.innerHTML = Formatter.degrees(dms[0], 0);
-		this._minutes.innerHTML = Formatter.minutes(dms[1]);
+		this._absolute.innerHTML = Formatter.degreesMinutes(
+				this._calculator.magneticDeclination(reading));
 
 		this._ordMin.innerHTML =
 				Formatter.minutes(this._calculator.computedE(reading));
@@ -72,8 +68,7 @@ define([
 			'<td class="valid"><input type="checkbox" /></td>',
 			'<td class="start-time"></td>',
 			'<td class="end-time"></td>',
-			'<td class="degrees"></td>',
-			'<td class="minutes"></td>',
+			'<td class="absolute-declination"></td>',
 			'<td class="ord-min"></td>',
 			'<td class="baseline-min"></td>',
 			'<td class="baseline-nt"></td>',
@@ -92,8 +87,7 @@ define([
 		this._valid = el.querySelector('.valid > input');
 		this._startTime = el.querySelector('.start-time');
 		this._endTime = el.querySelector('.end-time');
-		this._degrees = el.querySelector('.degrees');
-		this._minutes = el.querySelector('.minutes');
+		this._absolute = el.querySelector('.absolute-declination');
 		this._ordMin = el.querySelector('.ord-min');
 		this._baselineMin = el.querySelector('.baseline-min');
 		this._baselineNt = el.querySelector('.baseline-nt');

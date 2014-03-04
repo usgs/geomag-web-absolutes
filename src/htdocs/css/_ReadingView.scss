@@ -40,20 +40,20 @@
 .declination-input,
 .inclination-input {
 
+	table {
+		margin-right:2em;
+	}
+
 	tbody th {
 		text-align:right;
 		padding-right:16px;
-
-		&:after {
-			content:':';
-		}
 	}
 
 	input {
 		width:5em;
 	}
 	.measurement-time > input {
-		width:8em;
+		width:6em;
 	}
 
 	.measurement-degrees,
@@ -71,5 +71,12 @@
 	.measurement-h,
 	.measurement-z {
 		padding-right:8px;
+	}
+
+	td.measurement-h,
+	td.measurement-e,
+	td.measurement-z,
+	td.measurement-f {
+		font-size:smaller;
 	}
 }
