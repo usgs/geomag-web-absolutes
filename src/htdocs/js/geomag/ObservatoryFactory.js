@@ -234,6 +234,8 @@ define([
 		    observation = options.observation,
 		    data;
 
+		data = JSON.stringify(observation);
+
 		// post/put observation data to observation_data.php
 		Xhr.ajax({
 			url: observationDetailUrl,
