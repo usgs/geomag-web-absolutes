@@ -226,8 +226,14 @@ define([
 	/**
 	 * Save an observation to the server.
 	 *
-	 * @param observation {Observation}
+	 * @param options {Object}
+	 *        method options.
+	 * @param options.observation {Observation}
 	 *        the observation to save.
+	 * @param options.success {Function(ObservationDetail)}
+	 *        called with saved observatory as returned by server.
+	 * @param options.error {Function}
+	 *        called when errors loading observatories.
 	 */
 	ObservatoryFactory.prototype.saveObservation = function (options) {
 		var _this = this,
