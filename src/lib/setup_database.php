@@ -30,10 +30,6 @@ $username = configure('DB_ROOT_USER', 'root', 'Database adminitrator user');
 $password = configure('DB_ROOT_PASS', '', 'Database administrator password',
 		true);
 
-// Create an administrative connection to the database
-$setupdb = new PDO($CONFIG['DB_DSN'], $username, $password);
-$setupdb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 $defaultScriptDir = implode(DIRECTORY_SEPARATOR, array(
 		$CONFIG['APP_DIR'], 'lib', 'sql', $dbtype));
 
@@ -72,6 +68,64 @@ if (!file_exists($schemaScript)) {
 	exit(-1);
 }
 
+// Create an administrative connection to the database
+if ($dbtype === 'mysql') {
+	try {
+		$setupdb = new PDO($CONFIG['DB_DSN'], $username, $password);
+
+		// If this connection worked, database already exists. We need to drop it.
+		preg_match('/dbname=([^;]+)/', $CONFIG['DB_DSN'], $matches);
+
+		if (count($matches) < 2) {
+			print "No database name (dbname) specified in DSN. This is required \n" .
+			      "for MySQL connections. Check your configured DSN and try\n" .
+						"again. Stopping.\n";
+			exit(-1);
+		}
+
+		$dbname = $matches[1];
+
+		// Make absolutely sure
+		$answer = configure('DROP_DATABASE_CONFIRM', 'N', 'About to drop MySQL ' .
+				"database ${dbname}. Are you sure you want to continue");
+
+		if (!responseIsAffirmative($answer)) {
+			print "Normal exit.\n";
+			exit(0);
+		}
+
+		$db->exec('DROP DATABASE IF EXISTS ' . $dbname);
+
+	} catch (Exception $ex) {
+
+		// Whoops, database doesn't exist yet
+		$setupdb = new PDO(str_replace("dbname=${dbname}", '', $CONFIG['DB_DSN']),
+				$username, $password);
+
+	} finally {
+		$db->exec('CREATE DATABASE IF NOT EXISTS ' . $dbname);
+		$db->exec('USE ' . $dbname);
+	}
+
+} else if ($dbtype === 'sqlite') {
+
+	if (preg_match('/:([^;])+/', $CONFIG['DB_DSN'], $matches)) {
+
+		$dbfilename = $matches[1];
+
+		if (file_exists($dbfilename)) {
+			print "SQLite database ($dbfilename). Backed up database to file " .
+					"${dbfilename}.bak before removing.\n";
+			rename($dbfilename, "${dbfilename}.bak");
+			unlink($dbfilename);
+		}
+	}
+
+	$setupdb = new PDO($CONFIG['DB_DSN'], $username, $password);
+}
+$setupdb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// Delete existing database, then re-create it
 $setupdb->exec(file_get_contents($schemaScript));
 
 print "Schema loaded successfully!\n";
