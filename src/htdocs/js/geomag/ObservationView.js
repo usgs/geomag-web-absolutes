@@ -4,6 +4,7 @@ define([
 	'mvc/Collection',
 	'util/Util',
 	'util/Xhr',
+	'mvc/ModalView',
 
 	'geomag/ObservatoryFactory',
 	'geomag/Observation',
@@ -16,6 +17,7 @@ define([
 	Collection,
 	Util,
 	Xhr,
+	ModalView,
 
 	ObservatoryFactory,
 	Observation,
@@ -239,9 +241,36 @@ define([
 
 
 	ObservationView.prototype._saveObservation = function () {
-		var factory = this._options.factory;
+		var _this = this,
+		    factory = this._options.factory;
 
-		factory.saveObservation(this._observation);
+		factory.saveObservation({
+			observation: this._observation,
+			success: function (){
+				(new ModalView(
+					'<h3>Success!</h3><p>Your observations has been saved.</p>',
+					{
+						title: 'Save Successful',
+						buttons: [{
+							classes: ['center'],
+							text: 'View Observations',
+							callback: function () {
+								window.location = 'observatory/' +
+										_this._observation.get('observatory_id');
+							}
+						}]
+					}
+				)).show();
+			},
+			error: function (status, xhr) {
+				(new ModalView(
+					'<h3>' + status + ' Error.</h3><p>' + xhr.response + '</p>',
+					{
+						title: 'Save Failed'
+					}
+				)).show();
+			}
+		});
 	};
 
 	ObservationView.prototype._updateErrorCount = function () {
