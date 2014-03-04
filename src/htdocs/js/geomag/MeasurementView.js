@@ -47,7 +47,9 @@ define([
 	MeasurementView.prototype.render = function () {
 		var measurement = this._measurement,
 		    time = measurement.get('time'),
+		    time_error = measurement.get('time_error'),
 		    angle = measurement.get('angle'),
+		    angle_error = measurement.get('angle_error'),
 		    timeString = null,
 		    dms = null,
 		    h = measurement.get('h'),
@@ -55,24 +57,25 @@ define([
 		    z = measurement.get('z'),
 		    f = measurement.get('f');
 
-		if (time === null) {
-			timeString = '';
-		} else {
-			timeString = Format.time(time);
+		if (time_error === null) {
+			if (time === null) {
+				timeString = '';
+			} else {
+				timeString = Format.time(time);
+			}
+			this._timeInput.value = timeString;
 		}
 
-		// Deconstruct the decimal degrees back to Dms
-		// TODO :: Refactor to its own method for testability
-		if (angle === null) {
-			dms = ['', '', ''];
-		} else {
-			dms = Format.decimalToDms(angle);
+		if (angle_error === null) {
+			if (angle === null) {
+				dms = ['', '', ''];
+			} else {
+				dms = Format.decimalToDms(angle);
+			}
+			this._degreesInput.value = dms[0];
+			this._minutesInput.value = dms[1];
+			this._secondsInput.value = dms[2];
 		}
-
-		this._timeInput.value = timeString;
-		this._degreesInput.value = dms[0];
-		this._minutesInput.value = dms[1];
-		this._secondsInput.value = dms[2];
 
 		this._hValue.innerHTML = (h === null ? '--' : Format.nanoteslas(h));
 		this._eValue.innerHTML = (e === null ? '--' : Format.nanoteslas(e));
@@ -155,6 +158,7 @@ define([
 			}
 		};
 
+		this._measurement.on('change', this.render, this);
 		this._timeInput.addEventListener('blur', onTimeChange);
 		this._degreesInput.addEventListener('blur', onAngleChange);
 		this._minutesInput.addEventListener('blur', onAngleChange);

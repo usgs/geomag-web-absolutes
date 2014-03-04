@@ -86,13 +86,14 @@ define([
 
 
 			it('correctly validates all invalid measurement values', function () {
+				// trigger error with time
 				time.value = 'f';
+				time.dispatchEvent(getBlurEvent());
+
+				// trigger errors with angle
 				degrees.value = 'f';
 				minutes.value = 'f';
 				seconds.value = 'f';
-
-				// trigger blur on each element
-				time.dispatchEvent(getBlurEvent());
 				degrees.dispatchEvent(getBlurEvent());
 				minutes.dispatchEvent(getBlurEvent());
 				seconds.dispatchEvent(getBlurEvent());
