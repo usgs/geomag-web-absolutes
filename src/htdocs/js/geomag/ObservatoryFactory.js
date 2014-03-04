@@ -212,10 +212,10 @@ define([
 
 		readings = json.readings = json.readings.toJSON();
 		for (r = 0, rlen = readings.length; r < rlen; r++) {
-			reading = readings[r];
+			reading = readings[r] = readings[r].toJSON();
 			measurements = reading.measurements = reading.measurements.toJSON();
 			for (m = 0, mlen = measurements.length; m < mlen; m++) {
-				measurement = measurements[m];
+				measurement = measurements[m] = measurements[m].toJSON();
 				measurement.time = this._toSeconds(measurement.time);
 			}
 		}
