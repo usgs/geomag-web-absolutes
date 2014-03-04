@@ -204,22 +204,21 @@ define([
 		    mlen,
 		    data;
 
-		// serialize the observation object
+		// serialize the observation to JSON
 		json = observation.toJSON();
 		// convert milliseconds to seconds
 		json.begin = this._toSeconds(json.begin);
 		json.end = this._toSeconds(json.end);
-
-		readings = json.readings = json.readings.toJSON();
+		readings = json.readings;
 		for (r = 0, rlen = readings.length; r < rlen; r++) {
-			reading = readings[r] = readings[r].toJSON();
-			measurements = reading.measurements = reading.measurements.toJSON();
+			reading = readings[r];
+			measurements = reading.measurements;
 			for (m = 0, mlen = measurements.length; m < mlen; m++) {
-				measurement = measurements[m] = measurements[m].toJSON();
+				measurement = measurements[m];
 				measurement.time = this._toSeconds(measurement.time);
 			}
 		}
-
+		// convert JSON to string
 		data = JSON.stringify(json);
 		return data;
 	};
