@@ -3,7 +3,6 @@ define([
 	'util/Util',
 	'util/Xhr',
 	'mvc/Collection',
-	'mvc/ModalView',
 
 	'geomag/Observatory',
 	'geomag/Instrument',
@@ -16,7 +15,6 @@ define([
 	Util,
 	Xhr,
 	Collection,
-	ModalView,
 
 	Observatory,
 	Instrument,
@@ -231,8 +229,10 @@ define([
 	 * @param observation {Observation}
 	 *        the observation to save.
 	 */
-	ObservatoryFactory.prototype.saveObservation = function (observation) {
-		var observationDetailUrl = this._options.observationDetailUrl,
+	ObservatoryFactory.prototype.saveObservation = function (options) {
+		var _this = this,
+		    observationDetailUrl = this._options.observationDetailUrl,
+		    observation = options.observation,
 		    data = this._serializeObservation(observation);
 
 		// post/put observation data to observation_data.php
@@ -240,29 +240,10 @@ define([
 			url: observationDetailUrl,
 			rawdata: data,
 			method: (observation.id) ? 'PUT' : 'POST',
-			success: function (){
-				(new ModalView(
-					'<h3>Success!</h3><p>Your observations has been saved.</p>',
-					{
-						title: 'Save Successful',
-						buttons: [{
-							classes: ['center'],
-							text: 'View Observations',
-							callback: function () {
-								window.location = '/observatory/' + observation.get('observatory_id');
-							}
-						}]
-					}
-				)).show();
+			success: function (data) {
+				options.success(_this._getObservation(data));
 			},
-			error: function (status, xhr) {
-				(new ModalView(
-					'<h3>' + status + ' Error.</h3><p>' + xhr.response + '</p>',
-					{
-						title: 'Save Failed'
-					}
-				)).show();
-			}
+			error: options.error || function () {}
 		});
 	};
 
