@@ -7,7 +7,7 @@ class Reading {
 
 	// reading attributes
 	public $id;
-	public $observation_id;
+	protected $observation_id;
 	public $set_number;
 	public $observer_user_id;
 	public $declination_valid;
@@ -45,11 +45,12 @@ class Reading {
 			}
 		}
 
-		return new Reading ($p['id'], $p['observation_id'], $p['set_number'],
-					$p['observer_user_id'], $p['declination_valid'],
-					$p['declination_shift'], $p['horizontal_intensity_valid'],
-					$p['vertical_intensity_valid'], $p['annotation'],
-					$measurements);
+		return new Reading ($p['id'],
+				isset($p['observation_id']) ?$p['observation_id'] : null,
+				$p['set_number'], $p['observer_user_id'], $p['declination_valid'],
+				$p['declination_shift'], $p['horizontal_intensity_valid'],
+				$p['vertical_intensity_valid'], $p['annotation'],
+				$measurements);
 	}
 
 	public function toArray () {

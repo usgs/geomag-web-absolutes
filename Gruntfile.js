@@ -217,6 +217,9 @@ module.exports = function (grunt) {
 						},
 						{
 							name: 'observation'
+						},
+						{
+							name: 'observatory'
 						}
 					]
 				}

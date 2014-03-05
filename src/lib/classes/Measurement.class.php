@@ -30,21 +30,22 @@ class Measurement {
 	}
 
 	public static function fromArray (&$p) {
-		return new Measurement($p['id'], $p['reading_id'], $p['type'],
-					$p['time'], $p['angle'], $p['h'], $p['e'], $p['z'],
-					$p['f']);
+		return new Measurement($p['id'],
+				isset($p['reading_id']) ? $p['reading_id'] : null, $p['type'],
+				$p['time'], $p['angle'], $p['h'], $p['e'], $p['z'],
+				$p['f']);
 	}
 
 	public function toArray () {
 		return array('id' => $this->id,
-					'readingId' => $this->reading_id,
-					'type' => $this->type,
-					'time' => $this->time,
-					'angle' => $this->angle,
-					'h' => $this->h,
-					'e' => $this->e,
-					'z' => $this->z,
-					'f' => $this->f);
+				'readingId' => $this->reading_id,
+				'type' => $this->type,
+				'time' => $this->time,
+				'angle' => $this->angle,
+				'h' => $this->h,
+				'e' => $this->e,
+				'z' => $this->z,
+				'f' => $this->f);
 	}
 
 }
