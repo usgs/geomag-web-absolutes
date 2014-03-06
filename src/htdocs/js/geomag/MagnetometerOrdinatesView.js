@@ -78,10 +78,17 @@ define([
 						'<td class="baseline fBaseline"></td>',
 					'</tr>',
 				'</tbody>',
-			'</table>',
-			'<p class="pier-correction">Pier Correction',
-				'<span class="pier-correction-value"></span>',
+				'<tfoot class="pier-correction">',
+					'<tr>',
+						'<td colspan="4">Pier Correction',
+						'<span class="pier-correction-value"></span></td>',
+					'</tr>',
+				'</tfoot>',
 			'</p>',
+			'</table>',
+			//'<p class="pier-correction">Pier Correction',
+			//	'<span class="pier-correction-value"></span>',
+			//'</p>',
 			'<p class="scaleValue"></p>'
 		].join('');
 
