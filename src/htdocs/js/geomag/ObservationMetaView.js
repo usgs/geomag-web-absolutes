@@ -120,6 +120,7 @@ define([
 						'<label for="', idPrefix, '-pier">Pier</label>',
 						'<select id="', idPrefix, '-pier"',
 								' class="pier"></select>',
+						'<span class="pier-correction-value"></span>',
 						'<label for="', idPrefix, '-mark">Mark</label>',
 						'<select id="', idPrefix, '-mark"',
 								' class="mark"></select>',
@@ -214,9 +215,13 @@ define([
 			    mark_id = null,
 			    mark = null,
 			    pierCorrection = 0,
+			    pierCorrectionValue = '',
 			    trueAzimuthOfMark = 0;
 			if (pier !== null) {
 				pierCorrection = pier.get('correction');
+				pierCorrectionValue = el.querySelector('.pier-correction-value');
+				pierCorrectionValue.innerHTML = Format.rawNanoteslas(pierCorrection);
+
 				// update mark
 				marks = pier.get('marks');
 				mark_id = observation.get('mark_id') ||
@@ -282,6 +287,7 @@ define([
 	 */
 	ObservationMetaView.prototype._setObservatory = function (observatory) {
 		var pierSelectView = this._pierSelectView,
+		    pierCorrection = this._pierCorrection,
 		    electronicsSelectView = this._electronicsSelectView,
 		    theodoliteSelectView = this._theodoliteSelectView,
 		    // observation selections
@@ -323,6 +329,7 @@ define([
 		}
 		if (pier !== null) {
 			piers.select(pier);
+			pierCorrection = pier.get('correction');
 			default_electronics_id = pier.get('default_electronics_id');
 			default_theodolite_id = pier.get('default_theodolite_id');
 		}
