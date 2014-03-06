@@ -78,7 +78,17 @@ define([
 						'<td class="baseline fBaseline"></td>',
 					'</tr>',
 				'</tbody>',
+				'<tfoot class="pier-correction">',
+					'<tr>',
+						'<td colspan="4">Pier Correction',
+						'<span class="pier-correction-value"></span></td>',
+					'</tr>',
+				'</tfoot>',
+			'</p>',
 			'</table>',
+			//'<p class="pier-correction">Pier Correction',
+			//	'<span class="pier-correction-value"></span>',
+			//'</p>',
 			'<p class="scaleValue"></p>'
 		].join('');
 
@@ -98,26 +108,19 @@ define([
 		this._dBaseline = this._el.querySelector('.dBaseline');
 		this._zBaseline = this._el.querySelector('.zBaseline');
 
+		this._pierCorrection = this._el.querySelector('.pier-correction-value');
 		this._scaleValue = this._el.querySelector('.scaleValue');
 
 		// hook up to measurements on change.
 		// Only need time/angles not markup/markdown
-		measurements[Measurement.WEST_DOWN][0].
-				on('change', this.render, this);
-		measurements[Measurement.EAST_DOWN][0].
-				on('change', this.render, this);
-		measurements[Measurement.WEST_UP][0].
-				on('change', this.render, this);
-		measurements[Measurement.EAST_UP][0].
-				on('change', this.render, this);
-		measurements[Measurement.SOUTH_DOWN][0].
-				on('change', this.render, this);
-		measurements[Measurement.NORTH_UP][0].
-				on('change', this.render, this);
-		measurements[Measurement.SOUTH_UP][0].
-				on('change', this.render, this);
-		measurements[Measurement.NORTH_DOWN][0].
-				on('change', this.render, this);
+		measurements[Measurement.WEST_DOWN][0].on('change', this.render, this);
+		measurements[Measurement.EAST_DOWN][0].on('change', this.render, this);
+		measurements[Measurement.WEST_UP][0].on('change', this.render, this);
+		measurements[Measurement.EAST_UP][0].on('change', this.render, this);
+		measurements[Measurement.SOUTH_DOWN][0].on('change', this.render, this);
+		measurements[Measurement.NORTH_UP][0].on('change', this.render, this);
+		measurements[Measurement.SOUTH_UP][0].on('change', this.render, this);
+		measurements[Measurement.NORTH_DOWN][0].on('change', this.render, this);
 		// hook up to calculator on change.
 		// for changes to pier and mark.
 		this._calculator.on('change', this.render, this);
@@ -129,35 +132,31 @@ define([
 		var calculator = this._calculator,
 		    reading = this._reading;
 
-		this._hMean.innerHTML =
-				Format.nanoteslas(calculator.meanH(reading));
-		this._eMean.innerHTML =
-				Format.nanoteslas(calculator.meanE(reading));
-		this._dMean.innerHTML =
-				Format.minutes(calculator.computedE(reading));
-		this._zMean.innerHTML =
-				Format.nanoteslas(calculator.meanZ(reading));
-		this._fMean.innerHTML =
-				Format.nanoteslas(calculator.meanF(reading));
+		this._hMean.innerHTML = Format.nanoteslas(calculator.meanH(reading));
+		this._eMean.innerHTML = Format.nanoteslas(calculator.meanE(reading));
+		this._dMean.innerHTML = Format.minutes(calculator.computedE(reading));
+		this._zMean.innerHTML = Format.nanoteslas(calculator.meanZ(reading));
+		this._fMean.innerHTML = Format.nanoteslas(calculator.meanF(reading));
 
 		this._absoluteH.innerHTML =
-			Format.nanoteslas(calculator.horizontalComponent(reading));
+				Format.nanoteslas(calculator.horizontalComponent(reading));
 		this._absoluteD.innerHTML =
-			Format.minutes((calculator.magneticDeclination(reading) * 60));
+				Format.minutes((calculator.magneticDeclination(reading) * 60));
 		this._absoluteZ.innerHTML =
-			Format.nanoteslas(calculator.verticalComponent(reading));
+				Format.nanoteslas(calculator.verticalComponent(reading));
 		this._absoluteF.innerHTML =
-			Format.nanoteslas(calculator.correctedF(reading));
+				Format.nanoteslas(calculator.correctedF(reading));
 
 		this._hBaseline.innerHTML =
-			Format.nanoteslas(calculator.baselineH(reading));
+				Format.nanoteslas(calculator.baselineH(reading));
 		this._eBaseline.innerHTML =
-			Format.nanoteslas(calculator.baselineE(reading));
-		this._dBaseline.innerHTML =
-			Format.minutes(calculator.d(reading));
+				Format.nanoteslas(calculator.baselineE(reading));
+		this._dBaseline.innerHTML = Format.minutes(calculator.d(reading));
 		this._zBaseline.innerHTML =
-			Format.nanoteslas(calculator.baselineZ(reading));
+				Format.nanoteslas(calculator.baselineZ(reading));
 
+		this._pierCorrection.innerHTML =
+				Format.rawNanoteslas(calculator.pierCorrection());
 		this._scaleValue.innerHTML = [
 				'Ordinate Mean D is calculated using ',
 				'<code>(Corrected F * scaleValue / 60)</code>',

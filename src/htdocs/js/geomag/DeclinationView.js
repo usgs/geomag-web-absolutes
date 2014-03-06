@@ -65,13 +65,6 @@ define([
 				'<dd class="west-up-minus-east-down-value">----</dd>',
 				'<dt class="east-up-minus-west-down">(EU - WD) * 60</dt>',
 				'<dd class="east-up-minus-west-down-value">----</dd>',
-
-				'<dt class="f-mean">F Mean</dt>',
-				'<dd class="f-mean-value">--------</dd>',
-				'<dt class="pier-correction">Pier Correction</dt>',
-				'<dd class="pier-correction-value">-----</dd>',
-				'<dt class="corrected-f">Corrected F</dt>',
-				'<dd class="corrected-f-value">--------</dd>',
 			'</dl>'
 		].join('');
 
@@ -89,10 +82,6 @@ define([
 				'.west-up-minus-east-down-value');
 		this._eastUpMinusWestDown = this._el.querySelector(
 				'.east-up-minus-west-down-value');
-
-		this._fMean = this._el.querySelector('.f-mean-value');
-		this._pierCorrection = this._el.querySelector('.pier-correction-value');
-		this._correctedF = this._el.querySelector('.corrected-f-value');
 
 		// when reading changes render view
 		this._options.reading.on('change', this.render, this);
@@ -146,11 +135,6 @@ define([
 				Format.minutes(calculator.westUpMinusEastDown(reading));
 		this._eastUpMinusWestDown.innerHTML =
 				Format.minutes(calculator.eastUpMinusWestDown(reading));
-
-		this._fMean.innerHTML = Format.nanoteslas(calculator.meanF(reading));
-		this._pierCorrection.innerHTML =
-				Format.rawNanoteslas(calculator.pierCorrection());
-		this._correctedF.innerHTML = Format.nanoteslas(calculator.correctedF(reading));
 	};
 
 	return DeclinationView;
