@@ -113,9 +113,9 @@ define([
 				Format.nanoteslas(calculator.verticalComponent(reading));
 
 		this._southDownMinusNorthUp.innerHTML =
-				Format.minutes(calculator.southDownMinusNorthUp(reading));
+				Format.minutes(calculator.southDownMinusNorthUp(reading)*60);
 		this._northDownMinusSouthUp.innerHTML =
-				Format.minutes(calculator.northDownMinusSouthUp(reading));
+				Format.minutes(calculator.northDownMinusSouthUp(reading)*60);
 	};
 
 	return InclinationView;
