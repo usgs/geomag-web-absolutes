@@ -4,17 +4,17 @@ define([
 	'util/Util',
 
 	'geomag/DeclinationSummaryView',
+	'geomag/Formatter',
 	'geomag/HorizontalIntensitySummaryView',
-	'geomag/VerticalIntensitySummaryView',
-	'geomag/Formatter'
+	'geomag/VerticalIntensitySummaryView'
 ], function (
 	View,
 	Util,
 
 	DeclinationSummaryView,
+	Format,
 	HorizontalIntensitySummaryView,
-	VerticalIntensitySummaryView,
-	Formatter
+	VerticalIntensitySummaryView
 ) {
 	'use strict';
 
@@ -44,9 +44,9 @@ define([
 		    reading,
 		    range,
 		    baselineD = [],
-		    baselineDNt = [],
+		    eBaseline = [],
 		    baselineDStats,
-		    baselineDNtStats;
+		    eBaselineStats;
 
 		Util.empty(declinationSummaryView);
 
@@ -65,28 +65,28 @@ define([
 
 			// insert view
 			if (reading.get('declination_valid') === 'Y') {
-				baselineD.push(calculator.baselineD(reading));
-				baselineDNt.push(calculator.d(reading));
+				baselineD.push(calculator.dBaseline(reading));
+				eBaseline.push(calculator.eBaseline(reading));
 			}
 		}
 
 		baselineDStats = calculator.getStats(baselineD);
-		baselineDNtStats = calculator.getStats(baselineDNt);
+		eBaselineStats = calculator.getStats(eBaseline);
 
-		this._baselineMinMean.innerHTML = Formatter.minutes(baselineDStats.mean);
+		this._baselineMinMean.innerHTML = Format.minutes(baselineDStats.mean);
 		this._baselineNtMean.innerHTML =
-				Formatter.nanoteslas(baselineDNtStats.mean);
+				Format.nanoteslas(eBaselineStats.mean);
 
 		range = baselineDStats.max - baselineDStats.min;
-		this._baselineMinRange.innerHTML = Formatter.minutes(range);
+		this._baselineMinRange.innerHTML = Format.minutes(range);
 
-		range = baselineDNtStats.max - baselineDNtStats.min;
-		this._baselineNtRange.innerHTML = Formatter.nanoteslas(range);
+		range = eBaselineStats.max - eBaselineStats.min;
+		this._baselineNtRange.innerHTML = Format.nanoteslas(range);
 
 		this._baselineMinStdDev.innerHTML =
-				Formatter.minutes(baselineDStats.stdDev);
+				Format.minutes(baselineDStats.stdDev);
 		this._baselineNtStdDev.innerHTML =
-				Formatter.nanoteslas(baselineDNtStats.stdDev);
+				Format.nanoteslas(eBaselineStats.stdDev);
 	};
 
 	ObservationSummaryView.prototype._renderInclination = function () {
@@ -124,18 +124,18 @@ define([
 				reading._horizontalIntensitySummary._el);
 
 			if (reading.get('horizontal_intensity_valid') === 'Y') {
-				baselineH.push(calculator.baselineH(reading));
+				baselineH.push(calculator.hBaseline(reading));
 			}
 		}
 		baselineHStats = calculator.getStats(baselineH);
 		this._baselineValuesMean.innerHTML =
-				Formatter.nanoteslas(baselineHStats.mean);
+				Format.nanoteslas(baselineHStats.mean);
 
 		range = baselineHStats.max - baselineHStats.min;
-		this._baselineValuesRange.innerHTML = Formatter.nanoteslas(range);
+		this._baselineValuesRange.innerHTML = Format.nanoteslas(range);
 
 		this._baselineValuesStdDev.innerHTML =
-				Formatter.nanoteslas(baselineHStats.stdDev);
+				Format.nanoteslas(baselineHStats.stdDev);
 	};
 
 	ObservationSummaryView.prototype._renderVerticalIntensitySummaryView =
@@ -167,26 +167,26 @@ define([
 					(reading._verticalIntensitySummary._el);
 
 			if (reading.get('vertical_intensity_valid') === 'Y') {
-				baselineZ.push(calculator.baselineZ(reading));
+				baselineZ.push(calculator.zBaseline(reading));
 			}
 		}
 		baselineZStats = calculator.getStats(baselineZ);
 
 		this._verticalBaselineValuesMean.innerHTML =
-				Formatter.nanoteslas(baselineZStats.mean);
+				Format.nanoteslas(baselineZStats.mean);
 
 		range = baselineZStats.max - baselineZStats.min;
-		this._verticalBaselineValuesRange.innerHTML = Formatter.nanoteslas(range);
+		this._verticalBaselineValuesRange.innerHTML = Format.nanoteslas(range);
 
 		this._verticalBaselineValuesStdDev.innerHTML =
-				Formatter.nanoteslas(baselineZStats.stdDev);
+				Format.nanoteslas(baselineZStats.stdDev);
 	};
 
 	ObservationSummaryView.prototype._renderSummaryBottom = function () {
 		var observation = this._observation;
 
 		this._pierTemperature.innerHTML =
-				Formatter.celsius(observation.get('pier_temperature'),1);
+				Format.celsius(observation.get('pier_temperature'),1);
 		this._electronicsTemperature.innerHTML = 'elec temp';
 		this._fluxgateTemperature.innerHTML = 'flux temp';
 		this._protonTemperature.innerHTML = 'prot temp';
