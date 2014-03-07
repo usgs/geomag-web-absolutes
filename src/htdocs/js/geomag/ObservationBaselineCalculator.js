@@ -348,7 +348,7 @@ define([
 	 * @return {Number} hBaseline
 	 */
 	ObservationBaselineCalculator.prototype.hBaseline = function (reading) {
-		return this._calculator.baselineH(
+		return this._calculator.hBaseline(
 				this.horizontalComponent(reading),
 				this.meanH(reading)
 		);
@@ -363,7 +363,7 @@ define([
 	 */
 	ObservationBaselineCalculator.prototype.eBaseline = function (reading) {
 		return this._calculator.eBaseline(
-				this.eBaseline(reading),
+				this.dBaseline(reading),
 				this.scaleValue(reading)
 		); //
 	};
