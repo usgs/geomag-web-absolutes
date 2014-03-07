@@ -214,11 +214,11 @@ define([
 	};
 
 	/**
-	 * correctedF
+	 * F Corrected
 	 *
 	 * @param {Object} reading, a reading from an observation
 	 *
-	 * @return {Number} correctedF
+	 * @return {Number} fCorrected
 	 */
 	ObservationBaselineCalculator.prototype.fCorrected =
 			function (reading) {
@@ -260,7 +260,7 @@ define([
 	ObservationBaselineCalculator.prototype.horizontalComponent =
 			function (reading) {
 		return this._calculator.horizontalComponent(
-				this.correctedF(reading),
+				this.fCorrected(reading),
 				this.inclination(reading)
 		);
 	};
@@ -275,7 +275,7 @@ define([
 	ObservationBaselineCalculator.prototype.verticalComponent =
 			function (reading) {
 		return this._calculator.verticalComponent(
-				this.correctedF(reading),
+				this.fCorrected(reading),
 				this.inclination(reading)
 		);
 	};
