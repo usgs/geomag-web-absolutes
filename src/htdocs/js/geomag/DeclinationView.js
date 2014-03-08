@@ -143,9 +143,9 @@ define([
 				Format.degreesAndDegreesMinutes(calculator.magneticDeclination(reading));
 
 		this._westUpMinusEastDown.innerHTML =
-				Format.minutes(calculator.westUpMinusEastDown(reading));
+				Format.minutes(calculator.westUpMinusEastDown(reading)*60);
 		this._eastUpMinusWestDown.innerHTML =
-				Format.minutes(calculator.eastUpMinusWestDown(reading));
+				Format.minutes(calculator.eastUpMinusWestDown(reading)*60);
 
 		this._fMean.innerHTML = Format.nanoteslas(calculator.meanF(reading));
 		this._pierCorrection.innerHTML =

@@ -228,20 +228,22 @@ define([
 
 		}); // END ::  magneticDeclination
 
-		describe('w()', function () {
+		describe('westUpMinusEastDown()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.07166666666666667;   // 4.3' converted to degrees
-				expect(calc.w(READING)).to.be.closeTo(expected, 0.0001);
+				expect(calc.westUpMinusEastDown(READING))
+						.to.be.closeTo(expected, 0.0001);
 			});
 
-		}); // END ::  w
+		}); // END ::  westUpMinusEastDown
 
-		describe('e()', function () {
+		describe('eastUpMinusWestDown()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.09716666666666667;    // 5.83 converted to degrees
-				expect(calc.e(READING)).to.be.closeTo(expected, 0.0001);
+				expect(calc.eastUpMinusWestDown(READING))
+						.to.be.closeTo(expected, 0.0001);
 			});
 
 		}); // END :: e
@@ -279,24 +281,26 @@ define([
 
 		}); // END :: verticalComponent
 
-		describe('s()', function () {
+		describe('southDownMinusNorthUp()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.0046666;    // 0 0.28 converted to degrees
-				expect(calc.s(READING)).to.be.closeTo(expected, 0.0001);
+				expect(calc.southDownMinusNorthUp(READING))
+						.to.be.closeTo(expected, 0.0001);
 			});
 
 		}); // END :: s
 
 
-		describe('n()', function () {
+		describe('northDownMinusSouthUp()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 0.0063333;    //  0 0.38 converted to degrees
-				expect(calc.n(READING)).to.be.closeTo(expected, 0.0001);
+				expect(calc.northDownMinusSouthUp(READING))
+						.to.be.closeTo(expected, 0.0001);
 			});
 
-		}); // END :: n
+		}); // END :: northDownMinusSouthUp
 
 
 		describe('scaleValue()', function () {
