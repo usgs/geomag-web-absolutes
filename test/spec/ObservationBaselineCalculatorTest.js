@@ -248,10 +248,10 @@ define([
 
 		}); // END :: e
 
-		describe('correctedF()', function () {
+		describe('fCorrected()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				expect(calc.correctedF(READING)).to.be.closeTo(52606.01, 0.00001);
+				expect(calc.fCorrected(READING)).to.be.closeTo(52606.01, 0.00001);
 			});
 
 		}); // END :: corrected F
@@ -312,51 +312,51 @@ define([
 
 		}); // END :: scaleValue
 
-		describe('computedE()', function () {
+		describe('dComputed()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = -0.7413333333333333;// 464.5604 min, convert to degrees
-				expect(calc.computedE(READING)).to.be.closeTo(expected, 0.0001);
+				expect(calc.dComputed(READING)).to.be.closeTo(expected, 0.0001);
 			});
 
-		}); // END :: computedE
+		}); // END :: dComputed
 
-		describe('baselineD()', function () {
+		describe('dBaseline()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 9.780333333333335;  // 586.66 min, converted to degrees
-				expect(calc.baselineE(READING)).to.be.closeTo(expected, 0.0001);
+				expect(calc.dBaseline(READING)).to.be.closeTo(expected, 0.0001);
 			});
 
-		}); // END :: baselineD
+		}); // END :: dBaseline
 
 
-		describe('baselineH()', function () {
+		describe('hBaseline()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				expect(calc.baselineH(READING)).to.be.closeTo(20.23, 0.01);
+				expect(calc.hBaseline(READING)).to.be.closeTo(20.23, 0.01);
 			});
 
-		}); // END :: baselineH
+		}); // END :: hBaseline
 
 
-		describe('baselineZ()', function () {
+		describe('zBaseline()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
-				expect(calc.baselineZ(READING)).to.be.closeTo(547.76, 0.01);
+				expect(calc.zBaseline(READING)).to.be.closeTo(547.76, 0.01);
 			});
 
-		}); // END :: baselineZ
+		}); // END :: zBaseline
 
 
-		describe('d()', function () {
+		describe('eBaseline()', function () {
 
 			it('computes correctly with data from BOU20132861836.bns', function () {
 				var expected = 3557.5945472773902;   // 3556.6245477416474
-				expect(calc.d(READING)).to.be.closeTo(expected, 0.1);
+				expect(calc.eBaseline(READING)).to.be.closeTo(expected, 0.1);
 			});
 
-		}); // END :: d
+		}); // END :: eBaseline
 
 		describe('get stats', function () {
 			it('computes correctly 1,1,1,1', function () {
