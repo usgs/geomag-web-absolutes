@@ -1,9 +1,11 @@
 /* global define, describe, it */
 define([
 	'chai',
+
 	'geomag/UserRole'
 ], function (
 	chai,
+
 	UserRole
 ) {
 	'use strict';
