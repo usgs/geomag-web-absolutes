@@ -5,18 +5,18 @@ define([
 
 	'util/Xhr',
 
-	'geomag/ObservatoryFactory',
+	'geomag/Measurement',
 	'geomag/Observation',
-	'geomag/Measurement'
+	'geomag/ObservatoryFactory'
 ], function (
 	chai,
 	sinon,
 
 	Xhr,
 
-	ObservatoryFactory,
+	Measurement,
 	Observation,
-	Measurement
+	ObservatoryFactory
 ) {
 	'use strict';
 
