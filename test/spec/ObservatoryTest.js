@@ -4,10 +4,17 @@
 
 define([
 	'chai',
-	'geomag/Observatory',
 	'mvc/Collection',
-	'util/Util'
-], function (chai, Observatory, Collection, Util) {
+	'util/Util',
+
+	'geomag/Observatory'
+], function (
+	chai,
+	Collection,
+	Util,
+
+	Observatory
+) {
 	'use strict';
 	var expect = chai.expect;
 
