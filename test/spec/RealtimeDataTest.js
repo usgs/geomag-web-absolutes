@@ -2,9 +2,11 @@
 
 define([
 	'chai',
+
 	'geomag/RealtimeData'
 ], function (
 	chai,
+
 	RealtimeData
 ) {
 	'use strict';
