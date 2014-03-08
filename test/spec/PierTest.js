@@ -4,11 +4,19 @@
 
 define([
 	'chai',
-	'geomag/Pier',
 	'mvc/Collection',
 	'mvc/Model',
-	'util/Util'
-], function (chai, Pier, Collection, Model, Util) {
+	'util/Util',
+
+	'geomag/Pier'
+], function (
+	chai,
+	Collection,
+	Model,
+	Util,
+
+	Pier
+) {
 	'use strict';
 	var expect = chai.expect;
 
