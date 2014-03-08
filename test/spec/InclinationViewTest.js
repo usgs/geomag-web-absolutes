@@ -143,9 +143,9 @@ define([
 						calculator.verticalComponent().toFixed(2) + 'nT');
 
 				expect(view._southDownMinusNorthUp.textContent).to.equal(
-						calculator.southDownMinusNorthUp().toFixed(2) + '\'');
+						(calculator.southDownMinusNorthUp()*60).toFixed(2) + '\'');
 				expect(view._northDownMinusSouthUp.textContent).to.equal(
-						calculator.northDownMinusSouthUp().toFixed(2) + '\'');
+						(calculator.northDownMinusSouthUp()*60).toFixed(2) + '\'');
 			});
 
 		});
