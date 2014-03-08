@@ -11,6 +11,12 @@
     "geomag",
     "geomagnetism"
   ],
+  "license:": [
+    {
+      "type": "Public Domain",
+      "url": "http://www.usgs.gov/visual-id/credit_usgs.html#copyright"
+    },
+  ],
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
