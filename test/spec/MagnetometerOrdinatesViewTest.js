@@ -34,12 +34,12 @@ define([
 
 		describe('View', function () {
 			var renderSpy,
-			    reading,
-			    calculator,
-			    view,
-			    observation,
-			    readingMeasurements,
-			    measurements;
+					reading,
+					calculator,
+					view,
+					observation,
+					readingMeasurements,
+					measurements;
 
 			beforeEach(function () {
 				renderSpy = sinon.spy(MagnetometerOrdinatesView.prototype, 'render');
@@ -76,7 +76,7 @@ define([
 
 			it('should render when measurement changes', function () {
 				var i = null,
-				    len = null;
+						len = null;
 
 				for (i = 0, len = measurements.length; i < len; i++) {
 					measurements[i].trigger('change');
@@ -95,9 +95,9 @@ define([
 		describe('Values', function () {
 
 				var reading,
-				    calculator,
-				    view,
-				    observation;
+						calculator,
+						view,
+						observation;
 				function format4 (number) {return number.toFixed(4);}
 
 				//Stub function in ObservationBaselineCalculator.
@@ -149,7 +149,7 @@ define([
 				expect(view._eMean.innerHTML).to.equal(Format.nanoteslas(2));
 			});
 			it('updates view elements for dMean', function () {
-				expect(view._dMean.innerHTML).to.equal(Format.minutes(2));
+				expect(view._dMean.innerHTML).to.equal(Format.minutes(2*60));
 			});
 			it('updates view elements for zMean', function () {
 				expect(view._zMean.innerHTML).to.equal(Format.nanoteslas(3));
@@ -178,7 +178,7 @@ define([
 				expect(view._eBaseline.innerHTML).to.equal(Format.nanoteslas(10));
 				});
 			it('updates view elements for dBaseline', function () {
-				expect(view._dBaseline.innerHTML).to.equal(Format.minutes(11));
+				expect(view._dBaseline.innerHTML).to.equal(Format.minutes(11*60));
 				});
 			it('updates view elements for zBaseline', function () {
 				expect(view._zBaseline.innerHTML).to.equal(Format.nanoteslas(12));
