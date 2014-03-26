@@ -50,31 +50,31 @@ define([
 					'<tr>',
 						'<th class="channel h">H</th>',
 						'<td class="mean hMean"></td>',
-						'<td class="absolute absoluteH"></td>',
+						'<td class="absolute hAbsolute"></td>',
 						'<td class="baseline hBaseline"></td>',
 					'</tr>',
 					'<tr>',
 						'<th class="channel e">E</th>',
 						'<td class="mean eMean"></td>',
-						'<td class="absolute absoluteE"></td>',
+						'<td class="absolute eAbsolute"></td>',
 						'<td class="baseline eBaseline"></td>',
 					'</tr>',
 					'<tr>',
 						'<th class="channel d">D</th>',
 						'<td class="mean dMean"></td>',
-						'<td class="absolute absoluteD"></td>',
+						'<td class="absolute dAbsolute"></td>',
 						'<td class="baseline dBaseline"></td>',
 					'</tr>',
 					'<tr>',
 						'<th class="channel z">Z</th>',
 						'<td class="mean zMean"></td>',
-						'<td class="absolute absoluteZ"></td>',
+						'<td class="absolute zAbsolute"></td>',
 						'<td class="baseline zBaseline"></td>',
 					'</tr>',
 					'<tr>',
 						'<th class="channel f">F</th>',
 						'<td class="mean fMean"></td>',
-						'<td class="absolute absoluteF"></td>',
+						'<td class="absolute fAbsolute"></td>',
 						'<td class="baseline fBaseline"></td>',
 					'</tr>',
 				'</tbody>',
@@ -98,10 +98,10 @@ define([
 		this._zMean = this._el.querySelector('.zMean');
 		this._fMean = this._el.querySelector('.fMean');
 
-		this._absoluteD = this._el.querySelector('.absoluteD');
-		this._absoluteH = this._el.querySelector('.absoluteH');
-		this._absoluteZ = this._el.querySelector('.absoluteZ');
-		this._absoluteF = this._el.querySelector('.absoluteF');
+		this._absoluteD = this._el.querySelector('.dAbsolute');
+		this._absoluteH = this._el.querySelector('.hAbsolute');
+		this._absoluteZ = this._el.querySelector('.zAbsolute');
+		this._absoluteF = this._el.querySelector('.fAbsolute');
 
 		this._hBaseline = this._el.querySelector('.hBaseline');
 		this._eBaseline = this._el.querySelector('.eBaseline');
@@ -132,11 +132,11 @@ define([
 		var calculator = this._calculator,
 		    reading = this._reading;
 
-		this._hMean.innerHTML = Format.nanoteslas(calculator.meanH(reading));
-		this._eMean.innerHTML = Format.nanoteslas(calculator.meanE(reading));
-		this._dMean.innerHTML = Format.minutes(calculator.computedE(reading));
-		this._zMean.innerHTML = Format.nanoteslas(calculator.meanZ(reading));
-		this._fMean.innerHTML = Format.nanoteslas(calculator.meanF(reading));
+		this._hMean.innerHTML =	Format.nanoteslas(calculator.meanH(reading));
+		this._eMean.innerHTML =	Format.nanoteslas(calculator.meanE(reading));
+		this._dMean.innerHTML =	Format.minutes(calculator.dComputed(reading));
+		this._zMean.innerHTML =	Format.nanoteslas(calculator.meanZ(reading));
+		this._fMean.innerHTML =	Format.nanoteslas(calculator.meanF(reading));
 
 		this._absoluteH.innerHTML =
 				Format.nanoteslas(calculator.horizontalComponent(reading));
@@ -145,15 +145,16 @@ define([
 		this._absoluteZ.innerHTML =
 				Format.nanoteslas(calculator.verticalComponent(reading));
 		this._absoluteF.innerHTML =
-				Format.nanoteslas(calculator.correctedF(reading));
+			Format.nanoteslas(calculator.fCorrected(reading));
 
 		this._hBaseline.innerHTML =
-				Format.nanoteslas(calculator.baselineH(reading));
+			Format.nanoteslas(calculator.hBaseline(reading));
 		this._eBaseline.innerHTML =
-				Format.nanoteslas(calculator.baselineE(reading));
-		this._dBaseline.innerHTML = Format.minutes(calculator.d(reading));
+			Format.nanoteslas(calculator.eBaseline(reading));
+		this._dBaseline.innerHTML =
+			Format.minutes(calculator.dBaseline(reading));
 		this._zBaseline.innerHTML =
-				Format.nanoteslas(calculator.baselineZ(reading));
+			Format.nanoteslas(calculator.zBaseline(reading));
 
 		this._pierCorrection.innerHTML =
 				Format.rawNanoteslas(calculator.pierCorrection());
@@ -164,7 +165,6 @@ define([
 						'scaleValue = ', calculator.scaleValue(reading).toFixed(4),
 				'</code>'].join('');
 	};
-
 
 	return MagnetometerOrdinatesView;
 });
