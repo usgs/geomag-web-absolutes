@@ -81,9 +81,6 @@ define([
 			expect(view._magneticDeclination).to.not.be.undefined;
 			expect(view._westUpMinusEastDown).to.not.be.undefined;
 			expect(view._eastUpMinusWestDown).to.not.be.undefined;
-			expect(view._fMean).to.not.be.undefined;
-			expect(view._pierCorrection).to.not.be.undefined;
-			expect(view._correctedF).to.not.be.undefined;
 			/*jshint +W030*/
 		});
 
@@ -166,13 +163,6 @@ define([
 						calculator.westUpMinusEastDown().toFixed(2) + '\'');
 				expect(view._eastUpMinusWestDown.textContent).to.equal(
 						calculator.eastUpMinusWestDown().toFixed(2) + '\'');
-
-				expect(view._fMean.textContent).to.equal(
-						calculator.meanF().toFixed(2) + 'nT');
-				expect(view._pierCorrection.textContent).to.equal('' +
-						calculator.pierCorrection() + 'nT');
-				expect(view._correctedF.textContent).to.equal(
-						calculator.correctedF().toFixed(2) + 'nT');
 			});
 
 		});
