@@ -186,17 +186,14 @@ define([
 	 *
 	 * @return {Number} w
 	 */
-	ObservationBaselineCalculator.prototype.w = function (reading) {
+	ObservationBaselineCalculator.prototype.westUpMinusEastDown =
+			function (reading) {
 		var measurements = reading.getMeasurements();
 
-		return this._calculator.w(
+		return this._calculator.westUpMinusEastDown(
 				measurements[Measurement.WEST_UP][0].get('angle'),
 				measurements[Measurement.EAST_DOWN][0].get('angle')
 		);
-	};
-	ObservationBaselineCalculator.prototype.westUpMinusEastDown =
-			function (reading){
-		return this.w(reading);
 	};
 
 	/**
@@ -206,17 +203,14 @@ define([
 	 *
 	 * @return {Number} e
 	 */
-	ObservationBaselineCalculator.prototype.e = function (reading) {
+	ObservationBaselineCalculator.prototype.eastUpMinusWestDown =
+			function (reading){
 		var measurements = reading.getMeasurements();
 
-		return this._calculator.e(
+		return this._calculator.eastUpMinusWestDown(
 				measurements[Measurement.EAST_UP][0].get('angle'),
 				measurements[Measurement.WEST_DOWN][0].get('angle')
 		);
-	};
-	ObservationBaselineCalculator.prototype.eastUpMinusWestDown =
-			function (reading){
-		return this.e(reading);
 	};
 
 	/**
@@ -293,17 +287,14 @@ define([
 	 *
 	 * @return {Number} s
 	 */
-	ObservationBaselineCalculator.prototype.s = function (reading) {
+	ObservationBaselineCalculator.prototype.southDownMinusNorthUp =
+			function (reading) {
 		var measurements = reading.getMeasurements();
 
-		return this._calculator.s(
+		return this._calculator.southDownMinusNorthUp(
 				measurements[Measurement.SOUTH_DOWN][0].get('angle'),
 				measurements[Measurement.NORTH_UP][0].get('angle')
 		);
-	};
-	ObservationBaselineCalculator.prototype.southDownMinusNorthUp =
-			function (reading) {
-		return this.s(reading);
 	};
 
 	/**
@@ -313,17 +304,14 @@ define([
 	 *
 	 * @return {Number} n
 	 */
-	ObservationBaselineCalculator.prototype.n = function (reading) {
+	ObservationBaselineCalculator.prototype.northDownMinusSouthUp =
+			function (reading) {
 		var measurements = reading.getMeasurements();
 
-		return this._calculator.n(
+		return this._calculator.northDownMinusSouthUp(
 				measurements[Measurement.NORTH_DOWN][0].get('angle'),
 				measurements[Measurement.SOUTH_UP][0].get('angle')
 		);
-	};
-	ObservationBaselineCalculator.prototype.northDownMinusSouthUp =
-			function (reading) {
-		return this.n(reading);
 	};
 	/**
 	 * scaleValue

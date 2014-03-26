@@ -90,7 +90,7 @@ define([
 		 *
 		 * @return {Number} Decimal degrees
 		 */
-		w: function (westUp, eastDown) {
+		westUpMinusEastDown: function (westUp, eastDown) {
 			return (westUp - eastDown);
 		},
 
@@ -102,7 +102,7 @@ define([
 		 *
 		 * @return {Number} Decimal degrees
 		 */
-		e: function (eastUp, westDown) {
+		eastUpMinusWestDown: function (eastUp, westDown) {
 			return (eastUp - westDown);
 		},
 
@@ -165,7 +165,7 @@ define([
 		 *
 		 * @return {Number} Decimal degrees
 		 */
-		s: function (southDown, northUp) {
+		southDownMinusNorthUp: function (southDown, northUp) {
 			return (southDown - northUp - 180.0);
 		},
 
@@ -177,7 +177,7 @@ define([
 		 *
 		 * @return {Number} Decimal degrees
 		 */
-		n: function (northDown, southUp) {
+		northDownMinusSouthUp: function (northDown, southUp) {
 			return (northDown - southUp - 180.0);
 		},
 

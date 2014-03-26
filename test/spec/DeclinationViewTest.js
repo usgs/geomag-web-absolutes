@@ -160,9 +160,9 @@ define([
 								calculator.magneticDeclination()));
 
 				expect(view._westUpMinusEastDown.textContent).to.equal(
-						calculator.westUpMinusEastDown().toFixed(2) + '\'');
+						(calculator.westUpMinusEastDown()*60).toFixed(2) + '\'');
 				expect(view._eastUpMinusWestDown.textContent).to.equal(
-						calculator.eastUpMinusWestDown().toFixed(2) + '\'');
+						(calculator.eastUpMinusWestDown()*60).toFixed(2) + '\'');
 			});
 
 		});
