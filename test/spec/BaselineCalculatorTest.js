@@ -295,7 +295,8 @@ define([
 				    eastDown = 90.5050,   // 90 30.3
 				    expected = -0.0300;   // -1.80 converted to degrees
 
-				expect(calc.w(westUp, eastDown)).to.be.closeTo(expected, 0.00001);
+				expect(calc.westUpMinusEastDown(westUp,
+						eastDown)).to.be.closeTo(expected, 0.00001);
 			});
 
 			it('computes correctly with data from CMO20131651602.bns', function () {
@@ -303,7 +304,8 @@ define([
 				    eastDown = 92.1181,   // 92 07 05
 				    expected = 0.0541;    // 3.25 converted to degrees
 
-				expect(calc.w(westUp,	eastDown)).to.be.closeTo(expected, 0.00001);
+				expect(calc.westUpMinusEastDown(westUp,
+						eastDown)).to.be.closeTo(expected, 0.00001);
 			});
 
 			it('computes correctly with data from FRN20130311611.bns', function () {
@@ -311,7 +313,8 @@ define([
 				    eastDown = 283.1375,  // 283 08 15
 				    expected = -0.1006;   // -6.03 converted to degrees
 
-				expect(calc.w(westUp,	eastDown)).to.be.closeTo(expected, 0.00001);
+				expect(calc.westUpMinusEastDown(westUp,
+						eastDown)).to.be.closeTo(expected, 0.00001);
 			});
 
 		}); // END :: westUpMinusEastDown
@@ -331,7 +334,8 @@ define([
 				    westDown = 270.3533,  // 270 21.2
 				    expected = 0.0300;    // 1.80 converted to degrees
 
-				expect(calc.w(eastUp,	westDown)).to.be.closeTo(expected, 0.00001);
+				expect(calc.eastUpMinusWestDown(eastUp,
+						westDown)).to.be.closeTo(expected, 0.00001);
 			});
 
 			it('computes correctly with data from CMO20131651602.bns', function () {
@@ -339,7 +343,8 @@ define([
 				    westDown = 272.3111,  // 272 18 40
 				    expected = 0.1289;    // 7.73 converted to degrees
 
-				expect(calc.w(eastUp,	westDown)).to.be.closeTo(expected, 0.00001);
+				expect(calc.eastUpMinusWestDown(eastUp,
+						westDown)).to.be.closeTo(expected, 0.00001);
 			});
 
 			it('computes correctly with data from FRN20130311611.bns', function () {
@@ -347,7 +352,8 @@ define([
 				    westDown = 103.1508,  // 103 09 03
 				    expected = -0.078;    // -4.68 converted to degrees
 
-				expect(calc.w(eastUp,	westDown)).to.be.closeTo(expected, 0.00001);
+				expect(calc.eastUpMinusWestDown(eastUp,
+						westDown)).to.be.closeTo(expected, 0.00001);
 			});
 
 		}); // END :: eastUpMinusWestDown
@@ -520,7 +526,7 @@ define([
 
 		}); // END :: verticalComponent
 
-		describe('soutDownMinusNorthUp()', function () {
+		describe('southDownMinusNorthUp()', function () {
 
 			it('computes correctly', function () {
 				var southDown = 182.0,
@@ -536,7 +542,8 @@ define([
 				    northUp = 66.6467,    // 66 38.8
 				    expected = 0.0183;    // 1.10 converted to degrees
 
-				expect(calc.s(southDown, northUp)).to.be.closeTo(expected, 0.000001);
+				expect(calc.southDownMinusNorthUp(southDown,
+						northUp)).to.be.closeTo(expected, 0.000001);
 			});
 
 			it('computes correctly with data from CMO20131651602.bns', function () {
@@ -544,7 +551,8 @@ define([
 				    northUp = 77.2500,    // 77 15 00
 				    expected = 0.0044;    // 0.27 converted to degrees
 
-				expect(calc.s(southDown, northUp)).to.be.closeTo(expected, 0.000001);
+				expect(calc.southDownMinusNorthUp(southDown,
+						northUp)).to.be.closeTo(expected, 0.000001);
 			});
 
 			it('computes correctly with data from FRN20130311611.bns', function () {
@@ -552,7 +560,8 @@ define([
 				    northUp = 61.0925,    // 61 05 33
 				    expected = 0.0106;    // 0.63 converted to degrees
 
-				expect(calc.s(southDown, northUp)).to.be.closeTo(expected, 0.000001);
+				expect(calc.southDownMinusNorthUp(southDown,
+						northUp)).to.be.closeTo(expected, 0.000001);
 			});
 
 		}); // END :: southDownMinusNorthUp
@@ -573,7 +582,8 @@ define([
 				    southUp = 113.3967,   // 113 23.8
 				    expected = 0.0100;    // 0.60 converted to degrees
 
-				expect(calc.n(northDown, southUp)).to.be.closeTo(expected, 0.000001);
+				expect(calc.northDownMinusSouthUp(northDown,
+						southUp)).to.be.closeTo(expected, 0.000001);
 			});
 
 			it('computes correctly with data from CMO20131651602.bns', function () {
@@ -581,7 +591,8 @@ define([
 				    southUp = 102.6742,   // 102 40 27
 				    expected = 0.0022;    // 0.13 converted to degrees
 
-				expect(calc.n(northDown, southUp)).to.be.closeTo(expected, 0.000001);
+				expect(calc.northDownMinusSouthUp(northDown,
+						southUp)).to.be.closeTo(expected, 0.000001);
 			});
 
 			it('computes correctly with data from FRN20130311611.bns', function () {
@@ -589,7 +600,8 @@ define([
 				    southUp = 118.8819,   // 118 52 55
 				    expected = 0.0092;    // 0.55 converted to degrees
 
-				expect(calc.n(northDown, southUp)).to.be.closeTo(expected, 0.000001);
+				expect(calc.northDownMinusSouthUp(northDown,
+						southUp)).to.be.closeTo(expected, 0.000001);
 			});
 
 		}); // END :: northDownMinusSouthUp
