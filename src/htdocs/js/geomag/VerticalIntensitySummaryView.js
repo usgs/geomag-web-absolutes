@@ -3,14 +3,14 @@ define([
 	'mvc/View',
 	'util/Util',
 
-	'geomag/Measurement',
-	'geomag/Formatter'
+	'geomag/Formatter',
+	'geomag/Measurement'
 ], function (
 	View,
 	Util,
 
-	Measurement,
-	Formatter
+	Format,
+	Measurement
 ) {
 	'use strict';
 
@@ -41,14 +41,14 @@ define([
 			startTime = Math.min.apply(null, times);
 			endTime = Math.max.apply(null, times);
 		}
-		this._startTime.innerHTML = Formatter.time(startTime);
-		this._endTime.innerHTML = Formatter.time(endTime);
+		this._startTime.innerHTML = Format.time(startTime);
+		this._endTime.innerHTML = Format.time(endTime);
 
 		this._absValue.innerHTML =
-				Formatter.nanoteslas(this._calculator.verticalComponent(reading));
-		this._ord.innerHTML = Formatter.nanoteslas(this._calculator.meanZ(reading));
+				Format.nanoteslas(this._calculator.verticalComponent(reading));
+		this._ord.innerHTML = Format.nanoteslas(this._calculator.meanZ(reading));
 		this._baselineValue.innerHTML =
-				Formatter.nanoteslas(this._calculator.baselineZ(reading));
+				Format.nanoteslas(this._calculator.zBaseline(reading));
 		this._observer.innerHTML = this._reading.get('observer') || '';
 	};
 
@@ -130,5 +130,6 @@ define([
 			vertical_intensity_valid: (this._valid.checked ? 'Y' : 'N')
 		});
 	};
+
 	return VerticalIntensitySummaryView;
 });

@@ -3,16 +3,16 @@ define([
 	'chai',
 
 	'geomag/Observation',
+	'geomag/ObservationBaselineCalculator',
 	'geomag/Reading',
-	'geomag/ReadingGroupView',
-	'geomag/ObservationBaselineCalculator'
+	'geomag/ReadingGroupView'
 ], function (
 	chai,
 
 	Observation,
+	ObservationBaselineCalculator,
 	Reading,
-	ReadingGroupView,
-	ObservationBaselineCalculator
+	ReadingGroupView
 ) {
 	'use strict';
 

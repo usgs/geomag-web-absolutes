@@ -5,8 +5,14 @@
 define([
 	'chai',
 	'mvc/Model',
+
 	'geomag/Mark'
-], function (chai, Model, Mark) {
+], function (
+	chai,
+	Model,
+
+	Mark
+) {
 	'use strict';
 	var expect = chai.expect;
 

@@ -214,18 +214,18 @@ define([
 	};
 
 	/**
-	 * correctedF
+	 * F Corrected
 	 *
 	 * @param {Object} reading, a reading from an observation
 	 *
-	 * @return {Number} correctedF
+	 * @return {Number} fCorrected
 	 */
-	ObservationBaselineCalculator.prototype.correctedF =
+	ObservationBaselineCalculator.prototype.fCorrected =
 			function (reading) {
 		// dont need to check each measurement, use ns(ud)
 		// (value will be null for measurement values that don't matter)
 
-		return this._calculator.correctedF(
+		return this._calculator.fCorrected(
 				this.meanF(reading),
 				this.pierCorrection()
 		);
@@ -260,7 +260,7 @@ define([
 	ObservationBaselineCalculator.prototype.horizontalComponent =
 			function (reading) {
 		return this._calculator.horizontalComponent(
-				this.correctedF(reading),
+				this.fCorrected(reading),
 				this.inclination(reading)
 		);
 	};
@@ -275,7 +275,7 @@ define([
 	ObservationBaselineCalculator.prototype.verticalComponent =
 			function (reading) {
 		return this._calculator.verticalComponent(
-				this.correctedF(reading),
+				this.fCorrected(reading),
 				this.inclination(reading)
 		);
 	};
@@ -327,89 +327,76 @@ define([
 	};
 
 	/**
-	 * computedE
+	 * D Computed
 	 *
 	 * @param {Object} reading, a reading from an observation
 	 *
 	 * @return {Number} computedE
 	 */
-	ObservationBaselineCalculator.prototype.computedE = function (reading) {
-		return this._calculator.computedE(
+	ObservationBaselineCalculator.prototype.dComputed = function (reading) {
+		return this._calculator.dComputed(
 				this.meanE(reading),
 				this.scaleValue(reading)
 		);
 	};
 
 	/**
-	 * baselineD
+	 * H Baseline
 	 *
 	 * @param {Object} reading, a reading from an observation
 	 *
-	 * @return {Number} baselineD
+	 * @return {Number} hBaseline
 	 */
-	ObservationBaselineCalculator.prototype.baselineD = function (reading) {
-		return this._calculator.baselineD(
-				this.magneticDeclination(reading),
-				this.computedE(reading)
-		);
-	};
-
-	/**
-	 * baselineE
-	 Identical to baselineD, renamed as it's more appropriate.
-	 *
-	 * @param {Object} reading, a reading from an observation
-	 *
-	 * @return {Number} baselineE
-	 */
-	ObservationBaselineCalculator.prototype.baselineE = function (reading) {
-		return this._calculator.baselineE(
-				this.magneticDeclination(reading),
-				this.computedE(reading)
-		);
-	};
-
-	/**
-	 * baselineH
-	 *
-	 * @param {Object} reading, a reading from an observation
-	 *
-	 * @return {Number} baselineH
-	 */
-	ObservationBaselineCalculator.prototype.baselineH = function (reading) {
-		return this._calculator.baselineH(
+	ObservationBaselineCalculator.prototype.hBaseline = function (reading) {
+		return this._calculator.hBaseline(
 				this.horizontalComponent(reading),
 				this.meanH(reading)
 		);
 	};
 
 	/**
-	 * baselineZ
+	 * E Baseline
 	 *
 	 * @param {Object} reading, a reading from an observation
 	 *
-	 * @return {Number} baselineZ
+	 * @return {Number} eBaseline
 	 */
-	ObservationBaselineCalculator.prototype.baselineZ = function (reading) {
-		return this._calculator.baselineZ(
+	ObservationBaselineCalculator.prototype.eBaseline = function (reading) {
+		return this._calculator.eBaseline(
+				this.dBaseline(reading),
+				this.scaleValue(reading)
+		); //
+	};
+
+	/**
+	 * D Baseline
+	 *
+	 * @param {Object} reading, a reading from an observation
+	 *
+	 * @return {Number} dBaseline
+	 */
+	ObservationBaselineCalculator.prototype.dBaseline = function (reading) {
+		return this._calculator.dBaseline(
+				this.magneticDeclination(reading),
+				this.dComputed(reading)
+		);
+	};
+
+	/**
+	 * Z Baseline
+	 *
+	 * @param {Object} reading, a reading from an observation
+	 *
+	 * @return {Number} zBaseline
+	 */
+	ObservationBaselineCalculator.prototype.zBaseline = function (reading) {
+		return this._calculator.zBaseline(
 				this.verticalComponent(reading),
 				this.meanZ(reading)
 		);
 	};
 
-	/**
-	 * d
-	 *
-	 * @param {Object} reading, a reading from an observation
-	 *
-	 * @return {Number} d
-	 */
-	ObservationBaselineCalculator.prototype.d = function (reading) {
-		return this._calculator.d(
-				this.baselineD(reading),
-				this.scaleValue(reading)
-		); //
-	};
+
 
 	/**
 	 * pierCorrection

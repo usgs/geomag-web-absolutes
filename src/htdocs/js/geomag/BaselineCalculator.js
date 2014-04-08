@@ -107,15 +107,15 @@ define([
 		},
 
 		/**
-		 * Corrected F
+		 * F Corrected
 		 *
 		 * @param fmean {Number} nT
 		 * @param pierCorrection {Number} nT
 		 *
 		 * @return {Number} nT
 		 */
-		correctedF: function (fmean, pierCorrection) {
-			return (fmean + pierCorrection);
+		fCorrected: function (fMean, pierCorrection) {
+			return (fMean + pierCorrection);
 		},
 
 
@@ -195,80 +195,66 @@ define([
 			return (SCALE_VALUE_COEFFICIENT / absoluteH);
 		},
 
-
 		/**
-		 * Computed E
+		 * Computed D
 		 *
 		 * @param meanE {Number} nT
 		 * @param scaleValue {Number} No units
 		 *
 		 * @return {Number} Decimal degrees
 		 */
-		computedE: function (meanE, scaleValue) {
-			return (meanE * scaleValue / 60.0);
-		},
-
-
-		/**
-		 * Baseline D
-		 *
-		 * @param magneticDeclination {Number} Decimal degrees
-		 * @param computedE {Number} Decimal degrees
-		 *
-		 * @return {Number} Decimal degrees
-		 */
-		baselineD: function (magneticDeclination, computedE) {
-			return (magneticDeclination - computedE);
+		dComputed: function (eMean, scaleValue) {
+			return (eMean * scaleValue / 60.0);
 		},
 
 		/**
-		 * Baseline E
-		 * Identical to baselineD, renamed as it's really baselineE
+		 * H Baseline
 		 *
-		 * @param magneticDeclination {Number} Decimal degrees
-		 * @param computedE {Number} Decimal degrees
-		 *
-		 * @return {Number} Decimal degrees
-		 */
-		baselineE: function (magneticDeclination, computedE) {
-			return (magneticDeclination - computedE);
-		},
-
-		/**
-		 * Baseline H
-		 *
-		 * @param absoluteH {Number} nT
-		 * @param computedH {Number} nT
+		 * @param hAbsolute {Number} nT
+		 * @param hComputed {Number} nT
 		 *
 		 * @return {Number} nT
 		 */
-		baselineH: function (absoluteH, computedH) {
-			return (absoluteH - computedH);
+		hBaseline: function (hAbsolute, hComputed) {
+			return (hAbsolute - hComputed);
+		},
+
+		/**
+		 * E Baseline
+		 *
+		 * @param dBaseline {Number} Decimal degrees
+		 * @param scaleValue {Number}
+		 *
+		 * @return {Number} nT
+		 */
+		eBaseline: function (dBaseline, scaleValue) {
+			return (dBaseline * 60.0 / scaleValue);
+		},
+
+		/**
+		 * D Baseline
+		 *
+		 * @param magneticDeclination {Number} Decimal degrees
+		 * @param dComputed {Number} Decimal degrees
+		 *
+		 * @return {Number} Decimal degrees
+		 */
+		dBaseline: function (magneticDeclination, dComputed) {
+			return (magneticDeclination - dComputed);
 		},
 
 		/**
 		 * Baseline Z
 		 *
-		 * @param absoluteZ {Number} nT
-		 * @param computedZ {Number} nT
+		 * @param zAbsolute {Number} nT
+		 * @param zComputed {Number} nT
 		 *
 		 * @return {Number} nT
 		 */
-		baselineZ: function (absoluteZ, computedZ) {
-			return (absoluteZ - computedZ);
+		zBaseline: function (zAbsolute, zComputed) {
+			return (zAbsolute - zComputed);
 		},
 
-		/**
-		 * D
-		 *
-		 * @param baselineD {Number} Decimal degrees
-		 * @param scaleValue {Number}
-		 *
-		 * @return {Number} nT
-		 */
-		d: function (baselineD, scaleValue) {
-			return (baselineD * 60.0 / scaleValue);
-		},
 
 		// --------------------------------------------------------------
 		// Helper Methods

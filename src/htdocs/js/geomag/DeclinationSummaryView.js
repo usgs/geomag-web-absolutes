@@ -3,14 +3,14 @@ define([
 	'mvc/View',
 	'util/Util',
 
-	'geomag/Measurement',
-	'geomag/Formatter'
+	'geomag/Formatter',
+	'geomag/Measurement'
 ], function (
 	View,
 	Util,
 
-	Measurement,
-	Formatter
+	Format,
+	Measurement
 ) {
 	'use strict';
 
@@ -41,20 +41,20 @@ define([
 			startTime = Math.min.apply(null, times);
 			endTime = Math.max.apply(null, times);
 		}
-		this._startTime.innerHTML = Formatter.time(startTime);
-		this._endTime.innerHTML = Formatter.time(endTime);
+		this._startTime.innerHTML = Format.time(startTime);
+		this._endTime.innerHTML = Format.time(endTime);
 
 		this._shift.value = reading.get('declination_shift');
 
-		this._absolute.innerHTML = Formatter.degreesMinutes(
+		this._absolute.innerHTML = Format.degreesMinutes(
 				this._calculator.magneticDeclination(reading));
 
 		this._ordMin.innerHTML =
-				Formatter.minutes(this._calculator.computedE(reading));
+				Format.minutes(this._calculator.dComputed(reading));
 		this._baselineMin.innerHTML =
-				Formatter.minutes(this._calculator.baselineD(reading));
-		this._baselineNt.innerHTML =
-				Formatter.nanoteslas(this._calculator.d(reading));
+				Format.minutes(this._calculator.dBaseline(reading));
+		this._eBaseline.innerHTML =
+				Format.nanoteslas(this._calculator.eBaseline(reading));
 		this._observer.innerHTML = this._reading.get('observer') || '';
 	};
 
@@ -90,7 +90,7 @@ define([
 		this._absolute = el.querySelector('.absolute-declination');
 		this._ordMin = el.querySelector('.ord-min');
 		this._baselineMin = el.querySelector('.baseline-min');
-		this._baselineNt = el.querySelector('.baseline-nt');
+		this._eBaseline = el.querySelector('.baseline-nt');
 		this._observer = el.querySelector('.observer');
 		this._shift = el.querySelector('.shift > select');
 

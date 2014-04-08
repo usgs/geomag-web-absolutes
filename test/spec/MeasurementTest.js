@@ -4,8 +4,13 @@
 
 define([
 	'chai',
+
 	'geomag/Measurement'
-], function (chai, Measurement) {
+], function (
+	chai,
+
+	Measurement
+) {
 	'use strict';
 	var expect = chai.expect;
 

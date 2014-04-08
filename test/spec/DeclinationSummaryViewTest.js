@@ -3,16 +3,16 @@ define([
 	'chai',
 	'sinon',
 
-	'geomag/Reading',
+	'geomag/DeclinationSummaryView',
 	'geomag/ObservationBaselineCalculator',
-	'geomag/DeclinationSummaryView'
+	'geomag/Reading'
 ], function (
 	chai,
 	sinon,
 
-	Reading,
+	DeclinationSummaryView,
 	ObservationBaselineCalculator,
-	DeclinationSummaryView
+	Reading
 ) {
 	'use strict';
 

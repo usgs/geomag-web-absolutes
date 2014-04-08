@@ -3,14 +3,14 @@ define([
 	'mvc/View',
 	'util/Util',
 
-	'geomag/Measurement',
-	'geomag/Formatter'
+	'geomag/Formatter',
+	'geomag/Measurement'
 ], function (
 	View,
 	Util,
 
-	Measurement,
-	Formatter
+	Format,
+	Measurement
 ) {
 	'use strict';
 
@@ -41,15 +41,15 @@ define([
 			startTime = Math.min.apply(null, times);
 			endTime = Math.max.apply(null, times);
 		}
-		this._startTime.innerHTML = Formatter.time(startTime);
-		this._endTime.innerHTML = Formatter.time(endTime);
+		this._startTime.innerHTML = Format.time(startTime);
+		this._endTime.innerHTML = Format.time(endTime);
 
 		this._absValue.innerHTML =
-				Formatter.nanoteslas(this._calculator.horizontalComponent(reading));
+				Format.nanoteslas(this._calculator.horizontalComponent(reading));
 		this._ord.innerHTML =
-				Formatter.nanoteslas(this._calculator.meanH(reading));
+				Format.nanoteslas(this._calculator.meanH(reading));
 		this._baselineValues.innerHTML =
-				Formatter.nanoteslas(this._calculator.baselineH(reading));
+				Format.nanoteslas(this._calculator.hBaseline(reading));
 		this._observer.innerHTML = this._reading.get('observer') || '';
 	};
 

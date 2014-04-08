@@ -8,24 +8,24 @@ define([
 	'mvc/Model',
 	'util/Util',
 
-	'geomag/Reading',
-	'geomag/Observation',
-	'geomag/Measurement',
 	'geomag/Formatter',
+	'geomag/MagnetometerOrdinatesView',
+	'geomag/Measurement',
+	'geomag/Observation',
 	'geomag/ObservationBaselineCalculator',
-	'geomag/MagnetometerOrdinatesView'
+	'geomag/Reading'
 ], function (
 	chai,
 	sinon,
 	Model,
 	Util,
 
-	Reading,
-	Observation,
-	Measurement,
 	Format,
+	MagnetometerOrdinatesView,
+	Measurement,
+	Observation,
 	ObservationBaselineCalculator,
-	MagnetometerOrdinatesView
+	Reading
 ){
 	'use strict';
 	var expect = chai.expect;
@@ -106,7 +106,7 @@ define([
 				sinon.stub(ObservationBaselineCalculator.prototype,
 						'meanE', function () {return 2;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
-						'computedE', function () {return 2;});
+						'dComputed', function () {return 2;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
 						'meanZ', function () {return 3;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
@@ -119,16 +119,16 @@ define([
 				sinon.stub(ObservationBaselineCalculator.prototype,
 						'verticalComponent', function () {return 7;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
-						'correctedF', function () {return 8;});
+						'fCorrected', function () {return 8;});
 
 				sinon.stub(ObservationBaselineCalculator.prototype,
-						'baselineH', function () {return 9;});
+						'hBaseline', function () {return 9;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
-						'baselineE', function () {return 10;});
+						'eBaseline', function () {return 10;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
-						'd', function () {return 11;});
+						'dBaseline', function () {return 11;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
-						'baselineZ', function () {return 12;});
+						'zBaseline', function () {return 12;});
 				sinon.stub(ObservationBaselineCalculator.prototype,
 						'scaleValue', function () {return 14;});
 
@@ -193,17 +193,17 @@ define([
 
 			ObservationBaselineCalculator.prototype.meanH.restore();
 			ObservationBaselineCalculator.prototype.meanE.restore();
-			ObservationBaselineCalculator.prototype.computedE.restore();
+			ObservationBaselineCalculator.prototype.dComputed.restore();
 			ObservationBaselineCalculator.prototype.meanZ.restore();
 			ObservationBaselineCalculator.prototype.meanF.restore();
 			ObservationBaselineCalculator.prototype.horizontalComponent.restore();
 			ObservationBaselineCalculator.prototype.magneticDeclination.restore();
 			ObservationBaselineCalculator.prototype.verticalComponent.restore();
-			ObservationBaselineCalculator.prototype.correctedF.restore();
-			ObservationBaselineCalculator.prototype.baselineH.restore();
-			ObservationBaselineCalculator.prototype.baselineE.restore();
-			ObservationBaselineCalculator.prototype.d.restore();
-			ObservationBaselineCalculator.prototype.baselineZ.restore();
+			ObservationBaselineCalculator.prototype.fCorrected.restore();
+			ObservationBaselineCalculator.prototype.hBaseline.restore();
+			ObservationBaselineCalculator.prototype.dBaseline.restore();
+			ObservationBaselineCalculator.prototype.eBaseline.restore();
+			ObservationBaselineCalculator.prototype.zBaseline.restore();
 			ObservationBaselineCalculator.prototype.scaleValue.restore();
 		});
 

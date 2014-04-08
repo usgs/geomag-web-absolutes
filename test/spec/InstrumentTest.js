@@ -1,12 +1,14 @@
 /* global define, describe, it */
 define([
 	'chai',
-	'geomag/Instrument',
-	'mvc/Model'
+	'mvc/Model',
+
+	'geomag/Instrument'
 ], function (
 	chai,
-	Instrument,
-	Model
+	Model,
+
+	Instrument
 ) {
 	'use strict';
 	var expect = chai.expect;

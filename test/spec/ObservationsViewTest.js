@@ -3,17 +3,21 @@
 define([
 	'chai',
 	'sinon',
-	'geomag/ObservationsView',
-	'./observatory1',
+
 	'util/Util',
-	'util/Xhr'
+	'util/Xhr',
+
+	'geomag/ObservationsView',
+	'./observatory1'
 ], function (
 	chai,
 	sinon,
-	ObservationsView,
-	observatory1,
+
 	Util,
-	Xhr
+	Xhr,
+
+	ObservationsView,
+	observatory1
 ) {
 
 	'use strict';

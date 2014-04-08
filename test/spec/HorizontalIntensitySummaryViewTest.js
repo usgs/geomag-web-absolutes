@@ -3,16 +3,16 @@ define([
 	'chai',
 	'sinon',
 
-	'geomag/Reading',
+	'geomag/HorizontalIntensitySummaryView',
 	'geomag/ObservationBaselineCalculator',
-	'geomag/HorizontalIntensitySummaryView'
+	'geomag/Reading'
 ], function (
 	chai,
 	sinon,
 
-	Reading,
+	HorizontalIntensitySummaryView,
 	ObservationBaselineCalculator,
-	HorizontalIntensitySummaryView
+	Reading
 ) {
 	'use strict';
 
