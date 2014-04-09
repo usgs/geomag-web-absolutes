@@ -86,9 +86,6 @@ define([
 				'</tfoot>',
 			'</p>',
 			'</table>',
-			//'<p class="pier-correction">Pier Correction',
-			//	'<span class="pier-correction-value"></span>',
-			//'</p>',
 			'<p class="scaleValue"></p>'
 		].join('');
 
@@ -98,8 +95,8 @@ define([
 		this._zMean = this._el.querySelector('.zMean');
 		this._fMean = this._el.querySelector('.fMean');
 
-		this._absoluteD = this._el.querySelector('.dAbsolute');
 		this._absoluteH = this._el.querySelector('.hAbsolute');
+		this._absoluteD = this._el.querySelector('.dAbsolute');
 		this._absoluteZ = this._el.querySelector('.zAbsolute');
 		this._absoluteF = this._el.querySelector('.fAbsolute');
 
@@ -130,13 +127,18 @@ define([
 
 	MagnetometerOrdinatesView.prototype.render = function () {
 		var calculator = this._calculator,
-		    reading = this._reading;
+				reading = this._reading;
 
-		this._hMean.innerHTML =	Format.nanoteslas(calculator.meanH(reading));
-		this._eMean.innerHTML =	Format.nanoteslas(calculator.meanE(reading));
-		this._dMean.innerHTML =	Format.minutes(calculator.dComputed(reading));
-		this._zMean.innerHTML =	Format.nanoteslas(calculator.meanZ(reading));
-		this._fMean.innerHTML =	Format.nanoteslas(calculator.meanF(reading));
+		this._hMean.innerHTML =
+				Format.nanoteslas(calculator.meanH(reading));
+		this._eMean.innerHTML =
+				Format.nanoteslas(calculator.meanE(reading));
+		this._dMean.innerHTML =
+				Format.minutes(calculator.dComputed(reading)*60);
+		this._zMean.innerHTML =
+				Format.nanoteslas(calculator.meanZ(reading));
+		this._fMean.innerHTML =
+				Format.nanoteslas(calculator.meanF(reading));
 
 		this._absoluteH.innerHTML =
 				Format.nanoteslas(calculator.horizontalComponent(reading));
@@ -152,7 +154,7 @@ define([
 		this._eBaseline.innerHTML =
 			Format.nanoteslas(calculator.eBaseline(reading));
 		this._dBaseline.innerHTML =
-			Format.minutes(calculator.dBaseline(reading));
+			Format.minutes(calculator.dBaseline(reading) * 60);
 		this._zBaseline.innerHTML =
 			Format.nanoteslas(calculator.zBaseline(reading));
 
