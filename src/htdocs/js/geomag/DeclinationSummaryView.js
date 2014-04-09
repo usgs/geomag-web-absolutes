@@ -50,9 +50,9 @@ define([
 				this._calculator.magneticDeclination(reading));
 
 		this._ordMin.innerHTML =
-				Format.minutes(this._calculator.dComputed(reading));
+				Format.minutes(this._calculator.dComputed(reading)*60);
 		this._baselineMin.innerHTML =
-				Format.minutes(this._calculator.dBaseline(reading));
+				Format.minutes(this._calculator.dBaseline(reading)*60);
 		this._eBaseline.innerHTML =
 				Format.nanoteslas(this._calculator.eBaseline(reading));
 		this._observer.innerHTML = this._reading.get('observer') || '';
