@@ -34,12 +34,12 @@ define([
 
 		describe('View', function () {
 			var renderSpy,
-					reading,
-					calculator,
-					view,
-					observation,
-					readingMeasurements,
-					measurements;
+			    reading,
+			    calculator,
+			    view,
+			    observation,
+			    readingMeasurements,
+			    measurements;
 
 			beforeEach(function () {
 				renderSpy = sinon.spy(MagnetometerOrdinatesView.prototype, 'render');
@@ -76,7 +76,7 @@ define([
 
 			it('should render when measurement changes', function () {
 				var i = null,
-						len = null;
+				    len = null;
 
 				for (i = 0, len = measurements.length; i < len; i++) {
 					measurements[i].trigger('change');
@@ -93,54 +93,54 @@ define([
 		});
 
 		describe('Values', function () {
+			var reading,
+			    calculator,
+			    view,
+			    observation;
 
-				var reading,
-						calculator,
-						view,
-						observation;
-				function format4 (number) {return number.toFixed(4);}
+			function format4 (number) {return number.toFixed(4);}
 
-				//Stub function in ObservationBaselineCalculator.
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'meanH', function () {return 1;});
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'meanE', function () {return 2;});
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'dComputed', function () {return 2;});
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'meanZ', function () {return 3;});
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'meanF', function () {return 4;});
+			//Stub function in ObservationBaselineCalculator.
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'meanH', function () {return 1;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'meanE', function () {return 2;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'dComputed', function () {return 2;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'meanZ', function () {return 3;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'meanF', function () {return 4;});
 
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'horizontalComponent', function () {return 5;});
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'magneticDeclination', function () {return 6;});
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'verticalComponent', function () {return 7;});
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'fCorrected', function () {return 8;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'horizontalComponent', function () {return 5;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'magneticDeclination', function () {return 6;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'verticalComponent', function () {return 7;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'fCorrected', function () {return 8;});
 
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'hBaseline', function () {return 9;});
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'eBaseline', function () {return 10;});
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'dBaseline', function () {return 11;});
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'zBaseline', function () {return 12;});
-				sinon.stub(ObservationBaselineCalculator.prototype,
-						'scaleValue', function () {return 14;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'hBaseline', function () {return 9;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'eBaseline', function () {return 10;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'dBaseline', function () {return 11;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'zBaseline', function () {return 12;});
+			sinon.stub(ObservationBaselineCalculator.prototype,
+					'scaleValue', function () {return 14;});
 
-				reading = new Reading();
-				observation = new Observation();
-				calculator = new ObservationBaselineCalculator();
+			reading = new Reading();
+			observation = new Observation();
+			calculator = new ObservationBaselineCalculator();
 
-				view = new MagnetometerOrdinatesView({
-					reading: reading,
-					observation: observation,
-					baselineCalculator: calculator
-				});
+			view = new MagnetometerOrdinatesView({
+				reading: reading,
+				observation: observation,
+				baselineCalculator: calculator
+			});
 
 			it('updates view elements for hMean', function () {
 				expect(view._hMean.innerHTML).to.equal(Format.nanoteslas(1));
@@ -160,29 +160,29 @@ define([
 
 			it('updates view elements for absoluteH', function () {
 				expect(view._absoluteH.innerHTML).to.equal(Format.nanoteslas(5));
-				});
+			});
 			it('updates view elements for absoluteD', function () {
 				expect(view._absoluteD.innerHTML).to.equal(Format.minutes(6*60));
-				});
+			});
 			it('updates view elements for absoluteZ', function () {
 				expect(view._absoluteZ.innerHTML).to.equal(Format.nanoteslas(7));
-				});
+			});
 			it('updates view elements for absoluteF', function () {
 				expect(view._absoluteF.innerHTML).to.equal(Format.nanoteslas(8));
-				});
+			});
 
 			it('updates view elements for hBaseline', function () {
 				expect(view._hBaseline.innerHTML).to.equal(Format.nanoteslas(9));
-				});
+			});
 			it('updates view elements for eBaseline', function () {
 				expect(view._eBaseline.innerHTML).to.equal(Format.nanoteslas(10));
-				});
+			});
 			it('updates view elements for dBaseline', function () {
 				expect(view._dBaseline.innerHTML).to.equal(Format.minutes(11*60));
-				});
+			});
 			it('updates view elements for zBaseline', function () {
 				expect(view._zBaseline.innerHTML).to.equal(Format.nanoteslas(12));
-				});
+			});
 
 			it('updates view elements for scaleValue', function () {
 				expect(view._scaleValue.textContent).to.equal(
