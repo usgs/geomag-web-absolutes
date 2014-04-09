@@ -86,9 +86,6 @@ define([
 				'</tfoot>',
 			'</p>',
 			'</table>',
-			//'<p class="pier-correction">Pier Correction',
-			//	'<span class="pier-correction-value"></span>',
-			//'</p>',
 			'<p class="scaleValue"></p>'
 		].join('');
 
