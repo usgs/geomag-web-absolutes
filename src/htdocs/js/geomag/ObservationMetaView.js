@@ -75,9 +75,11 @@ define([
 		    begin = new Date(obs.get('begin') || new Date().getTime()),
 		    y = begin.getUTCFullYear(),
 		    m = begin.getUTCMonth() + 1,
-		    d = begin.getUTCDate();
+		    d = begin.getUTCDate(),
+		    janOne = new Date(y,0,1),
+		    yd = Math.ceil((begin - janOne) / 86400000);
 
-		this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
+		this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d + '  YD(' + yd + ')';
 		this._pierTemperature.value = obs.get('pier_temperature');
 	};
 
