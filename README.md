@@ -12,7 +12,6 @@ Getting Started
 1. Node, NPM
 1. Sass, Compass
 1. PHP-CGI 5.4+
-1. Bower
 1. Grunt
 
 ### Getting Started:
@@ -26,9 +25,6 @@ Make sure you are in your `geomag-baseline-calculator` project directory.
 
     `npm install`
 
-1. Install Bower dependencies
-
-    `bower install`
 1. Install Sass and Compass with Ruby
 
     `gem install sass`
@@ -49,9 +45,5 @@ Make sure you are in your `geomag-baseline-calculator` project directory.
 command line interface globally
 
     `npm install -g grunt-cli`
-
-1. If this is your first time using **bower**, you need to install bower globally
-
-    `npm install -g bower`
 
 [Dependency install details for Windows and Mac](readme_dependency_install.md)

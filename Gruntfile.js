@@ -35,14 +35,8 @@ module.exports = function (grunt) {
 		tmp: '.tmp'
 	};
 
-	// TODO :: Read this from .bowerrc
-	var bowerConfig = {
-		directory: 'bower_components'
-	};
-
 	grunt.initConfig({
 		app: appConfig,
-		bower: bowerConfig,
 		watch: {
 			scripts: {
 				files: ['<%= app.dev %>/htdocs/js/**/*.js'],
@@ -120,14 +114,12 @@ module.exports = function (grunt) {
 				options: {
 					base: '<%= app.dev %>/htdocs',
 					port: 8080,
-					components: bowerConfig.directory,
 					middleware: function (connect, options) {
 						return [
 							lrSnippet,
 							rewriteRulesSnippet,
 							proxySnippet,
 							mountFolder(connect, '.tmp'),
-							mountFolder(connect, options.components),
 							mountPHP(options.base),
 							mountFolder(connect, options.base),
 							mountFolder(connect, 'node_modules')
@@ -146,8 +138,7 @@ module.exports = function (grunt) {
 							proxySnippet,
 							mountPHP(options.base),
 							mountFolder(connect, options.base),
-							mountFolder(connect, 'node_modules'),
-							mountFolder(connect, 'bower_components')
+							mountFolder(connect, 'node_modules')
 						];
 					}
 				}
@@ -156,12 +147,10 @@ module.exports = function (grunt) {
 				options: {
 					base: '<%= app.test %>',
 					devBase: '<%= app.dev %>/htdocs',
-					components: bowerConfig.directory,
 					port: 8000,
 					middleware: function (connect, options) {
 						return [
 							mountFolder(connect, '.tmp'),
-							mountFolder(connect, 'bower_components'),
 							mountFolder(connect, 'node_modules'),
 							mountFolder(connect, options.base),
 							mountPHP(options.devBase),
@@ -207,8 +196,8 @@ module.exports = function (grunt) {
 					wrap: true,
 
 					paths: {
-						'mvc': '../../../bower_components/hazdev-webutils/src/mvc',
-						'util': '../../../bower_components/hazdev-webutils/src/util',
+						'mvc': '../../../node_modules/hazdev-webutils/src/mvc',
+						'util': '../../../node_modules/hazdev-webutils/src/util',
 						'tablist': '../../../node_modules/hazdev-tablist/src/tablist'
 					},
 					modules: [
@@ -261,10 +250,6 @@ module.exports = function (grunt) {
 			},
 			dist: {
 				files: {
-					'<%= app.dist %>/htdocs/lib/requirejs/require.js':
-							['<%= bower.directory %>/requirejs/require.js'],
-					'<%= app.dist %>/htdocs/lib/html5shiv/html5shiv.js':
-							['<%= bower.directory %>/html5shiv-dist/html5shiv.js']
 				}
 			}
 		},
@@ -310,10 +295,6 @@ module.exports = function (grunt) {
 						from: '<script src="http://localhost:35729/livereload.js'+
 								'?snipver=1"></script>',
 						to: ''
-					},
-					{
-						from: 'requirejs/require.js',
-						to: 'lib/requirejs/require.js'
 					},
 					{
 						from: 'html5shiv-dist/html5shiv.js',
