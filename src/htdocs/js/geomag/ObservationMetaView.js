@@ -77,9 +77,10 @@ define([
 		    m = begin.getUTCMonth() + 1,
 		    d = begin.getUTCDate(),
 		    janOne = new Date(y,0,1),
-		    yd = Math.ceil((begin - janOne) / 86400000);
+		    julianDay = Math.ceil((begin - janOne) / 86400000);
 
-		this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d + '  YD(' + yd + ')';
+		this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
+		this._julianDay.innerHTML = julianDay;
 		this._pierTemperature.value = obs.get('pier_temperature');
 	};
 
@@ -110,6 +111,8 @@ define([
 						'<label for="', idPrefix, '-date">Date</label>',
 						'<input id="',  idPrefix, '-date" type="text"',
 								' class="date" placeholder="YYYY-MM-DD"/>',
+						'<span class="julian-day">Julian Day</span>',
+						'<span class="julian-day-value"></span>',
 						'<label for="', idPrefix, '-piertemp">',
 								'Pier <abbr title="Temperature">Temp</abbr></label>',
 						'<input id="',  idPrefix, '-piertemp" type="text"',
@@ -136,6 +139,9 @@ define([
 				'</div>',
 			'</section>'
 		].join('');
+
+		this._julianDay = this._el.querySelector('.julian-day-value');
+		// this._date.value.on('change', this.render, this);
 
 		// observatory information inputs
 		this._observatorySelectView = observatorySelectView =
