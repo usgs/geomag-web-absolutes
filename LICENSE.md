@@ -5,4 +5,6 @@ information, see the official USGS copyright policy at
 http://www.usgs.gov/visual-id/credit_usgs.html#copyright
 
 
-The file lib/classes/PdoSessionHandler.php is reused from the Symfony PHP Framework (https://github.com/symfony/symfony) and has a separate license; included in that file.
+The file lib/classes/PdoSessionHandler.php is reused from the Symfony
+PHP Framework (https://github.com/symfony/symfony) and has a separate license;
+included in that file.
