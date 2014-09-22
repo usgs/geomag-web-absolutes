@@ -77,10 +77,10 @@ define([
 			this._secondsInput.value = dms[2];
 		}
 
-		this._hValue.innerHTML = (h === null ? '--' : Format.nanoteslas(h));
-		this._eValue.innerHTML = (e === null ? '--' : Format.nanoteslas(e));
-		this._zValue.innerHTML = (z === null ? '--' : Format.nanoteslas(z));
-		this._fValue.innerHTML = (f === null ? '--' : Format.nanoteslas(f));
+		this._hValue.innerHTML = (h === null ? '&ndash;' : Format.nanoteslas(h));
+		this._eValue.innerHTML = (e === null ? '&ndash;' : Format.nanoteslas(e));
+		this._zValue.innerHTML = (z === null ? '&ndash;' : Format.nanoteslas(z));
+		this._fValue.innerHTML = (f === null ? '&ndash;' : Format.nanoteslas(f));
 	};
 
 	MeasurementView.prototype._initialize = function () {
@@ -100,10 +100,10 @@ define([
 			'<td class="measurement-minutes"><input type="text"/></td>',
 			'<td class="measurement-seconds"><input type="text"/></td>',
 
-			'<td class="measurement-h">--</td>',
-			'<td class="measurement-e">--</td>',
-			'<td class="measurement-z">--</td>',
-			'<td class="measurement-f">--</td>'
+			'<td class="measurement-h">&ndash;</td>',
+			'<td class="measurement-e">&ndash;</td>',
+			'<td class="measurement-z">&ndash;</td>',
+			'<td class="measurement-f">&ndash;</td>'
 		].join('');
 
 		this._timeInput = this._el.querySelector('.measurement-time > input');

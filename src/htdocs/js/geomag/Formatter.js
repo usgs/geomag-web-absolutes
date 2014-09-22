@@ -196,7 +196,12 @@ define([
 		if (typeof digits === 'undefined') {
 			digits = DEFAULT_DIGITS;
 		}
-		return this.rawMinutes(angle.toFixed(digits));
+
+		if (isNaN(angle)) {
+			return '&ndash;';
+		} else {
+			return this.rawMinutes(angle.toFixed(digits));
+		}
 	};
 
 	/**
@@ -240,11 +245,14 @@ define([
 		degrees = parseInt(angle, 10);
 		minutes = (angle - degrees) * 60;
 
-		buf.push(
-				this.rawDegrees(degrees),
-				'&nbsp;',
-				this.minutes(minutes, digits));
-
+		if (isNaN(degrees) || isNaN(minutes)) {
+			buf.push('&ndash;');
+		} else {
+			buf.push(
+					this.rawDegrees(degrees),
+					'&nbsp;',
+					this.minutes(minutes, digits));
+		}
 		return buf.join('');
 	};
 
@@ -289,7 +297,11 @@ define([
 			digits = DEFAULT_DIGITS;
 		}
 
-		return this.rawNanoteslas(nT.toFixed(digits));
+		if (isNaN(nT)) {
+			return '&ndash;';
+		} else {
+			return this.rawNanoteslas(nT.toFixed(digits));
+		}
 	};
 
 	/**
@@ -385,7 +397,7 @@ define([
 	 */
 	Formatter.celsius = function (temperature, digits) {
 		if (temperature === null) {
-			return '-';
+			return '&ndash;';
 		}
 
 		if (typeof digits === 'undefined') {
@@ -407,7 +419,7 @@ define([
 		var buf = [];
 
 		if (temperature === null) {
-			return '-';
+			return '&ndash;';
 		}
 
 		buf.push(
@@ -429,7 +441,7 @@ define([
 	 */
 	Formatter.fahrenheit = function (temperature, digits) {
 		if (temperature === null) {
-			return '-';
+			return '&ndash;';
 		}
 
 		if (typeof digits === 'undefined') {
@@ -451,7 +463,7 @@ define([
 		var buf = [];
 
 		if (temperature === null) {
-			return '-';
+			return '&ndash;';
 		}
 
 		buf.push(

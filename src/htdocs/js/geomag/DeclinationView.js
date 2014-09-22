@@ -51,20 +51,20 @@ define([
 		this._el.innerHTML = [
 			'<dl>',
 				'<dt class="mag-s-meridian">Magnetic South Meridian</dt>',
-				'<dd class="mag-s-meridian-value">------</dd>',
+				'<dd class="mag-s-meridian-value">&ndash;</dd>',
 				'<dt class="mean-mark">Mean Mark</dt>',
-				'<dd class="mean-mark-value">------</dd>',
+				'<dd class="mean-mark-value">&ndash;</dd>',
 				'<dt class="mag-az-of-mark">Magnetic Azimuth of Mark</dt>',
-				'<dd class="mag-az-of-mark-value">------</dd>',
+				'<dd class="mag-az-of-mark-value">&ndash;</dd>',
 				'<dt class="true-az-of-mark">True Azimuth of Mark</dt>',
-				'<dd class="true-az-of-mark-value">------</dd>',
+				'<dd class="true-az-of-mark-value">&ndash;</dd>',
 				'<dt class="mag-declination">Magnetic Declination</dt>',
-				'<dd class="mag-declination-value">------</dd>',
+				'<dd class="mag-declination-value">&ndash;</dd>',
 
 				'<dt class="west-up-minus-east-down">(WU - ED) * 60</dt>',
-				'<dd class="west-up-minus-east-down-value">----</dd>',
+				'<dd class="west-up-minus-east-down-value">&ndash;</dd>',
 				'<dt class="east-up-minus-west-down">(EU - WD) * 60</dt>',
-				'<dd class="east-up-minus-west-down-value">----</dd>',
+				'<dd class="east-up-minus-west-down-value">&ndash;</dd>',
 			'</dl>'
 		].join('');
 

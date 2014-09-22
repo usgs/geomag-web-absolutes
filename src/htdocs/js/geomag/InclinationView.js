@@ -52,16 +52,16 @@ define([
 		this._el.innerHTML = [
 			'<dl>',
 				'<dt class="inclination">Inclination</dt>',
-				'<dd class="inclination-value">------</dd>',
+				'<dd class="inclination-value">&ndash;</dd>',
 				'<dt class="horizontal-component">Horizontal Component</dt>',
-				'<dd class="horizontal-component-value">------</dd>',
+				'<dd class="horizontal-component-value">&ndash;</dd>',
 				'<dt class="vertical-component">Vertical Component</dt>',
-				'<dd class="vertical-component-value">------</dd>',
+				'<dd class="vertical-component-value">&ndash;</dd>',
 
 				'<dt class="south-down-minus-north-up">(SD - NU - 180) * 60</dt>',
-				'<dd class="south-down-minus-north-up-value">----</dd>',
+				'<dd class="south-down-minus-north-up-value">&ndash;</dd>',
 				'<dt class="north-down-minus-south-up">(ND - SU - 180) * 60</dt>',
-				'<dd class="north-down-minus-south-up-value">----</dd>',
+				'<dd class="north-down-minus-south-up-value">&ndash;</dd>',
 			'</dl>'
 		].join('');
 
