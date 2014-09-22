@@ -237,14 +237,16 @@ define([
 
 	};
 
+
 	/**
-	 * Create a panel at the bottom of the Observation view to create or delete
-	 * the observation
+	 * Create a panel at the bottom of the Observation view to create, update,
+	 * or delete the observation.
 	 *
 	 */
 	ObservationView.prototype._createControls = function () {
 		var controls = this._el.querySelector('.observation-view-controls'),
 		    saveButton = document.createElement('button'),
+		    publishButton,
 		    _this = this;
 
 		saveButton.id = 'saveButton';
@@ -255,6 +257,13 @@ define([
 		});
 
 		controls.appendChild(saveButton);
+
+		// Add publish button for admin users
+		if (this._user.hasRole(new UserRole({'id': 1, 'name': 'admin'}))) {
+			publishButton = document.createElement('button');
+			publishButton.innerHTML = 'Publish';
+			controls.appendChild(publishButton);
+		}
 	};
 
 
