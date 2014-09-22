@@ -6,25 +6,19 @@
 	.top-aligned,
 	.left-aligned,
 	.right-aligned {
-		> label {
+		> label,
+		> .label {
 			padding: 0;
 			margin: 0;
 			display: block;
 			font-weight: bold;
 			padding-right: 5px;
 		}
-		> .julian-day {
-			font-weight: bold;
-			padding: 2px 5px 0 5px;
-		}
-		> .julian-day-value {
-			padding-top: 2px;
-		}
 
 		> input,
 		> select,
 		> textarea,
-		> .julian-day-value,
+		> .value,
 		> .pier-correction-value {
 			margin-bottom: 1em;
 		}
@@ -44,7 +38,8 @@
 	@media screen and (min-width:768px) {
 		.left-aligned,
 		.right-aligned {
-			> label {
+			> label,
+			> .label {
 				float: left;
 				clear: left;
 				width: 8em;
@@ -53,7 +48,8 @@
 
 			> input,
 			> select,
-			> textarea {
+			> textarea,
+			> .value {
 				float: left;
 				margin-bottom: 5px;
 			}
@@ -65,8 +61,11 @@
 			}
 		}
 
-		.right-aligned > label {
-			text-align: right;
+		.right-aligned {
+			> label,
+			> .label {
+				text-align: right;
+			}
 		}
 	}
 }
