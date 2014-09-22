@@ -24,12 +24,7 @@ $OBSERVATORY_FACTORY = new ObservatoryFactory($DB);
 $OBSERVATION_FACTORY = new ObservationFactory($DB);
 
 // set up database backed sessions
-if (isset($CONFIG['SESSION_DB_DSN'])) {
-	$SESSION_DB_DSN = $CONFIG['SESSION_DB_DSN'];
-	if ($SESSION_DB_DSN !== '') {
-		$SESSION_DB = new PDO($SESSION_DB_DSN, $CONFIG['SESSION_DB_USER'],
-				$CONFIG['SESSION_DB_PASS']);
-		$SESSION_DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		session_set_save_handler(new PdoSessionHandler($SESSION_DB), true);
-	}
+if (isset($CONFIG['USE_DATABASE_SESSIONS']) &&
+		$CONFIG['USE_DATABASE_SESSIONS'] === 'true') {
+	session_set_save_handler(new PdoSessionHandler($DB), true);
 }
