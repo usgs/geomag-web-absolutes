@@ -121,6 +121,7 @@ define([
 		// hook up to calculator on change.
 		// for changes to pier and mark.
 		this._calculator.on('change', this.render, this);
+		this._reading.on('change', this.render, this);
 
 		this.render();
 	};
