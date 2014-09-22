@@ -1,6 +1,6 @@
 /* BDT - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation, default_pier_id)
-VALUES ('Boulder Test (BDT)','BDT','Boulder, CO' ,'40.1375' ,'105.2372' ,'48.40' ,'320.59' ,'1682' ,'HDZF', NULL);
+VALUES ('Boulder Test (BDT)','BDT','Boulder, CO' ,'40.1375' ,'-105.2372' ,'48.40' ,'320.59' ,'1682' ,'HDZF', NULL);
 
 /* add BDT's instruments - two pairs*/
 /* this pair is current but the begin time is just an estimate */
@@ -56,7 +56,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 
 /* BOU - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation, default_pier_id)
-VALUES ('Boulder (BOU)','BOU','Boulder, CO' ,'40.1375' ,'105.2372' ,'48.40' ,'320.59' ,'1682' ,'HDZF', NULL);
+VALUES ('Boulder (BOU)','BOU','Boulder, CO' ,'40.1375' ,'-105.2372' ,'48.40' ,'320.59' ,'1682' ,'HDZF', NULL);
 
 /* add BOU's instruments - two pairs*/
 /* this pair is current but the begin time is just an estimate */
@@ -176,7 +176,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 
 /* BRW - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
- VALUES ('Barrow (BRW)','BRW' ,'Point Barrow, AK','71.3225' ,'156.6231' ,'69.61' ,'246.26' ,'12' ,'HDZF');
+ VALUES ('Barrow (BRW)','BRW' ,'Point Barrow, AK','71.3225' ,'-156.6231' ,'69.61' ,'246.26' ,'12' ,'HDZF');
  
 /* add BRW's instruments */
 /* this pair is current but the begin time is just an estimate */
@@ -258,7 +258,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 
 /* BSL - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
- VALUES ('Barrow (BSL)','BSL' ,'Point Barrow, AK','71.3225' ,'156.6231' ,'69.61' ,'246.26' ,'12' ,'HDZF');
+ VALUES ('Stennis (BSL)','BSL' ,'NASA Stennis Space Center, MS','30.3507' ,'-89.6359' ,'40.05' ,'339.79' ,'8' ,'HDZF');
  
 /* add BSL's instruments - note that there's no theodolite */
 INSERT INTO instrument (observatory_id, serial_number, begin, end, name, type)
@@ -337,7 +337,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 
 /* CMO - observatory entry */
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation, default_pier_id)
- VALUES ('College (CMO)','CMO' ,'Fairbanks, AK' ,'64.8742' ,'147.8597' ,'65.38' ,'261.63' ,'197' ,'HDZF', NULL);
+ VALUES ('College (CMO)','CMO' ,'Fairbanks, AK' ,'64.8742' ,'-147.8597' ,'65.38' ,'261.63' ,'197' ,'HDZF', NULL);
 
 /* insert CMO's instruments */
 INSERT INTO instrument (observatory_id, serial_number, begin, end, name, type)
@@ -401,7 +401,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 ;
 /* DED - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
- VALUES ('Deadhorse (DED)','DED' ,'Deadhorse, AK' ,'70.3552' ,'148.7928' ,NULL,NULL ,'10' ,'HDZF');
+ VALUES ('Deadhorse (DED)','DED' ,'Deadhorse, AK' ,'70.3552' ,'-148.7928' ,NULL,NULL ,'10' ,'HDZF');
  
 /* add DED's instruments */
 INSERT INTO instrument (observatory_id, serial_number, begin, end, name, type)
@@ -456,7 +456,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 
 /* FRD - add observatory entry */
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
- VALUES ('Fredericksburg (FRD)','FRD' ,'Corbin, VA','38.2047' ,'77.3729' ,'48.40' ,'353.38' ,'69' ,'HDZF');
+ VALUES ('Fredericksburg (FRD)','FRD' ,'Corbin, VA','38.2047' ,'-77.3729' ,'48.40' ,'353.38' ,'69' ,'HDZF');
 
 /* add FRD's instruments */
 INSERT INTO instrument (observatory_id, serial_number, begin, end, name, type)
@@ -511,7 +511,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 ;
 /* FRN - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
- VALUES ('Fresno (FRN)','FRN','ONeals, CA','37.0913' ,'119.7193' ,'43.52' ,'305.25' ,'331' ,'HDZF');
+ VALUES ('Fresno (FRN)','FRN','ONeals, CA','37.0913' ,'-119.7193' ,'43.52' ,'305.25' ,'331' ,'HDZF');
  
 /* add FRN's instruments */
 INSERT INTO instrument (observatory_id, serial_number, begin, end, name, type)
@@ -708,7 +708,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
             )                                   
 ;/* HON - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
- VALUES ('Honolulu (HON)','HON','Ewa Beach, HI','21.3166' ,'157.9996' ,'21.64' ,'269.74' ,'4' ,'HDZF');
+ VALUES ('Honolulu (HON)','HON','Ewa Beach, HI','21.3166' ,'-157.9996' ,'21.64' ,'269.74' ,'4' ,'HDZF');
  
 /* add HON's instruments - note that there's no theodolite */
 INSERT INTO instrument (observatory_id, serial_number, begin, end, name, type)
@@ -772,7 +772,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 
 /* NEW - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
- VALUES ('Newport (NEW)','NEW','Colville National Forest, WA','48.2649' ,'117.1231' ,'54.85' ,'304.68' ,'770' ,'HDZF');
+ VALUES ('Newport (NEW)','NEW','Colville National Forest, WA','48.2649' ,'-117.1231' ,'54.85' ,'304.68' ,'770' ,'HDZF');
  
 /* add NEW's instruments */
 INSERT INTO instrument (observatory_id, serial_number, begin, end, name, type)
@@ -857,7 +857,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 
 /* SHU - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
- VALUES ('Shumagin (SHU)','SHU','Sand Point, Popof, AK' ,'55.3472' ,'160.4644' ,'256.78' ,'160.46' ,'80' ,'HDZF');
+ VALUES ('Shumagin (SHU)','SHU','Sand Point, Popof, AK' ,'55.3472' ,'-160.4644' ,'256.78' ,'160.46' ,'80' ,'HDZF');
  
 /* add SHU's instruments - not that there's no theodolite */
 INSERT INTO instrument (observatory_id, serial_number, begin, end, name, type)
@@ -911,7 +911,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 
 /* SIT - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
- VALUES ('Sitka (SIT)','SIT','Sitka, AK','57.0576' ,'135.3273' ,'60.34' ,'280.35' ,'24' ,'HDZF');
+ VALUES ('Sitka (SIT)','SIT','Sitka, AK','57.0576' ,'-135.3273' ,'60.34' ,'280.35' ,'24' ,'HDZF');
  
 /* add SIT's instruments */
 INSERT INTO instrument (observatory_id, serial_number, begin, end, name, type)
@@ -966,7 +966,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 
 /* SJG - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
- VALUES ('San Juan (SJG)','SJG','Cayey, PR','18.1110' ,'66.1498' ,'28.31' ,'6.08' ,'424' ,'HDZF');
+ VALUES ('San Juan (SJG)','SJG','Cayey, PR','18.1110' ,'-66.1498' ,'28.31' ,'6.08' ,'424' ,'HDZF');
  
 /* add SJG's instruments */
 INSERT INTO instrument (observatory_id, serial_number, begin, end, name, type)
@@ -1059,7 +1059,7 @@ WHERE id = (SELECT id FROM pier WHERE observatory_id = ( SELECT id FROM observat
 
 /* TUC - add observatory entry */ 
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
- VALUES ('Tucson (TUC)','TUC','Tucson, AZ','32.1745' ,'110.7337' ,'39.88' ,'316.11' ,'946' ,'HDZF');
+ VALUES ('Tucson (TUC)','TUC','Tucson, AZ','32.1745' ,'-110.7337' ,'39.88' ,'316.11' ,'946' ,'HDZF');
 
 /* add TUC's instruments - two pairs*/
 /* this is the original epoch */
