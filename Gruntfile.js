@@ -219,9 +219,6 @@ module.exports = function (grunt) {
 					],
 					'<%= app.dist %>/htdocs/css/observation.css': [
 						'.tmp/css/observation.css'
-					],
-					'<%= app.dist %>/htdocs/css/theme.css': [
-						'.tmp/css/theme.css'
 					]
 				}
 			}
@@ -267,7 +264,8 @@ module.exports = function (grunt) {
 				cwd: '<%= app.dev %>/conf',
 				dest: '<%= app.dist %>/conf',
 				src: [
-					'config.inc.php'
+					'config.inc.php',
+					'config.ini'
 				]
 			},
 			lib: {
