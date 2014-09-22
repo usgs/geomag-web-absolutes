@@ -13,6 +13,7 @@ if (!isset($TEMPLATE)) {
 		</script>' .
 		'<script src="' . $MOUNT_PATH . '/js/index.js"></script>';
 
+	include '../lib/login.inc.php';
 	include 'template.inc.php';
 }
 ?>
