@@ -7,3 +7,4 @@ geomag-baseline-calculator.sublime-workspace
 src/conf/config.ini
 src/conf/httpd.conf
 testdata.db
+sessions.db
