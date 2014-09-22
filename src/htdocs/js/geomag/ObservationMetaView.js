@@ -90,7 +90,7 @@ define([
 		    janOne = new Date(y,0,1),
 		    selectedDate = new Date(y,m,d);
 
-		return Math.ceil((selectedDate - janOne) / 86400000) + 1;
+		return Math.round((selectedDate - janOne) / 86400000) + 1;
 	}
 
 
