@@ -91,7 +91,7 @@ define([
 		    selectedDate = new Date(y,m,d);
 
 		return Math.round((selectedDate - janOne) / 86400000) + 1;
-	}
+	};
 
 
 	ObservationMetaView.prototype._initialize = function () {
@@ -120,8 +120,8 @@ define([
 						'<label for="', idPrefix, '-date">Date</label>',
 						'<input id="',  idPrefix, '-date" type="text"',
 								' class="date" placeholder="YYYY-MM-DD"/>',
-						'<span class="julian-day">Julian Day</span>',
-						'<span class="julian-day-value"></span>',
+						'<div class="julian-day label">Julian Day</div>',
+						'<div class="julian-day-value value"></div>',
 						'<label for="', idPrefix, '-piertemp">',
 								'Pier <abbr title="Temperature">Temp</abbr></label>',
 						'<input id="',  idPrefix, '-piertemp" type="text"',
