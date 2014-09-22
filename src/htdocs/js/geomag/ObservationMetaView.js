@@ -78,8 +78,20 @@ define([
 		    d = begin.getUTCDate();
 
 		this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
+		this._julianDay.innerHTML = this.getJulianDay(begin);
 		this._pierTemperature.value = obs.get('pier_temperature');
 	};
+
+
+	ObservationMetaView.prototype.getJulianDay = function (date) {
+		var y = date.getUTCFullYear(),
+		    m = date.getUTCMonth(),
+		    d = date.getUTCDate(),
+		    janOne = new Date(y,0,1),
+		    selectedDate = new Date(y,m,d);
+
+		return Math.ceil((selectedDate - janOne) / 86400000) + 1;
+	}
 
 
 	ObservationMetaView.prototype._initialize = function () {
@@ -108,6 +120,8 @@ define([
 						'<label for="', idPrefix, '-date">Date</label>',
 						'<input id="',  idPrefix, '-date" type="text"',
 								' class="date" placeholder="YYYY-MM-DD"/>',
+						'<span class="julian-day">Julian Day</span>',
+						'<span class="julian-day-value"></span>',
 						'<label for="', idPrefix, '-piertemp">',
 								'Pier <abbr title="Temperature">Temp</abbr></label>',
 						'<input id="',  idPrefix, '-piertemp" type="text"',
@@ -165,10 +179,13 @@ define([
 				});
 		// observation inputs
 		this._date = date = el.querySelector('.date');
+		this._julianDay = this._el.querySelector('.julian-day-value');
 		this._pierTemperature = pierTemperature =
 				el.querySelector('.pier-temperature');
 
 		date.addEventListener('change', this._onChange);
+		// This makes sure the Julian day updates, among other things
+		observation.on('change', this.render, this);
 		pierTemperature.addEventListener('change', this._onChange);
 
 

@@ -11,11 +11,21 @@
 			margin: 0;
 			display: block;
 			font-weight: bold;
+			padding-right: 5px;
+		}
+		> .julian-day {
+			font-weight: bold;
+			padding: 2px 5px 0 5px;
+		}
+		> .julian-day-value {
+			padding-top: 2px;
 		}
 
 		> input,
 		> select,
-		> textarea {
+		> textarea,
+		> .julian-day-value,
+		> .pier-correction-value {
 			margin-bottom: 1em;
 		}
 
@@ -26,7 +36,7 @@
 	.pier-correction-value {
 		padding-left: 7px;
 		padding-top: 2px;
-		float:left;
+		float: left;
 	}
 
 
@@ -35,17 +45,17 @@
 		.left-aligned,
 		.right-aligned {
 			> label {
-				float:left;
-				clear:left;
-				width:8em;
-				padding-right:8px;
+				float: left;
+				clear: left;
+				width: 8em;
+				padding-right: 8px;
 			}
 
 			> input,
 			> select,
 			> textarea {
-				float:left;
-				margin-bottom:5px;
+				float: left;
+				margin-bottom: 5px;
 			}
 
 			&:after {
@@ -56,7 +66,7 @@
 		}
 
 		.right-aligned > label {
-			text-align:right;
+			text-align: right;
 		}
 	}
 }
