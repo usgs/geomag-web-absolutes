@@ -75,14 +75,23 @@ define([
 		    begin = new Date(obs.get('begin') || new Date().getTime()),
 		    y = begin.getUTCFullYear(),
 		    m = begin.getUTCMonth() + 1,
-		    d = begin.getUTCDate(),
-		    janOne = new Date(y,0,1),
-		    julianDay = Math.ceil((begin - janOne) / 86400000) + 1;
+		    d = begin.getUTCDate();
 
 		this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
-		this._julianDay.innerHTML = julianDay;
+		this._julianDay.innerHTML = this.getJulianDay(begin);
 		this._pierTemperature.value = obs.get('pier_temperature');
 	};
+
+
+	ObservationMetaView.prototype.getJulianDay = function (date) {
+		var y = date.getUTCFullYear(),
+		    m = date.getUTCMonth(),
+		    d = date.getUTCDate(),
+		    janOne = new Date(y,0,1),
+		    selectedDate = new Date(y,m,d);
+
+		return Math.ceil((selectedDate - janOne) / 86400000) + 1;
+	}
 
 
 	ObservationMetaView.prototype._initialize = function () {
