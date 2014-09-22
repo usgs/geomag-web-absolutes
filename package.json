@@ -39,7 +39,7 @@
     "grunt-contrib-copy": "~0.5.0",
     "grunt-text-replace": "~0.3.6",
     "grunt-contrib-uglify": "~0.2.2",
-    "hazdev-template": "0.0.5",
+    "hazdev-template": "git+https://github.com/usgs/hazdev-template.git",
     "grunt-connect-rewrite": "~0.2.1",
     "hazdev-tablist": "0.0.6",
     "grunt-connect-proxy": "~0.1.8",
