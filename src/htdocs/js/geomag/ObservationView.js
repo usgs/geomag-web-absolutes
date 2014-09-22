@@ -263,6 +263,10 @@ define([
 			publishButton = document.createElement('button');
 			publishButton.innerHTML = 'Publish';
 			controls.appendChild(publishButton);
+
+			Util.addEvent(publishButton, 'click', function () {
+				_this._publishObservation();
+			});
 		}
 	};
 
@@ -300,6 +304,13 @@ define([
 				)).show();
 			}
 		});
+	};
+
+	ObservationView.prototype._publishObservation = function () {
+		var _this = this;
+
+		console.log('admin privs.');
+		console.log('published.');
 	};
 
 	ObservationView.prototype._updateErrorCount = function () {
