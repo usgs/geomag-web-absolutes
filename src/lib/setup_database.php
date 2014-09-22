@@ -27,8 +27,8 @@ if (!file_exists($CONFIG_FILE)) {
 	exit(-1);
 }
 $CONFIG = parse_ini_file($CONFIG_FILE);
-
-$dbtype = substr($CONFIG['DB_DSN'], 0, strpos($CONFIG['DB_DSN'], ':'));
+$DB_DSN = $CONFIG['DB_DSN'];
+$dbtype = substr($DB_DSN, 0, strpos($DB_DSN, ':'));
 $username = configure('DB_ROOT_USER', 'root', 'Database adminitrator user');
 $password = configure('DB_ROOT_PASS', '', 'Database administrator password',
 		true);
@@ -73,20 +73,21 @@ if (!file_exists($schemaScript)) {
 
 // Create an administrative connection to the database
 if ($dbtype === 'mysql') {
+
+	preg_match('/dbname=([^;]+)/', $DB_DSN, $matches);
+	if (count($matches) < 2) {
+		print "No database name (dbname) specified in DSN. This is required \n" .
+		      "for MySQL connections. Check your configured DSN and try\n" .
+					"again. Stopping.\n";
+		exit(-1);
+	}
+	$dbname = $matches[1];
+
 	try {
-		$setupdb = new PDO($CONFIG['DB_DSN'], $username, $password);
+		$setupdb = new PDO($DB_DSN, $username, $password);
 
 		// If this connection worked, database already exists. We need to drop it.
-		preg_match('/dbname=([^;]+)/', $CONFIG['DB_DSN'], $matches);
-
-		if (count($matches) < 2) {
-			print "No database name (dbname) specified in DSN. This is required \n" .
-			      "for MySQL connections. Check your configured DSN and try\n" .
-						"again. Stopping.\n";
-			exit(-1);
-		}
-
-		$dbname = $matches[1];
+		$setupdb = null;
 
 		// Make absolutely sure
 		$answer = configure('DROP_DATABASE_CONFIRM', 'N', 'About to drop MySQL ' .
@@ -96,23 +97,25 @@ if ($dbtype === 'mysql') {
 			print "Normal exit.\n";
 			exit(0);
 		}
-
-		$db->exec('DROP DATABASE IF EXISTS ' . $dbname);
+		// Whoops, database doesn't exist yet
+		$setupdb = new PDO(str_replace("dbname=${dbname}", '', $DB_DSN),
+				$username, $password);
+		$setupdb->exec('DROP DATABASE IF EXISTS ' . $dbname);
 
 	} catch (Exception $ex) {
 
 		// Whoops, database doesn't exist yet
-		$setupdb = new PDO(str_replace("dbname=${dbname}", '', $CONFIG['DB_DSN']),
+		$setupdb = new PDO(str_replace("dbname=${dbname}", '', $DB_DSN),
 				$username, $password);
 
 	}
 
-	$db->exec('CREATE DATABASE IF NOT EXISTS ' . $dbname);
-	$db->exec('USE ' . $dbname);
+	$setupdb->exec('CREATE DATABASE IF NOT EXISTS ' . $dbname);
+	$setupdb->exec('USE ' . $dbname);
 
 } else if ($dbtype === 'sqlite') {
 
-	if (preg_match('/:([^;]+)/', $CONFIG['DB_DSN'], $matches)) {
+	if (preg_match('/:([^;]+)/', $DB_DSN, $matches)) {
 
 		$dbfilename = $matches[1];
 
@@ -123,12 +126,18 @@ if ($dbtype === 'mysql') {
 		}
 	}
 
-	$setupdb = new PDO($CONFIG['DB_DSN'], $username, $password);
+	$setupdb = new PDO($DB_DSN, $username, $password);
 }
 $setupdb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Delete existing database, then re-create it
-$setupdb->exec(file_get_contents($schemaScript));
+$schemaStatements = explode(';', file_get_contents($schemaScript));
+foreach ($schemaStatements as $sql) {
+	$sql = trim($sql);
+	if ($sql !== '') {
+		$setupdb->exec($sql);
+	}
+}
 
 print "Schema loaded successfully!\n";
 
