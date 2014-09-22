@@ -37,3 +37,4 @@ include_once $classDir . 'ObservatoryFactory.class.php';
 include_once $classDir . 'Pier.class.php';
 include_once $classDir . 'Reading.class.php';
 
+include_once $classDir . 'PdoSessionHandler.php';
