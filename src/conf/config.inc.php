@@ -22,6 +22,7 @@ $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // create factories
 $OBSERVATORY_FACTORY = new ObservatoryFactory($DB);
 $OBSERVATION_FACTORY = new ObservationFactory($DB);
+$USER_FACTORY = new UserFactory($DB);
 
 // set up database backed sessions
 if (isset($CONFIG['USE_DATABASE_SESSIONS']) &&
