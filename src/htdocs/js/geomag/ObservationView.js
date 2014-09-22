@@ -11,7 +11,9 @@ define([
 	'geomag/ObservationMetaView',
 	'geomag/ReadingGroupView',
 	'geomag/ObservationBaselineCalculator',
-	'geomag/RealtimeDataFactory'
+	'geomag/RealtimeDataFactory',
+	'geomag/User',
+	'geomag/UserRole'
 ], function (
 	View,
 	Collection,
@@ -24,7 +26,9 @@ define([
 	ObservationMetaView,
 	ReadingGroupView,
 	ObservationBaselineCalculator,
-	RealtimeDataFactory
+	RealtimeDataFactory,
+	User,
+	UserRole
 ) {
 	'use strict';
 
@@ -36,6 +40,17 @@ define([
 		realtimeDataFactory: new RealtimeDataFactory()
 	};
 
+	var TEST_USER = {
+		'id': 1,
+		'name': 'Eddie',
+		'username': 'ehunter',
+		'roles': [
+			new UserRole({
+				'id': 1,
+				'name': 'admin'
+			})
+		]
+	};
 
 	var ObservationView = function (options) {
 		this._options = Util.extend({}, DEFAULTS, options);
@@ -77,6 +92,8 @@ define([
 			id: this._options.observationId || null,
 			success: this._setObservation.bind(this)
 		});
+		// set user
+		this._user = new User(TEST_USER); // TODO, read user from options object
 		this._createControls();
 
 
