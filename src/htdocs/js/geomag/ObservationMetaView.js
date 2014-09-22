@@ -77,7 +77,7 @@ define([
 		    m = begin.getUTCMonth() + 1,
 		    d = begin.getUTCDate(),
 		    janOne = new Date(y,0,1),
-		    julianDay = Math.ceil((begin - janOne) / 86400000);
+		    julianDay = Math.ceil((begin - janOne) / 86400000) + 1;
 
 		this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
 		this._julianDay.innerHTML = julianDay;
@@ -175,8 +175,8 @@ define([
 				el.querySelector('.pier-temperature');
 
 		date.addEventListener('change', this._onChange);
-		// this._date.on('change', this.render, this);
-		// date.on('change', this.render, this);
+		// This makes sure the Julian day updates, among other things
+		observation.on('change', this.render, this);
 		pierTemperature.addEventListener('change', this._onChange);
 
 
