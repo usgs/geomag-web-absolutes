@@ -22,21 +22,21 @@ $SITE_COMMONNAV =
 
 $HEAD =
 		// site theme, should use a site root-relative URL
-		'<link rel="stylesheet" href="/css/theme.css"/>' .
+		'<link rel="stylesheet" href="/theme/site/geomag/index.css"/>' .
 		// page head content
 		($HEAD ? $HEAD : '') .
 		// description meta
 		'<meta name="description" content="' .
-				'USGS Earthquake Hazards Program, responsible for' .
-				' monitoring, reporting, and researching earthquakes and' .
-				' earthquake hazards' .
+				'National Geomagnetism Program, Real-time monitoring of the ' .
+				'Earth\'s magnetic field, Data for research and practical ' .
+				'application.' .
 		'"/>' .
 		// keywords meta
 		'<meta name="keywords" content="' .
-				'aftershock,earthquake,epicenter,fault,foreshock,geologist,' .
-				'geophysics,hazard,hypocenter,intensity,intensity scale,magnitude,' .
-				'magnitude scale,mercalli,plate,richter,seismic,seismicity,' .
-				'seismogram,seismograph,seismologist,seismology,subduction,' .
-				'tectonics,tsunami,quake,sismologico,sismologia' .
+				'aurora, spaceweather, space-weather, geomagnetism, dynamo, ' .
+				'paleomagnetism, palaeomagnetism, magnetic, magnetism, geomagnetic, ' .
+				'declination, magnetosphere, ionosphere, magnetospheric, ' .
+				'ionospheric, geophysics, Dst Index, K Index, Space Weather, ' .
+				'Solar Storm' .
 		'"/>';
 ?>
