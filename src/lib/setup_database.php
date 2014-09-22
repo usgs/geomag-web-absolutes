@@ -163,7 +163,13 @@ if (!file_exists($referenceScript)) {
 	exit(-1);
 }
 
-$setupdb->exec(file_get_contents($referenceScript));
+$referenceStatements = explode(';', file_get_contents($referenceScript));
+foreach ($referenceStatements as $sql) {
+	$sql = trim($sql);
+	if ($sql !== '') {
+		$setupdb->exec($sql);
+	}
+}
 
 print "Reference data loaded successfully!\n";
 
