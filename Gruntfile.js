@@ -16,7 +16,7 @@ var mountPHP = function (dir, options) {
 	options = options || {
 		'.php': 'php-cgi',
 		'env': {
-			'PHPRC': process.cwd() + '/node_modules/hazdev-template/src/conf/php.ini'
+			'PHPRC': process.cwd() + '/node_modules/hazdev-template/dist/conf/php.ini'
 		}
 	};
 	return gateway(require('path').resolve(dir), options);
@@ -81,9 +81,6 @@ module.exports = function (grunt) {
 			]
 		},
 		connect: {
-			options: {
-				hostname: 'localhost'
-			},
 			proxies: [{
 				context: '/map',
 				host: 'geomag.usgs.gov',
@@ -95,7 +92,7 @@ module.exports = function (grunt) {
 			rules: [
 				{
 					from: '^/theme/(.*)$',
-					to: '/hazdev-template/src/htdocs/$1'
+					to: '/hazdev-template/dist/htdocs/$1'
 				},
 				{
 					from: '^/webabsolutes/(.*)$',
@@ -222,9 +219,6 @@ module.exports = function (grunt) {
 					],
 					'<%= app.dist %>/htdocs/css/observation.css': [
 						'.tmp/css/observation.css'
-					],
-					'<%= app.dist %>/htdocs/css/theme.css': [
-						'.tmp/css/theme.css'
 					]
 				}
 			}
@@ -270,7 +264,8 @@ module.exports = function (grunt) {
 				cwd: '<%= app.dev %>/conf',
 				dest: '<%= app.dist %>/conf',
 				src: [
-					'config.inc.php'
+					'config.inc.php',
+					'config.ini'
 				]
 			},
 			lib: {
