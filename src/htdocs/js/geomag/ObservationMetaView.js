@@ -140,9 +140,6 @@ define([
 			'</section>'
 		].join('');
 
-		this._julianDay = this._el.querySelector('.julian-day-value');
-		// this._date.value.on('change', this.render, this);
-
 		// observatory information inputs
 		this._observatorySelectView = observatorySelectView =
 				new CollectionSelectBox({
@@ -173,10 +170,13 @@ define([
 				});
 		// observation inputs
 		this._date = date = el.querySelector('.date');
+		this._julianDay = this._el.querySelector('.julian-day-value');
 		this._pierTemperature = pierTemperature =
 				el.querySelector('.pier-temperature');
 
 		date.addEventListener('change', this._onChange);
+		// this._date.on('change', this.render, this);
+		// date.on('change', this.render, this);
 		pierTemperature.addEventListener('change', this._onChange);
 
 
