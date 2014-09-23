@@ -85,6 +85,18 @@ class Reading {
 				'declination_shift' => $this->declination_shift,
 				'horizontal_intensity_valid' => $this->horizontal_intensity_valid,
 				'vertical_intensity_valid' => $this->vertical_intensity_valid,
+				'startH' => $this->startH,
+				'endH' => $this->endH,
+				'absH' => $this->absH,
+				'baseH' => $this->baseH,
+				'startZ' => $this->startZ,
+				'endZ' => $this->endZ,
+				'absZ' => $this->absZ,
+				'baseZ' => $this->baseZ,
+				'startD' => $this->startD,
+				'endD' => $this->endD,
+				'absD' => $this->absD,
+				'baseD' => $this->baseD,
 				'annotation' => $this->annotation,
 				'measurements' => $this->measurements);
 	}
