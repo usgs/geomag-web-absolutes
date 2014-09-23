@@ -3,8 +3,9 @@ if (!isset($TEMPLATE)) {
 	include_once '../conf/config.inc.php';
 	include_once 'functions.inc.php';
 
-	$TITLE = 'Observatory Overview';
+	$TITLE = 'Dashboard';
 
+	$NAVIGATION = true;
 	$HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/index.css"/>';
 	$FOOT =
 		'<script>
@@ -16,6 +17,6 @@ if (!isset($TEMPLATE)) {
 }
 ?>
 
-<div class="observatory-view row"></div>
+<div class="observatory-view"></div>
 
 

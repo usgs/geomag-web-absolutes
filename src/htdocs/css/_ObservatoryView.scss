@@ -1,11 +1,12 @@
 .observatory-view {
 
+	label {
+		display:block;
+	}
+
 	ul {
 		padding:0;
 		list-style:none;
-		border:1px solid rgb(207,207,207);
-		background:rgb(247,247,247);
-		color:rgb(100,100,100);
 	}
 
 	li:first-child {
@@ -17,10 +18,9 @@
 		border-top:1px solid rgb(207,207,207);
 
 		> a {
-			padding:10px 15px;
+			padding:10px 15px 10px 0;
 			display:block;
 			text-decoration:none;
-			color:#666;
 		}
 	}
 

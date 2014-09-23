@@ -25,17 +25,19 @@ define([
 		this._options = Util.extend({}, DEFAULTS, options);
 		View.call(this, this._options);
 	};
-
 	ObservatoryView.prototype = Object.create(View.prototype);
 
 
 	ObservatoryView.prototype.render = function (id) {
-		if (id === null) {
+		if (typeof id === 'undefined' || id === null) {
 			id = this._options.observatoryId;
 		}
 
+		if (this._observatorySelect && id) {
+			this._observatorySelect.value = 'observatory_' + id;
+		}
+
 		this._getObservations(id);
-		this._updateSelected(id);
 	};
 
 
@@ -47,31 +49,45 @@ define([
 
 		hash = this._getHash();
 
-		// Overview of a single observatory, one column layout
+		// Overview of a single observatory
 		if (id) {
 			el.innerHTML = [
+				'<h2 class="observatory-title">Observatory #', id, '</h2>',
 				'<section class="observations-view"></section>',
 			].join('');
 
+			this._observatoryTitle = el.querySelector('.observatory-title');
+			this._getObservatories(); // Just to update the title
 			this._getObservations(id);
 
-		// Overview of all observatories/ observations, two column layout
+		// Overview of all observatories/ observations
 		} else {
 			el.innerHTML = [
-				'<section class="observatories column one-of-two"></section>',
-				'<section class="observations-view column one-of-two"></section>',
+				'<label for="observatories-select">Select Observatory</label>',
+				'<select name="observatories" class="observatories" ',
+						'id="observatories-select"></select>',
+				'<section class="observations-view"></section>'
 			].join('');
 
-			// TODO, find better way to render first observatory
-			this._options.observatoryId = (hash) ? hash : 2;
+			this._observatorySelect = el.querySelector('.observatories');
+			this._observatorySelect.addEventListener('change', function () {
+				var value = this.value.replace('observatory_', '');
+				window.location.hash = '#' + value;
+			});
+
+			// Gets observatories and then renders observations for either...
+			// ... (1) The observatory whose Id is in the current window.location.hash
+			// ... or ...
+			// ... (2) The first observatory in the list
+			// This could all be done better with promises...just saying.
 			this._getObservatories();
-			this.render(this._options.observatoryId);
+
+			// on a URL change, update the observatory
+			Events.on('hashchange', function() {
+				_this.render(_this._getHash());
+			});
 		}
 
-		// on a URL change, update the observatory
-		Events.on('hashchange', function() {
-			_this.render(_this._getHash());
-		});
 	};
 
 
@@ -80,55 +96,59 @@ define([
 		var _this = this,
 		    factory = this._options.factory;
 
-		_this.observatoryId = this._options.observatoryId;
-
 		// load observatories
 		factory.getObservatories({
 			success: function (observatories) {
-				_this._buildObservatoryList(observatories);
-				_this._updateSelected(_this.observatoryId);
+				var hash = _this._getHash();
+
+				if (_this._observatorySelect) {
+					_this._buildObservatoryList(observatories);
+
+					if (!hash) {
+						if (window.location.replace) {
+							window.location.replace('#' + observatories[0].get('id'));
+						} else {
+							window.location.hash = '#' + observatories[0].get('id');
+						}
+					} else {
+						_this.render(hash);
+					}
+				} else {
+					_this._setObservatoryTitle(observatories);
+				}
 			}
 		});
 	};
 
+	ObservatoryView.prototype._setObservatoryTitle = function (data) {
+		var i = 0, len = data.length, observatory;
+
+		for (; i < len; i++) {
+			observatory = data[i];
+			if (observatory.get('id') === this._options.observatoryId) {
+				this._observatoryTitle.innerHTML = observatory.get('name');
+				break;
+			}
+		}
+	};
+
 	ObservatoryView.prototype._buildObservatoryList = function (data) {
 
-		var el = this._el.querySelector('.observatories'),
-		    observatoryList = document.createElement('ul'),
-		    markup = [], observatory;
+		var observatoryList = this._observatorySelect,
+		    markup = [], observatory, observatoryId;
 
 		for (var i = 0; i < data.length; i++) {
 			observatory = data[i];
+			observatoryId = 'observatory_' + observatory.get('id');
 
 			markup.push([
-				'<li id="observatory_', observatory.get('id'),'">',
-					'<a href="#', observatory.get('id') ,'" >',
-						observatory.get('name') ,
-					'</a>',
-				'</li>'
+				'<option value="', observatoryId, '" id="', observatoryId, '">',
+					observatory.get('name') ,
+				'</option>'
 			].join(''));
 		}
 
 		observatoryList.innerHTML = markup.join('');
-
-		el.innerHTML = '<h2>Observatory</h2>';
-		el.appendChild(observatoryList);
-	};
-
-
-	ObservatoryView.prototype._updateSelected = function (id) {
-
-		// clear last selected observatory
-		var selected = this._el.querySelector('.selected'),
-		    element = this._el.querySelector('#observatory_' + id);
-
-		if (selected) {
-			selected.className = '';
-		}
-		// highlight currently selected observatory
-		if (element) {
-			element.className = 'selected';
-		}
 	};
 
 
@@ -138,10 +158,12 @@ define([
 
 		this._observationsView = null;
 
-		_this._observationsView = new ObservationsView({
-				el: el.querySelector('.observations-view'),
-				observatoryId: id
-		});
+		if (typeof id !== 'undefined' && id !== null) {
+			_this._observationsView = new ObservationsView({
+					el: el.querySelector('.observations-view'),
+					observatoryId: id
+			});
+		}
 	};
 
 

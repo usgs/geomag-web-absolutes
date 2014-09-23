@@ -25,7 +25,7 @@ define([
 	ObservationsView.prototype._initialize = function () {
 
 		this._el.innerHTML = [
-				'<h2 class="title">Observations</h2>',
+				'<h2>Observations</h2>',
 				'<section class="observations-new"></section>',
 				'<section class="observations-all"></section>'
 				// '<section class="observations-pending"></section>', // TODO
@@ -77,12 +77,14 @@ define([
 	// create, "add new observation" button
 	ObservationsView.prototype.getAddObservationButton = function () {
 		var el = this._el.querySelector('.observations-new'),
-		    button = document.createElement('a');
+		    button = document.createElement('button');
 
-		button.className = 'button';
-		button.href = MOUNT_PATH + '/observation/';
 		button.role = 'button';
 		button.innerHTML = 'Add New Observation';
+
+		button.addEventListener('click', function () {
+			window.location = MOUNT_PATH + '/observation/';
+		});
 
 		el.appendChild(button);
 	};
@@ -91,13 +93,8 @@ define([
 	// get all observations
 	ObservationsView.prototype.getAllObservations = function (observatory) {
 		var el = this._el.querySelector('.observations-all'),
-		    observations = observatory.get('observations').data(),
-		    title = this._el.querySelector('.title');
+		    observations = observatory.get('observations').data();
 
-		// set section title
-		title.innerHTML = observatory.get('name');
-
-		el.innerHTML = '<h3>Observations</h3>';
 		el.appendChild(this._buildObservationList(observations));
 	};
 
@@ -143,7 +140,7 @@ define([
 
 	ObservationsView.prototype._buildObservationList = function (observations) {
 		var list = document.createElement('ul'),
-		    observation, markup = [];
+		    observation, markup = [], classname, tooltip;
 
 		if (observations === null || observations.length === 0) {
 			list.innerHTML = '<li class="empty">There are no observations.</li>';
@@ -152,8 +149,25 @@ define([
 
 		for (var i = 0; i < observations.length; i++) {
 			observation = observations[i];
+			classname = observation.get('reviewed');
+
+			if (classname) {
+				classname = classname.toLowerCase();
+
+				if (classname === 'n') {
+					tooltip = 'Observation Pending Review';
+				} else if (classname === 'y') {
+					tooltip = 'Observation Approved';
+				}
+
+				classname = 'review-status-' + classname.toLowerCase();
+			} else {
+				classname = 'review-status-unknown';
+				tooltip = 'Observation in unknown review status!';
+			}
+
 			markup.push(
-				'<li>' +
+				'<li class="', classname, '" title="', tooltip, '">' +
 					'<a href="' + MOUNT_PATH + '/observation/' + observation.get('id') +
 							'">Observation ' +
 						this._formatDate(observation) +
