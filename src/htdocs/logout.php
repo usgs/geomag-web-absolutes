@@ -9,4 +9,4 @@ $_SESSION = array();
 session_destroy();
 
 // send to main page
-header('Location: ' . $MOUNT_PATH . '/');
+header('Location: ' . $MOUNT_PATH . '/index.php');
