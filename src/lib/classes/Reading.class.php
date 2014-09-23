@@ -10,11 +10,27 @@ class Reading {
 	protected $observation_id;
 	public $set_number;
 	public $observer_user_id;
-	public $declination_valid;
 	public $declination_shift;
-	public $horizontal_intensity_valid;
-	public $vertical_intensity_valid;
 	public $annotation;
+
+	// calibration values
+	public $horizontal_intensity_valid;
+	public $startH;
+	public $endH;
+	public $absH;
+	public $baseH;
+
+	public $vertical_intensity_valid;
+	public $startZ;
+	public $endZ;
+	public $absZ;
+	public $baseZ;
+
+	public $declination_valid;
+	public $startD;
+	public $endD;
+	public $absD;
+	public $baseD;
 
 	// multi-value attributes
 	public $measurements;
@@ -23,7 +39,11 @@ class Reading {
 				$set_number=null, $observer_user_id=null,
 				$declination_valid=null, $declination_shift=null,
 				$horizontal_intensity_valid=null, $vertical_intensity_valid=null,
+				$startH, $endH, $absH, $baseH,
+				$startZ, $endZ, $absZ, $baseZ,
+				$startD, $endD, $absD, $baseD,
 				$annotation=null, $measurements=array()) {
+
 		$this->id = $id;
 		$this->observation_id = $observation_id;
 		$this->set_number = $set_number;
@@ -49,8 +69,11 @@ class Reading {
 				isset($p['observation_id']) ?$p['observation_id'] : null,
 				$p['set_number'], $p['observer_user_id'], $p['declination_valid'],
 				$p['declination_shift'], $p['horizontal_intensity_valid'],
-				$p['vertical_intensity_valid'], $p['annotation'],
-				$measurements);
+				$p['vertical_intensity_valid'],
+				$p['startH'], $p['endH'], $p['absH'], $p['baseH'],
+				$p['startZ'], $p['endZ'], $p['absZ'], $p['baseZ'],
+				$p['startD'], $p['endD'], $p['absD'], $p['baseD'],
+				$p['annotation'], $measurements);
 	}
 
 	public function toArray () {
