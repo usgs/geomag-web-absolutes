@@ -25,7 +25,7 @@ define([
 	ObservationsView.prototype._initialize = function () {
 
 		this._el.innerHTML = [
-				'<h2 class="title">Observations</h2>',
+				'<h2>Observations</h2>',
 				'<section class="observations-new"></section>',
 				'<section class="observations-all"></section>'
 				// '<section class="observations-pending"></section>', // TODO
@@ -77,12 +77,14 @@ define([
 	// create, "add new observation" button
 	ObservationsView.prototype.getAddObservationButton = function () {
 		var el = this._el.querySelector('.observations-new'),
-		    button = document.createElement('a');
+		    button = document.createElement('button');
 
-		button.className = 'button';
-		button.href = MOUNT_PATH + '/observation/';
 		button.role = 'button';
 		button.innerHTML = 'Add New Observation';
+
+		button.addEventListener('click', function () {
+			window.location = MOUNT_PATH + '/observation/';
+		});
 
 		el.appendChild(button);
 	};
@@ -91,13 +93,8 @@ define([
 	// get all observations
 	ObservationsView.prototype.getAllObservations = function (observatory) {
 		var el = this._el.querySelector('.observations-all'),
-		    observations = observatory.get('observations').data(),
-		    title = this._el.querySelector('.title');
+		    observations = observatory.get('observations').data();
 
-		// set section title
-		title.innerHTML = observatory.get('name');
-
-		el.innerHTML = '<h3>Observations</h3>';
 		el.appendChild(this._buildObservationList(observations));
 	};
 
