@@ -11,9 +11,9 @@ class UserFactory {
 	public function __construct($pdo) {
 		$this->pdo = $pdo;
 		$this->queryUserById = $this->pdo->prepare(
-				"SELECT * FROM user WHERE ID = :id");
+				'SELECT * FROM user WHERE ID = :id');
 		$this->queryUserByCredentials = $this->pdo->prepare(
-				"SELECT * FROM user WHERE username = :username AND password = :password"
+				'SELECT * FROM user WHERE username = :username AND password = :password'
 				);
 	}
 
