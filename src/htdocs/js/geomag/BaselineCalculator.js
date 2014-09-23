@@ -9,8 +9,7 @@ define([
 		return 3437.7468;
 	};
 
-	var NaN = parseFloat('notanumber'),
-	    SCALE_VALUE_COEFFICIENT = getScaleValueCoefficient();
+	var SCALE_VALUE_COEFFICIENT = getScaleValueCoefficient();
 
 	var BaselineCalculator = function () {
 	};
@@ -287,7 +286,7 @@ define([
 			if (valid) {
 				return (sum / count);
 			} else {
-				return NaN;
+				return '&ndash;';
 			}
 		},
 
