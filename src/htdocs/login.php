@@ -1,17 +1,16 @@
 <?php
 
 if (!isset($TEMPLATE)) {
-	session_start();
-
 	// load configuration
 	include_once '../conf/config.inc.php';
+	session_start();
 
 	if (isset($_POST['username'])) {
 		// trying to authenticate
 		$user = $USER_FACTORY->authenticate($_POST['username'], $_POST['password']);
 		if ($user !== null) {
 			// logged in
-			$_SESSION['userid'] = $user['id'];
+			$_SESSION['userid'] = $user['ID'];
 		} else {
 			$error = 'Invalid username or password';
 		}
@@ -19,7 +18,7 @@ if (!isset($TEMPLATE)) {
 
 	if (isset($_SESSION['userid'])) {
 		// logged in, redirect to main page
-		header ('Location: ' . $MOUNT_PATH . '/');
+		header ('Location: ' . $MOUNT_PATH . '/index.php');
 		exit();
 	}
 
