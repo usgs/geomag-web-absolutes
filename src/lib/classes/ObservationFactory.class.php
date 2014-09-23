@@ -279,11 +279,20 @@ class ObservationFactory {
 		$statement = $this->db->prepare('INSERT INTO reading (' .
 				'observation_id, set_number, observer_user_id, ' .
 				'declination_valid, declination_shift, horizontal_intensity_valid, ' .
-				'vertical_intensity_valid, annotation) VALUES (' .
+				'vertical_intensity_valid, ' .
+				'startH, endH, absH, baseH, ' .
+				'startZ, endZ, absZ, baseZ, ' .
+				'startD, endD, absD, baseD, ' .
+				'annotation' .
+			') VALUES (' .
 				':observation_id, :set_number, :observer_user_id, ' .
 				':declination_valid, :declination_shift, ' .
 				':horizontal_intensity_valid, :vertical_intensity_valid,' .
-				':annotation)');
+				':startH, :endH, :absH, :baseH, ' .
+				':startZ, :endZ, :absZ, :baseZ, ' .
+				':startD, :endD, :absD, :baseD, ' .
+				':annotation' .
+			')');
 
 		foreach ($readings as $object) {
 			$statement->bindParam(':observation_id', $id, PDO::PARAM_INT);
@@ -299,6 +308,22 @@ class ObservationFactory {
 					$object->horizontal_intensity_valid, PDO::PARAM_STR);
 			$statement->bindParam(':vertical_intensity_valid',
 					$object->vertical_intensity_valid, PDO::PARAM_STR);
+
+			$statement->bindParam(':startH', $object->startH, PDO::PARAM_INT);
+			$statement->bindParam(':endH', $object->endH, PDO::PARAM_INT);
+			$statement->bindParam(':absH', $object->absH, PDO::PARAM_STR);
+			$statement->bindParam(':baseH', $object->baseH, PDO::PARAM_STR);
+
+			$statement->bindParam(':startZ', $object->startZ, PDO::PARAM_INT);
+			$statement->bindParam(':endZ', $object->endZ, PDO::PARAM_INT);
+			$statement->bindParam(':absZ', $object->absZ, PDO::PARAM_STR);
+			$statement->bindParam(':baseZ', $object->baseZ, PDO::PARAM_STR);
+
+			$statement->bindParam(':startD', $object->startD, PDO::PARAM_INT);
+			$statement->bindParam(':endD', $object->endD, PDO::PARAM_INT);
+			$statement->bindParam(':absD', $object->absD, PDO::PARAM_STR);
+			$statement->bindParam(':baseD', $object->baseD, PDO::PARAM_STR);
+
 			$statement->bindParam(':annotation',
 					$object->annotation, PDO::PARAM_STR);
 
@@ -442,6 +467,9 @@ class ObservationFactory {
 						safeintval($row['declination_shift']),
 						$row['horizontal_intensity_valid'],
 						$row['vertical_intensity_valid'],
+						$row['startH'], $row['endH'], $row['absH'], $row['baseH'],
+						$row['startZ'], $row['endZ'], $row['absZ'], $row['baseZ'],
+						$row['startD'], $row['endD'], $row['absD'], $row['baseD'],
 						$row['annotation'], $measurements );
 				$readings[] = $reading;
 			}
