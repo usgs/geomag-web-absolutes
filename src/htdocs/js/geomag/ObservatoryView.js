@@ -63,7 +63,9 @@ define([
 		// Overview of all observatories/ observations
 		} else {
 			el.innerHTML = [
-				'<select name="observatories" class="observatories"></select>',
+				'<label for="observatories-select">Select Observatory</label>',
+				'<select name="observatories" class="observatories" ',
+						'id="observatories-select"></select>',
 				'<section class="observations-view"></section>'
 			].join('');
 
