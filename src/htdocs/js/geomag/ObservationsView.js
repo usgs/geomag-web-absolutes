@@ -143,7 +143,7 @@ define([
 
 	ObservationsView.prototype._buildObservationList = function (observations) {
 		var list = document.createElement('ul'),
-		    observation, markup = [];
+		    observation, markup = [], classname, tooltip;
 
 		if (observations === null || observations.length === 0) {
 			list.innerHTML = '<li class="empty">There are no observations.</li>';
@@ -152,8 +152,25 @@ define([
 
 		for (var i = 0; i < observations.length; i++) {
 			observation = observations[i];
+			classname = observation.get('reviewed');
+
+			if (classname) {
+				classname = classname.toLowerCase();
+
+				if (classname === 'n') {
+					tooltip = 'Observation Pending Review';
+				} else if (classname === 'y') {
+					tooltip = 'Observation Approved';
+				}
+
+				classname = 'review-status-' + classname.toLowerCase();
+			} else {
+				classname = 'review-status-unknown';
+				tooltip = 'Observation in unknown review status!';
+			}
+
 			markup.push(
-				'<li>' +
+				'<li class="', classname, '" title="', tooltip, '">' +
 					'<a href="' + MOUNT_PATH + '/observation/' + observation.get('id') +
 							'">Observation ' +
 						this._formatDate(observation) +

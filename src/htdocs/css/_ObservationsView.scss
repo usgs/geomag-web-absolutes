@@ -11,6 +11,30 @@
 			position:relative;
 			border-top:1px solid rgb(207,207,207);
 
+			&.review-status-y:after,
+			&.review-status-n:after {
+				position:absolute;
+				right:0;
+				top:6px;
+				padding:0;
+				margin:0;
+				width:2em;
+				height:2em;
+				line-height:2;
+				text-align:center;
+				border-radius:2em;
+				background:rgba(0,0,0,0.05);
+			}
+
+			&.review-status-y:after {
+				content: '\2713';
+				color:#090;
+			}
+
+			&.review-status-n:after {
+				content: '?'
+			}
+
 			> a {
 				padding:10px 15px 10px 0;
 				display:block;
