@@ -5,24 +5,16 @@
  */
 class UserFactory {
 
-	// TODO: make it use a DB.
-	private $users = array(
-		array(
-			'id' => 1,
-			'username' => 'admin',
-			'password' => 'admin',
-			'admin' => true
-		),
-		array(
-			'id' => 2,
-			'username' => 'user',
-			'password' => 'user',
-			'admin' => false
-		)
-	);
+	private $queryUserById;
+	private $queryUserByCredentials;
 
 	public function __construct($pdo) {
 		$this->pdo = $pdo;
+		$this->queryUserById = $this->pdo->prepare(
+				"SELECT * FROM user WHERE ID = :id");
+		$this->queryUserByCredentials = $this->pdo->prepare(
+				"SELECT * FROM user WHERE username = :username AND password = :password"
+				);
 	}
 
 	/**
@@ -32,13 +24,19 @@ class UserFactory {
 	 *        the user id.
 	 */
 	public function getUser ($id) {
-		// TODO: make it use a DB.
-		foreach ($this->users as $user) {
-			if ($user['id'] === $id) {
-				return $user;
+		$user = null;
+		$this->queryUserById->bindValue(':id', intval($id), PDO::PARAM_INT);
+		try {
+			$this->queryUserById->execute();
+			$user = $this->queryUserById->fetchAll(PDO::FETCH_ASSOC);
+			$countUser = count($user);
+			if ($countUser === 1) {
+				$user = $user[0];
 			}
+		} catch (Exception $e) {
+			$user = null;
 		}
-		return null;
+		return $user;
 	}
 
 	/**
@@ -50,17 +48,22 @@ class UserFactory {
 	 *        the password.
 	 */
 	public function authenticate ($username, $password) {
-		// TODO: make it use a DB.
-		foreach ($this->users as $user) {
-			if ($user['username'] === $username) {
-				if ($user['password'] === $password) {
-					return $user;
-				} else {
-					break;
-				}
+		$user = null;
+		$this->queryUserByCredentials->bindValue(
+				':username', $username, PDO::PARAM_STR);
+		$this->queryUserByCredentials->bindValue(
+				':password', md5($password), PDO::PARAM_STR);
+		try {
+			$this->queryUserByCredentials->execute();
+			$user = $this->queryUserByCredentials->fetchAll(PDO::FETCH_ASSOC);
+			$countUser = count($user);
+			if ($countUser === 1) {
+				$user = $user[0];
 			}
+		} catch (Exception $e) {
+			$user = null;
 		}
-		return null;
+		return $user;
 	}
 
 	/**
