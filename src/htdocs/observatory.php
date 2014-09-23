@@ -8,7 +8,7 @@ if (!isset($TEMPLATE)) {
 		$id = intval($id, 10);
 	}
 
-	$TITLE = 'Observatory Overview';
+	$TITLE = 'Observatory Details';
 
 	$HEAD = '<link rel="stylesheet" href="'.$MOUNT_PATH.'/css/index.css"/>';
 	$FOOT =
@@ -23,4 +23,4 @@ if (!isset($TEMPLATE)) {
 }
 ?>
 
-<div class="observatory-view row"></div>
+<div class="observatory-view"></div>
