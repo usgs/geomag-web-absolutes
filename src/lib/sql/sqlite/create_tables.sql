@@ -9,5 +9,7 @@ CREATE TABLE [measurement] ([ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,[re
 CREATE TABLE [user] ([ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,[name] VARCHAR(255),[username] VARCHAR(255)  NOT NULL,[default_observatory_id] INTEGER,[email] VARCHAR(255),[password] VARCHAR(255),[last_login] INTEGER,[enabled] CHAR(1) NOT NULL DEFAULT 'Y',CONSTRAINT user_uniq UNIQUE (username) ON CONFLICT ABORT,FOREIGN KEY(default_observatory_id) REFERENCES observatory(id));
 CREATE TABLE [role] ([ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,[name] VARCHAR(255),[description] VARCHAR(255)  NOT NULL,CONSTRAINT role_uniq UNIQUE (name) ON CONFLICT ABORT);
 CREATE TABLE [user_role] ([ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,[user_id] INTEGER,[role_id] INTEGER,CONSTRAINT user_role_uniq UNIQUE (user_id, role_id) ON CONFLICT ABORT,FOREIGN KEY(user_id) REFERENCES user(id)FOREIGN KEY(role_id) REFERENCES role(id));
+CREATE TABLE [sessions] ([ID] INTEGER PRIMARY KEY AUTOINCREMENT, [sess_id] VARCHAR(255) UNIQUE NOT NULL, [sess_time] INTEGER, [sess_data] TEXT);
+CREATE INDEX [sessions_time_index] ON sessions([sess_time]);
 PRAGMA foreign_keys = ON;
 

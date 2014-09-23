@@ -33,6 +33,7 @@ $DEFAULTS = array(
 	'DB_DSN' => 'sqlite:testdata.db',
 	'DB_USER' => '',
 	'DB_PASS' => '',
+	'USE_DATABASE_SESSIONS' => 'true',
 	'AUTH_FILE' => $CONF_DIR . DIRECTORY_SEPARATOR . 'users.htpasswd'
 );
 
@@ -43,6 +44,7 @@ $HELP_TEXT = array(
 	'DB_DSN' => 'Database connection DSN string',
 	'DB_USER' => 'Read/write username for database connections',
 	'DB_PASS' => 'Password for database user',
+	'USE_DATABASE_SESSIONS' => 'Store session information in database',
 	'AUTH_FILE' => 'Name of htpassword authorization file'
 );
 
@@ -76,8 +78,8 @@ file_put_contents($APACHE_CONFIG_FILE, '
 ');
 
 $answer = configure('DO_DB_SETUP', 'N',
-		'Would you like to set up the database at this time');
-
+		'Would you like to set up the absolutes database at this time');
 if (responseIsAffirmative($answer)) {
 	include_once 'setup_database.php';
 }
+
