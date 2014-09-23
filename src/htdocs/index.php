@@ -5,6 +5,7 @@ if (!isset($TEMPLATE)) {
 
 	$TITLE = 'Dashboard';
 
+	$NAVIGATION = true;
 	$HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/index.css"/>';
 	$FOOT =
 		'<script>

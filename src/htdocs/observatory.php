@@ -10,6 +10,7 @@ if (!isset($TEMPLATE)) {
 
 	$TITLE = 'Observatory Details';
 
+	$NAVIGATION = true;
 	$HEAD = '<link rel="stylesheet" href="'.$MOUNT_PATH.'/css/index.css"/>';
 	$FOOT =
 		'<script>

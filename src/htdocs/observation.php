@@ -10,6 +10,7 @@ if (!isset($TEMPLATE)) {
 
 	$TITLE = 'Observation Input';
 
+	$NAVIGATION = true;
 	$HEAD = '<link rel="stylesheet" href="'.$MOUNT_PATH.'/css/observation.css"/>';
 	$FOOT =
 		'<script>
