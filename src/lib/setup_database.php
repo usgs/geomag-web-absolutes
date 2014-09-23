@@ -35,6 +35,8 @@ $password = configure('DB_ROOT_PASS', '', 'Database administrator password',
 
 $defaultScriptDir = implode(DIRECTORY_SEPARATOR, array(
 		$CONFIG['APP_DIR'], 'lib', 'sql', $dbtype));
+$defaultReferenceDir = implode(DIRECTORY_SEPARATOR, array(
+		$CONFIG['APP_DIR'], 'lib', 'sql', 'reference_data'));
 
 $defaultParser = implode(DIRECTORY_SEPARATOR, array(
 		$CONFIG['APP_DIR'], 'lib', 'sql', 'parse_observation'));
@@ -154,20 +156,27 @@ if (!responseIsAffirmative($answer)) {
 	exit(0);
 }
 
-$referenceScript = configure('REFERENCE_SCRIPT',
-		$defaultScriptDir . DIRECTORY_SEPARATOR . 'load_observatories.sql',
-		'SQL script containing reference data');
+$referenceDir = configure('REFERENCE_DIR', $defaultReferenceDir,
+		'SQL directory containing reference data');
 
-if (!file_exists($referenceScript)) {
-	print "\tThe indicated script does not exist. Please try again.\n";
+if (!is_dir($referenceDir)) {
+	print "\tThe indicated directory does not exist. Please try again.\n";
 	exit(-1);
 }
 
-$referenceStatements = explode(';', file_get_contents($referenceScript));
-foreach ($referenceStatements as $sql) {
-	$sql = trim($sql);
-	if ($sql !== '') {
-		$setupdb->exec($sql);
+foreach (glob($referenceDir . DIRECTORY_SEPARATOR . '*.sql') as $script) {
+	print "\tLoading data from '$script'\n";
+	$scriptContent = file_get_contents($script);
+
+	// Remove /* */ comments
+	$scriptContent = preg_replace('#/\*.*\*/#', '', $scriptContent);
+
+	$referenceStatements = explode(';', $scriptContent);
+	foreach ($referenceStatements as $sql) {
+		$sql = trim($sql);
+		if ($sql !== '') {
+			$setupdb->exec($sql);
+		}
 	}
 }
 
