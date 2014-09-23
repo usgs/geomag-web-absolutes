@@ -32,6 +32,8 @@ class UserFactory {
 			$countUser = count($user);
 			if ($countUser === 1) {
 				$user = $user[0];
+			} else {
+				$user = null;
 			}
 		} catch (Exception $e) {
 			$user = null;
@@ -59,6 +61,8 @@ class UserFactory {
 			$countUser = count($user);
 			if ($countUser === 1) {
 				$user = $user[0];
+			} else {
+				$user = null;
 			}
 		} catch (Exception $e) {
 			$user = null;
