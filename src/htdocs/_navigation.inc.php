@@ -2,19 +2,23 @@
 
 include_once '../conf/config.inc.php';
 
-$userLoggedIn = true; // isset($_SESSION['username']);
+// $currentUser = $USER_FACTORY->getCurrentUser();
+$userLoggedIn = true; // ($currentUser !== null); // ???
+$navItems = '';
 
 if ($userLoggedIn) {
-	print
+	$navItems .=
 		navItem($MOUNT_PATH . '/index.php', 'Dashboard') .
-		navItem($MOUNT_PATH . '/observation/', 'Add Observation');
+		navItem($MOUNT_PATH . '/observation/', 'Observation Input');
 
-	$userIsAdmin = true; // ($_SESSION['role'] === 'admin');
+	$userIsAdmin = true; // $user->inRole('admin'); // ???
 	if ($userIsAdmin) {
-		print navItem($MOUNT_PATH . '/accounts/', 'Administer Users');
+		$navItems .= navItem($MOUNT_PATH . '/accounts/', 'Administer Users');
 	}
 
-	print navItem($MOUNT_PATH . '/logout/', 'Logout');
+	$navItems .= navItem($MOUNT_PATH . '/logout.php', 'Logout');
 } else {
-	print navItem($MOUNT_PATH . '/login/', 'Login');
+	$navItems .= navItem($MOUNT_PATH . '/login.php', 'Login');
 }
+
+print navGroup('Web Absolutes', $navItems);
