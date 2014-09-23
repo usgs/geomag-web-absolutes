@@ -188,9 +188,10 @@ define([
 		 * @return {Number} No units
 		 */
 		scaleValue: function (absoluteH) {
-			if( absoluteH === 0 ) {
+			if (!absoluteH) {
 				return 1;
 			}
+
 			return (SCALE_VALUE_COEFFICIENT / absoluteH);
 		},
 
