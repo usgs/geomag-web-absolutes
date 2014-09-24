@@ -1,4 +1,4 @@
-/* global define, MOUNT_PATH */
+/* global define */
 define([
 	'mvc/View',
 	'mvc/Collection',
@@ -93,10 +93,8 @@ define([
 			success: this._setObservation.bind(this)
 		});
 		// set user
-		this._user = new User(TEST_USER); // TODO, read user from options object
+		this._options.user = new User(TEST_USER); // TODO, read user from options object
 		this._createControls();
-
-
 
 	};
 
@@ -112,6 +110,8 @@ define([
 		    calculator = this._calculator;
 
 		this._observation = observation;
+		// calculate calibrations for summary view
+		this.updateCalibrations();
 		// create reading group view
 		this._readingGroupView = new ReadingGroupView({
 			el: el.querySelector('.reading-group-view-wrapper'),
@@ -124,6 +124,7 @@ define([
 			success: this._setObservatories.bind(this)
 		});
 
+
 		// bind realtime data factory and measurements.
 		var getRealtimeData = this._getRealtimeData.bind(this);
 		this._realtimeDataFactory.on('change:observatory', getRealtimeData);
@@ -135,6 +136,12 @@ define([
 		var _updateErrorCount = this._updateErrorCount.bind(this);
 		this._observation.eachMeasurement(function (measurement) {
 			measurement.on('change', _updateErrorCount);
+		});
+
+		// bind calibration update to measurement change
+		var updateCalibrations = this.updateCalibrations.bind(this);
+		this._observation.eachMeasurement(function (measurement) {
+			measurement.on('change', updateCalibrations);
 		});
 	};
 
@@ -247,71 +254,146 @@ define([
 		var controls = this._el.querySelector('.observation-view-controls'),
 		    saveButton = document.createElement('button'),
 		    publishButton,
-		    _this = this;
+		    user = this._options.user || {};
 
 		saveButton.id = 'saveButton';
 		saveButton.innerHTML = 'Save Observation';
 
-		Util.addEvent(saveButton, 'click', function () {
-			_this._saveObservation();
-		});
+		this._onSaveClick = this._onSaveClick.bind(this);
+		saveButton.addEventListener('click', this._onSaveClick);
 
 		controls.appendChild(saveButton);
 
 		// Add publish button for admin users
-		if (this._user.hasRole(new UserRole({'id': 1, 'name': 'admin'}))) {
+		if (user.hasRole(new UserRole({'id': 1, 'name': 'admin'}))) {
 			publishButton = document.createElement('button');
 			publishButton.innerHTML = 'Publish';
 			controls.appendChild(publishButton);
 
-			Util.addEvent(publishButton, 'click', function () {
-				_this._publishObservation();
-			});
+			console.log(this._observation);
+
+			if (this._observation.get('reviewed') === 'N') {
+				this._onPublishClick = this._onPublishClick.bind(this);
+				publishButton.addEventListener('click', this._onPublishClick);
+			} else {
+				publishButton.setAttribute('disabled', true);
+			}
 		}
 	};
 
-
-	ObservationView.prototype._saveObservation = function () {
-		var _this = this,
-		    factory = this._options.factory;
-
-		factory.saveObservation({
-			observation: this._observation,
-			success: function (observation) {
-				_this._observation.set({id: observation.get('id')}, {silent: true});
+	ObservationView.prototype._onSaveClick = function () {
+		try {
+			this._saveObservation(function() {
 				(new ModalView(
 					'<h3>Success!</h3><p>Your observation has been saved.</p>',
 					{
 						title: 'Save Successful',
 						classes: ['modal-success'],
-						closable: false,
-						buttons: [{
-							text: 'Back to Observatory',
-							callback: function () {
-								window.location = MOUNT_PATH + '/observatory/' +
-										observation.get('observatory_id');
-							}
-						}]
+						closable: true
 					}
 				)).show();
+			});
+		} catch (e) {
+			(new ModalView(
+				'<h3>Error.</h3><p>' + e.message + '</p>',
+				{
+					title: 'Save Failed'
+				}
+			)).show();
+		}
+	};
+
+
+	ObservationView.prototype._saveObservation = function (callback) {
+		var _this = this,
+		    factory = this._options.factory;
+
+		// update observation reading model with calibrations before saving
+		this.updateCalibrations();
+
+		factory.saveObservation({
+			observation: this._observation,
+			success: function (observation) {
+				_this._observation.set({id: observation.get('id')}, {silent: true});
+				callback();
 			},
 			error: function (status, xhr) {
-				(new ModalView(
-					'<h3>' + status + ' Error.</h3><p>' + xhr.response + '</p>',
-					{
-						title: 'Save Failed'
-					}
-				)).show();
+				throw new Error(xhr.response);
 			}
 		});
 	};
 
-	ObservationView.prototype._publishObservation = function () {
-		var _this = this;
 
-		console.log('admin privs.');
-		console.log('published.');
+	ObservationView.prototype._onPublishClick = function () {
+
+		try {
+			this._saveObservation(this._publishObservation(function () {
+					(new ModalView(
+						'<h3>Success!</h3><p>Your observation has been published.</p>',
+						{
+							title: 'Publish Successful',
+							classes: ['modal-success'],
+							closable: true
+						}
+					)).show();
+				}
+			));
+		} catch (e) {
+			(new ModalView(
+				'<h3>Error.</h3><p>' + e.message + '</p>',
+				{
+					title: 'Publish Failed'
+				}
+			)).show();
+		}
 	};
+
+	/**
+	 * Save the observation, on success publish that data to the magproc2 server
+	 */
+	ObservationView.prototype._publishObservation = function (callback) {
+		var _this = this,
+		    factory = this._options.factory,
+		    user = this._options.user || {};
+
+		factory.publishObservation({
+			observation: _this._observation,
+			user: user,
+			success: function (observation) {
+				_this._observation.set({
+					reviewed: observation.get('reviewed'),
+					reviewer_user_id: observation.get('reviewer_user_id')
+				});
+				callback();
+			},
+			error: function (status, xhr) {
+				throw new Error(xhr.response);
+			}
+		});
+
+
+		// check observation object for calibrations
+		console.log(this._observation);
+	};
+
+	/**
+	 * Summarize component D,H,Z and store the calibrated values on
+	 * the reading model object
+	 */
+	ObservationView.prototype.updateCalibrations = function () {
+		var factory = this._options.factory,
+		    readings = this._observation.get('readings').data(),
+		    i, len, reading;
+
+		for (i = 0, len = readings.length; i < len; i++) {
+			reading = readings[i];
+
+			factory.setCalibrationD(reading);
+			factory.setCalibrationH(reading);
+			factory.setCalibrationZ(reading);
+		}
+	};
+
 
 	ObservationView.prototype._updateErrorCount = function () {
 		var errors = [],
