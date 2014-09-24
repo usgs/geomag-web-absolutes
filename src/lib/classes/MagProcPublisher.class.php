@@ -3,7 +3,7 @@
 class MagProcPublisher {
 
 	function __construct ($db) {
-		$this->$db = $db;
+		$this->db = $db;
 		$this->_initStatements();
 	}
 

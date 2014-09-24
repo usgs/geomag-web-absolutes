@@ -1,7 +1,7 @@
 <?php
 
 include_once '../conf/config.inc.php';
-include_once '../conf/pusblish.inc.php';
+include_once '../conf/publish.inc.php';
 include_once 'functions.inc.php';
 
 include_once 'login.inc.php';
