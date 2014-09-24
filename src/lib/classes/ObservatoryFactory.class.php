@@ -251,6 +251,121 @@ class ObservatoryFactory {
 		return $piers;
 	}
 
+	/**
+	 * Create a Pier in the DB.
+	 *
+	 * @param observatoryId {Integer}
+	 *        The database Id of the observatory.
+	 *        $pierName {String}'
+	 *        The name of the pier.
+	 *        $correction {Double}
+	 *        The pier correction value.
+	 *
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	protected function createPier ($observatoryId, $pierName, $correction) {
+		$this->db->beginTransaction();
+		$statement = $this->db->prepare('INSERT INTO pier (' .
+				'observatory_id, name, begin, end, correction,' .
+				'default_mark_id, default_electronics_id, default_theodolite_id)' .
+				'VALUES ( ' .
+				':observatory_id, :name, :begin, :end, :correction,' .
+				':default_mark_id, :default_electronics_id, :default_theodolite_id');
+
+		$statement->bindParam(':observatory_id',
+				$object->observatory_id, PDO::PARAM_INT);
+		$statement->bindParam(':name', $object->name, PDO::PARAM_STR);
+		$statement->bindParam(':begin', $object->begin, PDO::PARAM_INT);
+		$statement->bindParam(':end', $object->end, PDO::PARAM_INT);
+		$statement->bindParam(':correction', $object->correction, PDO::PARAM_STR);
+		$statement->bindParam(':default_mark_id',
+				$object->default_mark_id, PDO::PARAM_INT);
+		$statement->bindParam(':default_electronics_id',
+				$object->default_electronics_id, PDO::PARAM_INT);
+		$statement->bindParam(':default_theodolite_id',
+				$object->default_theodolite_id, PDO::PARAM_INT);
+
+		try {
+			$statement->execute();
+		} catch (Exception $ex) {
+			$this->db->rollback();
+			$this->triggerError($statement);
+		}
+	}
+
+	/**
+	 * Create a Mark in the DB.
+	 *
+	 * @param pierId {Integer}
+	 *        The database Id of the pier.
+	 *        $markName {String}'
+	 *        The name of the mark.
+	 *        $azimuth {Double}
+	 *        The azimuth value at the mark.
+	 *
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	protected function createMark ($pierId, $markName, $azimuth) {
+		$this->db->beginTransaction();
+		$statement = $this->db->prepare('INSERT INTO pier (' .
+				'pier_id, name, begin, end, azimuth,' .
+				'VALUES ( ' .
+				':pier_id, :name, :begin, :end, :azimuth,');
+
+		$statement->bindParam(':pier_id',
+				$object->pier_id, PDO::PARAM_INT);
+		$statement->bindParam(':name', $object->begin, PDO::PARAM_STR);
+		$statement->bindParam(':begin', $object->begin, PDO::PARAM_INT);
+		$statement->bindParam(':end', $object->end, PDO::PARAM_INT);
+		$statement->bindParam(':azimuth', $object->azimuth, PDO::PARAM_STR);
+
+		try {
+			$statement->execute();
+		} catch (Exception $ex) {
+			$this->db->rollback();
+			$this->triggerError($statement);
+		}
+	}
+
+	/**
+	 * Create a Instrument in the DB.
+	 *
+	 * @param observatoryId {Integer}
+	 *        The database Id of the observatory.
+	 *        $serial {String}'
+	 *        The serial number of the instrument.
+	 *        $type {String}
+	 *        The type of instrument (Theodolite or Electronics).
+	 *
+	 * @throws {Exception}
+	 *      Can throw an exception if an SQL error occurs. See "triggerError"
+	 */
+	protected function createInstrument ($observatoryId, $serial, $type) {
+		$this->db->beginTransaction();
+		$statement = $this->db->prepare('INSERT INTO pier (' .
+				'observatory_id, serial_number, begin, end, name, type)' .
+				'VALUES ( ' .
+				':observatory_id, :serial_number, :begin, :end, :name, :type');
+
+		$statement->bindParam(':observatory_id',
+				$object->observatory_id, PDO::PARAM_INT);
+		$statement->bindParam(':serial_number',
+				$object->serial_number, PDO::PARAM_STR);
+		$statement->bindParam(':begin', $object->begin, PDO::PARAM_INT);
+		$statement->bindParam(':end', $object->end, PDO::PARAM_INT);
+		$statement->bindParam(':name', $object->name, PDO::PARAM_STR);
+		$statement->bindParam(':type', $object->type, PDO::PARAM_INT);
+
+		try {
+			$statement->execute();
+		} catch (Exception $ex) {
+			$this->db->rollback();
+			$this->triggerError($statement);
+		}
+	}
+
 	protected function triggerError (&$statement) {
 		$error = $statement->errorInfo();
 		$statement->closeCursor();
