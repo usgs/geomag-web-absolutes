@@ -153,7 +153,8 @@ define([
 			el: el.querySelector('.observation-meta-wrapper'),
 			observation: observation,
 			observatories: observatories,
-			calculator: calculator
+			calculator: calculator,
+			observatoryId: parseInt(window.location.hash.replace('#', ''), 10)
 		});
 	};
 
