@@ -90,7 +90,7 @@ class ObservationFileParser {
 	 *         The observatory for the given $code, or NULL if no such observatory
 	 *         is found.
 	 */
-	protected function _getObservatoryFromCode ($code, &$warnings = null) {
+	protected function _getObservatory ($code, &$warnings = null) {
 		foreach ($this->observatories as $observatory) {
 			if ($observatory->code === $code) {
 				return $observatory;
@@ -125,8 +125,8 @@ class ObservationFileParser {
 	 * @return {Pier}
 	 *         The pier with the given name or NULL if no such pier is found.
 	 */
-	protected function _getPierFromName ($observatory, $name, $begin, $end,
-			&$warnings = null) {
+	protected function _getPier ($observatory_code, $pier_name, $pier_correction,
+				&$warnings = null) {
 
 		if ($observatory === null) {
 			$this->__addWarning("Failed to find pier for name '${name}'. " .
@@ -160,8 +160,8 @@ class ObservationFileParser {
 	 * @return {Mark}
 	 *         The mark with the given name or NULL if no such mark is found.
 	 */
-	protected function _getMarkFromName ($pier, $name, $begin, $end,
-			&$warnings = null) {
+	protected function _getMark ($observatory_code, $pier_name, $pier_correction,
+			$mark_name, $mark_azimuth, &$warnings = null) {
 
 		if ($pier === null) {
 			$this->__addWarning("Failed to find mark for name '${name}'. " .
@@ -198,8 +198,8 @@ class ObservationFileParser {
 	 *         The instrument with the given name or NULL if no such instrument
 	 *         is found.
 	 */
-	protected function _getInstrumentFromSerial ($observatory, $serial, $begin,
-			$end, $type, &$warnings = null) {
+	protected function _getInstrument ($observatory_code, $serial
+				&$warnings = null) {
 
 		if ($observatory === null) {
 			$this->__addWarning("Failed to find ${type} for serial '${serial}'." .
