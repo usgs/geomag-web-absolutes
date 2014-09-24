@@ -40,7 +40,7 @@ define([
 	ObservationsView.prototype.render = function (observatory) {
 
 		// create, "add new observation" button
-		this.getAddObservationButton();
+		this.getAddObservationButton(observatory.get('id'));
 
 		// first pass, get all observations, this can be removed once
 		// observation status is implemented, see methods below
@@ -75,7 +75,8 @@ define([
 
 
 	// create, "add new observation" button
-	ObservationsView.prototype.getAddObservationButton = function () {
+	ObservationsView.prototype.getAddObservationButton =
+			function (observatoryId) {
 		var el = this._el.querySelector('.observations-new'),
 		    button = document.createElement('button');
 
@@ -83,7 +84,7 @@ define([
 		button.innerHTML = 'Add New Observation';
 
 		button.addEventListener('click', function () {
-			window.location = MOUNT_PATH + '/observation/';
+			window.location = MOUNT_PATH + '/observation/#' + observatoryId;
 		});
 
 		el.appendChild(button);

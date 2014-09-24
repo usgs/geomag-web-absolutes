@@ -21,6 +21,7 @@ define([
 
 	// default constructor options
 	var DEFAULTS = {
+		observatoryId: null
 	};
 
 	// unique id prefix for form elements
@@ -292,6 +293,7 @@ define([
 
 		// load observatories collection
 		observatorySelectView.setCollection(observatories);
+		observatorySelectView.selectById(this._options.observatoryId);
 
 		// fill in observation inputs
 		this.render();
