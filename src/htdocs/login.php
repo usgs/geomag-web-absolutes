@@ -23,6 +23,7 @@ if (!isset($TEMPLATE)) {
 	}
 
 	$TITLE = 'Log in';
+	$NAVIGATION = true;
 	$HEAD = '<link rel="stylesheet" href="css/login.css" />';
 	include 'template.inc.php';
 }
