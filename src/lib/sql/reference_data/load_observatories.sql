@@ -1,10 +1,10 @@
 /* BDT - add observatory entry */
-INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation, default_pier_id)
-VALUES ('Boulder Test (BDT)','BDT','Boulder, CO','40.1375','-105.2372','48.40','320.59','1682','HDZF',NULL);
+INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
+VALUES ('Boulder Test (BDT)','BDT','Boulder, CO','40.1375','-105.2372','48.40','320.59','1682','HDZF');
 
 /* BOU - add observatory entry */
-INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation, default_pier_id)
-VALUES ('Boulder (BOU)','BOU','Boulder, CO','40.1375','-105.2372','48.40','320.59','1682','HDZF',NULL);
+INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
+VALUES ('Boulder (BOU)','BOU','Boulder, CO','40.1375','-105.2372','48.40','320.59','1682','HDZF');
 
 /* BRW - add observatory entry */
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
@@ -15,8 +15,8 @@ INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_
 VALUES ('Stennis (BSL)','BSL','NASA Stennis Space Center, MS','30.3507','-89.6359','40.05','339.79','8','HDZF');
 
 /* CMO - observatory entry */
-INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation, default_pier_id)
-VALUES ('College (CMO)','CMO','Fairbanks, AK','64.8742','-147.8597','65.38','261.63','197','HDZF',NULL);
+INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
+VALUES ('College (CMO)','CMO','Fairbanks, AK','64.8742','-147.8597','65.38','261.63','197','HDZF');
 
 /* DED - add observatory entry */
 INSERT INTO observatory (name, code, location, latitude, longitude, geomagnetic_latitude, geomagnetic_longitude, elevation, orientation)
