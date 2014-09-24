@@ -8,15 +8,17 @@ header('Cache-Control:no-cache, no-store');
 session_start();
 
 // load user from session.
-$currentUser = $USER_FACTORY->getCurrentUser();
-if ($currentUser === null) {
+$CURRENT_USER = $USER_FACTORY->getCurrentUser();
+session_write_close();
+
+if ($CURRENT_USER === null) {
 	// not logged in, send to login page
 	header('Location: ' . $MOUNT_PATH . '/login.php');
 	exit();
 } else {
 	// logged in, define user for js.
 	$FOOT = '<script>' .
-			'define("geomag/User", ' . json_encode($currentUser) . ');' .
+			'define("geomag/User", ' . json_encode($CURRENT_USER) . ');' .
 			'</script>' .
 			(isset($FOOT) ? $FOOT : '');
 }
