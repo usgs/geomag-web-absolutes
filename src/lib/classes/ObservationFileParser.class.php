@@ -110,32 +110,35 @@ class ObservationFileParser {
 	 * $name that began prior to the given $begin and ended after the given $end
 	 * (or has not yet ended).
 	 *
-	 * @param $observatory {ObservatoryDetail}
+	 * @param $observatory_code {ObservatoryDetail}
 	 *        The observatory to search.
-	 * @param $name {String}
+	 * @param $pier_name {String}
 	 *        The name of the pier to find.
-	 * @param $begin {Integer}
-	 *        Millisecond timestamp for the start of the time window.
-	 * @param $end {Integer}
-	 *        Millisecond timestamp for the end of the time window.
+	 * @param $pier_correction {Number}
+	 *        Correction value for the pier.
 	 * @param $warnings {Array} By reference. Optional.
 	 *        A buffer into which generated warnings will be logged. If not
 	 *        specified, warnings are logged to STDERR.
 	 *
 	 * @return {Pier}
-	 *         The pier with the given name or NULL if no such pier is found.
+	 *         The pier with the given name and correction
+	 *         or NULL if no such pier is found.
 	 */
 	protected function _getPier ($observatory_code, $pier_name, $pier_correction,
 				&$warnings = null) {
 
+		$observatory = $this->_getObservatory($observatory_code, $warnings);
 		if ($observatory === null) {
-			$this->__addWarning("Failed to find pier for name '${name}'. " .
-					'Observatory was null.', $warnings);
 			return null;
 		}
 
-		return $this->__getFromName($observatory->piers, $name, $begin, $end,
-				'pier', $warnings);
+		foreach ($observatory->piers as $pier) {
+			if ($pier->name === $pier_name &&
+					$pier->correction === $pier_correction) {
+				return $pier;
+			}
+		}
+		// TODO create pier
 	}
 
 	/**
@@ -145,14 +148,16 @@ class ObservationFileParser {
 	 * $name that began prior to the given $begin and ended after the given $end
 	 * (or has not yet ended).
 	 *
-	 * @param $pier {Pier}
-	 *        The pier to search.
-	 * @param $name {String}
+	 * @param $observatory_code {ObservatoryDetail}
+	 *        The observatory to search.
+	 * @param $pier_name {String}
+	 *        The name of the pier to find.
+	 * @param $pier_correction {Number}
+	 *        Correction value for the pier.
+	 * @param $make_name {String}
 	 *        The name of the mark to find.
-	 * @param $begin {Integer}
-	 *        Millisecond timestamp for the start of the time window.
-	 * @param $end {Integer}
-	 *        Millisecond timestamp for the end of the time window.
+	 * @param $mark_azimuth {Number}
+	 *        Azimuth value for the mark.
 	 * @param $warnings {Array} By reference. Optional.
 	 *        A buffer into which generated warnings will be logged. If not
 	 *        specified, warnings are logged to STDERR.
@@ -163,14 +168,23 @@ class ObservationFileParser {
 	protected function _getMark ($observatory_code, $pier_name, $pier_correction,
 			$mark_name, $mark_azimuth, &$warnings = null) {
 
+		$observatory = $this->_getObservatory($observatory_code, $warnings);
+		if ($observatory === null) {
+			return null;
+		}
+		$pier = $this->_getPier($observatory_code, $pier_name,
+				$pier_correction, $warnings);
 		if ($pier === null) {
-			$this->__addWarning("Failed to find mark for name '${name}'. " .
-					'Pier was null.', $warnings);
 			return null;
 		}
 
-		return $this->__getFromName($pier->marks, $name, $begin, $end, 'mark',
-				$warnings);
+		foreach ($pier->marks as $mark) {
+			if ($mark->name === $mark_name &&
+					$mark->azimuth === $mark_azimuth) {
+				return $mark;
+			}
+		}
+		// TODO create mark
 	}
 
 	/**
@@ -180,16 +194,12 @@ class ObservationFileParser {
 	 * with the given $serial number that began prior to the given $begin and
 	 * ended after the given $end (or has not yet ended).
 	 *
-	 * @param $observatory {ObservatoryDetail}
+	 * @param $observatory_code {ObservatoryDetail}
 	 *        The observatory to search.
 	 * @param $serial {String}
 	 *        The serial number of the instrument to find.
-	 * @param $begin {Integer}
-	 *        Millisecond timestamp for the start of the time window.
-	 * @param $end {Integer}
-	 *        Millisecond timestamp for the end of the time window.
 	 * @param $type {String}
-	 *        The type of the intended instrument. Used for logging purposes only.
+	 *        (theodolite | electronics)
 	 * @param $warnings {Array} By reference. Optional.
 	 *        A buffer into which generated warnings will be logged. If not
 	 *        specified, warnings are logged to STDERR.
@@ -198,31 +208,21 @@ class ObservationFileParser {
 	 *         The instrument with the given name or NULL if no such instrument
 	 *         is found.
 	 */
-	protected function _getInstrument ($observatory_code, $serial
+	protected function _getInstrument ($observatory_code, $serial, $type,
 				&$warnings = null) {
 
+		$observatory = $this->_getObservatory($observatory_code, $warnings);
 		if ($observatory === null) {
-			$this->__addWarning("Failed to find ${type} for serial '${serial}'." .
-					' Observatory was null.', $warnings);
-			return null;
-		}
-
-		if ($serial === null) {
-			$this->__addWarning("No serial number specified for ${type}.", $warnings);
 			return null;
 		}
 
 		$instruments = $observatory->instruments;
 		foreach ($instruments as $inst) {
-			if ($inst->serial_number === $serial && $inst->begin <= $begin &&
-					($inst->end === null || $inst->end >= $end)) {
+			if ($inst->serial_number === $serial) {
 				return $inst;
 			}
 		}
-
-		$this->__addWarning("No ${type} found for serial '${serial}' between " .
-				"'${begin}' and '${end}'.", $warnings);
-		return null;
+		// TODO create instrument
 	}
 
 	/**
