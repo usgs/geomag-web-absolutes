@@ -4,18 +4,21 @@ define([
 	'util/Util',
 
 	'geomag/Formatter',
-	'geomag/Measurement'
+	'geomag/Measurement',
+	'geomag/ObservatoryFactory'
 ], function (
 	View,
 	Util,
 
 	Format,
-	Measurement
+	Measurement,
+	ObservatoryFactory
 ) {
 	'use strict';
 
 
 	var DEFAULTS = {
+		factory: new ObservatoryFactory()
 	};
 
 
@@ -28,6 +31,8 @@ define([
 
 	VerticalIntensitySummaryView.prototype.render = function () {
 		var reading = this._reading,
+		    measurements = reading.get('measurements').data(),
+		    factory = this._options.factory,
 		    startTime = null,
 		    endTime = null,
 		    times;
@@ -36,7 +41,7 @@ define([
 
 		this._valid.checked = (reading.get('vertical_intensity_valid') === 'Y');
 
-		times = this._getMeasurementValues('time');
+		times = factory.getMeasurementValues(measurements, 'time');
 		if (times.length > 0) {
 			startTime = Math.min.apply(null, times);
 			endTime = Math.max.apply(null, times);
@@ -54,6 +59,8 @@ define([
 
 	VerticalIntensitySummaryView.prototype._initialize = function () {
 		var el = this._el,
+		    factory = this._options.factory,
+		    reading = this._options.reading,
 		    i = null,
 		    len = null;
 
@@ -80,7 +87,7 @@ define([
 		this._reading = this._options.reading;
 		this._calculator = this._options.calculator;
 
-		this._measurements = this._getVerticalIntensityMeasurements();
+		this._measurements = factory.getVerticalIntensityMeasurements(reading);
 
 		this._onChange = this._onChange.bind(this);
 		this._valid.addEventListener('change', this._onChange);
@@ -93,36 +100,6 @@ define([
 			this._measurements[i].on('change', this.render, this);
 		}
 		this.render();
-	};
-
-	VerticalIntensitySummaryView.prototype._getVerticalIntensityMeasurements =
-			function () {
-		var allMeasurements = this._reading.getMeasurements(),
-		    measurements = [];
-
-		measurements.push(allMeasurements[Measurement.SOUTH_DOWN][0]);
-		measurements.push(allMeasurements[Measurement.NORTH_UP][0]);
-		measurements.push(allMeasurements[Measurement.SOUTH_UP][0]);
-		measurements.push(allMeasurements[Measurement.NORTH_DOWN][0]);
-
-		return measurements;
-	};
-
-	VerticalIntensitySummaryView.prototype._getMeasurementValues =
-			function (name) {
-		var measurements = this._measurements,
-		    i = null,
-		    len = null,
-		    values = [],
-		    value;
-
-		for (i = 0, len = measurements.length; i < len; i++) {
-			value = measurements[i].get(name);
-			if (value !== null) {
-				values.push(measurements[i].get(name));
-			}
-		}
-		return values;
 	};
 
 	VerticalIntensitySummaryView.prototype._onChange = function () {

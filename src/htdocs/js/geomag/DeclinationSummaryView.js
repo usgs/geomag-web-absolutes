@@ -4,18 +4,21 @@ define([
 	'util/Util',
 
 	'geomag/Formatter',
-	'geomag/Measurement'
+	'geomag/Measurement',
+	'geomag/ObservatoryFactory'
 ], function (
 	View,
 	Util,
 
 	Format,
-	Measurement
+	Measurement,
+	ObservatoryFactory
 ) {
 	'use strict';
 
 
 	var DEFAULTS = {
+		factory: new ObservatoryFactory()
 	};
 
 
@@ -28,6 +31,8 @@ define([
 
 	DeclinationSummaryView.prototype.render = function () {
 		var reading = this._reading,
+		    measurements = reading.get('measurements').data(),
+		    factory = this._options.factory,
 		    startTime = null,
 		    endTime = null,
 		    times;
@@ -36,7 +41,7 @@ define([
 
 		this._valid.checked = (reading.get('declination_valid') === 'Y');
 
-		times = this._getMeasurementValues('time');
+		times = factory.getMeasurementValues(measurements, 'time');
 		if (times.length > 0) {
 			startTime = Math.min.apply(null, times);
 			endTime = Math.max.apply(null, times);
@@ -60,6 +65,8 @@ define([
 
 	DeclinationSummaryView.prototype._initialize = function () {
 		var el = this._el,
+		    factory = this._options.factory,
+		    reading = this._options.reading,
 		    i = null,
 		    len = null;
 
@@ -97,7 +104,7 @@ define([
 		this._reading = this._options.reading;
 		this._calculator = this._options.calculator;
 
-		this._measurements = this._getDeclinationMeasurements();
+		this._measurements = factory.getDeclinationMeasurements(reading);
 
 		this._onChange = this._onChange.bind(this);
 		this._valid.addEventListener('change', this._onChange);
@@ -114,44 +121,12 @@ define([
 		this.render();
 	};
 
-	DeclinationSummaryView.prototype._getDeclinationMeasurements = function () {
-		var allMeasurements = this._reading.getMeasurements(),
-		    measurements = [];
-
-		measurements.push(allMeasurements[Measurement.WEST_DOWN][0]);
-		measurements.push(allMeasurements[Measurement.EAST_DOWN][0]);
-		measurements.push(allMeasurements[Measurement.WEST_UP][0]);
-		measurements.push(allMeasurements[Measurement.EAST_UP][0]);
-
-		measurements.push(allMeasurements[Measurement.FIRST_MARK_UP][0]);
-		measurements.push(allMeasurements[Measurement.FIRST_MARK_DOWN][0]);
-		measurements.push(allMeasurements[Measurement.SECOND_MARK_UP][0]);
-		measurements.push(allMeasurements[Measurement.SECOND_MARK_DOWN][0]);
-
-		return measurements;
-	};
-
-	DeclinationSummaryView.prototype._getMeasurementValues = function (name) {
-		var measurements = this._measurements,
-		    i = null,
-		    len = null,
-		    values = [],
-		    value;
-
-		for (i = 0, len = measurements.length; i < len; i++) {
-			value = measurements[i].get(name);
-			if (value !== null) {
-				values.push(measurements[i].get(name));
-			}
-		}
-		return values;
-	};
-
 	DeclinationSummaryView.prototype._onChange = function () {
 		this._reading.set({
 			declination_valid: (this._valid.checked ? 'Y' : 'N'),
 			declination_shift: parseInt(this._shift.value, 10)
 		});
 	};
+
 	return DeclinationSummaryView;
 });
