@@ -2,8 +2,11 @@
 
 class MagProcPublisher {
 
+	private $db;
+	private $insertCalibartion;
+
 	function __construct ($db) {
-		$this->$db = $db;
+		$this->db = $db;
 		$this->_initStatements();
 	}
 
@@ -11,7 +14,7 @@ class MagProcPublisher {
 		$readings = $observation->readings;
 		$observationId = $observation->id;
 
-		$this->db->beginTranscation();
+		$this->db->beginTransaction();
 		try {
 			foreach ($readings as $reading) {
 				$this->_publishReading($reading, $observationId,
@@ -28,7 +31,7 @@ class MagProcPublisher {
 	private function _publishReading ($reading, $observationId,
 			$observer, $reviewer) {
 
-		$component; $start_time; $end_time; $abs; $base;
+		$component; $start_time; $end_time; $abs; $baseline;
 
 		$stationdid = $observationId;
 		$created_by = $observer;
@@ -49,7 +52,7 @@ class MagProcPublisher {
 				PDO::PARAM_STR);
 		$this->insertCalibration->bindParam(':abs', $abs,
 				PDO::PARAM_STR);
-		$this->insertCalibration->bindParam(':base', $base,
+		$this->insertCalibration->bindParam(':baseline', $baseline,
 				PDO::PARAM_STR);
 
 
@@ -58,7 +61,7 @@ class MagProcPublisher {
 			$start_time = date("Y-m-d H:i:s",$reading->startD);
 			$end_time = date("Y-m-d H:i:s",$reading->endD);
 			$abs = $reading->absD;
-			$base = $reading->baseD;
+			$baseline = $reading->baseD;
 
 			$this->insertCalibration->execute();
 		}
@@ -68,7 +71,7 @@ class MagProcPublisher {
 			$start_time = date("Y-m-d H:i:s",$reading->startH);
 			$end_time = date("Y-m-d H:i:s",$reading->endH);
 			$abs = $reading->absH;
-			$base = $reading->baseH;
+			$baseline = $reading->baseH;
 
 			$this->insertCalibration->execute();
 		}
@@ -78,7 +81,7 @@ class MagProcPublisher {
 			$start_time = date("Y-m-d H:i:s",$reading->startZ);
 			$end_time = date("Y-m-d H:i:s",$reading->endZ);
 			$abs = $reading->absZ;
-			$base = $reading->baseZ;
+			$baseline = $reading->baseZ;
 
 			$this->insertCalibration->execute();
 		}
