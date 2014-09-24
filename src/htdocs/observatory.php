@@ -20,6 +20,7 @@ if (!isset($TEMPLATE)) {
 		'<script src="' . $MOUNT_PATH . '/js/observatory.js"></script>' .
 		'<script src="http://localhost:35729/livereload.js?snipver=1"></script>';
 
+	include '../lib/login.inc.php';
 	include 'template.inc.php';
 }
 ?>

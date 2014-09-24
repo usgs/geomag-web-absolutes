@@ -14,6 +14,7 @@ if ($id <= 0) {
 
 // load config after ensuring required parameter is present
 include_once '../conf/config.inc.php';
+include '../lib/login.inc.php';
 
 // process request
 try {

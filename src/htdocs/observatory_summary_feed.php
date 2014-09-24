@@ -1,6 +1,7 @@
 <?php
 
 include_once '../conf/config.inc.php';
+include '../lib/login.inc.php';
 
 // process request
 try {
