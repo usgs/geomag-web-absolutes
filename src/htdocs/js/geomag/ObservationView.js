@@ -270,8 +270,6 @@ define([
 			publishButton.innerHTML = 'Publish';
 			controls.appendChild(publishButton);
 
-			console.log(this._observation);
-
 			if (this._observation.get('reviewed') === 'N') {
 				this._onPublishClick = this._onPublishClick.bind(this);
 				publishButton.addEventListener('click', this._onPublishClick);
@@ -370,10 +368,6 @@ define([
 				throw new Error(xhr.response);
 			}
 		});
-
-
-		// check observation object for calibrations
-		console.log(this._observation);
 	};
 
 	/**
