@@ -12,8 +12,7 @@ define([
 	'geomag/ReadingGroupView',
 	'geomag/ObservationBaselineCalculator',
 	'geomag/RealtimeDataFactory',
-	'geomag/User',
-	'geomag/UserRole'
+	'geomag/User'
 ], function (
 	View,
 	Collection,
@@ -27,8 +26,7 @@ define([
 	ReadingGroupView,
 	ObservationBaselineCalculator,
 	RealtimeDataFactory,
-	User,
-	UserRole
+	User
 ) {
 	'use strict';
 
@@ -38,18 +36,6 @@ define([
 		factory: new ObservatoryFactory(),
 		baselineCalculator: new ObservationBaselineCalculator(),
 		realtimeDataFactory: new RealtimeDataFactory()
-	};
-
-	var TEST_USER = {
-		'id': 1,
-		'name': 'Eddie',
-		'username': 'ehunter',
-		'roles': [
-			new UserRole({
-				'id': 1,
-				'name': 'admin'
-			})
-		]
 	};
 
 	var ObservationView = function (options) {
@@ -86,16 +72,16 @@ define([
 		this._observatories = null;
 		this._observationMetaView = null;
 		this._readingGroupView = null;
+		this._user = User;
 
 		// load observation
 		factory.getObservation({
 			id: this._options.observationId || null,
 			success: this._setObservation.bind(this)
 		});
-		// set user
-		this._options.user = new User(TEST_USER); // TODO, read user from options object
-		this._createControls();
 
+		// Add save/publish buttons based on roles
+		this._createControls();
 	};
 
 
@@ -253,8 +239,7 @@ define([
 	ObservationView.prototype._createControls = function () {
 		var controls = this._el.querySelector('.observation-view-controls'),
 		    saveButton = document.createElement('button'),
-		    publishButton,
-		    user = this._options.user || {};
+		    publishButton;
 
 		saveButton.id = 'saveButton';
 		saveButton.innerHTML = 'Save Observation';
@@ -265,7 +250,7 @@ define([
 		controls.appendChild(saveButton);
 
 		// Add publish button for admin users
-		if (user.hasRole(new UserRole({'id': 1, 'name': 'admin'}))) {
+		if (this._user && this._user.admin === 'Y') {
 			publishButton = document.createElement('button');
 			publishButton.innerHTML = 'Publish';
 			controls.appendChild(publishButton);
