@@ -1,18 +1,13 @@
 <?php
 
-include_once '../conf/config.inc.php';
-
-// $currentUser = $USER_FACTORY->getCurrentUser();
-$userLoggedIn = true; // ($currentUser !== null); // ???
 $navItems = '';
 
-if ($userLoggedIn) {
+if (isset($CURRENT_USER)) {
 	$navItems .=
 		navItem($MOUNT_PATH . '/index.php', 'Dashboard') .
 		navItem($MOUNT_PATH . '/observation/', 'Observation Input');
 
-	$userIsAdmin = true; // $user->inRole('admin'); // ???
-	if ($userIsAdmin) {
+	if ($CURRENT_USER['admin'] === 'Y') {
 		$navItems .= navItem($MOUNT_PATH . '/accounts/', 'Administer Users');
 	}
 
