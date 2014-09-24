@@ -79,9 +79,6 @@ define([
 			id: this._options.observationId || null,
 			success: this._setObservation.bind(this)
 		});
-
-		// Add save/publish buttons based on roles
-		this._createControls();
 	};
 
 
@@ -96,6 +93,13 @@ define([
 		    calculator = this._calculator;
 
 		this._observation = observation;
+
+		// Add save/publish buttons based on roles
+		if (this._observation.get('reviewed') === 'N') {
+			this._createControls();
+		} else {
+			this._removeControls();
+		}
 		// calculate calibrations for summary view
 		this.updateCalibrations();
 		// create reading group view
@@ -255,13 +259,20 @@ define([
 			publishButton.innerHTML = 'Publish';
 			controls.appendChild(publishButton);
 
-			if (this._observation.get('reviewed') === 'N') {
-				this._onPublishClick = this._onPublishClick.bind(this);
-				publishButton.addEventListener('click', this._onPublishClick);
-			} else {
-				publishButton.setAttribute('disabled', true);
-			}
+			this._onPublishClick = this._onPublishClick.bind(this);
+			publishButton.addEventListener('click', this._onPublishClick);
 		}
+	};
+
+	/**
+	 * Removes the save and publish buttons after an observation
+	 * is successfully published.
+	 */
+	ObservationView.prototype._removeControls = function () {
+		var controls = this._el.querySelector('.observation-view-controls');
+
+		controls.innerHTML =
+				'<div class="alert success">Observation has been published.</div>';
 	};
 
 	ObservationView.prototype._onSaveClick = function () {
@@ -347,6 +358,7 @@ define([
 					reviewed: observation.get('reviewed'),
 					reviewer_user_id: observation.get('reviewer_user_id')
 				});
+				_this._removeControls();
 				callback();
 			},
 			error: function (status, xhr) {
