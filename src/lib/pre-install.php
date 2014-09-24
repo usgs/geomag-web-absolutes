@@ -34,7 +34,10 @@ $DEFAULTS = array(
 	'DB_USER' => '',
 	'DB_PASS' => '',
 	'USE_DATABASE_SESSIONS' => 'true',
-	'AUTH_FILE' => $CONF_DIR . DIRECTORY_SEPARATOR . 'users.htpasswd'
+	'AUTH_FILE' => $CONF_DIR . DIRECTORY_SEPARATOR . 'users.htpasswd',
+	'MAGPROC_DSN' => 'mysql:host=136.177.50.63;dbname=geomag',
+	'MAGPROC_USER' => '',
+	'MAGPROC_PASS' => ''
 );
 
 $HELP_TEXT = array(
@@ -45,7 +48,10 @@ $HELP_TEXT = array(
 	'DB_USER' => 'Read/write username for database connections',
 	'DB_PASS' => 'Password for database user',
 	'USE_DATABASE_SESSIONS' => 'Store session information in database',
-	'AUTH_FILE' => 'Name of htpassword authorization file'
+	'AUTH_FILE' => 'Name of htpassword authorization file',
+	'MAGPROC_DSN' => 'Database connection DSN string for magproc database',
+	'MAGPROC_USER' => 'Read/write username for magproc database connections',
+	'MAGPROC_PASS' => 'Password for database user'
 );
 
 
