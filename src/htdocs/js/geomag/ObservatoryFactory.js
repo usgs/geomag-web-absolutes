@@ -10,7 +10,8 @@ define([
 	'geomag/Mark',
 	'geomag/Observation',
 	'geomag/Reading',
-	'geomag/Measurement'
+	'geomag/Measurement',
+	'geomag/ObservationBaselineCalculator'
 ], function (
 	Util,
 	Xhr,
@@ -22,7 +23,8 @@ define([
 	Mark,
 	Observation,
 	Reading,
-	Measurement
+	Measurement,
+	Calculator
 ) {
 	'use strict';
 
@@ -34,7 +36,8 @@ define([
 	var DEFAULTS = {
 		observatorySummaryUrl: mountPath + '/observatory_summary_feed.php',
 		observatoryDetailUrl: mountPath + '/observatory_detail_feed.php',
-		observationDetailUrl: mountPath + '/observation_data.php'
+		observationDetailUrl: mountPath + '/observation_data.php',
+		observationPublishUrl: mountPath + '/publish.php'
 	};
 
 
@@ -254,9 +257,201 @@ define([
 		});
 	};
 
+	/**
+	 * Save an observation to the MagProc2 server
+	 *
+	 * @param options {Object}
+	 *        method options.
+	 * @param options.observation.get('id') {Integer}
+	 *        the observation id of the observation to save.
+	 * @param options.success {Function(ObservationDetail)}
+	 *        called with saved observatory id.
+	 * @param options.error {Function}
+	 *        called when errors saving observatories.
+	 */
+	ObservatoryFactory.prototype.publishObservation = function (options) {
+		var _this = this,
+		    observationPublishUrl = this._options.observationPublishUrl,
+		    observationId = options.observation.get('id');
+
+		// post observation id to observation_data.php
+		Xhr.ajax({
+			url: observationPublishUrl,
+			data: {
+				id: observationId
+			},
+			method: 'POST',
+			success: function (data) {
+				options.success(_this._getObservation(data));
+			},
+			error: options.error || function () {}
+		});
+	};
+
+	/**
+	 * Summarize the declination measurements and serialize onto the
+	 * reading object
+	 *
+	 * @param reading {object}
+	 */
+	ObservatoryFactory.prototype.setCalibrationD = function (reading) {
+		var measurements = this.getDeclinationMeasurements(reading),
+		    starttime, endtime, absolute, baseline, valid, time,
+		    calculator = new Calculator();
+
+		time = this.getMeasurementValues(measurements, 'time');
+		starttime = Math.min(Number.parseInt(time));
+		endtime = Math.max(Number.parseInt(time));
+		valid = reading.get('declination_valid');
+		absolute = calculator.magneticDeclination(reading);
+		baseline = calculator.dBaseline(reading);
+
+		reading.startD = starttime;
+		reading.endD = endtime;
+		reading.absD = absolute;
+		reading.baseD = baseline;
+	};
+
+	/**
+	 * Summarize the horizontal intensity measurements and serialize onto
+	 * the reading object
+	 *
+	 * @param reading {object}
+	 */
+	ObservatoryFactory.prototype.setCalibrationH = function (reading) {
+		var measurements = this.getHorizontalIntensityMeasurements(reading),
+		    starttime, endtime, absolute, baseline, valid, time,
+		    calculator = new Calculator();
+
+		time = this.getMeasurementValues(measurements, 'time');
+		starttime = Math.min(Number.parseInt(time));
+		endtime = Math.max(Number.parseInt(time));
+		valid = reading.get('horizontal_intensity_valid');
+		absolute = calculator.horizontalComponent(reading);
+		baseline = calculator.hBaseline(reading);
+
+		reading.startH = starttime;
+		reading.endH = endtime;
+		reading.absH = absolute;
+		reading.baseH = baseline;
+	};
+
+	/**
+	 * Summarize the vertical intensity measurements and serialize onto
+	 * the reading object
+	 *
+	 * @param reading {object}
+	 */
+	ObservatoryFactory.prototype.setCalibrationZ = function (reading) {
+		var measurements = this.getVerticalIntensityMeasurements(reading),
+		    starttime, endtime, absolute, baseline, valid, time,
+		    calculator = new Calculator();
+
+		time = this.getMeasurementValues(measurements, 'time');
+		starttime = Math.min(Number.parseInt(time));
+		endtime = Math.max(Number.parseInt(time));
+		valid = reading.get('vertical_intensity_valid');
+		absolute = calculator.verticalComponent(reading);
+		baseline = calculator.zBaseline(reading);
+
+		reading.startZ = starttime;
+		reading.endZ = endtime;
+		reading.absZ = absolute;
+		reading.baseZ = baseline;
+	};
+
+
 
 	/////////////////////////////////////////////////////////////////////////////
 	// Utility Parsing Methods
+
+	/**
+	 * Return the values that make up a vertical intensity measurement from
+	 * a single reading.
+	 *
+	 * @param  reading {object}
+	 * @return {Array<Object>} an array of measurements
+	 */
+	ObservatoryFactory.prototype.getVerticalIntensityMeasurements =
+			function (reading) {
+		var allMeasurements = reading.getMeasurements(),
+		    measurements = [];
+
+		measurements.push(allMeasurements[Measurement.SOUTH_DOWN][0]);
+		measurements.push(allMeasurements[Measurement.NORTH_UP][0]);
+		measurements.push(allMeasurements[Measurement.SOUTH_UP][0]);
+		measurements.push(allMeasurements[Measurement.NORTH_DOWN][0]);
+
+		return measurements;
+	};
+
+	/**
+	 * Return the values that make up a horizontal intensity measurement from
+	 * a single reading.
+	 *
+	 * @param  reading {object}
+	 * @return {Array<Object>} an array of measurements
+	 */
+	ObservatoryFactory.prototype.getHorizontalIntensityMeasurements =
+			function (reading) {
+		var allMeasurements = reading.getMeasurements(),
+		    measurements = [];
+
+		measurements.push(allMeasurements[Measurement.SOUTH_DOWN][0]);
+		measurements.push(allMeasurements[Measurement.NORTH_UP][0]);
+		measurements.push(allMeasurements[Measurement.SOUTH_UP][0]);
+		measurements.push(allMeasurements[Measurement.NORTH_DOWN][0]);
+
+		return measurements;
+	};
+
+	/**
+	 * Return the values that make up a declination measurement from
+	 * a single reading.
+	 *
+	 * @param  reading {object}
+	 * @return {Array<Object>} an array of measurements
+	 */
+	ObservatoryFactory.prototype.getDeclinationMeasurements = function (reading) {
+		var allMeasurements = reading.getMeasurements(),
+		    measurements = [];
+
+		measurements.push(allMeasurements[Measurement.WEST_DOWN][0]);
+		measurements.push(allMeasurements[Measurement.EAST_DOWN][0]);
+		measurements.push(allMeasurements[Measurement.WEST_UP][0]);
+		measurements.push(allMeasurements[Measurement.EAST_UP][0]);
+
+		measurements.push(allMeasurements[Measurement.FIRST_MARK_UP][0]);
+		measurements.push(allMeasurements[Measurement.FIRST_MARK_DOWN][0]);
+		measurements.push(allMeasurements[Measurement.SECOND_MARK_UP][0]);
+		measurements.push(allMeasurements[Measurement.SECOND_MARK_DOWN][0]);
+
+		return measurements;
+	};
+
+	/**
+	 * Parse an array of measurement values into an array of scalar values
+	 * that match the key "name"
+	 *
+	 * @param  {object} measurements, a collection of measurements
+	 * @param  {string} name, the measurement model value to be returned
+	 *
+	 * @return {array} an array of values that match the key "name"
+	 */
+	ObservatoryFactory.prototype.getMeasurementValues = function (measurements, name) {
+		var i = null,
+		    len = null,
+		    values = [],
+		    value;
+
+		for (i = 0, len = measurements.length; i < len; i++) {
+			value = measurements[i].get(name);
+			if (value !== null) {
+				values.push(measurements[i].get(name));
+			}
+		}
+		return values;
+	};
 
 	/**
 	 * Parse an array of observatories into objects.
