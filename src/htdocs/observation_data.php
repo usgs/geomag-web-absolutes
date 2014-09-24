@@ -2,6 +2,7 @@
 
 if (!isset($TEMPLATE)) {
 	include_once '../conf/config.inc.php';
+	include '../lib/login.inc.php';
 	include_once 'functions.inc.php';
 }
 
