@@ -34,8 +34,7 @@ $DEFAULTS = array(
 	'DB_USER' => '',
 	'DB_PASS' => '',
 	'USE_DATABASE_SESSIONS' => 'true',
-	'AUTH_FILE' => $CONF_DIR . DIRECTORY_SEPARATOR . 'users.htpasswd',
-	'MAGPROC_DSN' => 'mysql:host=136.177.50.63;dbname=geomag',
+	'MAGPROC_DSN' => 'mysql:host=hostname;dbname=dbname',
 	'MAGPROC_USER' => '',
 	'MAGPROC_PASS' => ''
 );
@@ -48,7 +47,6 @@ $HELP_TEXT = array(
 	'DB_USER' => 'Read/write username for database connections',
 	'DB_PASS' => 'Password for database user',
 	'USE_DATABASE_SESSIONS' => 'Store session information in database',
-	'AUTH_FILE' => 'Name of htpassword authorization file',
 	'MAGPROC_DSN' => 'Database connection DSN string for magproc database',
 	'MAGPROC_USER' => 'Read/write username for magproc database connections',
 	'MAGPROC_PASS' => 'Password for database user'
@@ -65,16 +63,6 @@ file_put_contents($APACHE_CONFIG_FILE, '
 	<Location ' . $CONFIG['MOUNT_PATH'] . '>
 		Order Allow,Deny
 		Allow from all
-
-		# This authorization file can be created on *nix systems using:
-		#   htpasswd -c users.passwd <username>
-		# You will be prompted for the password
-
-		AuthType Basic
-		AuthName \'Authorization Required\'
-		AuthBasicProvider file
-		AuthUserFile ' . $CONFIG['AUTH_FILE'] . '
-		Require valid-user
 	</Location>
 	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observation_data/(.*)$ ' . $CONFIG['MOUNT_PATH'] . '/observation_data.php?id=$1 [L,PT]
 	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observatory_detail_feed/(.*)$ ' . $CONFIG['MOUNT_PATH'] . '/observatory_detail_feed.php?id=$1 [L,PT]
