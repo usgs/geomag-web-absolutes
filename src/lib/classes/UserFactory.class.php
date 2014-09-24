@@ -77,7 +77,9 @@ class UserFactory {
 	 */
 	public function getCurrentUser () {
 		if (isset($_SESSION['userid'])) {
-			return $this->getUser(intval($_SESSION['userid']));
+			$user = $this->getUser(intval($_SESSION['userid']));
+			unset($user['password']);
+			return $user;
 		} else {
 			return null;
 		}
