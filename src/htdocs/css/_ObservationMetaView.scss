@@ -33,6 +33,11 @@
 		float: left;
 	}
 
+	.julian-day-value {
+		padding: 0.5em;
+		font-size: 0.75em;
+		background: #f1f1f1;
+	}
 
 	// left and right stack, and change label text alignment
 	@media screen and (min-width:768px) {

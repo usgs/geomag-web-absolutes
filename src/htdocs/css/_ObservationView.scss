@@ -1,0 +1,23 @@
+.observation-view {
+
+	.tablist {
+		border-color: #ccc;
+
+		.tablist-backward-button,
+		.tablist-forward-button,
+		.tablist-container,
+		.tablist-panel,
+		.tablist-tab {
+			border-color: #ccc;
+		}
+
+		.tablist-panel {
+			padding: 0 15px;
+		}
+
+		.row {
+			margin: 0;
+		}
+	}
+}
+

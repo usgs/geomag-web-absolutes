@@ -1,7 +1,12 @@
+.reading-group-view {
+	margin:1em 0;
+}
+
 .reading-view {
 	> .row {
 		border-bottom:1px solid #666;
 		padding-bottom:1.33em;
+		//margin:0;
 	}
 }
 
@@ -50,7 +55,7 @@
 	}
 
 	input {
-		width:5em;
+		width:4em;
 	}
 	.measurement-time > input {
 		width:6em;
