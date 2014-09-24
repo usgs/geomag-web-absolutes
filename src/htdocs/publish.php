@@ -4,8 +4,8 @@ include_once '../conf/config.inc.php';
 include_once '../conf/publish.inc.php';
 include_once 'functions.inc.php';
 
-
 include_once '../lib/login.inc.php';
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	header('HTTP/1.1 400 Bad Request');
 	echo 'Should only post to publish.';
