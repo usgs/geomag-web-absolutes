@@ -1,6 +1,5 @@
 <?php
 
-
 include_once '../conf/config.inc.php';
 
 $MAGPROCDB = new PDO($CONFIG['MAGPROC_DSN'], $CONFIG['MAGPROC_USER'],
