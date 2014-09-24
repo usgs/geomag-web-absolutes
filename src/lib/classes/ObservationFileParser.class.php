@@ -42,7 +42,7 @@ class ObservationFileParser {
 			throw new Exception ("No such file: '$file'.");
 		}
 
-		$observationFile = new ObservationFile($this->observatories);
+		$observationFile = new ObservationFile($this);
 		$lines = file($file);
 		$i = 0; $numLines = count($lines);
 		$line = null;
@@ -70,14 +70,7 @@ class ObservationFileParser {
 		return $observationFile->toObservation($warnings);
 	}
 
-
-	// ------------------------------------------------------------
-	// Protected methods
-	// ------------------------------------------------------------
-
 	/**
-	 * @ProtectedMethod
-	 *
 	 * Looks through $this->observatories for the observatory with a given $code.
 	 *
 	 * @param $code {String}
@@ -90,22 +83,20 @@ class ObservationFileParser {
 	 *         The observatory for the given $code, or NULL if no such observatory
 	 *         is found.
 	 */
-	protected function _getObservatory ($code, &$warnings = null) {
+	public function _getObservatory ($code, &$warnings = null) {
 		foreach ($this->observatories as $observatory) {
 			if ($observatory->code === $code) {
 				return $observatory;
 			}
 		}
 
-		$this->__addWarning("No observatory found for code: '${code}.'",
+		$this->__addWarning("No observatory found for code: '${code}'.",
 				$warnings);
 
 		return null;
 	}
 
 		/**
-	 * @ProtectedMethod
-	 *
 	 * Looks through the piers on the given $observatory for a pier with the given
 	 * $name that began prior to the given $begin and ended after the given $end
 	 * (or has not yet ended).
@@ -124,7 +115,7 @@ class ObservationFileParser {
 	 *         The pier with the given name and correction
 	 *         or NULL if no such pier is found.
 	 */
-	protected function _getPier ($observatory_code, $pier_name, $pier_correction,
+	public function _getPier ($observatory_code, $pier_name, $pier_correction,
 				&$warnings = null) {
 
 		$observatory = $this->_getObservatory($observatory_code, $warnings);
@@ -134,16 +125,25 @@ class ObservationFileParser {
 
 		foreach ($observatory->piers as $pier) {
 			if ($pier->name === $pier_name &&
-					$pier->correction === $pier_correction) {
+					$pier->correction == $pier_correction) {
 				return $pier;
 			}
 		}
-		// TODO create pier
+
+		$this->factory->createPier($observatory->id, $pier_name, $pier_correction);
+		$observatory->piers = $this->factory->getPiers($observatory->id);
+
+		foreach ($observatory->piers as $pier) {
+			if ($pier->name === $pier_name &&
+					$pier->correction == $pier_correction) {
+				return $pier;
+			}
+		}
+		// WTF? TODO this should never happen, do something about it
+		return null;
 	}
 
 	/**
-	 * @ProtectedMethod
-	 *
 	 * Looks through the marks on the given $pier for a mark with the given
 	 * $name that began prior to the given $begin and ended after the given $end
 	 * (or has not yet ended).
@@ -165,13 +165,9 @@ class ObservationFileParser {
 	 * @return {Mark}
 	 *         The mark with the given name or NULL if no such mark is found.
 	 */
-	protected function _getMark ($observatory_code, $pier_name, $pier_correction,
+	public function _getMark ($observatory_code, $pier_name, $pier_correction,
 			$mark_name, $mark_azimuth, &$warnings = null) {
 
-		$observatory = $this->_getObservatory($observatory_code, $warnings);
-		if ($observatory === null) {
-			return null;
-		}
 		$pier = $this->_getPier($observatory_code, $pier_name,
 				$pier_correction, $warnings);
 		if ($pier === null) {
@@ -180,16 +176,24 @@ class ObservationFileParser {
 
 		foreach ($pier->marks as $mark) {
 			if ($mark->name === $mark_name &&
-					$mark->azimuth === $mark_azimuth) {
+					$mark->azimuth == $mark_azimuth) {
 				return $mark;
 			}
 		}
-		// TODO create mark
+
+		$this->factory->createMark($pier->id, $mark_name, $mark_azimuth);
+		$pier->marks = $this->factory->getMarks($pier->id);
+		foreach ($pier->marks as $mark) {
+			if ($mark->name === $mark_name &&
+					$mark->azimuth == $mark_azimuth) {
+				return $mark;
+			}
+		}
+		// WTF? TODO this should never happen, do something about it
+		return null;
 	}
 
 	/**
-	 * @ProtectedMethod
-	 *
 	 * Looks through the instruments on the given $observatory for an instrument
 	 * with the given $serial number that began prior to the given $begin and
 	 * ended after the given $end (or has not yet ended).
@@ -208,21 +212,34 @@ class ObservationFileParser {
 	 *         The instrument with the given name or NULL if no such instrument
 	 *         is found.
 	 */
-	protected function _getInstrument ($observatory_code, $serial, $type,
+	public function _getInstrument ($observatory_code, $serial, $type,
 				&$warnings = null) {
 
+		if ($serial === null) {
+			$this->__addWarning("No serial number found for '${type}' instrument",
+				$warnings);
+			return null;
+		}
 		$observatory = $this->_getObservatory($observatory_code, $warnings);
 		if ($observatory === null) {
 			return null;
 		}
 
-		$instruments = $observatory->instruments;
-		foreach ($instruments as $inst) {
-			if ($inst->serial_number === $serial) {
+		foreach ($observatory->instruments as $inst) {
+			if ($inst->serial_number === $serial && $inst->type === $type) {
 				return $inst;
 			}
 		}
-		// TODO create instrument
+
+		$this->factory->createInstrument($observatory->id, $serial, $type);
+		$observatory->instruments = $this->factory->getInstruments($observatory->id);
+		foreach ($observatory->instruments as $inst) {
+			if ($inst->serial_number === $serial && $inst->type === $type) {
+				return $inst;
+			}
+		}
+		// WTF? TODO this should never happen, do something about it
+		return null;
 	}
 
 	/**
@@ -281,6 +298,26 @@ class ObservationFileParser {
 
 		foreach ($summaries as $summary) {
 			$this->observatories[] = $this->factory->getObservatory($summary->id);
+		}
+	}
+
+	/**
+	 * @PrivateMethod
+	 *
+	 * Logs the warning either into the given $warnings buffer (presumably for
+	 * subsequent logging), or directly to STDERR if $warnings is not provided.
+	 *
+	 * @param $warning {String}
+	 *        The warning message to log.
+	 * @param $warnings {Array} By reference. Optional.
+	 *        A buffer into which generated warnings will be logged. If not
+	 *        specified, warnings are logged to STDERR.
+	 */
+	private function __addWarning ($warning, &$warnings = null) {
+		if ($warnings !== null && is_array($warnings)) {
+			$warnings[] = $warning;
+		} else {
+			fwrite(STDERR, "${warning}\n");
 		}
 	}
 }

@@ -111,7 +111,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	protected function getInstruments ($id) {
+	public function getInstruments ($id) {
 		$instruments = array();
 		$statement = $this->db->prepare('SELECT * FROM instrument ' .
 				'WHERE observatory_id=:id ORDER BY name');
@@ -146,7 +146,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	protected function getMarks ($id) {
+	public function getMarks ($id) {
 		$marks = array();
 		$statement = $this->db->prepare('SELECT * FROM mark WHERE ' .
 				'pier_id=:id ORDER BY name');
@@ -223,7 +223,7 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	protected function getPiers ($id) {
+	public function getPiers ($id) {
 		$piers = array();
 		$statement = $this->db->prepare('SELECT * FROM pier WHERE ' .
 				'observatory_id=:id ORDER BY name');
@@ -261,33 +261,19 @@ class ObservatoryFactory {
 	 *        $correction {Double}
 	 *        The pier correction value.
 	 *
-	 * @return {Object}
-	 *      The object read back from the database.
-	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	protected function createPier ($observatoryId, $pierName, $correction) {
+	public function createPier ($observatoryId, $pierName, $correction) {
 		$this->db->beginTransaction();
 		$statement = $this->db->prepare('INSERT INTO pier (' .
-				'observatory_id, name, begin, end, correction,' .
-				'default_mark_id, default_electronics_id, default_theodolite_id)' .
+				'observatory_id, name, correction)' .
 				'VALUES ( ' .
-				':observatory_id, :name, :begin, :end, :correction,' .
-				':default_mark_id, :default_electronics_id, :default_theodolite_id');
+				':observatory_id, :name, :correction)');
 
-		$statement->bindParam(':observatory_id',
-				$object->observatory_id, PDO::PARAM_INT);
-		$statement->bindParam(':name', $object->name, PDO::PARAM_STR);
-		$statement->bindParam(':begin', $object->begin, PDO::PARAM_INT);
-		$statement->bindParam(':end', $object->end, PDO::PARAM_INT);
-		$statement->bindParam(':correction', $object->correction, PDO::PARAM_STR);
-		$statement->bindParam(':default_mark_id',
-				$object->default_mark_id, PDO::PARAM_INT);
-		$statement->bindParam(':default_electronics_id',
-				$object->default_electronics_id, PDO::PARAM_INT);
-		$statement->bindParam(':default_theodolite_id',
-				$object->default_theodolite_id, PDO::PARAM_INT);
+		$statement->bindParam(':observatory_id', $observatoryId, PDO::PARAM_INT);
+		$statement->bindParam(':name', $pierName, PDO::PARAM_STR);
+		$statement->bindParam(':correction', $correction, PDO::PARAM_STR);
 
 		try {
 			$statement->execute();
@@ -298,9 +284,7 @@ class ObservatoryFactory {
 
 		$statement->closeCursor();
 
-		$pier_id = intval($this->db->lastInsertId());
 		$this->db->commit();
-		return $this->getPiers($pier_id);
 	}
 
 	/**
@@ -313,25 +297,19 @@ class ObservatoryFactory {
 	 *        $azimuth {Double}
 	 *        The azimuth value at the mark.
 	 *
-	 * @return {Object}
-	 *      The object read back from the database.
-	 *
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	protected function createMark ($pierId, $markName, $azimuth) {
+	public function createMark ($pierId, $markName, $azimuth) {
 		$this->db->beginTransaction();
-		$statement = $this->db->prepare('INSERT INTO pier (' .
-				'pier_id, name, begin, end, azimuth,' .
+		$statement = $this->db->prepare('INSERT INTO mark (' .
+				'pier_id, name, azimuth)' .
 				'VALUES ( ' .
-				':pier_id, :name, :begin, :end, :azimuth,');
+				':pier_id, :name, :azimuth)');
 
-		$statement->bindParam(':pier_id',
-				$object->pier_id, PDO::PARAM_INT);
-		$statement->bindParam(':name', $object->begin, PDO::PARAM_STR);
-		$statement->bindParam(':begin', $object->begin, PDO::PARAM_INT);
-		$statement->bindParam(':end', $object->end, PDO::PARAM_INT);
-		$statement->bindParam(':azimuth', $object->azimuth, PDO::PARAM_STR);
+		$statement->bindParam(':pier_id', $pierId, PDO::PARAM_INT);
+		$statement->bindParam(':name', $markName, PDO::PARAM_STR);
+		$statement->bindParam(':azimuth', $azimuth, PDO::PARAM_STR);
 
 		try {
 			$statement->execute();
@@ -342,9 +320,7 @@ class ObservatoryFactory {
 
 		$statement->closeCursor();
 
-		$mark_id = intval($this->db->lastInsertId());
 		$this->db->commit();
-		return $this->getMarks($mark_id);
 	}
 
 	/**
@@ -363,21 +339,16 @@ class ObservatoryFactory {
 	 * @throws {Exception}
 	 *      Can throw an exception if an SQL error occurs. See "triggerError"
 	 */
-	protected function createInstrument ($observatoryId, $serial, $type) {
+	public function createInstrument ($observatoryId, $serial, $type) {
 		$this->db->beginTransaction();
-		$statement = $this->db->prepare('INSERT INTO pier (' .
-				'observatory_id, serial_number, begin, end, name, type)' .
+		$statement = $this->db->prepare('INSERT INTO instrument (' .
+				'observatory_id, serial_number, type)' .
 				'VALUES ( ' .
-				':observatory_id, :serial_number, :begin, :end, :name, :type');
+				':observatory_id, :serial_number, :type)');
 
-		$statement->bindParam(':observatory_id',
-				$object->observatory_id, PDO::PARAM_INT);
-		$statement->bindParam(':serial_number',
-				$object->serial_number, PDO::PARAM_STR);
-		$statement->bindParam(':begin', $object->begin, PDO::PARAM_INT);
-		$statement->bindParam(':end', $object->end, PDO::PARAM_INT);
-		$statement->bindParam(':name', $object->name, PDO::PARAM_STR);
-		$statement->bindParam(':type', $object->type, PDO::PARAM_INT);
+		$statement->bindParam(':observatory_id', $observatoryId, PDO::PARAM_INT);
+		$statement->bindParam(':serial_number', $serial, PDO::PARAM_STR);
+		$statement->bindParam(':type', $type, PDO::PARAM_INT);
 
 		try {
 			$statement->execute();
@@ -388,9 +359,7 @@ class ObservatoryFactory {
 
 		$statement->closeCursor();
 
-		$instrument_id = intval($this->db->lastInsertId());
 		$this->db->commit();
-		return $this->getInstruments($instrument_id);
 	}
 
 	protected function triggerError (&$statement) {

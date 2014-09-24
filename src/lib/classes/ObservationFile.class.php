@@ -47,7 +47,9 @@ class ObservationFile {
 	private $electronicsSerial = null;
 	private $theodoliteSerial = null;
 	private $pierName = null;
+	private $pierCorrection = null;
 	private $markName = null;
+	private $markAzimuth = null;
 
 	// Flag indicating if remarks have been started. Once remarks are started, all
 	// subsequent lines in the data file are considered part of the remarks.
@@ -57,7 +59,7 @@ class ObservationFile {
 	private $currentReading = null;
 
 	// List of ObservatoryDetail objects used for lookups
-	private $observatories = null;
+	private $parser = null;
 
 	// Meta information about the observation
 	private $metaInfo = array();
@@ -78,8 +80,8 @@ class ObservationFile {
 	 *        converting raw field information into objects and corresponding ID
 	 *        values.
 	 */
-	public function __construct ($observatories = array()) {
-		$this->observatories = $observatories;
+	public function __construct ($parser) {
+		$this->parser = $parser;
 	}
 
 
@@ -102,7 +104,7 @@ class ObservationFile {
 		$this->_saveCurrentReading();
 
 		// This will be an ObservatoryDetail instance
-		$observatory = $this->_getObservatoryFromCode($this->observatoryCode,
+		$observatory = $this->parser->_getObservatory($this->observatoryCode,
 				$warnings);
 
 		// While getting readings, begin/end time information (needed for subsequent
@@ -113,15 +115,15 @@ class ObservationFile {
 		$begin = $beginEndStamps['begin'];
 		$end = $beginEndStamps['end'];
 
-		$pier = $this->_getPierFromName($observatory, $this->pierName, $begin, $end,
-				$warnings);
-		$mark = $this->_getMarkFromName($pier, $this->markName, $begin, $end,
-				$warnings);
+		$pier = $this->parser->_getPier($observatory->code, $this->pierName,
+				$this->pierCorrection, $warnings);
+		$mark = $this->parser->_getMark($observatory->code, $pier->name,
+				$pier->correction, $this->markName, $this->markAzimuth, $warnings);
 
-		$electronics = $this->_getInstrumentFromSerial($observatory,
-				$this->electronicsSerial, $begin, $end, 'electronics', $warnings);
-		$theodolite = $this->_getInstrumentFromSerial($observatory,
-				$this->theodoliteSerial, $begin, $end, 'theodolite', $warnings);
+		$electronics = $this->parser->_getInstrument($observatory->code,
+				$this->electronicsSerial, 'electronics', $warnings);
+		$theodolite = $this->parser->_getInstrument($observatory->code,
+				$this->theodoliteSerial, 'theodolite', $warnings);
 
 		$observation = array(
 			'id' => null,
@@ -335,8 +337,12 @@ class ObservationFile {
 
 			} else if ($field === 'Pier') {
 				$this->pierName = $value;
+			} else if ($field === 'PierCorrection') {
+				$this->pierCorrection = $value;
 			} else if ($field === 'Mark') {
 				$this->markName = $value;
+			} else if ($field === 'TrueAzOfMark') {
+				$this->markAzimuth = $value;
 			} else if ($field === 'Pier Temperature') {
 				$this->metaInfo['pier_temperature'] = $value;
 			} else if ($field === 'Elect Temperature') {
@@ -535,52 +541,6 @@ class ObservationFile {
 	// ------------------------------------------------------------
 	// Private methods
 	// ------------------------------------------------------------
-
-	/**
-	 * @PrivateMethod
-	 *
-	 * Helper method to get a named object out of a list of objects. The returned
-	 * object must begin prior to the given $begin and later than the given $end.
-	 *
-	 * @param $objects {Array{Object}}
-	 *        An array of objects with a public "name" field.
-	 * @param $name {String}
-	 *        The name of the desired object.
-	 * @param $begin {Integer}
-	 *        Timestamp in milliseconds for the start of the time-window.
-	 * @param $end {Integer}
-	 *        Timestamp in milliseconds for the end of the time-window.
-	 *
-	 * @param $type {String}
-	 *        The type of object being searched. Used for logging purposes only.
-	 * @param $warnings {Array} By reference. Optional.
-	 *        A buffer into which generated warnings will be logged. If not
-	 *        specified, warnings are logged to STDERR.
-	 *
-	 * @return {Object}
-	 *         The named object that was valid during the indicated time window,
-	 *         or NULL if no such object could be found.
-	 */
-	private function __getFromName ($objects, $name, $begin, $end, $type,
-			&$warnings = null) {
-
-		if ($objects === null || !is_array($objects)) {
-			$this->__addWarning("TypeError [Objects]: Could not find ${type} in " .
-					'objects.', $warnings);
-			return null;
-		}
-
-		foreach ($objects as $object) {
-			if ($object->name === $name && $object->begin <= $begin &&
-					($object->end === null || $object->end >= $end)) {
-				return $object;
-			}
-		}
-
-		$this->__addWarning("Could not find ${type} for name '${name}' between " .
-				"'${begin}' and '${end}'.", $warnings);
-		return null;
-	}
 
 	/**
 	 * @PrivateMethod
