@@ -28,6 +28,7 @@ $classDir = $APP_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR .
 include_once $classDir . 'Instrument.class.php';
 include_once $classDir . 'Mark.class.php';
 include_once $classDir . 'Measurement.class.php';
+include_once $classDir . 'MagProcPublisher.class.php';
 include_once $classDir . 'Observation.class.php';
 include_once $classDir . 'ObservationDetail.class.php';
 include_once $classDir . 'ObservationFactory.class.php';
