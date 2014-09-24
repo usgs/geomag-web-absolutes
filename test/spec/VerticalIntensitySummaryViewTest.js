@@ -5,14 +5,16 @@ define([
 
 	'geomag/ObservationBaselineCalculator',
 	'geomag/Reading',
-	'geomag/VerticalIntensitySummaryView'
+	'geomag/VerticalIntensitySummaryView',
+	'geomag/ObservatoryFactory'
 ], function (
 	chai,
 	sinon,
 
 	ObservationBaselineCalculator,
 	Reading,
-	VerticalIntensitySummaryView
+	VerticalIntensitySummaryView,
+	ObservatoryFactory
 ) {
 	'use strict';
 
@@ -31,18 +33,21 @@ define([
 			    reading,
 			    calculator,
 			    view,
-			    measurements;
+			    measurements,
+			    factory;
 
 			beforeEach(function () {
 				renderSpy = sinon.spy(VerticalIntensitySummaryView.prototype, 'render');
 				reading = new Reading();
 				calculator = new ObservationBaselineCalculator();
+				factory = new ObservatoryFactory();
 				view = new VerticalIntensitySummaryView({
 					el: document.createElement('tr'),
 					reading: reading,
-					calculator: calculator
+					calculator: calculator,
+					factory:factory
 				});
-				measurements = view._getVerticalIntensityMeasurements();
+				measurements = factory.getHorizontalIntensityMeasurements(reading);
 			});
 
 			afterEach(function () {
@@ -55,13 +60,15 @@ define([
 
 			it('should render when measurement changes', function () {
 				var i = null,
-				    len = null;
+				    len = null,
+				    count = 0;
 
 				for (i = 0, len = measurements.length; i < len; i++) {
+					count = renderSpy.callCount;
 					measurements[i].trigger('change');
 					// +2 because view renders during instantiation and loop
 					// index starts at 0
-					expect(renderSpy.callCount).to.equal(i + 2);
+					expect(renderSpy.callCount).to.equal(count + 1);
 				}
 			});
 

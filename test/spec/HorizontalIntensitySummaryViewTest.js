@@ -5,14 +5,16 @@ define([
 
 	'geomag/HorizontalIntensitySummaryView',
 	'geomag/ObservationBaselineCalculator',
-	'geomag/Reading'
+	'geomag/Reading',
+	'geomag/ObservatoryFactory'
 ], function (
 	chai,
 	sinon,
 
 	HorizontalIntensitySummaryView,
 	ObservationBaselineCalculator,
-	Reading
+	Reading,
+	ObservatoryFactory
 ) {
 	'use strict';
 
@@ -31,19 +33,22 @@ define([
 			    reading,
 			    calculator,
 			    view,
-			    measurements;
+			    measurements,
+			    factory;
 
 			beforeEach(function () {
 				renderSpy =
 						sinon.spy(HorizontalIntensitySummaryView.prototype, 'render');
 				reading = new Reading();
 				calculator = new ObservationBaselineCalculator();
+				factory = new ObservatoryFactory();
 				view = new HorizontalIntensitySummaryView({
 					el: document.createElement('tr'),
 					reading: reading,
-					calculator: calculator
+					calculator: calculator,
+					factory:factory
 				});
-				measurements = view._getHorizontalIntensityMeasurements();
+				measurements = factory.getHorizontalIntensityMeasurements(reading);
 			});
 
 			afterEach(function () {

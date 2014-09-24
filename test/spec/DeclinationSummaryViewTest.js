@@ -5,14 +5,16 @@ define([
 
 	'geomag/DeclinationSummaryView',
 	'geomag/ObservationBaselineCalculator',
-	'geomag/Reading'
+	'geomag/Reading',
+	'geomag/ObservatoryFactory'
 ], function (
 	chai,
 	sinon,
 
 	DeclinationSummaryView,
 	ObservationBaselineCalculator,
-	Reading
+	Reading,
+	ObservatoryFactory
 ) {
 	'use strict';
 
@@ -41,18 +43,21 @@ define([
 			    reading,
 			    calculator,
 			    view,
-			    measurements;
+			    measurements,
+			    factory;
 
 			beforeEach(function () {
 				renderSpy = sinon.spy(DeclinationSummaryView.prototype, 'render');
 				reading = new Reading();
 				calculator = new ObservationBaselineCalculator();
+				factory = new ObservatoryFactory();
 				view = new DeclinationSummaryView({
 					el: document.createElement('tr'),
 					reading: reading,
-					calculator: calculator
+					calculator: calculator,
+					factory: factory
 				});
-				measurements = view._getDeclinationMeasurements();
+				measurements = factory.getDeclinationMeasurements(reading);
 			});
 
 			afterEach(function () {
@@ -61,6 +66,7 @@ define([
 				view = null;
 				calculator = null;
 				measurements = null;
+				factory = null;
 			});
 
 			it('should render when measurement changes', function () {
