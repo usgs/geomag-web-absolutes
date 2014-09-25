@@ -142,5 +142,3 @@ define ([
 return UserAdminView;
 
 });
-
-
