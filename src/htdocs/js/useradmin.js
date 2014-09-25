@@ -10,9 +10,11 @@ require.config({
 });
 
 require([
-	'geomag/UserAdminView'
+	'geomag/UserAdminView',
+	'geomag/UserFactory'
 ], function (
-	UserAdminView
+	UserAdminView,
+	UserFactory
 ) {
 	'use strict';
 
