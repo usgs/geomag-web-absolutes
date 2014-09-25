@@ -35,12 +35,25 @@ class UserFactory {
 		$this->selectUserByCredentials = $this->db->prepare(
 				'SELECT * FROM user WHERE username = :username AND ' .
 					'password = :password');
-		$this->selectUsers = $this->db->prepare('SELECT * FROM user');
+		$this->selectUsers = $this->db->prepare(
+				'SELECT ' .
+					'ID as id, ' .
+					'name, ' .
+					'username, ' .
+					'default_observatory_id, ' .
+					'email, ' .
+					'last_login, ' .
+					'admin, ' .
+					'enabled ' .
+				'FROM ' .
+					'user ' .
+				'ORDER BY ' .
+					'name'
+			);
 
 		$this->insertUserSkeleton = $this->db->prepare(
 				'INSERT INTO user (username, password, default_observatory_id) ' .
 					'VALUES (:username, :password, :default_observatory_id)');
-
 		$this->insertUser = $this->db->prepare(
 				'INSERT INTO user (' .
 					'name, username, default_observatory_id, email,' .
