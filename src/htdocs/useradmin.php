@@ -3,9 +3,9 @@ if (!isset($TEMPLATE)) {
 	include_once '../conf/config.inc.php';
 	include_once 'functions.inc.php';
 	include '../lib/login.inc.php';
-	include 'template.inc.php';
 
-	if ($CURRENT_USERS['admin'] !== 'Y') {
+
+	if ($CURRENT_USER['admin'] !== 'Y') {
 		header('HTTP/1.1 403 Forbiden');
 		echo 'Only admin users may view or change user data.';
 		exit();
@@ -21,6 +21,8 @@ if (!isset($TEMPLATE)) {
 		</script>' .
 		'<script src="' . $MOUNT_PATH . '/js/useradmin.js"></script>' .
 		'<script src="http://localhost:35729/livereload.js?snipver=1"></script>';
+
+		include 'template.inc.php';
 }
 ?>
 
