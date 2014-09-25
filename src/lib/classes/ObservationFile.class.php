@@ -46,6 +46,8 @@ class ObservationFile {
 	private $dateOffset = 0;
 	private $electronicsSerial = null;
 	private $theodoliteSerial = null;
+	private $observer = null;
+	private $reviewer = null;
 	private $pierName = null;
 	private $pierCorrection = null;
 	private $markName = null;
@@ -124,14 +126,22 @@ class ObservationFile {
 				$this->electronicsSerial, 'electronics', $warnings);
 		$theodolite = $this->parser->_getInstrument($observatory->code,
 				$this->theodoliteSerial, 'theodolite', $warnings);
+		$observer = null;
+		$reviewer = null;
+		if ($this->observer !== null) {
+			$observer = $this->parser->_getUser($this->observer);
+		}
+		if ($this->reviewer !== null) {
+			$reviewer = $this->parser->_getUser($this->reviewer);
+		}
 
 		$observation = array(
 			'id' => null,
 			'observatory_id' => ($observatory !== null) ? $observatory->id : null,
 			'begin' => $beginEndStamps['begin'],
 			'end'   => $beginEndStamps['end'],
-			'reviewer_user_id' => null,
-			'observer_user_id' => null,
+			'reviewer_user_id' => ($reviewer !== null) ? $reviewer->id : null,
+			'observer_user_id' => ($observer !== null) ? $observer->id : null,
 			'mark_id' => ($mark !== null) ? $mark->id : null,
 			'electronics_id' => ($electronics !== null) ? $electronics->id : null,
 			'theodolite_id' => ($theodolite !== null) ? $theodolite->id : null,
@@ -335,6 +345,15 @@ class ObservationFile {
 					}
 				}
 
+			} else if ($field === 'Observer') {
+				$this->observer = $value;
+			} else if ($field === 'Checked By') {
+				$parts = explode(' ', $value);
+				if (count($parts) > 1) {
+					// Remove review date from the end of the line.
+					array_pop($parts);
+					$this->reviewer = implode(' ', $parts);
+				}
 			} else if ($field === 'Pier') {
 				$this->pierName = $value;
 			} else if ($field === 'PierCorrection') {

@@ -6,7 +6,8 @@ class ObservationFileParser {
 
 	// Loaded with ObservatoryDetail objects during instantiation
 	protected $observatories = array();
-
+	protected $factory = null;
+	protected $userFactory = null;
 
 	/**
 	 * @Constructor
@@ -14,9 +15,12 @@ class ObservationFileParser {
 	 * @param $observatoryFactory {ObservatoryFactory}
 	 *        A factory object capable of fetching Observatory and
 	 *        ObservatoryDetail objects from a data source.
+	 * @param $userFactory {UserFactory}
+	 *        A factory object capable of fetching User objects.
 	 */
-	public function __construct ($observatoryFactory) {
+	public function __construct ($observatoryFactory, $userFactory) {
 		$this->factory = $observatoryFactory;
+		$this->userFactory = $userFactory;
 		$this->__loadObservatories();
 	}
 
@@ -240,6 +244,27 @@ class ObservationFileParser {
 		}
 		// WTF? TODO this should never happen, do something about it
 		return null;
+	}
+
+	/**
+	 * Looks for user, creates a user if it doesn't exist.
+	 *
+	 * @param $username {String}
+	 * @param $observatory_code {ObservatoryDetail}
+	 *        Default observatory if user is created.
+	 *
+	 * @return {User}
+	 */
+	public function _getUser ($username, $observatory_code) {
+
+		$username = strtolower($username);
+		$user = $this->userFactory->getUserFromUsername($username);
+		if ($user === null) {
+			$observatory = $this->_getObservatory($observatory_code);
+			$user = $this->userFactory->addUser($username, $username,
+					$observatory->id);
+		}
+		return $user;
 	}
 
 	/**

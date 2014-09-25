@@ -24,7 +24,7 @@ if (!file_exists($dataDirectory)) {
 }
 
 include_once 'classes/ObservationFileParser.class.php';
-$parser = new ObservationFileParser($OBSERVATORY_FACTORY);
+$parser = new ObservationFileParser($OBSERVATORY_FACTORY, $USER_FACTORY);
 
 $files = recursiveGlob($dataDirectory, '*.bns');
 $errorCount = 0;
