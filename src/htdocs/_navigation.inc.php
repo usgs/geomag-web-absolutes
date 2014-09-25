@@ -8,7 +8,7 @@ if (isset($CURRENT_USER)) {
 		navItem($MOUNT_PATH . '/observation/', 'Observation Input');
 
 	if ($CURRENT_USER['admin'] === 'Y') {
-		$navItems .= navItem($MOUNT_PATH . '/accounts/', 'Administer Users');
+		$navItems .= navItem($MOUNT_PATH . '/useradmin.php', 'Administer Users');
 	}
 
 	$navItems .= navItem($MOUNT_PATH . '/logout.php', 'Logout');
