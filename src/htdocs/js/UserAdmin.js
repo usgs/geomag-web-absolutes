@@ -1,4 +1,4 @@
-/* global userId, MOUNT_PATH */
+/* global MOUNT_PATH */
 
 require.config({
 	baseUrl: MOUNT_PATH + '/js',
@@ -10,14 +10,16 @@ require.config({
 });
 
 require([
-	'geomag/UserAdmin'
+	'geomag/UserAdminView'
 ], function (
-	UserAdmin
+	UserAdminView
 ) {
 	'use strict';
 
-	new UserAdmin({
+	new UserAdminView({
 		el: document.querySelector('.user-admin-view-wrapper'),
-		UserAdmin: UserAdmin
+		factory: new UserFactory({
+			url: MOUNT_PATH + '/user_data.php'
+		})
 	});
 });
