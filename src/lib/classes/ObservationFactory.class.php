@@ -38,8 +38,8 @@ class ObservationFactory {
 				'mark_id, electronics_id, theodolite_id, pier_temperature, '.
 				'elect_temperature, flux_temperature, proton_temperature, '.
 				'reviewed, annotation) VALUES ( ' .
-				':observatory_id, :begin, :end, :reviewer_user_id, :mark_id, ' .
-				':electronics_id, :theodolite_id, :pier_temperature, ' .
+				':observatory_id, :begin, :end, :reviewer_user_id, :observer_user_id,' .
+				':mark_id, :electronics_id, :theodolite_id, :pier_temperature, ' .
 				':elect_temperature, :flux_temperature, :proton_temperature, ' .
 				':reviewed, :annotation)');
 
