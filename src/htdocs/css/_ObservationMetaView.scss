@@ -18,8 +18,7 @@
 		> input,
 		> select,
 		> textarea,
-		> .value,
-		> .pier-correction-value {
+		> .value {
 			margin-bottom: 1em;
 		}
 
@@ -36,7 +35,10 @@
 	.julian-day-value {
 		padding: 0.5em;
 		font-size: 0.75em;
-		background: #f1f1f1;
+		background: #f8f8f8;
+		width: 3em;
+		margin-left: 2px;
+		text-align: center;
 	}
 
 	// left and right stack, and change label text alignment
