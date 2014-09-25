@@ -66,7 +66,7 @@ define([
 		this._el.innerHTML = [
 			'<section class="reading-view">',
 				'<section class="row">',
-					'<h2 class="column">Declination</h2>',
+					'<h2>Declination</h2>',
 					'<section class="declination-input">',
 						'<table>',
 							'<thead>',
@@ -97,7 +97,7 @@ define([
 					'<section class="declination-output"></section>',
 				'</section>',
 				'<section class="row">',
-					'<h2 class="column">Inclination</h2>',
+					'<h2>Inclination</h2>',
 					'<section class="inclination-input">',
 						'<table>',
 							'<thead>',
