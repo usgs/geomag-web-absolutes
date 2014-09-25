@@ -17,8 +17,6 @@ class UserFactory {
 				);
 		$this->queryUserByUsername = $this->pdo->prepare(
 				'SELECT * FROM user WHERE username = :username');
-		$this->queryUserByUsername = $this->pdo->prepare(
-				'SELECT * FROM user WHERE username = :username');
 		$this->queryAddUser = $this->pdo->prepare(
 				'INSERT INTO user (username, password, default_observatory_id)' .
 				'VALUES (:username, :password, :default_observatory_id)');
