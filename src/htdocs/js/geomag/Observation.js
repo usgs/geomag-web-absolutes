@@ -19,6 +19,7 @@ define([
 		'begin': null,
 		'end': null,
 		'reviewer_user_id': null,
+		'observer_user_id': null,
 		'mark_id': null,
 		'electronics_id': null,
 		'theodolite_id': null,

@@ -193,6 +193,7 @@ class ObservatoryFactory {
 				$observation = new Observation(intval($row['ID']),
 						intval($row['observatory_id']), safeintval($row['begin']),
 						safeintval($row['end']), safeintval($row['reviewer_user_id']),
+						safeintval($row['observer_user_id']),
 						safeintval($row['mark_id']), safeintval($row['electronics_id']),
 						safeintval($row['theodolite_id']),
 						safefloatval($row['pier_temperature']),

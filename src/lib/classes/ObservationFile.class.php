@@ -129,6 +129,7 @@ class ObservationFile {
 			'begin' => $beginEndStamps['begin'],
 			'end'   => $beginEndStamps['end'],
 			'reviewer_user_id' => null,
+			'observer_user_id' => null,
 			'mark_id' => ($mark !== null) ? $mark->id : null,
 			'electronics_id' => ($electronics !== null) ? $electronics->id : null,
 			'theodolite_id' => ($theodolite !== null) ? $theodolite->id : null,
@@ -165,7 +166,6 @@ class ObservationFile {
 		$this->currentReading = array(
 			'id' => null,
 			'observation_id' => null,
-			'observer_user_id' => null,
 			'set_number' => intval($setNumber),
 			'declination_shift' => 0,
 			'declination_valid' => 'Y',

@@ -34,8 +34,8 @@ class ObservationFactory {
 	public function createObservation($object) {
 		$this->db->beginTransaction();
 		$statement = $this->db->prepare('INSERT INTO observation (' .
-				'observatory_id, begin, end, reviewer_user_id, mark_id, ' .
-				'electronics_id, theodolite_id, pier_temperature, '.
+				'observatory_id, begin, end, reviewer_user_id, observer_user_id, ' .
+				'mark_id, electronics_id, theodolite_id, pier_temperature, '.
 				'elect_temperature, flux_temperature, proton_temperature, '.
 				'reviewed, annotation) VALUES ( ' .
 				':observatory_id, :begin, :end, :reviewer_user_id, :mark_id, ' .
@@ -49,6 +49,8 @@ class ObservationFactory {
 		$statement->bindParam(':end', $object->end, PDO::PARAM_INT);
 		$statement->bindParam(':reviewer_user_id',
 				$object->reviewer_user_id, PDO::PARAM_INT);
+		$statement->bindParam(':observer_user_id',
+				$object->observer_user_id, PDO::PARAM_INT);
 		$statement->bindParam(':mark_id', $object->mark_id, PDO::PARAM_INT);
 		$statement->bindParam(':electronics_id',
 				$object->electronics_id, PDO::PARAM_INT);
@@ -137,6 +139,7 @@ class ObservationFactory {
 				$observation = new ObservationDetail(intval($row['ID']),
 						intval($row['observatory_id']), safeintval($row['begin']),
 						safeintval($row['end']), safeintval($row['reviewer_user_id']),
+						safeintval($row['observer_user_id']),
 						safeintval($row['mark_id']), safeintval($row['electronics_id']),
 						safeintval($row['theodolite_id']),
 						safefloatval($row['pier_temperature']),
@@ -167,9 +170,10 @@ class ObservationFactory {
 	 */
 	public function updateObservation($object) {
 		$this->db->beginTransaction();
-		$statement = $this->db->prepare('UPDATE observation set ' .
+		$statement = $this->db->prepare('UPDATE observation SET ' .
 				'observatory_id=:observatory_id, begin=:begin, end=:end, '.
-				'reviewer_user_id=:reviewer_user_id, mark_id=:mark_id, ' .
+				'reviewer_user_id=:reviewer_user_id, ' .
+				'observer_user_id=:observer_user_id, mark_id=:mark_id, ' .
 				'electronics_id=:electronics_id, ' .
 				'theodolite_id=:theodolite_id, ' .
 				'pier_temperature=:pier_temperature, '.
@@ -185,6 +189,8 @@ class ObservationFactory {
 		$statement->bindParam(':end', $object->end, PDO::PARAM_INT);
 		$statement->bindParam(':reviewer_user_id',
 				$object->reviewer_user_id, PDO::PARAM_INT);
+		$statement->bindParam(':observer_user_id',
+				$object->observer_user_id, PDO::PARAM_INT);
 		$statement->bindParam(':mark_id', $object->mark_id, PDO::PARAM_INT);
 		$statement->bindParam(':electronics_id',
 				$object->electronics_id, PDO::PARAM_INT);
@@ -462,7 +468,6 @@ class ObservationFactory {
 				$reading = new Reading($reading_id,
 						intval($row['observation_id']),
 						safeintval($row['set_number']),
-						safeintval($row['observer_user_id']),
 						$row['declination_valid'],
 						safeintval($row['declination_shift']),
 						$row['horizontal_intensity_valid'],

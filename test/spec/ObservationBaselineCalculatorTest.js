@@ -183,7 +183,13 @@ define([
 		'measurements': new Collection([
 			meas1, meas2, meas3, meas4, meas5, meas6,
 			meas7, meas8, meas9, measA, measB, measC
-		])
+		]),
+		startH: 1388772631000, endH: 1388772631000,
+		absH: 18664.830905707, baseH: -2178.7015942929,
+		startZ: 1388772631000, endZ: 1388772631000,
+		absZ: 49034.335971417, baseZ: 1470.1409714166,
+		startD: 1388772260000, endD: 1388772260000,
+		absD: 169.78791666667, baseD: 169.82565118348
 	});
 
 

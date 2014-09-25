@@ -11,15 +11,20 @@ class ObservationDetail extends Observation {
 	public $readings;
 
 	public function __construct ($id=null, $observatory_id=null, $begin=null,
-				$end=null, $reviewer_user_id=null, $mark_id=null,
-				$electronics_id=null, $theodolite_id=null,
-				$pier_temperature=null, $elect_temperature=null,
-				$flux_temperature=null, $proton_temperature=null,
-				$reviewed=null, $annotation=null, $readings=array()) {
-		parent::__construct($id, $observatory_id, $begin, $end,
-					$reviewer_user_id, $mark_id, $electronics_id,
-					$theodolite_id, $pier_temperature, $elect_temperature,
-					$flux_temperature, $proton_temperature, $reviewed, $annotation);
+			$end=null, $reviewer_user_id=null,
+			$observer_user_id, $mark_id=null, $electronics_id=null,
+			$theodolite_id=null, $pier_temperature=null, $elect_temperature=null,
+			$flux_temperature=null, $proton_temperature=null,
+			$reviewed=null, $annotation=null,
+			$readings=array()) {
+
+		parent::__construct($id, $observatory_id, $begin,
+				$end, $reviewer_user_id,
+				$observer_user_id, $mark_id, $electronics_id,
+				$theodolite_id, $pier_temperature, $elect_temperature,
+				$flux_temperature, $proton_temperature,
+				$reviewed, $annotation);
+
 		$this->readings = $readings;
 	}
 
@@ -31,12 +36,13 @@ class ObservationDetail extends Observation {
 			}
 		}
 
-		return new ObservationDetail($p['id'], $p['observatory_id'],
-					$p['begin'], $p['end'], $p['reviewer_user_id'],
-					$p['mark_id'], $p['electronics_id'], $p['theodolite_id'],
-					$p['pier_temperature'], $p['elect_temperature'],
-					$p['flux_temperature'], $p['proton_temperature'],
-					$p['reviewed'], $p['annotation'], $readings);
+		return new ObservationDetail($p['id'], $p['observatory_id'], $p['begin'],
+				$p['end'], $p['reviewer_user_id'],
+				$p['observer_user_id'], $p['mark_id'], $p['electronics_id'],
+				$p['theodolite_id'], $p['pier_temperature'], $p['elect_temperature'],
+				$p['flux_temperature'], $p['proton_temperature'],
+				$p['reviewed'], $p['annotation'],
+				$readings);
 	}
 
 	public function toArray () {

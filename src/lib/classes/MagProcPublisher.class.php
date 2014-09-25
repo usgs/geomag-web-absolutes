@@ -8,6 +8,7 @@ class MagProcPublisher {
 	function __construct ($db) {
 		$this->db = $db;
 		$this->_initStatements();
+		$this->log = fopen('/tmp/publish.log', 'a+');
 	}
 
 	public function publish ($observation, $observatory, $observer, $reviewer) {
@@ -20,9 +21,11 @@ class MagProcPublisher {
 				$this->_publishReading($reading, $observatory->code,
 						$observer, $reviewer);
 			}
-
+fwrite($this->log, "committing....\n");
 			$this->db->commit();
+fwrite($this->log, "success!\n");
 		} catch (Exception $e) {
+fwrite($this->log, "publish error\n");
 			$this->db->rollback();
 			$this->triggerError($e);
 		}
@@ -58,7 +61,7 @@ class MagProcPublisher {
 			$end_time = date("Y-m-d H:i:s",$reading->endD);
 			$abs = $reading->absD;
 			$baseline = $reading->baseD;
-
+fwrite($this->log, "Inserting D component\n");
 			$this->insertCalibration->execute();
 		}
 
@@ -68,7 +71,7 @@ class MagProcPublisher {
 			$end_time = date("Y-m-d H:i:s",$reading->endH);
 			$abs = $reading->absH;
 			$baseline = $reading->baseH;
-
+fwrite($this->log, "Inserting H component\n");
 			$this->insertCalibration->execute();
 		}
 
@@ -78,7 +81,7 @@ class MagProcPublisher {
 			$end_time = date("Y-m-d H:i:s",$reading->endZ);
 			$abs = $reading->absZ;
 			$baseline = $reading->baseZ;
-
+fwrite($this->log, "Inserting Z component\n");
 			$this->insertCalibration->execute();
 		}
 
@@ -92,7 +95,8 @@ class MagProcPublisher {
 					'abs, baseline, created_by, approved_by' .
 				') VALUES ( ' .
 					':component, :station_id, \'c\', :start_time, :end_time,' .
-					':abs, :baseline, :created_by, :approved_by');
+					':abs, :baseline, :created_by, :approved_by' .
+				')');
 	}
 
 	protected function triggerError (&$statement) {

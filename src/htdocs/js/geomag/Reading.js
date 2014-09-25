@@ -23,7 +23,6 @@ define([
 		'declination_shift': 0,
 		'horizontal_intensity_valid': 'Y',
 		'vertical_intensity_valid': 'Y',
-		'observer_user_id': null,
 		'annotation': null,
 		'measurements': null,
 		'absD': null,

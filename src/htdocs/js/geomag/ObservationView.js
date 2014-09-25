@@ -319,19 +319,22 @@ define([
 
 
 	ObservationView.prototype._onPublishClick = function () {
+		var _this = this;
 
 		try {
-			this._saveObservation(this._publishObservation(function () {
-					(new ModalView(
-						'<h3>Success!</h3><p>Your observation has been published.</p>',
-						{
-							title: 'Publish Successful',
-							classes: ['modal-success'],
-							closable: true
-						}
-					)).show();
-				}
-			));
+			this._saveObservation(function () {
+					_this._publishObservation(function () {
+						(new ModalView(
+							'<h3>Success!</h3><p>Your observation has been published.</p>',
+							{
+								title: 'Publish Successful',
+								classes: ['modal-success'],
+								closable: true
+							}
+						)).show();
+					}
+				);
+			});
 		} catch (e) {
 			(new ModalView(
 				'<h3>Error.</h3><p>' + e.message + '</p>',
