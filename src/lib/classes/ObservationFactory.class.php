@@ -283,7 +283,7 @@ class ObservationFactory {
 	 */
 	protected function createReadings($readings, $id) {
 		$statement = $this->db->prepare('INSERT INTO reading (' .
-				'observation_id, set_number, observer_user_id, ' .
+				'observation_id, set_number, ' .
 				'declination_valid, declination_shift, horizontal_intensity_valid, ' .
 				'vertical_intensity_valid, ' .
 				'startH, endH, absH, baseH, ' .
@@ -291,7 +291,7 @@ class ObservationFactory {
 				'startD, endD, absD, baseD, ' .
 				'annotation' .
 			') VALUES (' .
-				':observation_id, :set_number, :observer_user_id, ' .
+				':observation_id, :set_number, ' .
 				':declination_valid, :declination_shift, ' .
 				':horizontal_intensity_valid, :vertical_intensity_valid,' .
 				':startH, :endH, :absH, :baseH, ' .
@@ -304,8 +304,6 @@ class ObservationFactory {
 			$statement->bindParam(':observation_id', $id, PDO::PARAM_INT);
 			$statement->bindParam(':set_number',
 					$object->set_number, PDO::PARAM_INT);
-			$statement->bindParam(':observer_user_id',
-					$object->observer_user_id, PDO::PARAM_INT);
 			$statement->bindParam(':declination_valid',
 					$object->declination_valid, PDO::PARAM_STR);
 			$statement->bindParam(':declination_shift',
