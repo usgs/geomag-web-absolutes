@@ -306,10 +306,10 @@ define([
 		absolute = calculator.magneticDeclination(reading);
 		baseline = calculator.dBaseline(reading);
 
-		reading.startD = starttime;
-		reading.endD = endtime;
-		reading.absD = absolute;
-		reading.baseD = baseline;
+		reading.set({ startD: starttime });
+		reading.set({ endD: endtime });
+		reading.set({ absD: absolute });
+		reading.set({ baseD: baseline });
 	};
 
 	/**
@@ -330,10 +330,10 @@ define([
 		absolute = calculator.horizontalComponent(reading);
 		baseline = calculator.hBaseline(reading);
 
-		reading.startH = starttime;
-		reading.endH = endtime;
-		reading.absH = absolute;
-		reading.baseH = baseline;
+		reading.set({ startH: starttime });
+		reading.set({ endH: endtime });
+		reading.set({ absH: absolute });
+		reading.set({ baseH: baseline });
 	};
 
 	/**
@@ -354,10 +354,10 @@ define([
 		absolute = calculator.verticalComponent(reading);
 		baseline = calculator.zBaseline(reading);
 
-		reading.startZ = starttime;
-		reading.endZ = endtime;
-		reading.absZ = absolute;
-		reading.baseZ = baseline;
+		reading.set({ startZ: starttime });
+		reading.set({ endZ: endtime });
+		reading.set({ absZ: absolute });
+		reading.set({ baseZ: baseline });
 	};
 
 

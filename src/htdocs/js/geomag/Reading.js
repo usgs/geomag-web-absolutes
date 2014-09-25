@@ -25,7 +25,19 @@ define([
 		'vertical_intensity_valid': 'Y',
 		'observer_user_id': null,
 		'annotation': null,
-		'measurements': null
+		'measurements': null,
+		'absD': null,
+		'absH': null,
+		'absZ': null,
+		'baseD': null,
+		'baseH': null,
+		'baseZ': null,
+		'startD': null,
+		'startH': null,
+		'startZ': null,
+		'endD': null,
+		'endH': null,
+		'endZ': null
 	};
 
 
