@@ -5,35 +5,88 @@
  */
 class UserFactory {
 
-	private $queryUserById;
-	private $queryUserByCredentials;
+	private $selectUserById;
+	private $selectUserByCredentials;
+	private $selectUserByUsername;
+	private $selectUsers;
 
-	public function __construct($pdo) {
-		$this->pdo = $pdo;
-		$this->queryUserById = $this->pdo->prepare(
-				'SELECT * FROM user WHERE ID = :id');
-		$this->queryUserByCredentials = $this->pdo->prepare(
-				'SELECT * FROM user WHERE username = :username AND password = :password'
-				);
-		$this->queryUserByUsername = $this->pdo->prepare(
-				'SELECT * FROM user WHERE username = :username');
-		$this->queryAddUser = $this->pdo->prepare(
-				'INSERT INTO user (username, password, default_observatory_id)' .
-				'VALUES (:username, :password, :default_observatory_id)');
+	private $insertUserSkeleton;
+	private $insertUser;
+
+	private $updateUser;
+	private $deleteUser;
+
+	public function __construct ($db) {
+		$this->db = $db;
+		$this->_initStatements();
 	}
 
 	/**
-	 * Get user information by id.
+	 * initStatements
 	 *
-	 * @param $id {Integer}
-	 *        the user id.
+	 * Sets database prepare statements for transactions.
+	 *
+	 */
+	private function _initStatements () {
+		$this->selectUserById = $this->db->prepare(
+				'SELECT * FROM user WHERE ID = :id');
+		$this->selectUserByUsername = $this->db->prepare(
+				'SELECT * FROM user WHERE username = :username');
+		$this->selectUserByCredentials = $this->db->prepare(
+				'SELECT * FROM user WHERE username = :username AND ' .
+					'password = :password');
+		$this->selectUsers = $this->db->prepare('SELECT * FROM user');
+
+		$this->insertUserSkeleton = $this->db->prepare(
+				'INSERT INTO user (username, password, default_observatory_id) ' .
+					'VALUES (:username, :password, :default_observatory_id)');
+		$this->insertUser = $this->db->prepare(
+				'INSERT INTO user (' .
+					'ID, name, username, default_observatory_id, email,' .
+					'password, last_login, admin, enabled' .
+				') VALUES (' .
+					':id, :name, :username, :default_observatory_id, :email,' .
+					':password, :last_login, :admin, :enabled' .
+				')');
+
+		$this->updateUser = $this->db->prepare(
+				'UPDATE user set ' .
+					'ID=:id, name=:name, username=:username,' .
+					'default_observatory_id=:default_observatory_id, email=:email, ' .
+					'password=:password, last_login=:last_login, admin=:admin, ' .
+					'enabled=:enabled'
+					);
+		$this->deleteUser = $this->db->prepare(
+			'DELETE FROM user WHERE ID=:id');
+	}
+
+	/**
+	 * Get the current logged in user.
+	 *
+	 * @return array of user information, or null if no user logged in.
+	 */
+	public function getCurrentUser () {
+		if (isset($_SESSION['userid'])) {
+			$user = $this->getUser(intval($_SESSION['userid']));
+			unset($user['password']);
+			return $user;
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Get user information by ID.
+	 *
+	 * @param $ID {Integer}
+	 *        the user ID.
 	 */
 	public function getUser ($id) {
 		$user = null;
-		$this->queryUserById->bindValue(':id', intval($id), PDO::PARAM_INT);
+		$this->selectUserById->bindValue(':id', intval($id), PDO::PARAM_INT);
 		try {
-			$this->queryUserById->execute();
-			$user = $this->queryUserById->fetchAll(PDO::FETCH_ASSOC);
+			$this->selectUserById->execute();
+			$user = $this->selectUserById->fetchAll(PDO::FETCH_ASSOC);
 			$countUser = count($user);
 			if ($countUser === 1) {
 				$user = $user[0];
@@ -53,17 +106,63 @@ class UserFactory {
 	 */
 	public function getUserFromUsername ($username) {
 		$user = null;
-		$this->queryUserByUsername->bindValue(':username',
+		$this->selectUserByUsername->bindValue(':username',
 				$username, PDO::PARAM_STR);
 		try {
-			$this->queryUserByUsername->execute();
-			$user = $this->queryUserByUsername->fetchAll(PDO::FETCH_ASSOC);
+			$this->selectUserByUsername->execute();
+			$user = $this->selectUserByUsername->fetchAll(PDO::FETCH_ASSOC);
 			$countUser = count($user);
 			if ($countUser === 1) {
 				$user = $user[0];
 			} else {
 				$user = null;
 			}
+		} catch (Exception $e) {
+			$user = null;
+		}
+		return $user;
+	}
+
+	/**
+	 * Log a user in.
+	 *
+	 * @param $username {String}
+	 *        the username.
+	 * @param $password {String}
+	 *        the password.
+	 */
+	public function authenticate ($username, $password) {
+		$user = null;
+		$this->selectUserByCredentials->bindValue(
+				':username', $username, PDO::PARAM_STR);
+		$this->selectUserByCredentials->bindValue(
+				':password', md5($password), PDO::PARAM_STR);
+		try {
+			$this->selectUserByCredentials->execute();
+			$user = $this->selectUserByCredentials->fetchAll(PDO::FETCH_ASSOC);
+			$countUser = count($user);
+			if ($countUser === 1) {
+				$user = $user[0];
+			} else {
+				$user = null;
+			}
+		} catch (Exception $e) {
+			$user = null;
+		}
+		return $user;
+	}
+
+	/**
+	 * Get all users.
+	 *
+	 * @return array of user information, or null if no user logged in.
+	 */
+	public function getAllUsers () {
+		$users = null;
+		try {
+			$this->selectUsers->execute();
+			$users = $this->selectUsers->fetchAll(PDO::FETCH_ASSOC);
+			$countUser = count($user);
 		} catch (Exception $e) {
 			$user = null;
 		}
@@ -79,16 +178,18 @@ class UserFactory {
 	 * @param $default_observatory_id {Integer} Default null
 	 *        Id of an observatory object.
 	 */
-	public function addUser ($username, $password, $default_observatory_id=null) {
-		$this->queryAddUser->bindValue(':username',
+	public function createUserSkeleton ($username, $password,
+			$default_observatory_id=null) {
+
+		$this->insertUserSkeleton->bindValue(':username',
 				$username, PDO::PARAM_STR);
-		$this->queryAddUser->bindValue(':password',
+		$this->insertUserSkeleton->bindValue(':password',
 				md5($password), PDO::PARAM_STR);
-		$this->queryAddUser->bindValue(':default_observatory_id',
+		$this->insertUserSkeleton->bindValue(':default_observatory_id',
 				$default_observatory_id, PDO::PARAM_INT);
 
 		try {
-			$this->queryAddUser->execute();
+			$this->insertUserSkeleton->execute();
 			return $this->getUserFromUsername($username);
 		} catch (Exception $e) {
 			return null;
@@ -96,47 +197,81 @@ class UserFactory {
 	}
 
 	/**
-	 * Log a user in.
+	 * Get the current logged in user.
 	 *
-	 * @param $username {String}
-	 *        the username.
-	 * @param $password {String}
-	 *        the password.
+	 * @param $user {Array}
+	 *        array of user information.
+	 *
 	 */
-	public function authenticate ($username, $password) {
-		$user = null;
-		$this->queryUserByCredentials->bindValue(
-				':username', $username, PDO::PARAM_STR);
-		$this->queryUserByCredentials->bindValue(
-				':password', md5($password), PDO::PARAM_STR);
+	public function createUser ($user) {
+		$this->insertUser->bindValue(':id', intval($user['id']), PDO::PARAM_INT);
+		$this->insertUser->bindValue(':name', $user['name'], PDO::PARAM_STR);
+		$this->insertUser->bindValue(':username', $user['username'],
+				PDO::PARAM_STR);
+		$this->insertUser->bindValue(':default_observatory_id', $user['ID'],
+				PDO::PARAM_STR);
+		$this->insertUser->bindValue(':email', $user['email'], PDO::PARAM_STR);
+		$this->insertUser->bindValue(':password', $user['password'],
+				PDO::PARAM_STR);
+		$this->insertUser->bindValue(':last_login', $user['last_login'],
+				PDO::PARAM_STR);
+		$this->insertUser->bindValue(':admin', $user['admin'], PDO::PARAM_STR);
+		$this->insertUser->bindValue(':enabled', $user['enabled'], PDO::PARAM_STR);
+
 		try {
-			$this->queryUserByCredentials->execute();
-			$user = $this->queryUserByCredentials->fetchAll(PDO::FETCH_ASSOC);
-			$countUser = count($user);
-			if ($countUser === 1) {
-				$user = $user[0];
-			} else {
-				$user = null;
-			}
+			$this->insertUser->execute();
+			$this->db->commit();
 		} catch (Exception $e) {
-			$user = null;
+			$this->db->rollback;
+			$this->triggerError($e);
 		}
-		return $user;
 	}
 
 	/**
-	 * Get the current logged in user.
+	 * Update User by id
+	 *
+	 * @param $user {Array}
+	 *        array of user information.
 	 *
 	 * @return array of user information, or null if no user logged in.
 	 */
-	public function getCurrentUser () {
-		if (isset($_SESSION['userid'])) {
-			$user = $this->getUser(intval($_SESSION['userid']));
-			unset($user['password']);
-			return $user;
-		} else {
-			return null;
+	public function updateUser ($user) {
+		$this->updateUser->bindValue(':id', intval($user['id']), PDO::PARAM_INT);
+		$this->updateUser->bindValue(':username', $user['username'], PDO::PARAM_STR);
+		$this->updateUser->bindValue(':default_observatory_id', $user['ID'], PDO::PARAM_STR);
+		$this->updateUser->bindValue(':email', $user['email'], PDO::PARAM_STR);
+		$this->updateUser->bindValue(':password', $user['password'], PDO::PARAM_STR);
+		$this->updateUser->bindValue(':last_login', $user['last_login'], PDO::PARAM_STR);
+		$this->updateUser->bindValue(':admin', $user['admin'], PDO::PARAM_STR);
+		$this->updateUser->bindValue(':enabled', $user['enabled'], PDO::PARAM_STR);
+		try {
+			$this->updateUser->execute();
+			$this->db->commit();
+		} catch (Exception $e) {
+			$this->db->rollback;
+			$this->triggerError($e);
 		}
+	}
+
+	/**
+	 * Delete user by id.
+		 * @param $id {String}
+	 *        the username id.
+	 */
+	public function deleteUser ($id) {
+		$this->deleteUser->bindValue(':id', intval($id), PDO::PARAM_INT);
+	}
+
+	protected function triggerError (&$statement) {
+		$error = $statement->errorInfo();
+		$statement->closeCursor();
+
+		$errorMessage = (is_array($error)&&isset($error[2])&&isset($error[0])) ?
+				'[' . $error[0] . '] :: ' . $error[2] : 'Unknown SQL Error';
+		$errorCode = (is_array($error)&&isset($error[1])) ?
+				$error[1] : -999;
+
+		throw new Exception($errorMessage, $errorCode);
 	}
 
 }
