@@ -40,9 +40,10 @@ class UserFactory {
 		$this->insertUserSkeleton = $this->db->prepare(
 				'INSERT INTO user (username, password, default_observatory_id) ' .
 					'VALUES (:username, :password, :default_observatory_id)');
+
 		$this->insertUser = $this->db->prepare(
 				'INSERT INTO user (' .
-					'ID, name, username, default_observatory_id, email,' .
+					'name, username, default_observatory_id, email,' .
 					'password, last_login, admin, enabled' .
 				') VALUES (' .
 					':id, :name, :username, :default_observatory_id, :email,' .
@@ -162,11 +163,10 @@ class UserFactory {
 		try {
 			$this->selectUsers->execute();
 			$users = $this->selectUsers->fetchAll(PDO::FETCH_ASSOC);
-			$countUser = count($user);
 		} catch (Exception $e) {
-			$user = null;
+			$users = null;
 		}
-		return $user;
+		return $users;
 	}
 
 	/**
@@ -237,13 +237,18 @@ class UserFactory {
 	 */
 	public function updateUser ($user) {
 		$this->updateUser->bindValue(':id', intval($user['id']), PDO::PARAM_INT);
-		$this->updateUser->bindValue(':username', $user['username'], PDO::PARAM_STR);
-		$this->updateUser->bindValue(':default_observatory_id', $user['ID'], PDO::PARAM_STR);
+		$this->updateUser->bindValue(':username', $user['username'],
+				PDO::PARAM_STR);
+		$this->updateUser->bindValue(':default_observatory_id', $user['ID'],
+				PDO::PARAM_STR);
 		$this->updateUser->bindValue(':email', $user['email'], PDO::PARAM_STR);
-		$this->updateUser->bindValue(':password', $user['password'], PDO::PARAM_STR);
-		$this->updateUser->bindValue(':last_login', $user['last_login'], PDO::PARAM_STR);
+		$this->updateUser->bindValue(':password', $user['password'],
+				PDO::PARAM_STR);
+		$this->updateUser->bindValue(':last_login', $user['last_login'],
+				PDO::PARAM_STR);
 		$this->updateUser->bindValue(':admin', $user['admin'], PDO::PARAM_STR);
 		$this->updateUser->bindValue(':enabled', $user['enabled'], PDO::PARAM_STR);
+
 		try {
 			$this->updateUser->execute();
 			$this->db->commit();
