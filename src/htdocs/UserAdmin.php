@@ -8,16 +8,18 @@ if (!isset($TEMPLATE)) {
 	if ($CURRENT_USERS['admin'] !== 'Y') {
 		header('HTTP/1.1 403 Forbiden');
 		echo 'Only admin users may view or change user data.';
+		exit();
 	}
+
 	$TITLE = 'User Admin';
 
 	$NAVIGATION = true;
-	$HEAD = '<link rel="stylesheet" href="'.$MOUNT_PATH.'/css/UserAdmin.css"/>';
+	$HEAD = '<link rel="stylesheet" href="'.$MOUNT_PATH.'/css/useradmin.css"/>';
 	$FOOT =
 		'<script>
 			var MOUNT_PATH = \'' . $MOUNT_PATH .'\';
 		</script>' .
-		'<script src="' . $MOUNT_PATH . '/js/UserAdmin.js"></script>' .
+		'<script src="' . $MOUNT_PATH . '/js/useradmin.js"></script>' .
 		'<script src="http://localhost:35729/livereload.js?snipver=1"></script>';
 }
 ?>
