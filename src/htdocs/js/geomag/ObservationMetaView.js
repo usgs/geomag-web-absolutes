@@ -159,7 +159,7 @@ define([
 		this._pierSelectView = pierSelectView =
 				new CollectionSelectBox({
 					el: el.querySelector('.pier'),
-					emptyText: 'Select observatory...'
+					emptyText: 'Select observatory...',
 					formatOption: this._formatPier
 				});
 		this._marksSelectView = marksSelectView =
