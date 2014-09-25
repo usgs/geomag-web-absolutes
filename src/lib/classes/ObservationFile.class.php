@@ -129,10 +129,10 @@ class ObservationFile {
 		$observer = null;
 		$reviewer = null;
 		if ($this->observer !== null) {
-			$observer = $this->parser->_getUser($this->observer);
+			$observer = $this->parser->_getUser($this->observer, $observatory->code);
 		}
 		if ($this->reviewer !== null) {
-			$reviewer = $this->parser->_getUser($this->reviewer);
+			$reviewer = $this->parser->_getUser($this->reviewer, $observatory->code);
 		}
 
 		$observation = array(
