@@ -273,7 +273,7 @@ class UserFactory {
 
 	/**
 	 * Delete user by id.
-		 * @param $id {String}
+	 * @param $id {String}
 	 *        the username id.
 	 */
 	public function deleteUser ($id) {
@@ -291,5 +291,6 @@ class UserFactory {
 
 		throw new Exception($errorMessage, $errorCode);
 	}
+
 
 }
