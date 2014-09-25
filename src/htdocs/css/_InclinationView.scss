@@ -3,7 +3,6 @@ $line-vertical-separation:4px;
 .inclination-view {
 
 	> dl {
-
 		margin: 0;
 
 		> dt {
@@ -11,7 +10,7 @@ $line-vertical-separation:4px;
 			clear:left;
 			width:12em;
 			font-weight:bold;
-			text-align:right;
+			text-align:left;
 			margin-top:$line-vertical-separation;
 		}
 
