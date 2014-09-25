@@ -52,6 +52,22 @@ class Reading {
 		$this->declination_shift = $declination_shift;
 		$this->horizontal_intensity_valid = $horizontal_intensity_valid;
 		$this->vertical_intensity_valid = $vertical_intensity_valid;
+
+		$this->startH = $startH;
+		$this->endH = $endH;
+		$this->absH = $absH;
+		$this->baseH = $baseH;
+
+		$this->startZ = $startZ;
+		$this->endZ = $endZ;
+		$this->absZ = $absZ;
+		$this->baseZ = $baseZ;
+
+		$this->startD = $startD;
+		$this->endD = $endD;
+		$this->absD = $absD;
+		$this->baseD = $baseD;
+
 		$this->annotation = $annotation;
 
 		$this->measurements = $measurements;
