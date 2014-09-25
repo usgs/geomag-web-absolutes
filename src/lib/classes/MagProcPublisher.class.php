@@ -10,14 +10,14 @@ class MagProcPublisher {
 		$this->_initStatements();
 	}
 
-	public function publish (&$observation, $observer, $reviewer) {
+	public function publish ($observation, $observatory, $observer, $reviewer) {
 		$readings = $observation->readings;
-		$observationId = $observation->id;
 
-		$this->db->beginTransaction();
 		try {
+			$this->db->beginTransaction();
+
 			foreach ($readings as $reading) {
-				$this->_publishReading($reading, $observationId,
+				$this->_publishReading($reading, $observatory->code,
 						$observer, $reviewer);
 			}
 
@@ -28,16 +28,12 @@ class MagProcPublisher {
 		}
 	}
 
-	private function _publishReading ($reading, $observationId,
+	private function _publishReading ($reading, $station_code,
 			$observer, $reviewer) {
 
 		$component; $start_time; $end_time; $abs; $baseline;
 
-		$stationdid = $observationId;
-		$created_by = $observer;
-		$approved_by = $reviewer;
-
-		$this->insertCalibration->bindValue(':station_id', $observationId,
+		$this->insertCalibration->bindValue(':station_id', $station_code,
 				PDO::PARAM_INT);
 		$this->insertCalibration->bindValue(':created_by', $observer,
 				PDO::PARAM_STR);

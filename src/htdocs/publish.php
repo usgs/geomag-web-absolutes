@@ -15,13 +15,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $observationId = param('id', null);
 try {
 	$observation = $OBSERVATION_FACTORY->getObservation($observationId);
+	$observatory = $OBSERVATORY_FACTORY->getObservatory(
+			$observation->observatory_id);
 	$observer = $USER_FACTORY->getUser($observation->observer_user_id);
 	$reviewer = $CURRENT_USER;
 
 	if ($reviewer['admin'] === 'Y') {
 		if ($observation->reviewed !== 'Y') {
-			$MAGPROC_FACTORY->publish($observation, $observer['username'],
-					$reviewer['username']);
+			$MAGPROC_FACTORY->publish($observation, $observatory,
+					$observer['username'], $reviewer['username']);
 			$observation->reviewer_user_id = $reviewer['ID'];
 			$observation->reviewed = 'Y';
 			$OBSERVATION_FACTORY->updateObservation($observation);
