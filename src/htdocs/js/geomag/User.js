@@ -15,7 +15,8 @@ define([
 		'default_observatory_id': null,
 		'email': null,
 		'last_login': null,
-		'admin': null
+		'admin': null,
+		'enabled': null
 	};
 
 	var User = function (attributes) {

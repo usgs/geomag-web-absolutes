@@ -10,7 +10,7 @@ define([
 	'use strict';
 
 	var DEFAULTS = {
-
+		url: 'user_data.php'
 	};
 
 		/**
@@ -32,32 +32,33 @@ define([
 		Xhr.ajax({
 			url: this._options.url,
 			data: options.data || {},
-			success: function (data) {
-				if(options.success) {
-					options.success(data);
-				}
-			},
+			success: options.success || function () {},
 			error: options.error || function () {}
 		});
 	};
 
-	UserFactory.prototype.create = function(options) {
-		options.success();
-	};
+	UserFactory.prototype.save = function(options) {
+		var user = options.user.get(),
+		    data = JSON.stringify(user);
 
-	UserFactory.prototype.update = function(options) {
-		options.success();
+		Xhr.ajax({
+			url: this._options.url,
+			rawdata: data,
+			method: (user.id) ? 'PUT' : 'POST',
+			success: options.success || function () {},
+			error: options.error || function () {}
+		});
 	};
 
 	UserFactory.prototype.destroy = function(options) {
-		options.success();
+		Xhr.ajax({
+			url: this._options.url,
+			data: {id: options.id},
+			method: 'DELETE',
+			success: options.success || function () {},
+			error: options.error || function () {}
+		});
 	};
 
-return UserFactory;
+	return UserFactory;
 });
-
-
-// update()  [put]
-// create()  [post]
-// get()     (GET)
-// destroy() (DELETE)
