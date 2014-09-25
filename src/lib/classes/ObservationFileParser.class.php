@@ -220,8 +220,10 @@ class ObservationFileParser {
 				&$warnings = null) {
 
 		if ($serial === null) {
-			$this->__addWarning("No serial number found for '${type}' instrument",
-				$warnings);
+			if ($type !== 'electronics') {
+				$this->__addWarning("No serial number found for '${type}' instrument",
+						$warnings);
+			}
 			return null;
 		}
 		$observatory = $this->_getObservatory($observatory_code, $warnings);
