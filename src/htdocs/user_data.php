@@ -6,9 +6,9 @@ if (!isset($TEMPLATE)) {
 	include_once 'functions.inc.php';
 }
 
-$ID = param('ID', null);
-if ($ID !== null) {
-	$ID = intval($ID, 10);
+$id = param('id', null);
+if ($id !== null) {
+	$id = intval($id, 10);
 }
 
 // POST,GET,PUT,DELETE => Create,Read,Update,Delete
@@ -22,14 +22,14 @@ try {
 	//throw new Exception('foo');
 	if ($method === 'GET') {
 		// validate id parameter
-		if (!isset($_GET['ID'])) {
+		if (!isset($_GET['id'])) {
 			header('HTTP/1.1 400 Bad Request');
 			echo 'user id is a required parameter';
 			exit();
 		}
 
-		$ID = intval($_GET['ID']);
-		if ($ID <= 0) {
+		$id = intval($_GET['id']);
+		if ($id <= 0) {
 			$user = $USER_FACTORY->getAllUsers();
 		} else {
 			$user = $USER_FACTORY->getUser();
@@ -56,21 +56,21 @@ try {
 		$params = array();
 		parse_str(file_get_contents('php://input'), $params);
 		// validate id parameter
-		if (!isset($params['ID'])) {
+		if (!isset($params['id'])) {
 			header('HTTP/1.1 400 Bad Request');
 			echo 'user id is a required parameter';
 			exit();
 		}
 
-		$ID = intval($params['ID']);
-		if ($ID <= 0) {
+		$id = intval($params['id']);
+		if ($id <= 0) {
 			header('HTTP/1.1 400 Bad Request');
 			echo 'user id must be a positive integer';
 			exit();
 		}
 
 		// find matching observation
-		$user = $USER_FACTORY->getUser($ID);
+		$user = $USER_FACTORY->getUser($id);
 		if ($user === null) {
 			header('HTTP/1.1 400 Bad Request');
 			echo 'no matching user id found';
@@ -89,7 +89,7 @@ try {
 
 		if ($method === 'POST') {
 			// create
-			if ($user['ID'] !== null) {
+			if ($user['id'] !== null) {
 				header('HTTP/1.1 400 Bad Request');
 				echo 'cannot create an user that already has an id';
 				exit();
@@ -97,7 +97,7 @@ try {
 			$user = $USER_FACTORY->createUser($user);
 		} else if ($method === 'PUT') {
 			// update
-			if ($user['ID'] === null) {
+			if ($user['id'] === null) {
 				header('HTTP/1.1 400 Bad Request');
 				echo 'cannot update an user without an user id';
 				exit();
