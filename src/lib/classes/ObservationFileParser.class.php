@@ -280,7 +280,7 @@ class ObservationFileParser {
 		$user = $this->userFactory->getUserFromUsername($username);
 		if ($user === null) {
 			$observatory = $this->_getObservatory($observatory_code);
-			$user = $this->userFactory->addUser($username, $username,
+			$user = $this->userFactory->createUserSkeleton($username, $username,
 					$observatory->id);
 		}
 		return $user;
