@@ -279,7 +279,7 @@ define([
 		try {
 			this._saveObservation(function() {
 				(new ModalView(
-					'<h3>Success!</h3><p>Your observation has been saved.</p>',
+					'<p>Your observation has been saved.</p>',
 					{
 						title: 'Save Successful',
 						classes: ['modal-success'],
@@ -288,12 +288,7 @@ define([
 				)).show();
 			});
 		} catch (e) {
-			(new ModalView(
-				'<h3>Error.</h3><p>' + e.message + '</p>',
-				{
-					title: 'Save Failed'
-				}
-			)).show();
+			this._showErrorDialog('Save Failed', e.message);
 		}
 	};
 
@@ -312,7 +307,7 @@ define([
 				callback();
 			},
 			error: function (status, xhr) {
-				throw new Error(xhr.response);
+				_this._showErrorDialog('Save Failed', xhr.response);
 			}
 		});
 	};
@@ -325,7 +320,7 @@ define([
 			this._saveObservation(function () {
 					_this._publishObservation(function () {
 						(new ModalView(
-							'<h3>Success!</h3><p>Your observation has been published.</p>',
+							'<p>Your observation has been published.</p>',
 							{
 								title: 'Publish Successful',
 								classes: ['modal-success'],
@@ -336,12 +331,7 @@ define([
 				);
 			});
 		} catch (e) {
-			(new ModalView(
-				'<h3>Error.</h3><p>' + e.message + '</p>',
-				{
-					title: 'Publish Failed'
-				}
-			)).show();
+			_this._showErrorDialog('Publish Failed', e.message);
 		}
 	};
 
@@ -365,9 +355,19 @@ define([
 				callback();
 			},
 			error: function (status, xhr) {
-				throw new Error(xhr.response);
+				_this._showErrorDialog('Publish Failed', xhr.response);
 			}
 		});
+	};
+
+	ObservationView.prototype._showErrorDialog = function (title, message) {
+		(new ModalView(
+			'<p>' + message + '</p>',
+			{
+				title: title,
+				classes: ['modal-error']
+			}
+		)).show();
 	};
 
 	/**
