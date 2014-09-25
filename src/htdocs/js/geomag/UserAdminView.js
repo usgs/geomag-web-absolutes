@@ -3,12 +3,12 @@ define ([
 	'mvc/View',
 	'util/Util',
 
-	'geomag/UserView'
+	'geomag/UsersView'
 ], function (
 	View,
 	Util,
 
-	UserView
+	UsersView
 ) {
 	'use strict';
 
@@ -25,7 +25,7 @@ define ([
 
 	var UserAdminView = function (options) {
 		this._options = Util.extend({}, DEFAULTS, options);
-		View.call(this. this._options);
+		View.call(this, this._options);
 	};
 
 	UserAdminView.prototype = Object.create(View.prototype);
@@ -55,22 +55,17 @@ define ([
 						'</li>',
 						'<li>',
 							'<label class="email" for="email">',
-										'email</label>',
+										'Email</label>',
 							'<input type="text" id="email"/>',
 						'</li>',
 						'<li>',
 							'<label class="password" for="password">',
-										'password</label>',
+										'Password</label>',
 							'<input type="text" id="password"/>',
 						'</li>',
 						'<li>',
-							'<label class="password" for="password">',
-										'password</label>',
-							'<input type="passowrd" id="password"/>',
-						'</li>',
-						'<li>',
 							'<label class="confirm password" for="confirm password">',
-										'confirm password</label>',
+										'Confirm Password</label>',
 							'<input type="passowrd" id="password"/>',
 						'</li>',
 						'<li>',
@@ -81,7 +76,7 @@ define ([
 						'</li>',
 						'<li>',
 							'<label class="enabled">',
-								'<input type="enabled" id="enabled"/>',
+								'<input type="checkbox" id="enabled"/>',
 								'Enabled',
 							'</label>',
 						'</li>',
