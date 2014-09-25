@@ -38,7 +38,6 @@ class ObservationFile {
 		'Include V Set' => 'vertical_intensity_valid'
 	);
 
-
 	// Raw data fields from the data file. Populated during file parsing and
 	// converted to objects and corresponding ID values during toObservation
 	// method.
@@ -391,7 +390,10 @@ class ObservationFile {
 	 *
 	 */
 	protected function _saveCurrentReading () {
-		if ($this->currentReading !== null) {
+		if ($this->currentReading !== null &&
+				// when a set is empty, all measurements have time "0000"
+				// and there are fewer than 12 measurements
+				count($this->currentReading['measurements']) >= 12) {
 			$this->readings[$this->currentReading['set_number']] =
 					$this->currentReading;
 		}
@@ -436,6 +438,7 @@ class ObservationFile {
 
 			// Old file format does not support remarks on a per-reading level
 			$reading['annotation'] = null;
+
 
 			// Update absolute begin/end based on begin/end from this reading
 			$begin = ($begin === null) ? $beginEnd['begin'] :
@@ -529,7 +532,6 @@ class ObservationFile {
 		$end = null;
 
 		foreach ($reading['measurements'] as $mKey => $measurement) {
-
 			if ($mKey === 'FirstMarkUp' || $mKey === 'FirstMarkDown' ||
 					$mKey === 'SecondMarkUp' || $mKey === 'SecondMarkDown') {
 				continue; // No times on these measurements
