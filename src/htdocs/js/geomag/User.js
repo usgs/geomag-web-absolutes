@@ -12,29 +12,16 @@ define([
 		'id': null,
 		'name': null,
 		'username': null,
-		'roles': null
+		'default_observatory_id': null,
+		'email': null,
+		'last_login': null,
+		'admin': null
 	};
 
 	var User = function (attributes) {
 		Model.call(this, Util.extend({}, DEFAULTS, attributes));
 	};
-
-	User.prototype = Object.create(Util.extend({}, Model.prototype, {
-		hasRole: function (role) {
-			var roles = this.get('roles'),
-			    len = roles.length,
-			    i = 0;
-
-			// TODO :: Is "roles" a collection or an array?
-			for (i = 0; i < len; i++) {
-				if (roles[i].get('id') === role.get('id')) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-	}));
+	User.prototype = Object.create(Model.prototype);
 
 	return User;
 });
