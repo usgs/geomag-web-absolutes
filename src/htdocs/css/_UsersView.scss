@@ -1,0 +1,12 @@
+.users-view {
+	> tbody > tr {
+
+		> td {
+			cursor:pointer;
+		}
+
+		&.selected > td {
+			background-color:#BFF;
+		}
+	}
+}
