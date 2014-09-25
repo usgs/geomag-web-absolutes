@@ -117,7 +117,7 @@ define([
 		el.innerHTML = [
 			'<section class="observation-meta-view">',
 				'<div class="row">',
-					'<div class="column one-of-two right-aligned">',
+					'<div class="column one-of-two left-aligned">',
 						'<label for="', idPrefix, '-date">Date</label>',
 						'<input id="',  idPrefix, '-date" type="text"',
 								' class="observation-date" placeholder="YYYY-MM-DD"/>',
@@ -129,7 +129,7 @@ define([
 						'<input id="',  idPrefix, '-piertemp" type="text"',
 								' class="pier-temperature"/>',
 					'</div>',
-					'<div class="column one-of-two right-aligned">',
+					'<div class="column one-of-two left-aligned">',
 						'<label for="', idPrefix, '-observatory">Observatory</label>',
 						'<select id="', idPrefix, '-observatory"',
 								' class="observatory"></select>',
