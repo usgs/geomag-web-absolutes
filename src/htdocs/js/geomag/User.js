@@ -20,8 +20,8 @@ define([
 		'email': null,
 		'password': null,
 		'last_login': null,
-		'admin': 'N',
-		'enabled': 'Y'
+		'admin': null,
+		'enabled': null
 	};
 
 	// static reference to currently logged in user
