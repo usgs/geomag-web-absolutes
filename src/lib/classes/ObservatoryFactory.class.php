@@ -348,7 +348,7 @@ class ObservatoryFactory {
 
 		$statement->bindParam(':observatory_id', $observatoryId, PDO::PARAM_INT);
 		$statement->bindParam(':serial_number', $serial, PDO::PARAM_STR);
-		$statement->bindParam(':type', $type, PDO::PARAM_INT);
+		$statement->bindParam(':type', $type, PDO::PARAM_STR);
 
 		try {
 			$statement->execute();
