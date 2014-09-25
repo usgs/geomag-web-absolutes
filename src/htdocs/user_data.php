@@ -15,24 +15,23 @@ if ($id !== null) {
 $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] :
 		 'GET';
 
+if ($CURRENT_USER['admin'] !== 'Y') {
+	header('HTTP/1.1 403 Forbiden');
+	echo 'Only admin users may view or change user data.';
+	exit();
+}
+
 // process request
 try {
 	// 09/04/12 -- EMM: This exception is for testing client-side error handling.
 	//                  Remove it for production.
 	//throw new Exception('foo');
 	if ($method === 'GET') {
-		// validate id parameter
-		if (!isset($_GET['id'])) {
-			header('HTTP/1.1 400 Bad Request');
-			echo 'user id is a required parameter';
-			exit();
-		}
-
 		$id = intval($_GET['id']);
 		if ($id <= 0) {
 			$user = $USER_FACTORY->getAllUsers();
 		} else {
-			$user = $USER_FACTORY->getUser();
+			$user = $USER_FACTORY->getUser($id);
 		}
 
 		// find matching observation
