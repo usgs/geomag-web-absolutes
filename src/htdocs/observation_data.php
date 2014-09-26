@@ -126,6 +126,20 @@ try {
 				exit();
 			}
 
+			// check current status
+			$existingObservation = $OBSERVATION_FACTORY->getObservation(
+					$observation->id);
+			if ($existingObservation === null) {
+				header('HTTP/1.1 400 Bad Request');
+				echo 'cannot update an observation that does not exist';
+				exit();
+			}
+			// make sure not published
+			if ($existingObservation->reviewed === 'Y') {
+				header('HTTP/1.1 403 Forbidden');
+				echo 'cannot update an observation that has already been published';
+				exit();
+			}
 			// check user permissions
 			if (!$isAdmin &&
 					$observation->observatory_id !== $defaultObservatoryId) {
