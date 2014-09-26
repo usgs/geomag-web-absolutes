@@ -104,6 +104,14 @@ try {
 				echo 'cannot create an observation without an observatory';
 				exit();
 			}
+
+			// check user permissions
+			if (!$isAdmin &&
+					$observation->observatory_id !== $defaultObservatoryId) {
+				header('HTTP/1.1 403 Forbidden');
+				echo 'you are not allowed to create observations for this observatory';
+				exit();
+			}
 			$observation = $OBSERVATION_FACTORY->createObservation($observation);
 		} else if ($method === 'PUT') {
 			// update
