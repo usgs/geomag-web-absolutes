@@ -14,6 +14,8 @@ if ($id !== null) {
 // POST,GET,PUT,DELETE => Create,Read,Update,Delete
 $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] :
 		 'GET';
+$isAdmin = ($CURRENT_USER['admin'] === 'Y');
+$defaultObservatoryId = intval($CURRENT_USER['default_observatory_id']);
 
 // process request
 try {
@@ -51,6 +53,12 @@ try {
 			echo $json;
 		}
 	} else if ($method === 'DELETE') {
+		if (!$isAdmin) {
+			// only admin can delete
+			header('HTTP/1.1 403 Forbidden');
+			echo 'only admin users can delete observations';
+			exit();
+		}
 		// php doesn't populate $_POST when method is DELETE.
 		$params = array();
 		parse_str(file_get_contents('php://input'), $params);
