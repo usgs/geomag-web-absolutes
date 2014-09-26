@@ -100,10 +100,10 @@ class ObservationFileParser {
 		return null;
 	}
 
-		/**
+	/**
 	 * Looks through the piers on the given $observatory for a pier with the given
 	 * $name that began prior to the given $begin and ended after the given $end
-	 * (or has not yet ended).
+	 * (or has not yet ended). Creates the pier if it doesn't exist.
 	 *
 	 * @param $observatory_code {ObservatoryDetail}
 	 *        The observatory to search.
@@ -127,6 +127,7 @@ class ObservationFileParser {
 			return null;
 		}
 
+		// If the pier exists, return it
 		foreach ($observatory->piers as $pier) {
 			if ($pier->name === $pier_name &&
 					$pier->correction == $pier_correction) {
@@ -134,23 +135,26 @@ class ObservationFileParser {
 			}
 		}
 
+		// If the pier doesn't exist, create it then find it and return it.
 		$this->factory->createPier($observatory->id, $pier_name, $pier_correction);
 		$observatory->piers = $this->factory->getPiers($observatory->id);
-
 		foreach ($observatory->piers as $pier) {
 			if ($pier->name === $pier_name &&
 					$pier->correction == $pier_correction) {
 				return $pier;
 			}
 		}
-		// WTF? TODO this should never happen, do something about it
+
+		// This should never happen
+		$this->__addWarning("Failed to create '${pier}' pier for '${observatory}'.",
+				$warnings);
 		return null;
 	}
 
 	/**
 	 * Looks through the marks on the given $pier for a mark with the given
 	 * $name that began prior to the given $begin and ended after the given $end
-	 * (or has not yet ended).
+	 * (or has not yet ended). Creates the mark if it doesn't exist.
 	 *
 	 * @param $observatory_code {ObservatoryDetail}
 	 *        The observatory to search.
@@ -178,6 +182,7 @@ class ObservationFileParser {
 			return null;
 		}
 
+		// If the mark exists, return it.
 		foreach ($pier->marks as $mark) {
 			if ($mark->name === $mark_name &&
 					$mark->azimuth == $mark_azimuth) {
@@ -185,6 +190,7 @@ class ObservationFileParser {
 			}
 		}
 
+		// If the mark doesn't exist, create it then find it and return it.
 		$this->factory->createMark($pier->id, $mark_name, $mark_azimuth);
 		$pier->marks = $this->factory->getMarks($pier->id);
 		foreach ($pier->marks as $mark) {
@@ -193,14 +199,19 @@ class ObservationFileParser {
 				return $mark;
 			}
 		}
-		// WTF? TODO this should never happen, do something about it
+
+		// This should never happen
+		$warning = "Failed to create '${mark}' mark for '${pier}' " .
+				" at '${observatory}'.";
+		$this->__addWarning($warning, $warnings);
 		return null;
 	}
 
 	/**
 	 * Looks through the instruments on the given $observatory for an instrument
 	 * with the given $serial number that began prior to the given $begin and
-	 * ended after the given $end (or has not yet ended).
+	 * ended after the given $end (or has not yet ended). Creates the mark if it
+	 * doesn't exist.
 	 *
 	 * @param $observatory_code {ObservatoryDetail}
 	 *        The observatory to search.
@@ -231,12 +242,14 @@ class ObservationFileParser {
 			return null;
 		}
 
+		// If the instrument exists, return it.
 		foreach ($observatory->instruments as $inst) {
 			if ($inst->serial_number === $serial && $inst->type === $type) {
 				return $inst;
 			}
 		}
 
+		// If the instrument doesn't exist, create it then find it and return it.
 		$this->factory->createInstrument($observatory->id, $serial, $type);
 		$observatory->instruments = $this->factory->getInstruments($observatory->id);
 		foreach ($observatory->instruments as $inst) {
@@ -244,7 +257,11 @@ class ObservationFileParser {
 				return $inst;
 			}
 		}
-		// WTF? TODO this should never happen, do something about it
+
+		// This should never happen
+		$warning = "Failed to create '${instrument}' '${type}' instrument" .
+				" at '${observatory}'.";
+		$this->__addWarning($warning, $warnings);
 		return null;
 	}
 
