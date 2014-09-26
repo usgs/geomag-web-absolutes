@@ -120,6 +120,12 @@ try {
 				echo 'cannot update an observation without an id';
 				exit();
 			}
+			if ($observation->observatory_id === null) {
+				header('HTTP/1.1 400 Bad Request');
+				echo 'cannot update an observation without an observatory';
+				exit();
+			}
+
 			$observation = $OBSERVATION_FACTORY->updateObservation($observation);
 		} else {
 				header('HTTP/1.1 405 Method not allowed');
