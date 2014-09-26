@@ -8,9 +8,13 @@ if (!isset($TEMPLATE)) {
 	if (isset($_POST['username'])) {
 		// trying to authenticate
 		$user = $USER_FACTORY->authenticate($_POST['username'], $_POST['password']);
-		if ($user !== null && ($user['enabled'] === 'Y')) {
-			// logged in
-			$_SESSION['userid'] = $user['ID'];
+		if ($user !== null) {
+			if ($user['enabled'] === 'Y') {
+				// logged in
+				$_SESSION['userid'] = $user['ID'];
+			} else {
+				$error = 'User is no longer enabled';
+			}
 		} else {
 			$error = 'Invalid username or password';
 		}
