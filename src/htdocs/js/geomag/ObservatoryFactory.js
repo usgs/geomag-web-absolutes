@@ -215,6 +215,12 @@ define([
 		readings = json.readings;
 		for (r = 0, rlen = readings.length; r < rlen; r++) {
 			reading = readings[r];
+			reading.startD = this._toSeconds(reading.startD);
+			reading.endD = this._toSeconds(reading.endD);
+			reading.startH = this._toSeconds(reading.startH);
+			reading.endH = this._toSeconds(reading.endH);
+			reading.startZ = this._toSeconds(reading.startZ);
+			reading.endZ = this._toSeconds(reading.endZ);
 			measurements = reading.measurements;
 			for (m = 0, mlen = measurements.length; m < mlen; m++) {
 				measurement = measurements[m];
@@ -602,6 +608,12 @@ define([
 		    data = [];
 		for (i = 0, len = readings.length; i < len; i++) {
 			reading = Util.extend({}, readings[i]);
+			reading.startD = this._toMilliseconds(reading.startD);
+			reading.endD = this._toMilliseconds(reading.endD);
+			reading.startH = this._toMilliseconds(reading.startH);
+			reading.endH = this._toMilliseconds(reading.endH);
+			reading.startZ = this._toMilliseconds(reading.startZ);
+			reading.endZ = this._toMilliseconds(reading.endZ);
 			reading.measurements = this._getMeasurements(reading.measurements);
 			data[i] = new Reading(reading);
 		}
