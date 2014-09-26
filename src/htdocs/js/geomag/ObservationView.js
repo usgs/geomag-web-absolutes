@@ -149,6 +149,13 @@ define([
 		    observatory_id,
 		    observatory;
 
+		//filter observatories list for non admin users
+		if (User.admin !== 'Y' && User.default_observatory_id !== null) {
+			observatories = new Collection(observatories);
+			observatories = [observatories.get(User.default_observatory_id)];
+		}
+
+
 		// convert to collection
 		this._observatories = observatories = new Collection(observatories);
 		// bind before select code below, so this will run for first select
