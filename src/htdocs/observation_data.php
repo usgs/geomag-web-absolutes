@@ -150,6 +150,7 @@ try {
 			$observation = $OBSERVATION_FACTORY->updateObservation($observation);
 		} else {
 				header('HTTP/1.1 405 Method not allowed');
+				header('Allow: GET, POST, PUT, DELETE');
 				echo 'unsupported HTTP method';
 				exit();
 		}
