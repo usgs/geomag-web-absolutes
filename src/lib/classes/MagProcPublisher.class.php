@@ -54,8 +54,8 @@ class MagProcPublisher {
 
 		if ($reading->declination_valid === 'Y') {
 			$component = 'D';
-			$start_time = date("Y-m-d H:i:s", substr($reading->startD, 0, -3));
-			$end_time = date("Y-m-d H:i:s", substr($reading->endD, 0, -3));
+			$start_time = date("Y-m-d H:i:s", $reading->startD);
+			$end_time = date("Y-m-d H:i:s", $reading->endD);
 			$abs = $reading->absD;
 			$baseline = $reading->baseD;
 
@@ -64,8 +64,8 @@ class MagProcPublisher {
 
 		if ($reading->horizontal_intensity_valid === 'Y') {
 			$component = 'H';
-			$start_time = date("Y-m-d H:i:s", substr($reading->startH, 0, -3));
-			$end_time = date("Y-m-d H:i:s", substr($reading->endH, 0, -3));
+			$start_time = date("Y-m-d H:i:s", $reading->startH);
+			$end_time = date("Y-m-d H:i:s", $reading->endH);
 			$abs = $reading->absH;
 			$baseline = $reading->baseH;
 
@@ -74,8 +74,8 @@ class MagProcPublisher {
 
 		if ($reading->vertical_intensity_valid === 'Y') {
 			$component = 'Z';
-			$start_time = date("Y-m-d H:i:s", substr($reading->startZ, 0, -3));
-			$end_time = date("Y-m-d H:i:s", substr($reading->endZ, 0, -3));
+			$start_time = date("Y-m-d H:i:s", $reading->startZ);
+			$end_time = date("Y-m-d H:i:s", $reading->endZ);
 			$abs = $reading->absZ;
 			$baseline = $reading->baseZ;
 
