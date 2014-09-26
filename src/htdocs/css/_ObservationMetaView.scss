@@ -13,13 +13,13 @@
 			display: block;
 			font-weight: bold;
 			padding-right: 5px;
+			line-height: 1.9;
 		}
 
 		> input,
 		> select,
 		> textarea,
-		> .value,
-		> .pier-correction-value {
+		> .value {
 			margin-bottom: 1em;
 		}
 
@@ -33,6 +33,14 @@
 		float: left;
 	}
 
+	.julian-day-value {
+		padding: 0.5em;
+		font-size: 0.75em;
+		background: #f8f8f8;
+		width: 3em;
+		margin-left: 2px;
+		text-align: center;
+	}
 
 	// left and right stack, and change label text alignment
 	@media screen and (min-width:768px) {
@@ -42,7 +50,7 @@
 			> .label {
 				float: left;
 				clear: left;
-				width: 8em;
+				width: 7em;
 				padding-right: 8px;
 			}
 

@@ -7,6 +7,12 @@
 		padding-right:16px;
 	}
 
+	table {
+		padding: 1em;
+		border:1px solid #d8d8d8;
+		background: #f8f8f8;
+	}
+
 	td.mean,
 	td.absolute,
 	td.baseline {
@@ -23,6 +29,10 @@
 	}
 	.pier-correction {
 		font-size:smaller;
+
+		td {
+			padding-top: 1em;
+		}
 	}
 
 }

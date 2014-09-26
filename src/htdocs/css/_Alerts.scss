@@ -31,7 +31,8 @@
 	}
 }
 
-.alert.error {
+.alert.error,
+input.error {
 	background: #fff1f0;
 	color: #d85030;
 	border:1px solid rgba(216,80,48,.3);
@@ -50,9 +51,4 @@
 		border-bottom:1px solid rgba(226,131,39,.3);
 	}
 }
-
-input.error {
-	background: rgba(216,80,48,.3);
-}
-
 

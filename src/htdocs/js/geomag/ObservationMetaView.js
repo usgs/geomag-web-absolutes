@@ -79,7 +79,7 @@ define([
 		    d = begin.getUTCDate();
 
 		this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
-		this._julianDay.innerHTML = this.getJulianDay(begin);
+		this._julianDay.value = this.getJulianDay(begin);
 		this._pierTemperature.value = obs.get('pier_temperature');
 	};
 
@@ -117,18 +117,19 @@ define([
 		el.innerHTML = [
 			'<section class="observation-meta-view">',
 				'<div class="row">',
-					'<div class="column one-of-two right-aligned">',
+					'<div class="column one-of-two left-aligned">',
 						'<label for="', idPrefix, '-date">Date</label>',
 						'<input id="',  idPrefix, '-date" type="text"',
-								' class="date" placeholder="YYYY-MM-DD"/>',
-						'<div class="julian-day label">Julian Day</div>',
-						'<div class="julian-day-value value"></div>',
+								' class="observation-date" placeholder="YYYY-MM-DD"/>',
+						'<label for="', idPrefix, '-julian-day">Julian Day</label>',
+						'<input id="', idPrefix, '-julian-day" type="text"',
+								' class="julian-day-value" disabled />',
 						'<label for="', idPrefix, '-piertemp">',
 								'Pier <abbr title="Temperature">Temp</abbr></label>',
 						'<input id="',  idPrefix, '-piertemp" type="text"',
 								' class="pier-temperature"/>',
 					'</div>',
-					'<div class="column one-of-two right-aligned">',
+					'<div class="column one-of-two left-aligned">',
 						'<label for="', idPrefix, '-observatory">Observatory</label>',
 						'<select id="', idPrefix, '-observatory"',
 								' class="observatory"></select>',
@@ -179,7 +180,7 @@ define([
 					formatOption: this._formatInstrument
 				});
 		// observation inputs
-		this._date = date = el.querySelector('.date');
+		this._date = date = el.querySelector('.observation-date');
 		this._julianDay = this._el.querySelector('.julian-day-value');
 		this._pierTemperature = pierTemperature =
 				el.querySelector('.pier-temperature');
