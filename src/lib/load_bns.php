@@ -2,6 +2,9 @@
 
 date_default_timezone_set('UTC');
 
+// work from lib directory
+chdir(dirname($argv[0]));
+
 $CONFIG_FILE = '../conf/config.ini';
 
 // Initial configuration stuff
