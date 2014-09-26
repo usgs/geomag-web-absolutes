@@ -44,7 +44,7 @@ foreach ($files as $file) {
 
 	if (count($warnings) !== 0) {
 		$errorCount += 1;
-		print "The following warnings occurred while processing file '${file}'\n  ";
+		print "The following warnings occurred while processing '${file}'\n  ";
 		print implode("\n  ", $warnings) . "\n";
 	}
 }
