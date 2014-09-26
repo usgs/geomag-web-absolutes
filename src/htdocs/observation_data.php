@@ -126,6 +126,13 @@ try {
 				exit();
 			}
 
+			// check user permissions
+			if (!$isAdmin &&
+					$observation->observatory_id !== $defaultObservatoryId) {
+				header('HTTP/1.1 403 Forbidden');
+				echo 'you are not allowed to update observations for this observatory';
+				exit();
+			}
 			$observation = $OBSERVATION_FACTORY->updateObservation($observation);
 		} else {
 				header('HTTP/1.1 405 Method not allowed');
