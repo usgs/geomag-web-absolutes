@@ -8,7 +8,7 @@ if (!isset($TEMPLATE)) {
 	if (isset($_POST['username'])) {
 		// trying to authenticate
 		$user = $USER_FACTORY->authenticate($_POST['username'], $_POST['password']);
-		if ($user !== null) {
+		if ($user !== null && ($user['enabled'] === 'Y')) {
 			// logged in
 			$_SESSION['userid'] = $user['ID'];
 		} else {
