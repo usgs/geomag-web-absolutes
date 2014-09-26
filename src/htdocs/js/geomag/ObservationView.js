@@ -155,7 +155,6 @@ define([
 			observatories = [observatories.get(User.default_observatory_id)];
 		}
 
-
 		// convert to collection
 		this._observatories = observatories = new Collection(observatories);
 		// bind before select code below, so this will run for first select
