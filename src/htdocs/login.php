@@ -11,7 +11,7 @@ if (!isset($TEMPLATE)) {
 		if ($user !== null) {
 			if ($user['enabled'] === 'Y') {
 				// logged in
-				$_SESSION['userid'] = $user['ID'];
+				$_SESSION['userid'] = $user['id'];
 			} else {
 				$error = 'User is no longer enabled';
 			}
