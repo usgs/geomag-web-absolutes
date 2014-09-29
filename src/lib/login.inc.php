@@ -18,7 +18,7 @@ if ($CURRENT_USER === null) {
 } else {
 	// logged in, define user for js.
 	$FOOT = '<script>' .
-			'define("geomag/User", ' . json_encode($CURRENT_USER) . ');' .
+			'define("CurrentUser", ' . json_encode($CURRENT_USER) . ');' .
 			'</script>' .
 			(isset($FOOT) ? $FOOT : '');
 }
