@@ -4,13 +4,15 @@ define([
 	'util/Events',
 	'util/Util',
 	'geomag/ObservatoryFactory',
-	'geomag/ObservationsView'
+	'geomag/ObservationsView',
+	'geomag/User'
 ], function (
 	View,
 	Events,
 	Util,
 	ObservatoryFactory,
-	ObservationsView
+	ObservationsView,
+	User
 ) {
 	'use strict';
 
@@ -46,6 +48,11 @@ define([
 		    el = this._el,
 		    id = this._options.observatoryId,
 		    hash;
+
+		this._user = User.getCurrentUser();
+		if (this._user.get('admin') !== 'Y') {
+			id = this._user.get('default_observatory_id') || id;
+		}
 
 		hash = this._getHash();
 
@@ -121,12 +128,19 @@ define([
 	};
 
 	ObservatoryView.prototype._setObservatoryTitle = function (data) {
-		var i = 0, len = data.length, observatory;
+		var i = 0, len = data.length, observatory,
+		    id;
+
+		if (this._user.get('admin') !== 'Y') {
+			id = parseInt(this._user.get('default_observatory_id'), 10);
+		} else {
+			id = parseInt(this._options.observatoryId, 10);
+		}
 
 		for (; i < len; i++) {
 			observatory = data[i];
-			if (observatory.get('id') === this._options.observatoryId) {
-				this._observatoryTitle.innerHTML = observatory.get('name');
+			if (observatory.get('id') === id) {
+				this._observatoryTitle.innerHTML = observatory.get('code');
 				break;
 			}
 		}
