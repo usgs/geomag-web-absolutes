@@ -386,7 +386,7 @@ define([
 	 */
 	ObservationMetaView.prototype._formatPier = function (pier) {
 		return pier.get('name') +
-				' (' + pier.get('correction') + ')';
+				' (' + pier.get('correction') + ' nT)';
 	};
 
 	/**
