@@ -147,12 +147,26 @@ define([
 		    observation = this._observation,
 		    calculator = this._calculator,
 		    observatory_id,
-		    observatory;
+		    observatory,
+		    i,
+		    len;
 
 		//filter observatories list for non admin users
-		if (User.admin !== 'Y' && User.default_observatory_id !== null) {
-			observatories = new Collection(observatories);
-			observatories = [observatories.get(User.default_observatory_id)];
+		if (User.admin !== 'Y') {
+			if (User.default_observatory_id !== null) {
+				observatory_id = parseInt(User.default_observatory_id, 10);
+
+				for (i = 0, len = observatories.length; i < len; i++) {
+					if (observatories[i].id === observatory_id) {
+						observatories = [observatories[i]];
+					}
+				}
+				if (observatories.length !== 1) {
+					observatories = [];
+				}
+			} else {
+				observatories = [];
+			}
 		}
 
 		// convert to collection
