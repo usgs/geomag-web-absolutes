@@ -14,7 +14,6 @@ class UserFactory {
 	private $insertUser;
 
 	private $updateUser;
-	private $deleteUser;
 
 	public function __construct ($db) {
 		$this->db = $db;
@@ -28,23 +27,30 @@ class UserFactory {
 	 *
 	 */
 	private function _initStatements () {
-		$this->selectUserById = $this->db->prepare(
-				'SELECT * FROM user WHERE ID = :id');
-		$this->selectUserByUsername = $this->db->prepare(
-				'SELECT * FROM user WHERE username = :username');
-		$this->selectUserByCredentials = $this->db->prepare(
-				'SELECT * FROM user WHERE username = :username AND ' .
-					'password = :password');
-		$this->selectUsers = $this->db->prepare(
-				'SELECT ' .
-					'ID as id, ' .
+		$userFields =
+				'ID as id, ' .
 					'name, ' .
 					'username, ' .
 					'default_observatory_id, ' .
 					'email, ' .
 					'last_login, ' .
 					'admin, ' .
-					'enabled ' .
+					'enabled ';
+		$this->selectUserById = $this->db->prepare(
+				'SELECT ' .
+					$userFields .
+				'FROM user WHERE ID = :id');
+		$this->selectUserByUsername = $this->db->prepare(
+				'SELECT ' .
+					$userFields .
+				'FROM user WHERE username = :username');
+		$this->selectUserByCredentials = $this->db->prepare(
+				'SELECT ' .
+					$userFields .
+				'FROM user WHERE username = :username AND password = :password');
+		$this->selectUsers = $this->db->prepare(
+				'SELECT ' .
+					$userFields .
 				'FROM ' .
 					'user ' .
 				'ORDER BY ' .
@@ -65,13 +71,11 @@ class UserFactory {
 
 		$this->updateUser = $this->db->prepare(
 				'UPDATE user set ' .
-					'ID=:id, name=:name, username=:username,' .
+					'name=:name, username=:username,' .
 					'default_observatory_id=:default_observatory_id, email=:email, ' .
 					'password=:password, last_login=:last_login, admin=:admin, ' .
-					'enabled=:enabled'
+					'enabled=:enabled WHERE ID = :id'
 					);
-		$this->deleteUser = $this->db->prepare(
-			'DELETE FROM user WHERE ID=:id');
 	}
 
 	/**
@@ -217,6 +221,8 @@ class UserFactory {
 	 *
 	 */
 	public function createUser ($user) {
+		$this->db->beginTransaction();
+
 		$this->insertUser->bindValue(':name', $user['name'], PDO::PARAM_STR);
 		$this->insertUser->bindValue(':username', $user['username'],
 				PDO::PARAM_STR);
@@ -233,9 +239,11 @@ class UserFactory {
 		try {
 			$this->insertUser->execute();
 			$this->db->commit();
+			$user_id = intval($this->db->lastInsertId());
+			return $this->getUser($user_id);
 		} catch (Exception $e) {
 			$this->db->rollback;
-			$this->triggerError($e);
+			$this->triggerError($this->insertUser, $e);
 		}
 	}
 
@@ -248,6 +256,8 @@ class UserFactory {
 	 * @return array of user information, or null if no user logged in.
 	 */
 	public function updateUser ($user) {
+		$this->db->beginTransaction();
+
 		$this->updateUser->bindValue(':id', intval($user['id']), PDO::PARAM_INT);
 		$this->updateUser->bindValue(':name', $user['name'], PDO::PARAM_STR);
 		$this->updateUser->bindValue(':username', $user['username'],
@@ -265,32 +275,27 @@ class UserFactory {
 		try {
 			$this->updateUser->execute();
 			$this->db->commit();
+			return $this->getUser($user['id']);
 		} catch (Exception $e) {
 			$this->db->rollback;
-			$this->triggerError($e);
+			$this->triggerError($this->updateUser, $e);
 		}
 	}
 
-	/**
-	 * Delete user by id.
-	 * @param $id {String}
-	 *        the username id.
-	 */
-	public function deleteUser ($id) {
-		$this->deleteUser->bindValue(':id', intval($id), PDO::PARAM_INT);
-	}
-
-	protected function triggerError (&$statement) {
+	protected function triggerError (&$statement, $e) {
 		$error = $statement->errorInfo();
 		$statement->closeCursor();
 
-		$errorMessage = (is_array($error)&&isset($error[2])&&isset($error[0])) ?
-				'[' . $error[0] . '] :: ' . $error[2] : 'Unknown SQL Error';
-		$errorCode = (is_array($error)&&isset($error[1])) ?
-				$error[1] : -999;
+		if (is_array($error) && isset($error[2]) && isset($error[0])) {
+			$errorMessage = '[' . $error[0] . '] :: ' . $error[2];
+			$errorCode = (isset($error[1])) ?
+					$error[1] : -999;
+		} else {
+			$errorMessage = $e->getMessage();
+			$errorCode = -4242;
+		}
 
 		throw new Exception($errorMessage, $errorCode);
 	}
-
 
 }
