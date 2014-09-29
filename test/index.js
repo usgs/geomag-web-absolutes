@@ -28,6 +28,7 @@ if (!Function.prototype.bind) {
 	};
 }
 
+define('CurrentUser', null);
 
 require.config({
 	baseUrl: '..',
