@@ -397,7 +397,7 @@ define([
 	 */
 	ObservationMetaView.prototype._formatMark = function (mark) {
 		return mark.get('name') +
-				' (' + mark.get('azimuth') + ')';
+				' (' + mark.get('azimuth') + '&deg;)';
 	};
 
 
