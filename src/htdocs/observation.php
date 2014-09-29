@@ -15,7 +15,8 @@ if (!isset($TEMPLATE)) {
 	$FOOT =
 		'<script>
 			var observationId = ' . $id . ';
-			var MOUNT_PATH = \'' . $MOUNT_PATH .'\';
+			var MOUNT_PATH = \'' . $MOUNT_PATH . '\';
+			var REALTIME_DATA_URL = \'' . $REALTIME_DATA_URL . '\';
 		</script>' .
 		'<script src="' . $MOUNT_PATH . '/js/observation.js"></script>' .
 		'<script src="http://localhost:35729/livereload.js?snipver=1"></script>';
