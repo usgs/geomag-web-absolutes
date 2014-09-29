@@ -198,7 +198,7 @@ define ([
 
 		if (this._passwordField.value !== '') {
 			if (this._passwordField.value !== this._confirmField.value) {
-				throw new Exception('Passwords do not match!');
+				throw new Error('Passwords do not match!');
 			} else {
 				formData.password = this._passwordField.value;
 				formData.confirm = this._confirmField.value;
