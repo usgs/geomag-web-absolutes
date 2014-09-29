@@ -41,7 +41,7 @@ define([
 				className: 'last_login',
 				title: 'Last Login',
 				format: function (user) {
-					return Formatter.date(parseInt(user.get('last_login'), 10));
+					return Formatter.date(parseInt(user.get('last_login'), 10)*1000);
 				}
 			},
 			{
@@ -62,7 +62,8 @@ define([
 				className: 'edit',
 				title: 'Edit?',
 				format: function (user) {
-					return '<button class="edituser" data-id="' + user.get('id') + '">Edit</button>';
+					return '<button class="edituser" data-id="' + user.get('id') +
+							'">Edit</button>';
 				}
 			}
 		],
