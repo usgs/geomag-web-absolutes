@@ -3,12 +3,11 @@
 class MagProcPublisher {
 
 	private $db;
-	private $insertCalibartion;
+	private $insertCalibration;
 
 	function __construct ($db) {
 		$this->db = $db;
 		$this->_initStatements();
-		$this->log = fopen('/tmp/publish.log', 'a+');
 	}
 
 	public function publish ($observation, $observatory, $observer, $reviewer) {
@@ -21,12 +20,10 @@ class MagProcPublisher {
 				$this->_publishReading($reading, $observatory->code,
 						$observer, $reviewer);
 			}
-fwrite($this->log, "committing....\n");
 			$this->db->commit();
-fwrite($this->log, "success!\n");
 		} catch (Exception $e) {
-fwrite($this->log, "publish error\n");
 			$this->db->rollback();
+			$this->insertCalibration->closeCursor();
 			$this->triggerError($e);
 		}
 	}
@@ -57,31 +54,31 @@ fwrite($this->log, "publish error\n");
 
 		if ($reading->declination_valid === 'Y') {
 			$component = 'D';
-			$start_time = date("Y-m-d H:i:s",$reading->startD);
-			$end_time = date("Y-m-d H:i:s",$reading->endD);
+			$start_time = date("Y-m-d H:i:s", $reading->startD);
+			$end_time = date("Y-m-d H:i:s", $reading->endD);
 			$abs = $reading->absD;
 			$baseline = $reading->baseD;
-fwrite($this->log, "Inserting D component\n");
+
 			$this->insertCalibration->execute();
 		}
 
 		if ($reading->horizontal_intensity_valid === 'Y') {
 			$component = 'H';
-			$start_time = date("Y-m-d H:i:s",$reading->startH);
-			$end_time = date("Y-m-d H:i:s",$reading->endH);
+			$start_time = date("Y-m-d H:i:s", $reading->startH);
+			$end_time = date("Y-m-d H:i:s", $reading->endH);
 			$abs = $reading->absH;
 			$baseline = $reading->baseH;
-fwrite($this->log, "Inserting H component\n");
+
 			$this->insertCalibration->execute();
 		}
 
 		if ($reading->vertical_intensity_valid === 'Y') {
 			$component = 'Z';
-			$start_time = date("Y-m-d H:i:s",$reading->startZ);
-			$end_time = date("Y-m-d H:i:s",$reading->endZ);
+			$start_time = date("Y-m-d H:i:s", $reading->startZ);
+			$end_time = date("Y-m-d H:i:s", $reading->endZ);
 			$abs = $reading->absZ;
 			$baseline = $reading->baseZ;
-fwrite($this->log, "Inserting Z component\n");
+
 			$this->insertCalibration->execute();
 		}
 
@@ -99,16 +96,19 @@ fwrite($this->log, "Inserting Z component\n");
 				')');
 	}
 
-	protected function triggerError (&$statement) {
-		$error = $statement->errorInfo();
-		$statement->closeCursor();
+	protected function triggerError ($exception) {
+		$error = $this->insertCalibration->errorInfo();
 
-		$errorMessage = (is_array($error)&&isset($error[2])&&isset($error[0])) ?
-				'[' . $error[0] . '] :: ' . $error[2] : 'Unknown SQL Error';
-		$errorCode = (is_array($error)&&isset($error[1])) ?
-				$error[1] : -999;
+		if (is_array($errorInfo)) {
+			$errorMessage = (isset($error[2]) && isset($error[0])) ?
+					'[' . $error[0] . '] :: ' . $error[2] : 'Unknown SQL Error';
+			$errorCode = (isset($error[1])) ?
+					$error[1] : -999;
 
-		throw new Exception($errorMessage, $errorCode);
+			throw new Exception($errorMessage, $errorCode);
+		} else {
+			throw $exception;
+		}
 	}
 
 }
