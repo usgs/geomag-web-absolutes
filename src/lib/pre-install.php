@@ -36,7 +36,8 @@ $DEFAULTS = array(
 	'USE_DATABASE_SESSIONS' => 'true',
 	'MAGPROC_DSN' => 'mysql:host=hostname;dbname=dbname',
 	'MAGPROC_USER' => '',
-	'MAGPROC_PASS' => ''
+	'MAGPROC_PASS' => '',
+	'REALTIME_DATA_URL' => '/map/observatories_data.json.php'
 );
 
 $HELP_TEXT = array(
@@ -49,7 +50,8 @@ $HELP_TEXT = array(
 	'USE_DATABASE_SESSIONS' => 'Store session information in database',
 	'MAGPROC_DSN' => 'Database connection DSN string for magproc database',
 	'MAGPROC_USER' => 'Read/write username for magproc database connections',
-	'MAGPROC_PASS' => 'Password for database user'
+	'MAGPROC_PASS' => 'Password for database user',
+	'REALTIME_DATA_URL' => 'Base URL for Realtime Data Factory'
 );
 
 
