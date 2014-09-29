@@ -3,15 +3,17 @@
 if (!isset($TEMPLATE)) {
 	// load configuration
 	include_once '../conf/config.inc.php';
-	session_start();
 
 	if (isset($_POST['username'])) {
 		// trying to authenticate
 		$user = $USER_FACTORY->authenticate($_POST['username'], $_POST['password']);
+
 		if ($user !== null) {
 			if ($user['enabled'] === 'Y') {
 				// logged in
+				session_start();
 				$_SESSION['userid'] = $user['id'];
+				session_write_close();
 			} else {
 				$error = 'User is no longer enabled';
 			}
