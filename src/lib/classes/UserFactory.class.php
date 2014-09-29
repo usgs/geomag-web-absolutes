@@ -13,7 +13,8 @@ class UserFactory {
 	private $insertUserSkeleton;
 	private $insertUser;
 
-	private $updateUser;
+	private $updateUserWithPassword;
+	private $updateUserWithoutPassword;
 
 	public function __construct ($db) {
 		$this->db = $db;
@@ -69,13 +70,20 @@ class UserFactory {
 					':password, :last_login, :admin, :enabled' .
 				')');
 
-		$this->updateUser = $this->db->prepare(
+		$this->updateUserWithPassword = $this->db->prepare(
 				'UPDATE user set ' .
 					'name=:name, username=:username,' .
 					'default_observatory_id=:default_observatory_id, email=:email, ' .
 					'password=:password, last_login=:last_login, admin=:admin, ' .
 					'enabled=:enabled WHERE ID = :id'
-					);
+				);
+		$this->updateUserWithoutPassword = $this->db->prepare(
+				'UPDATE user set ' .
+					'name=:name, username=:username,' .
+					'default_observatory_id=:default_observatory_id, email=:email, ' .
+					'last_login=:last_login, admin=:admin, ' .
+					'enabled=:enabled WHERE ID = :id'
+				);
 	}
 
 	/**
@@ -161,6 +169,10 @@ class UserFactory {
 			$countUser = count($user);
 			if ($countUser === 1) {
 				$user = $user[0];
+
+				// Update last login time for this user
+				$user['last_login'] = time();
+				$user = $this->updateUser($user);
 			} else {
 				$user = null;
 			}
@@ -232,7 +244,7 @@ class UserFactory {
 		$this->insertUser->bindValue(':password', $user['password'],
 				PDO::PARAM_STR);
 		$this->insertUser->bindValue(':last_login', $user['last_login'],
-				PDO::PARAM_STR);
+				PDO::PARAM_INT);
 		$this->insertUser->bindValue(':admin', $user['admin'], PDO::PARAM_STR);
 		$this->insertUser->bindValue(':enabled', $user['enabled'], PDO::PARAM_STR);
 
@@ -242,7 +254,7 @@ class UserFactory {
 			$user_id = intval($this->db->lastInsertId());
 			return $this->getUser($user_id);
 		} catch (Exception $e) {
-			$this->db->rollback;
+			$this->db->rollback();
 			$this->triggerError($this->insertUser, $e);
 		}
 	}
@@ -256,29 +268,72 @@ class UserFactory {
 	 * @return array of user information, or null if no user logged in.
 	 */
 	public function updateUser ($user) {
+		if (isset($user['password'])) {
+			return $this->_updateUserWithPassword($user);
+		} else {
+			return $this->_updateUserWithoutPassword($user);
+		}
+	}
+
+	protected function _updateUserWithPassword ($user) {
 		$this->db->beginTransaction();
 
-		$this->updateUser->bindValue(':id', intval($user['id']), PDO::PARAM_INT);
-		$this->updateUser->bindValue(':name', $user['name'], PDO::PARAM_STR);
-		$this->updateUser->bindValue(':username', $user['username'],
+		$this->updateUserWithPassword->bindValue(':id', intval($user['id']),
+				PDO::PARAM_INT);
+		$this->updateUserWithPassword->bindValue(':name', $user['name'],
 				PDO::PARAM_STR);
-		$this->updateUser->bindValue(':default_observatory_id',
+		$this->updateUserWithPassword->bindValue(':username', $user['username'],
+				PDO::PARAM_STR);
+		$this->updateUserWithPassword->bindValue(':default_observatory_id',
 				$user['default_observatory_id'], PDO::PARAM_STR);
-		$this->updateUser->bindValue(':email', $user['email'], PDO::PARAM_STR);
-		$this->updateUser->bindValue(':password', $user['password'],
+		$this->updateUserWithPassword->bindValue(':email', $user['email'],
 				PDO::PARAM_STR);
-		$this->updateUser->bindValue(':last_login', $user['last_login'],
+		$this->updateUserWithPassword->bindValue(':password', $user['password'],
 				PDO::PARAM_STR);
-		$this->updateUser->bindValue(':admin', $user['admin'], PDO::PARAM_STR);
-		$this->updateUser->bindValue(':enabled', $user['enabled'], PDO::PARAM_STR);
+		$this->updateUserWithPassword->bindValue(':last_login',
+				intval($user['last_login']), PDO::PARAM_INT);
+		$this->updateUserWithPassword->bindValue(':admin', $user['admin'],
+				PDO::PARAM_STR);
+		$this->updateUserWithPassword->bindValue(':enabled', $user['enabled'],
+				PDO::PARAM_STR);
 
 		try {
-			$this->updateUser->execute();
+			$this->updateUserWithPassword->execute();
 			$this->db->commit();
 			return $this->getUser($user['id']);
 		} catch (Exception $e) {
-			$this->db->rollback;
-			$this->triggerError($this->updateUser, $e);
+			$this->db->rollback();
+			$this->triggerError($this->updateUserWithPassword, $e);
+		}
+	}
+
+	protected function _updateUserWithoutPassword ($user) {
+		$this->db->beginTransaction();
+
+		$this->updateUserWithoutPassword->bindValue(':id', intval($user['id']),
+				PDO::PARAM_INT);
+		$this->updateUserWithoutPassword->bindValue(':name', $user['name'],
+				PDO::PARAM_STR);
+		$this->updateUserWithoutPassword->bindValue(':username', $user['username'],
+				PDO::PARAM_STR);
+		$this->updateUserWithoutPassword->bindValue(':default_observatory_id',
+				$user['default_observatory_id'], PDO::PARAM_STR);
+		$this->updateUserWithoutPassword->bindValue(':email', $user['email'],
+				PDO::PARAM_STR);
+		$this->updateUserWithoutPassword->bindValue(':last_login',
+				intval($user['last_login']), PDO::PARAM_INT);
+		$this->updateUserWithoutPassword->bindValue(':admin', $user['admin'],
+				PDO::PARAM_STR);
+		$this->updateUserWithoutPassword->bindValue(':enabled', $user['enabled'],
+				PDO::PARAM_STR);
+
+		try {
+			$this->updateUserWithoutPassword->execute();
+			$this->db->commit();
+			return $this->getUser($user['id']);
+		} catch (Exception $e) {
+			$this->db->rollback();
+			$this->triggerError($this->updateUserWithoutPassword, $e);
 		}
 	}
 
