@@ -281,25 +281,22 @@ define([
 				'<div class="alert success">Observation has been published.</div>';
 	};
 
+	/**
+	 * Save button click handler.
+	 */
 	ObservationView.prototype._onSaveClick = function () {
-		try {
-			this._saveObservation(function() {
-				(new ModalView(
-					'<p>Your observation has been saved.</p>',
-					{
-						title: 'Save Successful',
-						classes: ['modal-success'],
-						closable: true
-					}
-				)).show();
-			});
-		} catch (e) {
-			this._showErrorDialog('Save Failed', e.message);
-		}
+		this._saveObservation(this.__saveSuccess, this.__saveError);
 	};
 
-
-	ObservationView.prototype._saveObservation = function (callback) {
+	/**
+	 * Save the current observation.
+	 *
+	 * @param callback {Function}
+	 *        called after save succeeds.
+	 * @param errback {Function}
+	 *        called after save fails.
+	 */
+	ObservationView.prototype._saveObservation = function (callback, errback) {
 		var _this = this,
 		    factory = this._options.factory;
 
@@ -313,12 +310,18 @@ define([
 				callback();
 			},
 			error: function (status, xhr) {
-				_this._showErrorDialog('Save Failed', xhr.response);
+				if (typeof errback === 'function') {
+					errback(status, xhr);
+				} else {
+					throw new Error(xhr.response);
+				}
 			}
 		});
 	};
 
-
+	/**
+	 * Publish button click handler.
+	 */
 	ObservationView.prototype._onPublishClick = function () {
 		var _this = this;
 
@@ -342,9 +345,14 @@ define([
 	};
 
 	/**
-	 * Save the observation, on success publish that data to the magproc2 server
+	 * Save the observation, on success publish that data to the magproc2 server.
+	 *
+	 * @param callback {Function}
+	 *        called after publish succeeds.
+	 * @param errback {Function}
+	 *        called after publish fails.
 	 */
-	ObservationView.prototype._publishObservation = function (callback) {
+	ObservationView.prototype._publishObservation = function (callback, errback) {
 		var _this = this,
 		    factory = this._options.factory,
 		    user = this._options.user || {};
@@ -361,17 +369,87 @@ define([
 				callback();
 			},
 			error: function (status, xhr) {
-				_this._showErrorDialog('Publish Failed', xhr.response);
+				if (typeof errback === 'function') {
+					errback(status, xhr);
+				} else {
+					throw new Error(xhr.response);
+				}
 			}
 		});
 	};
 
-	ObservationView.prototype._showErrorDialog = function (title, message) {
+	/**
+	 * Callback to show publish success in modal dialog.
+	 *
+	 * @param status {Integer}
+	 *        http error status code.
+	 * @param xhr {XMLHttpRequest}
+	 *        XHR object with error information.
+	 */
+	ObservationView.prototype.__saveSuccess = function () {
 		(new ModalView(
-			'<p>' + message + '</p>',
+			'<h3>Success!</h3><p>Your observation has been saved.</p>',
 			{
-				title: title,
-				classes: ['modal-error']
+				title: 'Save Successful',
+				classes: ['modal-success'],
+				closable: true
+			}
+		)).show();
+	};
+
+	/**
+	 * Callback to show publish erros in modal dialog.
+	 *
+	 * @param status {Integer}
+	 *        http error status code.
+	 * @param xhr {XMLHttpRequest}
+	 *        XHR object with error information.
+	 */
+	ObservationView.prototype.__saveError = function (status, xhr) {
+		(new ModalView(
+			'<h3>Error</h3><p>' + xhr.response + '</p>',
+			{
+				title: 'Save Failed',
+				classes: ['modal-error'],
+				closable: true
+			}
+		)).show();
+	};
+
+	/**
+	 * Callback to show publish success in modal dialog.
+	 *
+	 * @param status {Integer}
+	 *        http error status code.
+	 * @param xhr {XMLHttpRequest}
+	 *        XHR object with error information.
+	 */
+	ObservationView.prototype.__publishSuccess = function () {
+		(new ModalView(
+			'<h3>Success!</h3><p>Your observation has been published.</p>',
+			{
+				title: 'Publish Successful',
+				classes: ['modal-success'],
+				closable: true
+			}
+		)).show();
+	};
+
+	/**
+	 * Callback to show publish errors in modal dialog.
+	 *
+	 * @param status {Integer}
+	 *        http error status code.
+	 * @param xhr {XMLHttpRequest}
+	 *        XHR object with error information.
+	 */
+	ObservationView.prototype.__publishError = function (status, xhr) {
+		(new ModalView(
+			'<h3>Error</h3><p>' + xhr.response + '</p>',
+			{
+				title: 'Publish Failed',
+				classes: ['modal-error'],
+				closable: true
 			}
 		)).show();
 	};

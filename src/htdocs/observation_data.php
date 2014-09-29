@@ -14,6 +14,8 @@ if ($id !== null) {
 // POST,GET,PUT,DELETE => Create,Read,Update,Delete
 $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] :
 		 'GET';
+$isAdmin = ($CURRENT_USER['admin'] === 'Y');
+$defaultObservatoryId = intval($CURRENT_USER['default_observatory_id']);
 
 // process request
 try {
@@ -51,6 +53,12 @@ try {
 			echo $json;
 		}
 	} else if ($method === 'DELETE') {
+		if (!$isAdmin) {
+			// only admin can delete
+			header('HTTP/1.1 403 Forbidden');
+			echo 'only admin users can delete observations';
+			exit();
+		}
 		// php doesn't populate $_POST when method is DELETE.
 		$params = array();
 		parse_str(file_get_contents('php://input'), $params);
@@ -96,6 +104,14 @@ try {
 				echo 'cannot create an observation without an observatory';
 				exit();
 			}
+
+			// check user permissions
+			if (!$isAdmin &&
+					$observation->observatory_id !== $defaultObservatoryId) {
+				header('HTTP/1.1 403 Forbidden');
+				echo 'you are not allowed to create observations for this observatory';
+				exit();
+			}
 			$observation = $OBSERVATION_FACTORY->createObservation($observation);
 		} else if ($method === 'PUT') {
 			// update
@@ -104,9 +120,37 @@ try {
 				echo 'cannot update an observation without an id';
 				exit();
 			}
+			if ($observation->observatory_id === null) {
+				header('HTTP/1.1 400 Bad Request');
+				echo 'cannot update an observation without an observatory';
+				exit();
+			}
+
+			// check current status
+			$existingObservation = $OBSERVATION_FACTORY->getObservation(
+					$observation->id);
+			if ($existingObservation === null) {
+				header('HTTP/1.1 400 Bad Request');
+				echo 'cannot update an observation that does not exist';
+				exit();
+			}
+			// make sure not published
+			if ($existingObservation->reviewed === 'Y') {
+				header('HTTP/1.1 403 Forbidden');
+				echo 'cannot update an observation that has already been published';
+				exit();
+			}
+			// check user permissions
+			if (!$isAdmin &&
+					$observation->observatory_id !== $defaultObservatoryId) {
+				header('HTTP/1.1 403 Forbidden');
+				echo 'you are not allowed to update observations for this observatory';
+				exit();
+			}
 			$observation = $OBSERVATION_FACTORY->updateObservation($observation);
 		} else {
 				header('HTTP/1.1 405 Method not allowed');
+				header('Allow: GET, POST, PUT, DELETE');
 				echo 'unsupported HTTP method';
 				exit();
 		}
