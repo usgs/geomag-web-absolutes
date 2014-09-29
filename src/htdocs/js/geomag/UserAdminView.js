@@ -137,6 +137,9 @@ define ([
 			);
 
 		this._modalview.show();
+		if (e.stopPropagation) {
+			e.stopPropagation();
+		}
 	};
 
 return UserAdminView;

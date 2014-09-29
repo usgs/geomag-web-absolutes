@@ -41,6 +41,9 @@ define([
 				className: 'last_login',
 				title: 'Last Login',
 				format: function (user) {
+					if (user.get('last_login') === null) {
+						return '&ndash;';
+					}
 					return Formatter.date(parseInt(user.get('last_login'), 10)*1000);
 				}
 			},
