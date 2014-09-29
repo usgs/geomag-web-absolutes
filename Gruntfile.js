@@ -197,17 +197,25 @@ module.exports = function (grunt) {
 						'util': '../../../node_modules/hazdev-webutils/src/util',
 						'tablist': '../../../node_modules/hazdev-tablist/src/tablist'
 					},
-					modules: [
-						{
-							name: 'index'
-						},
-						{
-							name: 'observation'
-						},
-						{
-							name: 'observatory'
-						}
-					]
+					modules: (function () {
+						var EXCLUDES = [
+							'CurrentUser'
+						];
+						return [
+							{
+								name: 'index',
+								exclude: EXCLUDES
+							},
+							{
+								name: 'observation',
+								exclude: EXCLUDES
+							},
+							{
+								name: 'observatory',
+								exclude: EXCLUDES
+							}
+						];
+					})()
 				}
 			}
 		},
