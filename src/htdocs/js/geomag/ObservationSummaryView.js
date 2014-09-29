@@ -1,4 +1,4 @@
-/* global define */
+/* global define, MOUNT_PATH */
 define([
 	'mvc/View',
 	'util/Util',
@@ -6,7 +6,8 @@ define([
 	'geomag/DeclinationSummaryView',
 	'geomag/Formatter',
 	'geomag/HorizontalIntensitySummaryView',
-	'geomag/VerticalIntensitySummaryView'
+	'geomag/VerticalIntensitySummaryView',
+	'geomag/UserFactory'
 ], function (
 	View,
 	Util,
@@ -14,12 +15,16 @@ define([
 	DeclinationSummaryView,
 	Format,
 	HorizontalIntensitySummaryView,
-	VerticalIntensitySummaryView
+	VerticalIntensitySummaryView,
+	UserFactory
 ) {
 	'use strict';
 
 
 	var DEFAULTS = {
+		UserFactory: new UserFactory({
+			url: MOUNT_PATH + '/user_data.php'
+		})
 	};
 
 
@@ -183,7 +188,10 @@ define([
 	};
 
 	ObservationSummaryView.prototype._renderSummaryBottom = function () {
-		var observation = this._observation;
+		var _this = this,
+		    observation = this._observation,
+		    reviewed = observation.get('reviewed'),
+		    reviewer = observation.get('reviewer_user_id');
 
 		this._pierTemperature.innerHTML =
 				Format.celsius(observation.get('pier_temperature'),1);
@@ -191,8 +199,20 @@ define([
 		this._fluxgateTemperature.innerHTML = 'flux temp';
 		this._protonTemperature.innerHTML = 'prot temp';
 		this._outsideTemperature.innerHTML = 'outs temp';
-		this._checkedBy.innerHTML = 'user name';
 		this._remarks.innerHTML = observation.get('annotation');
+
+		if (reviewed === 'Y' && reviewer) {
+			// set reviewer to reviwer_user_id while fetching the user name.
+			this._checkedBy.innerHTML = reviewer;
+
+			this._userFactory.get({
+				data: {'id': reviewer},
+				success: function (data) {
+					// replace reviwer_user_id with user name once it is returned.
+					_this._checkedBy.innerHTML = data.name;
+				}
+			});
+		}
 	};
 
 	ObservationSummaryView.prototype._initialize = function () {
@@ -201,6 +221,7 @@ define([
 		this._observation = this._options.observation;
 		this._calculator = this._options.baselineCalculator;
 		this._readings = this._observation.get('readings');
+		this._userFactory = this._options.UserFactory;
 
 		el.innerHTML = [
 			'<section class="observation-summary-view">',
