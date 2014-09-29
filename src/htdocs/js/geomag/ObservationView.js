@@ -159,6 +159,7 @@ define([
 				for (i = 0, len = observatories.length; i < len; i++) {
 					if (observatories[i].id === observatory_id) {
 						observatories = [observatories[i]];
+						break;
 					}
 				}
 				if (observatories.length !== 1) {
