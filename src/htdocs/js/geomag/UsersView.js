@@ -14,7 +14,7 @@ define([
 
 	var DEFAULTS = {
 		className: 'collection-table users-view tabular',
-		clickToSelect: true,
+		clickToSelect: false,
 		columns: [
 			{
 				className: 'name',
@@ -57,6 +57,13 @@ define([
 				format: function (user) {
 					return user.get('enabled');
 				}
+			},
+			{
+				className: 'edit',
+				title: 'Edit?',
+				format: function (user) {
+					return '<button class="edituser" data-id="' + user.get('id') + '">Edit</button>';
+				}
 			}
 		],
 		emptyMarkup: '&ndash;'
@@ -67,6 +74,7 @@ define([
 		CollectionTable.call(this, options);
 	};
 	UsersView.prototype = Object.create(CollectionTable.prototype);
+
 
 	return UsersView;
 });

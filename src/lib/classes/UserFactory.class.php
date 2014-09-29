@@ -217,12 +217,11 @@ class UserFactory {
 	 *
 	 */
 	public function createUser ($user) {
-		$this->insertUser->bindValue(':id', intval($user['id']), PDO::PARAM_INT);
 		$this->insertUser->bindValue(':name', $user['name'], PDO::PARAM_STR);
 		$this->insertUser->bindValue(':username', $user['username'],
 				PDO::PARAM_STR);
-		$this->insertUser->bindValue(':default_observatory_id', $user['ID'],
-				PDO::PARAM_STR);
+		$this->insertUser->bindValue(':default_observatory_id',
+				$user['default_observatory_id'], PDO::PARAM_STR);
 		$this->insertUser->bindValue(':email', $user['email'], PDO::PARAM_STR);
 		$this->insertUser->bindValue(':password', $user['password'],
 				PDO::PARAM_STR);
@@ -250,10 +249,11 @@ class UserFactory {
 	 */
 	public function updateUser ($user) {
 		$this->updateUser->bindValue(':id', intval($user['id']), PDO::PARAM_INT);
+		$this->updateUser->bindValue(':name', $user['name'], PDO::PARAM_STR);
 		$this->updateUser->bindValue(':username', $user['username'],
 				PDO::PARAM_STR);
-		$this->updateUser->bindValue(':default_observatory_id', $user['ID'],
-				PDO::PARAM_STR);
+		$this->updateUser->bindValue(':default_observatory_id',
+				$user['default_observatory_id'], PDO::PARAM_STR);
 		$this->updateUser->bindValue(':email', $user['email'], PDO::PARAM_STR);
 		$this->updateUser->bindValue(':password', $user['password'],
 				PDO::PARAM_STR);

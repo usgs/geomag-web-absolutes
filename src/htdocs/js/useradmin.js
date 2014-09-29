@@ -10,18 +10,29 @@ require.config({
 });
 
 require([
+	'mvc/Collection',
+
 	'geomag/UserAdminView',
-	'geomag/UserFactory'
+	'geomag/UserFactory',
+	'geomag/ObservatoryFactory'
 ], function (
+	Collection,
+
 	UserAdminView,
-	UserFactory
+	UserFactory,
+	ObservatoryFactory
 ) {
 	'use strict';
 
-	new UserAdminView({
-		el: document.querySelector('.user-admin-view-wrapper'),
-		factory: new UserFactory({
-			url: MOUNT_PATH + '/user_data.php'
-		})
+	new ObservatoryFactory().getObservatories({
+		success: function (observatories) {
+			new UserAdminView({
+				el: document.querySelector('.user-admin-view-wrapper'),
+				factory: new UserFactory({
+					url: MOUNT_PATH + '/user_data.php'
+				}),
+				observatories: new Collection(observatories)
+			});
+		}
 	});
 });

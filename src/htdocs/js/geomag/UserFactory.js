@@ -32,32 +32,37 @@ define([
 		Xhr.ajax({
 			url: this._options.url,
 			data: options.data || {},
-			success: options.success || function () {},
+			success: function (data) {
+				if (options.success) {
+					options.success(data);
+				}
+			},
 			error: options.error || function () {}
 		});
 	};
 
 	UserFactory.prototype.save = function(options) {
-		var user = options.user.get(),
-		    data = JSON.stringify(user);
-
 		Xhr.ajax({
 			url: this._options.url,
-			rawdata: data,
-			method: (user.id) ? 'PUT' : 'POST',
-			success: options.success || function () {},
+			rawdata: JSON.stringify(options.data),
+			method: (options.data.id) ? 'PUT' : 'POST',
+			success: function () {
+				options.success();
+			},
 			error: options.error || function () {}
 		});
+
+		console.log('create');
+	};
+
+	UserFactory.prototype.update = function(options) {
+		options.success();
+		console.log('create');
 	};
 
 	UserFactory.prototype.destroy = function(options) {
-		Xhr.ajax({
-			url: this._options.url,
-			data: {id: options.id},
-			method: 'DELETE',
-			success: options.success || function () {},
-			error: options.error || function () {}
-		});
+		options.success();
+		console.log('create');
 	};
 
 	return UserFactory;

@@ -83,6 +83,7 @@ try {
 
 		// read json from client
 		$json = file_get_contents('php://input');
+
 		$json = json_decode($json, true /* associative */);
 		$user = $json; //User::fromArray($json);
 
