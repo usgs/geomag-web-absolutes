@@ -59,6 +59,56 @@ if ($errorCount !== 0) {
 	print "\n";
 }
 
+
+// ----------------------------------------------------------------------
+// Set begin times for instruments, marks, and piers,
+// based on first time they are referenced by an observation
+// ----------------------------------------------------------------------
+
+// find instrument begin times
+$rs = $DB->prepare('select i.ID, min(o.begin) as begin' .
+		' from instrument i join observation o on ' .
+		' (o.theodolite_id = i.ID or o.electronics_id = i.ID)' .
+		' group by i.ID');
+$rs->execute();
+$instruments = $rs->fetchAll(PDO::FETCH_ASSOC);
+// set begin times
+$rs = $DB->prepare('update instrument set begin=:begin where ID=:id');
+foreach ($instruments as $i) {
+	$rs->execute(array(
+			':id' => $i['ID'],
+			':begin' => $i['begin']));
+}
+
+// find mark begin times
+$rs = $DB->prepare('select m.ID, min(o.begin) as begin' .
+		' from mark m join observation o on (m.ID = o.mark_id)' .
+		' group by m.ID');
+$rs->execute();
+$marks = $rs->fetchAll(PDO::FETCH_ASSOC);
+// set begin times
+$rs = $DB->prepare('update mark set begin=:begin where ID=:id');
+foreach ($marks as $m) {
+	$rs->execute(array(
+			':id' => $m['ID'],
+			':begin' => $m['begin']));
+}
+
+// find pier begin times
+$rs = $DB->prepare('select p.ID, min(m.begin) as begin' .
+		' from pier p join mark m on (m.pier_id = p.ID)' .
+		' group by p.ID');
+$rs->execute();
+$piers = $rs->fetchAll(PDO::FETCH_ASSOC);
+// set begin times
+$rs = $DB->prepare('update pier set begin=:begin where ID=:id');
+foreach ($piers as $p) {
+	$rs->execute(array(
+			':id' => $p['ID'],
+			':begin' => $p['begin']));
+}
+
+
 // ----------------------------------------------------------------------
 // Done
 // ----------------------------------------------------------------------
