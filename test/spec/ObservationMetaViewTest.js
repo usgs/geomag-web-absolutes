@@ -39,10 +39,10 @@ define([
 						        {id: 12, name: 'Mark 12', azimuth: 12.13}]}
 			],
 			instruments: [
-				{id: 5, type: 'elec', name: 'Electronics1', serial: '1234'},
-				{id: 6, type: 'theo', name: 'Theodolite1', serial: 'abcd'},
-				{id: 7, type: 'elec', name: 'Electronics2', serial: '1235'},
-				{id: 8, type: 'theo', name: 'Theodolite2', serial: 'abce'}
+				{id: 5, type: 'electronics', name: 'Electronics1', serial: '1234'},
+				{id: 6, type: 'theodolite', name: 'Theodolite1', serial: 'abcd'},
+				{id: 7, type: 'electronics', name: 'Electronics2', serial: '1235'},
+				{id: 8, type: 'theodolite', name: 'Theodolite2', serial: 'abce'}
 			],
 			observations: []
 		}));

@@ -136,7 +136,6 @@ define([
 						'<label for="', idPrefix, '-pier">Pier</label>',
 						'<select id="', idPrefix, '-pier"',
 								' class="pier"></select>',
-						'<span class="pier-correction-value"></span>',
 						'<label for="', idPrefix, '-mark">Mark</label>',
 						'<select id="', idPrefix, '-mark"',
 								' class="mark"></select>',
@@ -160,12 +159,14 @@ define([
 		this._pierSelectView = pierSelectView =
 				new CollectionSelectBox({
 					el: el.querySelector('.pier'),
-					emptyText: 'Select observatory...'
+					emptyText: 'Select observatory...',
+					formatOption: this._formatPier
 				});
 		this._marksSelectView = marksSelectView =
 				new CollectionSelectBox({
 					el: el.querySelector('.mark'),
-					emptyText: 'Select pier...'
+					emptyText: 'Select pier...',
+					formatOption: this._formatMark
 				});
 		this._electronicsSelectView = electronicsSelectView =
 				new CollectionSelectBox({
@@ -234,12 +235,9 @@ define([
 			    mark_id = null,
 			    mark = null,
 			    pierCorrection = 0,
-			    pierCorrectionValue = '',
 			    trueAzimuthOfMark = 0;
 			if (pier !== null) {
 				pierCorrection = pier.get('correction');
-				pierCorrectionValue = el.querySelector('.pier-correction-value');
-				pierCorrectionValue.innerHTML = Format.rawNanoteslas(pierCorrection);
 
 				// update mark
 				marks = pier.get('marks');
@@ -307,7 +305,6 @@ define([
 	 */
 	ObservationMetaView.prototype._setObservatory = function (observatory) {
 		var pierSelectView = this._pierSelectView,
-		    pierCorrection = this._pierCorrection,
 		    electronicsSelectView = this._electronicsSelectView,
 		    theodoliteSelectView = this._theodoliteSelectView,
 		    // observation selections
@@ -349,7 +346,6 @@ define([
 		}
 		if (pier !== null) {
 			piers.select(pier);
-			pierCorrection = pier.get('correction');
 			default_electronics_id = pier.get('default_electronics_id');
 			default_theodolite_id = pier.get('default_theodolite_id');
 		}
@@ -380,6 +376,28 @@ define([
 			begin: date,
 			pier_temperature: pierTemperature
 		});
+	};
+
+	/**
+	 * Formatting callback for pier select view.
+	 *
+	 * @param pier {Pier}
+	 * @return {String} content for option element.
+	 */
+	ObservationMetaView.prototype._formatPier = function (pier) {
+		return pier.get('name') +
+				' (' + pier.get('correction') + ' nT)';
+	};
+
+	/**
+	 * Formatting callback for mark select view.
+	 *
+	 * @param mark {Mark}
+	 * @return {String} content for option element.
+	 */
+	ObservationMetaView.prototype._formatMark = function (mark) {
+		return mark.get('name') +
+				' (' + mark.get('azimuth') + '&deg;)';
 	};
 
 

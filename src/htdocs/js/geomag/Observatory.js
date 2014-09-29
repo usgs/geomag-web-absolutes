@@ -123,7 +123,7 @@ define([
 		    len;
 		for (i = 0, len = instruments.length; i < len; i++) {
 			instrument = instruments[i];
-			if (instrument.get('type') === 'elec') {
+			if (instrument.get('type') === 'electronics') {
 				electronics.push(instrument);
 			}
 		}
@@ -144,7 +144,7 @@ define([
 		    len;
 		for (i = 0, len = instruments.length; i < len; i++) {
 			instrument = instruments[i];
-			if (instrument.get('type') === 'theo') {
+			if (instrument.get('type') === 'theodolite') {
 				theodolites.push(instrument);
 			}
 		}
