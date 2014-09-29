@@ -59,7 +59,7 @@ class UserFactory {
 					'name, username, default_observatory_id, email,' .
 					'password, last_login, admin, enabled' .
 				') VALUES (' .
-					':id, :name, :username, :default_observatory_id, :email,' .
+					':name, :username, :default_observatory_id, :email,' .
 					':password, :last_login, :admin, :enabled' .
 				')');
 
