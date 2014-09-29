@@ -17,7 +17,11 @@ if ($CURRENT_USER === null) {
 	exit();
 } else {
 	// logged in, define user for js.
-	$FOOT = '<script>' .
+	if (!isset($FOOT)) {
+		$FOOT = '';
+	}
+
+	$FOOT .= '<script>' .
 			'define("CurrentUser", ' . json_encode($CURRENT_USER) . ');' .
 			'</script>' .
 			(isset($FOOT) ? $FOOT : '');
