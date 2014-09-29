@@ -191,6 +191,7 @@ module.exports = function (grunt) {
 					dir: appConfig.dist + '/htdocs/js',
 					useStrict: true,
 					wrap: true,
+					fileExclusionRegExp: /(^\.|\.scss$)/,
 
 					paths: {
 						'mvc': '../../../node_modules/hazdev-webutils/src/mvc',
@@ -221,14 +222,10 @@ module.exports = function (grunt) {
 		},
 		cssmin: {
 			dist: {
-				files: {
-					'<%= app.dist %>/htdocs/css/index.css': [
-						'.tmp/css/index.css'
-					],
-					'<%= app.dist %>/htdocs/css/observation.css': [
-						'.tmp/css/observation.css'
-					]
-				}
+				expand: true,
+				cwd: '.tmp/css',
+				src: ['*.css'],
+				dest: '<%= app.dist %>/htdocs/css/'
 			}
 		},
 		htmlmin: {
