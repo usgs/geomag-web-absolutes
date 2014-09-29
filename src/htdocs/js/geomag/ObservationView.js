@@ -566,7 +566,6 @@ define([
 	};
 
 
-
 	ObservationView.prototype._formatMeasurementErrors = function (measurement) {
 		var time_error = measurement.get('time_error'),
 		    angle_error = measurement.get('angle_error'),
