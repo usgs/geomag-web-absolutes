@@ -1,10 +1,14 @@
 /* global define */
 define([
 	'mvc/Model',
-	'util/Util'
+	'util/Util',
+
+	'CurrentUser'
 ], function (
 	Model,
-	Util
+	Util,
+
+	CurrentUser
 ) {
 	'use strict';
 
@@ -12,29 +16,41 @@ define([
 		'id': null,
 		'name': null,
 		'username': null,
-		'roles': null
+		'default_observatory_id': null,
+		'email': null,
+		'password': null,
+		'last_login': null,
+		'admin': 'N',
+		'enabled': 'Y'
 	};
 
+	// static reference to currently logged in user
+	var CURRENT_USER = null;
+
+
+	/**
+	 * Construct a new User object.
+	 */
 	var User = function (attributes) {
 		Model.call(this, Util.extend({}, DEFAULTS, attributes));
 	};
 
-	User.prototype = Object.create(Util.extend({}, Model.prototype, {
-		hasRole: function (role) {
-			var roles = this.get('roles'),
-			    len = roles.length,
-			    i = 0;
+	// User extends Model
+	User.prototype = Object.create(Model.prototype);
 
-			// TODO :: Is "roles" a collection or an array?
-			for (i = 0; i < len; i++) {
-				if (roles[i].get('id') === role.get('id')) {
-					return true;
-				}
-			}
 
-			return false;
+	/**
+	 * Static access to current user object.
+	 *
+	 * @return currently logged in user.
+	 */
+	User.getCurrentUser = function () {
+		if (CURRENT_USER === null) {
+			CURRENT_USER = new User(CurrentUser);
 		}
-	}));
+		return CURRENT_USER;
+	};
+
 
 	return User;
 });

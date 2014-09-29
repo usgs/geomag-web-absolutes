@@ -72,7 +72,7 @@ define([
 		this._observatories = null;
 		this._observationMetaView = null;
 		this._readingGroupView = null;
-		this._user = User;
+		this._user = User.getCurrentUser();
 
 		// load observation
 		factory.getObservation({
@@ -144,6 +144,7 @@ define([
 	 */
 	ObservationView.prototype._setObservatories = function (observatories) {
 		var el = this._el,
+		    user = this._user,
 		    observation = this._observation,
 		    calculator = this._calculator,
 		    observatory_id,
@@ -152,9 +153,10 @@ define([
 		    len;
 
 		//filter observatories list for non admin users
-		if (User.admin !== 'Y') {
-			if (User.default_observatory_id !== null) {
-				observatory_id = parseInt(User.default_observatory_id, 10);
+		if (user.get('admin') !== 'Y') {
+			observatory_id = user.get('default_observatory_id');
+			if (observatory_id !== null) {
+				observatory_id = parseInt(observatory_id, 10);
 
 				for (i = 0, len = observatories.length; i < len; i++) {
 					if (observatories[i].id === observatory_id) {
@@ -263,6 +265,7 @@ define([
 	 */
 	ObservationView.prototype._createControls = function () {
 		var controls = this._el.querySelector('.observation-view-controls'),
+		    user = this._user,
 		    saveButton = document.createElement('button'),
 		    publishButton;
 
@@ -275,7 +278,7 @@ define([
 		controls.appendChild(saveButton);
 
 		// Add publish button for admin users
-		if (this._user && this._user.admin === 'Y') {
+		if (user.get('admin') === 'Y') {
 			publishButton = document.createElement('button');
 			publishButton.innerHTML = 'Publish';
 			controls.appendChild(publishButton);
@@ -370,7 +373,7 @@ define([
 	ObservationView.prototype._publishObservation = function (callback, errback) {
 		var _this = this,
 		    factory = this._options.factory,
-		    user = this._options.user || {};
+		    user = this._user;
 
 		factory.publishObservation({
 			observation: _this._observation,

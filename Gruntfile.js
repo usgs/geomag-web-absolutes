@@ -191,36 +191,41 @@ module.exports = function (grunt) {
 					dir: appConfig.dist + '/htdocs/js',
 					useStrict: true,
 					wrap: true,
+					fileExclusionRegExp: /(^\.|\.scss$)/,
 
 					paths: {
 						'mvc': '../../../node_modules/hazdev-webutils/src/mvc',
 						'util': '../../../node_modules/hazdev-webutils/src/util',
 						'tablist': '../../../node_modules/hazdev-tablist/src/tablist'
 					},
-					modules: [
-						{
-							name: 'index'
-						},
-						{
-							name: 'observation'
-						},
-						{
-							name: 'observatory'
-						}
-					]
+					modules: (function () {
+						var EXCLUDES = [
+							'CurrentUser'
+						];
+						return [
+							{
+								name: 'index',
+								exclude: EXCLUDES
+							},
+							{
+								name: 'observation',
+								exclude: EXCLUDES
+							},
+							{
+								name: 'observatory',
+								exclude: EXCLUDES
+							}
+						];
+					})()
 				}
 			}
 		},
 		cssmin: {
 			dist: {
-				files: {
-					'<%= app.dist %>/htdocs/css/index.css': [
-						'.tmp/css/index.css'
-					],
-					'<%= app.dist %>/htdocs/css/observation.css': [
-						'.tmp/css/observation.css'
-					]
-				}
+				expand: true,
+				cwd: '.tmp/css',
+				src: ['*.css'],
+				dest: '<%= app.dist %>/htdocs/css/'
 			}
 		},
 		htmlmin: {
