@@ -27,7 +27,7 @@ if (!file_exists($CONFIG_FILE)) {
 	exit(-1);
 }
 $CONFIG = parse_ini_file($CONFIG_FILE);
-$DB_DSN = $CONFIG['DB_DSN'];
+$DB_DSN = configure('DB_ROOT_DSN', '', 'Database administrator DSN');
 $dbtype = substr($DB_DSN, 0, strpos($DB_DSN, ':'));
 $username = configure('DB_ROOT_USER', 'root', 'Database adminitrator user');
 $password = configure('DB_ROOT_PASS', '', 'Database administrator password',
