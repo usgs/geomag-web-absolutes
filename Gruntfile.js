@@ -210,6 +210,10 @@ module.exports = function (grunt) {
 							{
 								name: 'observation',
 								exclude: EXCLUDES
+							},
+							{
+								name: 'useradmin',
+								exclude: EXCLUDES
 							}
 						];
 					})()
