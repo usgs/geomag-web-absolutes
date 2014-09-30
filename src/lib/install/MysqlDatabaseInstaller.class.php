@@ -57,6 +57,14 @@ class MysqlDatabaseInstaller extends DatabaseInstaller {
 	}
 
 	/**
+	 * Create user with $roles
+	 */
+	public function createUser ($roles, $user, $password) {
+		// create read/write user for save
+		$this->run('GRANT ' . implode(',', $roles) . ' ON ' . $this->dbname . '.* TO ' . $user . ' IDENTIFIED BY \'' . $password . '\'');
+	}
+
+	/**
 	 * Connect to the mysql server without specifying a database name.
 	 * Used by dropDatabase() and createDatabase().
 	 */

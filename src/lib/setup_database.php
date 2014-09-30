@@ -27,7 +27,7 @@ if (!file_exists($CONFIG_FILE)) {
 	exit(-1);
 }
 $CONFIG = parse_ini_file($CONFIG_FILE);
-$DB_DSN = $CONFIG['DB_DSN'];
+$DB_DSN = configure('DB_ROOT_DSN', '', 'Database administrator DSN');
 $dbtype = substr($DB_DSN, 0, strpos($DB_DSN, ':'));
 $username = configure('DB_ROOT_USER', 'root', 'Database adminitrator user');
 $password = configure('DB_ROOT_PASS', '', 'Database administrator password',
@@ -82,15 +82,6 @@ if (!file_exists($dropSchemaScript)) {
 // ----------------------------------------------------------------------
 include_once 'install/DatabaseInstaller.class.php';
 $dbInstaller = DatabaseInstaller::getInstaller($DB_DSN, $username, $password);
-// if database already exists
-if ($dbInstaller->databaseExists()) {
-	// check if user wants to recreate database
-	$answer = configure('DROP_DATABASE_CONFIRM', 'N',
-			'Database already exists, do you want to drop the database?');
-	if (responseIsAffirmative($answer)) {
-		$dbInstaller->dropDatabase();
-	}
-}
 
 // make sure database exists
 if (!$dbInstaller->databaseExists()) {
@@ -106,6 +97,10 @@ if (!$dbInstaller->databaseExists()) {
 $dbInstaller->runScript($dropSchemaScript);
 // create schema
 $dbInstaller->runScript($schemaScript);
+// create read/write user for save
+$dbInstaller->createUser(array('SELECT', 'INSERT', 'UPDATE', 'DELETE'),
+		$CONFIG['DB_USER'], $CONFIG['DB_PASS']);
+
 print "Schema loaded successfully!\n";
 
 

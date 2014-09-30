@@ -131,6 +131,11 @@ abstract class DatabaseInstaller {
 	 */
 	public abstract function createDatabase ();
 
+	/**
+	 * Create database user.
+	 */
+	public abstract function createUser ($roles, $user, $password);
+
 }
 
 
