@@ -104,7 +104,7 @@ module.exports = function (grunt) {
 				},
 				{
 					from: '^/observatory/(.*)$',
-					to: '/observatory.php?id=$1'
+					to: '/index.php?id=$1'
 				}
 			],
 			dev: {
@@ -209,10 +209,6 @@ module.exports = function (grunt) {
 							},
 							{
 								name: 'observation',
-								exclude: EXCLUDES
-							},
-							{
-								name: 'observatory',
 								exclude: EXCLUDES
 							}
 						];
