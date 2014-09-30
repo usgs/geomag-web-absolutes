@@ -1,4 +1,4 @@
-/* global observationId, MOUNT_PATH */
+/* global observationId, MOUNT_PATH, REALTIME_DATA_URL */
 
 require.config({
 	baseUrl: MOUNT_PATH + '/js',
@@ -10,15 +10,20 @@ require.config({
 });
 
 require([
-	'geomag/ObservationView'
+	'geomag/ObservationView',
+	'geomag/RealtimeDataFactory'
 ], function (
-	ObservationView
+	ObservationView,
+	RealtimeDataFactory
 ) {
 	'use strict';
 
 	new ObservationView({
 		el: document.querySelector('.observation-view-wrapper'),
-		observationId: observationId
+		observationId: observationId,
+		realtimeDataFactory: new RealtimeDataFactory({
+			url: REALTIME_DATA_URL
+		})
 	});
 
 });
