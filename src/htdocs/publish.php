@@ -24,7 +24,7 @@ try {
 		if ($observation->reviewed !== 'Y') {
 			$MAGPROC_FACTORY->publish($observation, $observatory,
 					$observer['username'], $reviewer['username']);
-			$observation->reviewer_user_id = $reviewer['ID'];
+			$observation->reviewer_user_id = $reviewer['id'];
 			$observation->reviewed = 'Y';
 			$OBSERVATION_FACTORY->updateObservation($observation);
 			header('Content-Type: application/json');
