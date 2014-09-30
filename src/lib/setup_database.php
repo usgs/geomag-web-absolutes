@@ -38,12 +38,9 @@ $defaultScriptDir = implode(DIRECTORY_SEPARATOR, array(
 $defaultReferenceDir = implode(DIRECTORY_SEPARATOR, array(
 		$CONFIG['APP_DIR'], 'lib', 'sql', 'reference_data'));
 
-$defaultParser = implode(DIRECTORY_SEPARATOR, array(
-		$CONFIG['APP_DIR'], 'lib', 'sql', 'parse_observation'));
-
 
 // ----------------------------------------------------------------------
-// Schema loading
+// Schema loading configuration
 // ----------------------------------------------------------------------
 
 $answer = configure('DO_SCHEMA_LOAD', 'Y',
@@ -54,8 +51,8 @@ if (!responseIsAffirmative($answer)) {
 	exit(0);
 }
 
-$answer = configure('CONFIRM_DO_SCHEMA_LOAD', 'Y',
-		"Loading the schema removes any exist schema and/or data.\n" .
+$answer = configure('CONFIRM_DO_SCHEMA_LOAD', 'N',
+		"Loading the schema removes any existing schema and/or data.\n" .
 		'Are you sure you wish to continue');
 
 if (!responseIsAffirmative($answer)) {
@@ -67,80 +64,48 @@ if (!responseIsAffirmative($answer)) {
 $schemaScript = configure('SCHEMA_SCRIPT',
 		$defaultScriptDir . DIRECTORY_SEPARATOR . 'create_tables.sql',
 		'SQL script containing schema definition');
-
 if (!file_exists($schemaScript)) {
 	print "The indicated script does not exist. Please try again.\n";
 	exit(-1);
 }
-
-// Create an administrative connection to the database
-if ($dbtype === 'mysql') {
-
-	preg_match('/dbname=([^;]+)/', $DB_DSN, $matches);
-	if (count($matches) < 2) {
-		print "No database name (dbname) specified in DSN. This is required \n" .
-		      "for MySQL connections. Check your configured DSN and try\n" .
-					"again. Stopping.\n";
-		exit(-1);
-	}
-	$dbname = $matches[1];
-
-	try {
-		$setupdb = new PDO($DB_DSN, $username, $password);
-
-		// If this connection worked, database already exists. We need to drop it.
-		$setupdb = null;
-
-		// Make absolutely sure
-		$answer = configure('DROP_DATABASE_CONFIRM', 'N', 'About to drop MySQL ' .
-				"database ${dbname}. Are you sure you want to continue");
-
-		if (!responseIsAffirmative($answer)) {
-			print "Normal exit.\n";
-			exit(0);
-		}
-		// Whoops, database doesn't exist yet
-		$setupdb = new PDO(str_replace("dbname=${dbname}", '', $DB_DSN),
-				$username, $password);
-		$setupdb->exec('DROP DATABASE IF EXISTS ' . $dbname);
-
-	} catch (Exception $ex) {
-
-		// Whoops, database doesn't exist yet
-		$setupdb = new PDO(str_replace("dbname=${dbname}", '', $DB_DSN),
-				$username, $password);
-
-	}
-
-	$setupdb->exec('CREATE DATABASE IF NOT EXISTS ' . $dbname);
-	$setupdb->exec('USE ' . $dbname);
-
-} else if ($dbtype === 'sqlite') {
-
-	if (preg_match('/:([^;]+)/', $DB_DSN, $matches)) {
-
-		$dbfilename = $matches[1];
-
-		if (file_exists($dbfilename)) {
-			print "SQLite database ($dbfilename) exists. Backed up database to file " .
-					"${dbfilename}.bak before removing.\n";
-			rename($dbfilename, "${dbfilename}.bak");
-		}
-	}
-
-	$setupdb = new PDO($DB_DSN, $username, $password);
+$dropSchemaScript = configure('SCHEMA_SCRIPT',
+		str_replace('create_tables.sql', 'drop_tables.sql', $schemaScript),
+		'SQL script containing schema definition');
+if (!file_exists($dropSchemaScript)) {
+	print "The indicated script does not exist. Please try again.\n";
+	exit(-1);
 }
-$setupdb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Delete existing database, then re-create it
-$schemaStatements = explode(';', file_get_contents($schemaScript));
-foreach ($schemaStatements as $sql) {
-	$sql = trim($sql);
-	if ($sql !== '') {
-		$setupdb->exec($sql);
+
+// ----------------------------------------------------------------------
+// Create Database
+// ----------------------------------------------------------------------
+include_once 'install/DatabaseInstaller.class.php';
+$dbInstaller = DatabaseInstaller::getInstaller($DB_DSN, $username, $password);
+// if database already exists
+if ($dbInstaller->databaseExists()) {
+	// check if user wants to recreate database
+	$answer = configure('DROP_DATABASE_CONFIRM', 'N',
+			'Database already exists, do you want to drop the database?');
+	if (responseIsAffirmative($answer)) {
+		$dbInstaller->dropDatabase();
 	}
 }
 
+// make sure database exists
+if (!$dbInstaller->databaseExists()) {
+	$dbInstaller->createDatabase();
+}
+
+
+// ----------------------------------------------------------------------
+// Create Schema
+// ----------------------------------------------------------------------
+
+// run drop tables
+$dbInstaller->runScript($dropSchemaScript);
+// create schema
+$dbInstaller->runScript($schemaScript);
 print "Schema loaded successfully!\n";
 
 
@@ -166,18 +131,7 @@ if (!is_dir($referenceDir)) {
 
 foreach (glob($referenceDir . DIRECTORY_SEPARATOR . '*.sql') as $script) {
 	print "\tLoading data from '$script'\n";
-	$scriptContent = file_get_contents($script);
-
-	// Remove /* */ comments
-	$scriptContent = preg_replace('#/\*.*\*/#', '', $scriptContent);
-
-	$referenceStatements = explode(';', $scriptContent);
-	foreach ($referenceStatements as $sql) {
-		$sql = trim($sql);
-		if ($sql !== '') {
-			$setupdb->exec($sql);
-		}
-	}
+	$dbInstaller->runScript($script);
 }
 
 print "Reference data loaded successfully!\n";
@@ -200,50 +154,8 @@ if (!responseIsAffirmative($answer)) {
 	exit(0);
 }
 
-$dataDirectory = configure('DATA_DIR', $CONFIG['DATA_DIR'],
-		'Enter directory where observatory files can be located');
-
-if (!file_exists($dataDirectory)) {
-	print "\tThe indicated directory does not exist. Please try again.\n";
-	exit(-1);
-}
-
-include_once 'classes/ObservationFileParser.class.php';
-include_once 'classes/ObservationFactory.class.php';
-include_once 'classes/ObservatoryFactory.class.php';
-$observatoryFactory = new ObservatoryFactory($setupdb);
-$observationFactory = new ObservationFactory($setupdb);
-$parser = new ObservationFileParser($observatoryFactory);
-
-$files = recursiveGlob($dataDirectory, '*.bns');
-$errorCount = 0;
-
-foreach ($files as $file) {
-	$warnings = array();
-
-	try {
-		$observation = $parser->parse($file, $warnings);
-		$observationFactory->createObservation($observation);
-	} catch (Exception $e) {
-		$warnings[] = $e->getMessage();
-	}
-
-	if (count($warnings) !== 0) {
-		$errorCount += 1;
-		print "The following warnings occurred while processing file '${file}'\n  ";
-		print implode("\n  ", $warnings) . "\n";
-	}
-}
-
-// Show an error summary in case user wasn't watching too closely.
-print "\nProcessed " . count($files) . " files with " . $errorCount .
-		" errors.";
-
-if ($errorCount !== 0) {
-	print " See above for details.\n";
-} else {
-	print "\n";
-}
+// data loading script, which can be run separately
+include 'load_bns.php';
 
 // ----------------------------------------------------------------------
 // Done
