@@ -66,11 +66,16 @@ file_put_contents($APACHE_CONFIG_FILE, '
 		Order Allow,Deny
 		Allow from all
 	</Location>
-	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observation_data/(.*)$ ' . $CONFIG['MOUNT_PATH'] . '/observation_data.php?id=$1 [L,PT]
-	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observatory_detail_feed/(.*)$ ' . $CONFIG['MOUNT_PATH'] . '/observatory_detail_feed.php?id=$1 [L,PT]
-	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observatory_summary_feed/?$ ' . $CONFIG['MOUNT_PATH'] . '/observatory_summary_feed.php [L,PT]
-	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observation/(.*)$ ' . $CONFIG['MOUNT_PATH'] . '/observation.php?id=$1 [L,PT]
-	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observatory/(.*)$ ' . $CONFIG['MOUNT_PATH'] . '/observatory.php?id=$1 [L,PT]
+	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observation_data/(.*)$ ' .
+			$CONFIG['MOUNT_PATH'] . '/observation_data.php?id=$1 [L,PT]
+	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observatory_detail_feed/(.*)$ ' .
+			$CONFIG['MOUNT_PATH'] . '/observatory_detail_feed.php?id=$1 [L,PT]
+	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observatory_summary_feed/?$ ' .
+			$CONFIG['MOUNT_PATH'] . '/observatory_summary_feed.php [L,PT]
+	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observation/(.*)$ ' .
+			$CONFIG['MOUNT_PATH'] . '/observation.php?id=$1 [L,PT]
+	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observatory/(.*)$ ' .
+			$CONFIG['MOUNT_PATH'] . '/index.php?id=$1 [L,PT]
 ');
 
 $answer = configure('DO_DB_SETUP', 'N',
