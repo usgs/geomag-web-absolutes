@@ -101,7 +101,8 @@ define ([
 	};
 
 	UserAdminView.prototype._onEditClick = function (e) {
-		var target = e.target,
+		var _this = this,
+		    target = e.target,
 		    id,
 		    user;
 
@@ -131,15 +132,26 @@ define ([
 		this._modalview = new ModalView(
 					this._editview._el,
 					{
-						title: 'User Admin',
-						closable: false
+						title: this._user.get('id') ? 'Edit User' : 'Create User',
+						closable: false,
+						buttons: [
+							{
+								classes: ['green'],
+								text: this._user.get('id') ? 'Update' : 'Create',
+								callback: function () {
+									_this._editview.updateModel();
+									_this._onUserSave();
+								}
+							},
+							{
+								text: 'Cancel',
+								callback: this._onUserCancel
+							}
+						]
 					}
 			);
 
 		this._modalview.show();
-		if (e.stopPropagation) {
-			e.stopPropagation();
-		}
 	};
 
 return UserAdminView;
