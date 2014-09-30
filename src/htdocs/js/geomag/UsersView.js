@@ -17,13 +17,6 @@ define([
 		clickToSelect: false,
 		columns: [
 			{
-				className: 'name',
-				title: 'Name',
-				format: function (user) {
-					return user.get('name');
-				}
-			},
-			{
 				className: 'username',
 				title: 'Username',
 				format: function (user) {
@@ -38,6 +31,27 @@ define([
 				}
 			},
 			{
+				className: 'name',
+				title: 'Name',
+				format: function (user) {
+					return user.get('name');
+				}
+			},
+			{
+				className: 'admin',
+				title: 'Admin',
+				format: function (user) {
+					return user.get('admin');
+				}
+			},
+			{
+				className: 'enabled',
+				title: 'Enabled',
+				format: function (user) {
+					return user.get('enabled');
+				}
+			},
+			{
 				className: 'last_login',
 				title: 'Last Login',
 				format: function (user) {
@@ -48,22 +62,8 @@ define([
 				}
 			},
 			{
-				className: 'admin',
-				title: 'Is Admin?',
-				format: function (user) {
-					return user.get('admin');
-				}
-			},
-			{
-				className: 'enabled',
-				title: 'Account Enabled?',
-				format: function (user) {
-					return user.get('enabled');
-				}
-			},
-			{
 				className: 'edit',
-				title: 'Edit?',
+				title: '',
 				format: function (user) {
 					return '<button class="edituser" data-id="' + user.get('id') +
 							'">Edit</button>';
