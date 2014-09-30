@@ -23,8 +23,6 @@ define ([
 	UserEditView.prototype.render = function () {
 		var user = this._options.user;
 
-		this._title.innerHTML = user.id ? 'Edit User' : 'Create User';
-
 		this._name.value = user.get('name');
 		this._username.value = user.get('username');
 		this._observatories.selectById(user.get('default_observatory_id'));
@@ -47,31 +45,30 @@ define ([
 
 	UserEditView.prototype._initialize = function () {
 		this._el.innerHTML = [
-			'<h3 class="title"></h3>',
 			'<ul>',
 				'<li>',
 					'<label class="name" for="useredit-name">Name</label>',
-					'<input type="text" id="useredit-name"/>',
+					'<input type="text" id="useredit-name" placeholder="John Doe"/>',
 				'</li>',
 				'<li>',
 					'<label class="username" for="useredit-username">',
 								'User Name</label>',
-					'<input type="text" id="useredit-username"/>',
+					'<input type="text" id="useredit-username" placeholder="jdoe"/>',
 				'</li>',
 				'<li>',
 					'<label class="default-observatory-id" for="default-observatory-id">',
-								'Default Observatory ID</label>',
+								'Default Observatory</label>',
 					'<select id="default-observatory-id"></select>',
 				'</li>',
 				'<li>',
 					'<label class="email" for="email">',
 								'Email</label>',
-					'<input type="text" id="email"/>',
+					'<input type="text" id="email" placeholder="jdoe@usgs.gov"/>',
 				'</li>',
 				'<li>',
 					'<label class="password" for="password">',
 								'Password</label>',
-					'<input type="text" id="password"/>',
+					'<input type="password" id="password"/>',
 				'</li>',
 				'<li>',
 					'<label class="confirm-password" for="confirm-password">',
@@ -90,14 +87,9 @@ define ([
 						'Enabled',
 					'</label>',
 				'</li>',
-				'<li>',
-					'<button class="save">Save</button>',
-					'<button class="cancel">Cancel</button>',
-				'</li>',
 			'</ul>'
 		].join('');
 
-		this._title = this._el.querySelector('.title');
 		this._name = this._el.querySelector('#useredit-name');
 		this._username = this._el.querySelector('#useredit-username');
 		this._observatories = new CollectionSelectBox({
@@ -110,18 +102,9 @@ define ([
 		this._confirmpassword = this._el.querySelector('#confirm-password');
 		this._admin = this._el.querySelector('#admin');
 		this._enabled = this._el.querySelector('#enabled');
-		this._save = this._el.querySelector('.save');
-		this._cancel = this._el.querySelector('.cancel');
-
-		this._onSaveClick = this._onSaveClick.bind(this);
-		this._onCancelClick = this._onCancelClick.bind(this);
-
-		this._save.addEventListener('click', this._onSaveClick);
-		this._cancel.addEventListener('click', this._onCancelClick);
 	};
 
-	UserEditView.prototype._onSaveClick = function () {
-		//TODO update model object.
+	UserEditView.prototype.updateModel = function () {
 		var values = {},
 		    observatory;
 
@@ -139,18 +122,8 @@ define ([
 		}
 
 		this._options.user.set(values);
-		this._options.user.trigger('save');
-
-	};
-
-	UserEditView.prototype._onCancelClick = function () {
-		//TODO cancel
-		this._options.user.trigger('canceledit');
 	};
 
 
-return UserEditView;
-
+	return UserEditView;
 });
-
-
