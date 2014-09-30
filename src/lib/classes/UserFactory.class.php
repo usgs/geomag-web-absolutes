@@ -241,7 +241,7 @@ class UserFactory {
 		$this->insertUser->bindValue(':default_observatory_id',
 				$user['default_observatory_id'], PDO::PARAM_STR);
 		$this->insertUser->bindValue(':email', $user['email'], PDO::PARAM_STR);
-		$this->insertUser->bindValue(':password', $user['password'],
+		$this->insertUser->bindValue(':password', md5($user['password']),
 				PDO::PARAM_STR);
 		$this->insertUser->bindValue(':last_login', $user['last_login'],
 				PDO::PARAM_INT);
@@ -288,8 +288,8 @@ class UserFactory {
 				$user['default_observatory_id'], PDO::PARAM_STR);
 		$this->updateUserWithPassword->bindValue(':email', $user['email'],
 				PDO::PARAM_STR);
-		$this->updateUserWithPassword->bindValue(':password', $user['password'],
-				PDO::PARAM_STR);
+		$this->updateUserWithPassword->bindValue(':password',
+				md5($user['password']), PDO::PARAM_STR);
 		$this->updateUserWithPassword->bindValue(':last_login',
 				intval($user['last_login']), PDO::PARAM_INT);
 		$this->updateUserWithPassword->bindValue(':admin', $user['admin'],
