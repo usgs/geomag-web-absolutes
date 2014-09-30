@@ -29,7 +29,6 @@ if (!file_exists($CONFIG_FILE)) {
 $CONFIG = parse_ini_file($CONFIG_FILE);
 $DB_DSN = configure('DB_ROOT_DSN', '', 'Database administrator DSN');
 $dbtype = substr($DB_DSN, 0, strpos($DB_DSN, ':'));
-$dbname = substr($DB_DSN, strpos('dbname:'));
 $username = configure('DB_ROOT_USER', 'root', 'Database adminitrator user');
 $password = configure('DB_ROOT_PASS', '', 'Database administrator password',
 		true);
@@ -99,9 +98,9 @@ $dbInstaller->runScript($dropSchemaScript);
 // create schema
 $dbInstaller->runScript($schemaScript);
 // create read/write user for save
-if ($dbtype === 'mysql') {
-	$dbInstaller->run("GRANT SELECT, CREATE, UPDATE, DELETE ON ${dbname}.* TO ${username}@'%.usgs.gov' IDENTIFIED BY '{$password}'");
-}
+$dbInstaller->createUser(array('SELECT', 'INSERT', 'UPDATE', 'DELETE'),
+		$CONFIG['DB_USER'], $CONFIG['DB_PASS']);
+
 print "Schema loaded successfully!\n";
 
 

@@ -52,4 +52,11 @@ class SqliteDatabaseInstaller extends DatabaseInstaller {
 		// nothing to do
 	}
 
+	/**
+	 * Create database user.
+	 */
+	public function createUser ($roles, $user, $password) {
+		// nothing to do
+	}
+
 }
