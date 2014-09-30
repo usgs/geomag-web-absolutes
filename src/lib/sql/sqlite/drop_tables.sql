@@ -1,0 +1,11 @@
+PRAGMA foreign_keys = OFF;
+DROP TABLE IF EXISTS observatory;
+DROP TABLE IF EXISTS pier;
+DROP TABLE IF EXISTS mark;
+DROP TABLE IF EXISTS instrument;
+DROP TABLE IF EXISTS observation;
+DROP TABLE IF EXISTS reading;
+DROP TABLE IF EXISTS measurement;
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS sessions;
+PRAGMA foreign_keys = ON;
