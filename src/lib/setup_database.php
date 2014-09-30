@@ -82,15 +82,6 @@ if (!file_exists($dropSchemaScript)) {
 // ----------------------------------------------------------------------
 include_once 'install/DatabaseInstaller.class.php';
 $dbInstaller = DatabaseInstaller::getInstaller($DB_DSN, $username, $password);
-// if database already exists
-if ($dbInstaller->databaseExists()) {
-	// check if user wants to recreate database
-	$answer = configure('DROP_DATABASE_CONFIRM', 'N',
-			'Database already exists, do you want to drop the database?');
-	if (responseIsAffirmative($answer)) {
-		$dbInstaller->dropDatabase();
-	}
-}
 
 // make sure database exists
 if (!$dbInstaller->databaseExists()) {
