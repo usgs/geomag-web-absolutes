@@ -70,6 +70,7 @@ require([
 		'spec/InstrumentTest',
 		'spec/ObservationTest',
 		'spec/UserTest',
+		'spec/UserAdminViewTest',
 		'spec/ReadingTest',
 		'spec/MeasurementViewTest',
 		'spec/ReadingGroupViewTest',

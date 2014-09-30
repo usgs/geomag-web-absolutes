@@ -18,10 +18,9 @@ define([
 		'username': null,
 		'default_observatory_id': null,
 		'email': null,
-		'password': null,
 		'last_login': null,
-		'admin': 'N',
-		'enabled': 'Y'
+		'admin': null,
+		'enabled': null
 	};
 
 	// static reference to currently logged in user
@@ -34,7 +33,6 @@ define([
 	var User = function (attributes) {
 		Model.call(this, Util.extend({}, DEFAULTS, attributes));
 	};
-
 	// User extends Model
 	User.prototype = Object.create(Model.prototype);
 
@@ -50,7 +48,6 @@ define([
 		}
 		return CURRENT_USER;
 	};
-
 
 	return User;
 });

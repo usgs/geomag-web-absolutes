@@ -20,13 +20,6 @@ define([
 				expect(obj).to.be.an.instanceOf(User);
 			});
 
-			it('is enabled by default', function () {
-				expect(obj.get('enabled')).to.equal('Y');
-			});
-
-			it('is not admin by default', function () {
-				expect(obj.get('admin')).to.equal('N');
-			});
 		}); // END :: Constructor
 
 	}); // END :: Unit tests for User

@@ -80,14 +80,33 @@ class Reading {
 		}
 
 		return new Reading ($p['id'],
-				isset($p['observation_id']) ?$p['observation_id'] : null,
-				$p['set_number'], $p['declination_valid'],
-				$p['declination_shift'], $p['horizontal_intensity_valid'],
-				$p['vertical_intensity_valid'],
-				$p['startH'], $p['endH'], $p['absH'], $p['baseH'],
-				$p['startZ'], $p['endZ'], $p['absZ'], $p['baseZ'],
-				$p['startD'], $p['endD'], $p['absD'], $p['baseD'],
-				$p['annotation'], $measurements);
+				isset($p['observation_id']) ? $p['observation_id'] : null,
+				isset($p['set_number']) ? $p['set_number'] : null,
+				isset($p['declination_valid']) ? $p['declination_valid'] : null,
+				isset($p['declination_shift']) ? $p['declination_shift'] : null,
+				isset($p['horizontal_intensity_valid']) ?
+						$p['horizontal_intensity_valid'] : null,
+				isset($p['vertical_intensity_valid']) ?
+						$p['vertical_intensity_valid'] : null,
+
+				isset($p['startH']) ? $p['startH'] : null,
+				isset($p['endH']) ? $p['endH'] : null,
+				isset($p['absH']) ? $p['absH'] : null,
+				isset($p['baseH']) ? $p['baseH'] : null,
+
+				isset($p['startZ']) ? $p['startZ'] : null,
+				isset($p['endZ']) ? $p['endZ'] : null,
+				isset($p['absZ']) ? $p['absZ'] : null,
+				isset($p['baseZ']) ? $p['baseZ'] : null,
+
+				isset($p['startD']) ? $p['startD'] : null,
+				isset($p['endD']) ? $p['endD'] : null,
+				isset($p['absD']) ? $p['absD'] : null,
+				isset($p['baseD']) ? $p['baseD'] : null,
+
+				isset($p['annotation']) ? $p['annotation'] : null,
+
+				$measurements);
 	}
 
 	public function toArray () {
