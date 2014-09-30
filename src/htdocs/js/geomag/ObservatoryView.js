@@ -14,19 +14,16 @@ define([
 ) {
 	'use strict';
 
-
 	var DEFAULTS = {
 		observatoryId: null,
 		factory: new ObservatoryFactory()
 	};
-
 
 	var ObservatoryView = function (options) {
 		this._options = Util.extend({}, DEFAULTS, options);
 		View.call(this, this._options);
 	};
 	ObservatoryView.prototype = Object.create(View.prototype);
-
 
 	ObservatoryView.prototype.render = function (id) {
 		if (typeof id === 'undefined' || id === null) {
@@ -39,7 +36,6 @@ define([
 
 		this._getObservations(id);
 	};
-
 
 	ObservatoryView.prototype._initialize = function () {
 		var _this = this,
@@ -90,9 +86,7 @@ define([
 
 	};
 
-
 	ObservatoryView.prototype._getObservatories = function () {
-
 		var _this = this,
 		    factory = this._options.factory;
 
@@ -121,12 +115,14 @@ define([
 	};
 
 	ObservatoryView.prototype._setObservatoryTitle = function (data) {
-		var i = 0, len = data.length, observatory;
+		var i,
+		    len = data.length,
+		    observatory;
 
-		for (; i < len; i++) {
+		for (i = 0; i < len; i++) {
 			observatory = data[i];
 			if (observatory.get('id') === this._options.observatoryId) {
-				this._observatoryTitle.innerHTML = observatory.get('name');
+				this._observatoryTitle.innerHTML = observatory.get('code');
 				break;
 			}
 		}
@@ -151,7 +147,6 @@ define([
 		observatoryList.innerHTML = markup.join('');
 	};
 
-
 	ObservatoryView.prototype._getObservations = function (id) {
 		var _this = this,
 		    el = this._el;
@@ -166,9 +161,7 @@ define([
 		}
 	};
 
-
 	ObservatoryView.prototype._getHash = function(url){
-
 		var hash;
 
 		if (typeof url === 'undefined' || url === null){

@@ -137,4 +137,3 @@ abstract class DatabaseInstaller {
 // include sub classes, now that abstract class is defined.
 include_once 'MysqlDatabaseInstaller.class.php';
 include_once 'SqliteDatabaseInstaller.class.php';
-
