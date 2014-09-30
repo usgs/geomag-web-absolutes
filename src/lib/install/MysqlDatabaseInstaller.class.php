@@ -61,7 +61,9 @@ class MysqlDatabaseInstaller extends DatabaseInstaller {
 	 */
 	public function createUser ($roles, $user, $password) {
 		// create read/write user for save
-		$this->run('GRANT ' . implode(',', $roles) . ' ON ' . $this->dbname . '.* TO ' . $user . ' IDENTIFIED BY \'' . $password . '\'');
+		$this->run('GRANT ' . implode(',', $roles) . ' ON ' .
+				$this->dbname . '.* TO ' . $user . '@\'%\' IDENTIFIED BY \'' .
+				$password . '\'');
 	}
 
 	/**
