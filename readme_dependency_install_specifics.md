@@ -1,5 +1,6 @@
 Readme dependencies
 
+---
 ### Windows ###
 
 1. You will need a terminal tool for Windows. I used [Git Bash][] to test these
@@ -58,23 +59,33 @@ Readme dependencies
 ### Mac ###
 
 1. install xcode
+
    ```https://developer.apple.com/xcode/```
 
-2. install homebrew
+1. install homebrew
+
    ```http://mxcl.github.io/homebrew/```
 
-3. Use homebrew to install node, git and ruby
+1. Use homebrew to install node, git and ruby
+
    ```brew install node```
+
    ```brew install git```
+
    ```brew install ruby```
 
-4. Update paths as needed in your `~/.bash_profile`:
+1. Update paths as needed in your `~/.bash_profile`:
    ```# brew installed binaries```
+
    ```export PATH=$PATH:/usr/local/bin```
+
    ```# npm installed binaries```
+
    ```export PATH=$PATH:/usr/local/share/npm/bin```
+
    ```# gem installed binaries```
+
    ```export PATH=$PATH:/usr/local/opt/ruby/bin```
 
-5. Close and re-open your terminal so that your new PATH is loaded.
+1. Close and re-open your terminal so that your new PATH is loaded.
    Make sure to navigate back to your `geomag-baseline-calculator` project directory.

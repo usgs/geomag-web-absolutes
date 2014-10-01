@@ -23,6 +23,7 @@ Make sure you are in your `geomag-baseline-calculator` project directory.
 Install these packages from your terminal.
 
 1. Install local npm modules
+
    ```npm install```
 
    [Dependency install details for Windows and Mac](readme_dependency_install_specifics.md)
