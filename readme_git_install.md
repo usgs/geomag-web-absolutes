@@ -4,7 +4,7 @@ GIT INSTALL
 
 1. Fork the project into your GitHub user account.
   1. Sign in to GitHub.
-  2. Go to `https://github.com/usgs/earthquake-eventpages`.
+  2. Go to `https://github.com/usgs/geomag-baseline-calculator`.
   2. Click the **Fork** button near the top right of the page.
 
 1. Make sure you Add an SSH Key to GitHub for the computer you're
@@ -14,24 +14,24 @@ GIT INSTALL
    Navigate to the _HOME_ directory that you want to use for projects.
    Replace `[your username]` with your GitHub username.
 
-   ```git clone git@github.com:[your username]/earthquake-eventpages.git
-   earthquake-eventpages```
+   `git clone git@github.com:[your username]/geomag-baseline-calculator.git
+   geomag-baseline-calculator`
 
-   ```cd earthquake-eventpages```
+   `cd geomag-baseline-calculator`
 
 1. Add upstream remote for primary (use terminal)
 
-   ```git remote add upstream git@github.com:usgs/earthquake-eventpages.git```
+   `git remote add upstream git@github.com:usgs/geomag-baseline-calculator.git`
 
    Check your remotes with `git remote -v`, it should look like this
 
-   ```origin  git@github.com:[your username]/earthquake-eventpages.git (fetch)```
+   `origin  git@github.com:[your username]/geomag-baseline-calculator.git (fetch)`
 
-   ```origin  git@github.com:[your username]/earthquake-eventpages.git (push)```
+   `origin  git@github.com:[your username]/geomag-baseline-calculator.git (push)`
 
-   ```upstream        git@github.com:usgs/earthquake-eventpages.git (fetch)```
+   `upstream        git@github.com:usgs/geomag-baseline-calculator.git (fetch)`
 
-   ```upstream        git@github.com:usgs/earthquake-eventpages.git (push)```
+   `upstream        git@github.com:usgs/geomag-baseline-calculator.git (push)`
 
 
 ### Add an SSH Key to GitHub ###
