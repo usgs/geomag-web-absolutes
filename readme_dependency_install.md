@@ -8,6 +8,7 @@ You will need to have the following tools installed in order to run this project
   1. Sass
   1. Compass
 
+---
 1. Install PHP
 
     `npm install php`
