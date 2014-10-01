@@ -8,11 +8,6 @@ data processing software.
 Getting Started
 ---------------
 
-
-
-### Getting Started:
-Make sure you are in your `geomag-baseline-calculator` project directory.
-
 1. [Use git to clone earthquake-eventpages from git repository](readme_git_install.md)
 
 1. [Install needed dependencies and run them](readme_dependency_install.md)
