@@ -46,4 +46,4 @@ command line interface globally
 
     `npm install -g grunt-cli`
 
-[Dependency install details for Windows and Mac](readme_dependency_install.md)
+[Dependency install details](readme_dependency_install.md)
