@@ -34,7 +34,6 @@ var HorizontalIntensitySummaryView = function (options) {
       _factory,
       _measurements,
       _name,
-      _observer,
       _options,
       _ord,
       _reading,
@@ -65,8 +64,7 @@ var HorizontalIntensitySummaryView = function (options) {
       '<td class="end-time"></td>',
       '<td class="abs-value"></td>',
       '<td class="ord"></td>',
-      '<td class="baseline-values"></td>',
-      '<td class="observer"></td>'
+      '<td class="baseline-values"></td>'
     ].join('');
 
     // save references to elements that will be updated during render
@@ -77,7 +75,6 @@ var HorizontalIntensitySummaryView = function (options) {
     _absValue = el.querySelector('.abs-value');
     _ord = el.querySelector('.ord');
     _baselineValues = el.querySelector('.baseline-values');
-    _observer = el.querySelector('.observer');
 
     _measurements = _factory.getHorizontalIntensityMeasurements(_reading);
 
@@ -126,7 +123,6 @@ var HorizontalIntensitySummaryView = function (options) {
         Format.nanoteslas(_calculator.meanH(_reading));
     _baselineValues.innerHTML =
         Format.nanoteslas(_calculator.hBaseline(_reading));
-    _observer.innerHTML = _reading.get('observer') || '';
   };
 
   _initialize(options);
