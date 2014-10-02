@@ -20,6 +20,9 @@ var _DEFAULTS = {
       className: 'email',
       title: 'Email',
       format: function (user) {
+        if (user.get('email') === null) {
+          return '&ndash;';
+        }
         return user.get('email');
       }
     },
@@ -27,6 +30,9 @@ var _DEFAULTS = {
       className: 'name',
       title: 'Name',
       format: function (user) {
+        if (user.get('name') === null) {
+          return '&ndash;';
+        }
         return user.get('name');
       }
     },
