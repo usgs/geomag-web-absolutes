@@ -60,7 +60,6 @@ define([
 				Format.minutes(this._calculator.dBaseline(reading)*60);
 		this._eBaseline.innerHTML =
 				Format.nanoteslas(this._calculator.eBaseline(reading));
-		this._observer.innerHTML = this._reading.get('observer') || '';
 	};
 
 	DeclinationSummaryView.prototype._initialize = function () {
@@ -79,7 +78,6 @@ define([
 			'<td class="ord-min"></td>',
 			'<td class="baseline-min"></td>',
 			'<td class="baseline-nt"></td>',
-			'<td class="observer"></td>',
 			'<td class="shift">',
 				'<select>',
 					'<option value="-180">-180</option>',
@@ -98,7 +96,6 @@ define([
 		this._ordMin = el.querySelector('.ord-min');
 		this._baselineMin = el.querySelector('.baseline-min');
 		this._eBaseline = el.querySelector('.baseline-nt');
-		this._observer = el.querySelector('.observer');
 		this._shift = el.querySelector('.shift > select');
 
 		this._reading = this._options.reading;
