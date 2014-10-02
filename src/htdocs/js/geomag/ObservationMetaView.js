@@ -1,16 +1,21 @@
+/* MOUNT_PATH */
 'use strict';
-
 
 var Collection = require('mvc/Collection'),
     CollectionSelectBox = require('mvcutil/CollectionSelectBox'),
     Formatter = require('geomag/Formatter'),
+    User = require('geomag/User'),
+    UserFactory = require('geomag/UserFactory'),
     Util = require('util/Util'),
     View = require('mvc/View');
 
 
 // default constructor options
 var _DEFAULTS = {
-  observatoryId: null
+  observatoryId: null,
+  UserFactory: new UserFactory({
+    url: MOUNT_PATH + '/user_data.php'
+  })
 };
 
 // unique id prefix for form elements
@@ -59,9 +64,11 @@ var ObservationMetaView = function (options) {
       _observatoryId,
       _observatorySelectView,
       _observatories,
+      _observerName,
       _pierSelectView,
       _pierTemperature,
       _theodoliteSelectView,
+      _user,
 
       _createViewSkeleton,
       _formatInstrument,
@@ -89,6 +96,9 @@ var ObservationMetaView = function (options) {
 
     _observatoryId = options.observatoryId;
 
+    _userFactory = options.UserFactory;
+    _user = User.getCurrentUser();
+
     _createViewSkeleton();
   };
 
@@ -97,11 +107,25 @@ var ObservationMetaView = function (options) {
     var begin = new Date(_observation.get('begin') || (new Date()).getTime()),
         y = begin.getUTCFullYear(),
         m = begin.getUTCMonth() + 1,
-        d = begin.getUTCDate();
+        d = begin.getUTCDate(),
+        observer = _observation.get('observer_user_id');
 
     _date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
     _julianDay.value = _this.getJulianDay(begin);
     _pierTemperature.value = _observation.get('pier_temperature');
+
+    _observerName.value = observer;
+    if (observer) {
+      _userFactory.get({
+        data: {'id': observer},
+        success: function (data) {
+          // replace observer_user_id with username once it is returned.
+          _observerName.value = data.username;
+        }
+      });
+      } else {
+      _observerName.value = user.get('username');
+    }
   };
 
 
@@ -134,6 +158,9 @@ var ObservationMetaView = function (options) {
                 'Pier <abbr title="Temperature">Temp</abbr></label>',
             '<input id="',  idPrefix, '-piertemp" type="text"',
                 ' class="pier-temperature"/>',
+            '<label for="', idPrefix, '-observer">Observer</label>',
+            '<input id="',  idPrefix, '-observer" type="text"',
+                ' class="observer-name" disabled />',
           '</div>',
           '<div class="column one-of-two left-aligned">',
             '<label for="', idPrefix, '-observatory" class="print-hidden">Observatory</label>',
@@ -186,6 +213,7 @@ var ObservationMetaView = function (options) {
     _date = el.querySelector('.observation-date');
     _julianDay = el.querySelector('.julian-day-value');
     _pierTemperature = el.querySelector('.pier-temperature');
+    _observerName = el.querySelector('.observer-name');
 
     _date.addEventListener('change', _onChange);
     // This makes sure the Julian day updates, among other things
