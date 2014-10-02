@@ -1,4 +1,4 @@
-/* global define */
+/* global define, MOUNT_PATH */
 define([
 	'mvc/View',
 	'mvc/Collection',
@@ -6,7 +6,8 @@ define([
 
 	'mvcutil/CollectionSelectBox',
 
-	'geomag/Formatter'
+	'geomag/Formatter',
+	'geomag/UserFactory'
 ], function (
 	View,
 	Collection,
@@ -14,14 +15,18 @@ define([
 
 	CollectionSelectBox,
 
-	Format
+	Format,
+	UserFactory
 ) {
 	'use strict';
 
 
 	// default constructor options
 	var DEFAULTS = {
-		observatoryId: null
+		observatoryId: null,
+		UserFactory: new UserFactory({
+			url: MOUNT_PATH + '/user_data.php'
+		})
 	};
 
 	// unique id prefix for form elements
@@ -72,15 +77,28 @@ define([
 
 
 	ObservationMetaView.prototype.render = function () {
-		var obs = this._observation,
+		var _this = this,
+		    obs = this._observation,
 		    begin = new Date(obs.get('begin') || new Date().getTime()),
 		    y = begin.getUTCFullYear(),
 		    m = begin.getUTCMonth() + 1,
-		    d = begin.getUTCDate();
+		    d = begin.getUTCDate(),
+		    observer = obs.get('observer_user_id');
 
 		this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
 		this._julianDay.value = this.getJulianDay(begin);
 		this._pierTemperature.value = obs.get('pier_temperature');
+		this._observerName.value = observer;
+
+		if (observer) {
+			this._userFactory.get({
+				data: {'id': observer},
+				success: function (data) {
+					// replace observer_user_id with username once it is returned.
+					_this._observerName.value = data.username;
+				}
+			});
+		}
 	};
 
 
@@ -108,10 +126,12 @@ define([
 		    theodoliteSelectView,
 		    date,
 		    pierTemperature,
+		    observerName,
 		    idPrefix = IDPREFIX + (++SEQUENCE);
 
 		this._calculator = calculator;
 		this._observation = observation;
+		this._userFactory = this._options.UserFactory;
 		this._onChange = this._onChange.bind(this);
 
 		el.innerHTML = [
@@ -128,6 +148,9 @@ define([
 								'Pier <abbr title="Temperature">Temp</abbr></label>',
 						'<input id="',  idPrefix, '-piertemp" type="text"',
 								' class="pier-temperature"/>',
+						'<label for="', idPrefix, '-observer">Observer</label>',
+						'<input id="',  idPrefix, '-observer" type="text"',
+								' class="observer-name"/>',
 					'</div>',
 					'<div class="column one-of-two left-aligned">',
 						'<label for="', idPrefix, '-observatory">Observatory</label>',
@@ -185,6 +208,7 @@ define([
 		this._julianDay = this._el.querySelector('.julian-day-value');
 		this._pierTemperature = pierTemperature =
 				el.querySelector('.pier-temperature');
+		this._observerName = observerName = el.querySelector('.observer-name');
 
 		date.addEventListener('change', this._onChange);
 		// This makes sure the Julian day updates, among other things
