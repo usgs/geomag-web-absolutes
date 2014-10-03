@@ -238,6 +238,7 @@ var ObservationMetaView = function (options) {
           mark = null,
           pierCorrection = 0,
           trueAzimuthOfMark = 0;
+
       if (pier !== null) {
         pierCorrection = pier.get('correction');
 
@@ -272,6 +273,7 @@ var ObservationMetaView = function (options) {
     _marksSelectView.on('change', function (mark) {
       var mark_id = null,
           trueAzimuthOfMark = 0;
+
       if (mark !== null) {
         mark_id = mark.id;
         trueAzimuthOfMark = mark.get('azimuth');
@@ -307,7 +309,14 @@ var ObservationMetaView = function (options) {
    * @return {String} content for option element.
    */
   _formatInstrument = function (instrument) {
-    return instrument.get('name') + ' (' + instrument.get('serial_number') + ')';
+    var name = instrument.get('name'),
+        serial = instrument.get('serial_number');
+
+    if (name) {
+      return name + ' (' + serial + ')';
+    } else {
+      return serial;
+    }
   };
 
   /**
