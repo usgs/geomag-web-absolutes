@@ -432,12 +432,12 @@ var ObservationMetaView = function (options) {
       } else {
       _observerName.value = _user.get('username');
     }
-        if (reviewer) {
-      this._userFactory.get({
+    if (reviewer) {
+      _userFactory.get({
         data: {'id': reviewer},
         success: function (data) {
           // replace reviewer_user_id with username once it is returned.
-          _this._reviewerName.value = data.username;
+          _reviewerName.value = data.username;
         }
       });
     }
