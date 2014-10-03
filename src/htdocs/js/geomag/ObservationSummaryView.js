@@ -58,12 +58,12 @@ var ObservationSummaryView = function (options) {
       _renderSummaryBottom,
       _renderVerticalIntensitySummaryView;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
 
   _initialize = function () {
     var el = _this.el;
 
-    _options = Util.extend({}, _DEFAULTS, options);
     _calculator = _options.baselineCalculator;
     _observation = _options.observation;
     _readings = _observation.get('readings');
