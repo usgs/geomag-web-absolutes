@@ -150,7 +150,7 @@ define([
 								' class="pier-temperature"/>',
 						'<label for="', idPrefix, '-observer">Observer</label>',
 						'<input id="',  idPrefix, '-observer" type="text"',
-								' class="observer-name"/>',
+								' class="observer-name" disabled />',
 					'</div>',
 					'<div class="column one-of-two left-aligned">',
 						'<label for="', idPrefix, '-observatory">Observatory</label>',
