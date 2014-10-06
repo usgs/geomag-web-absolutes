@@ -366,9 +366,14 @@ define([
 	ObservationMetaView.prototype._onChange = function () {
 		var observation = this._observation,
 		    date = this._date.value,
+		    today = new Date().getTime(),
 		    pierTemperature = this._pierTemperature.value;
 
 		date = Format.parseDate(date);
+		if (date > today) {
+			date = today;
+		}
+
 		pierTemperature = (pierTemperature === '' ?
 				null : parseFloat(pierTemperature));
 
