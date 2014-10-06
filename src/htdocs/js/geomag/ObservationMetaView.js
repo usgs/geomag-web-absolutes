@@ -7,7 +7,8 @@ define([
 	'mvcutil/CollectionSelectBox',
 
 	'geomag/Formatter',
-	'geomag/UserFactory'
+	'geomag/UserFactory',
+	'geomag/User'
 ], function (
 	View,
 	Collection,
@@ -16,7 +17,8 @@ define([
 	CollectionSelectBox,
 
 	Format,
-	UserFactory
+	UserFactory,
+	User
 ) {
 	'use strict';
 
@@ -83,7 +85,8 @@ define([
 		    y = begin.getUTCFullYear(),
 		    m = begin.getUTCMonth() + 1,
 		    d = begin.getUTCDate(),
-		    observer = obs.get('observer_user_id');
+		    observer = obs.get('observer_user_id'),
+		    user = this._user;
 
 		this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
 		this._julianDay.value = this.getJulianDay(begin);
@@ -98,6 +101,8 @@ define([
 					_this._observerName.value = data.username;
 				}
 			});
+		} else {
+			_this._observerName.value = user.get('username');
 		}
 	};
 
@@ -119,6 +124,7 @@ define([
 		    calculator = this._options.calculator,
 		    observation = this._options.observation,
 		    observatories = this._options.observatories,
+		    idPrefix = IDPREFIX + (++SEQUENCE),
 		    observatorySelectView,
 		    pierSelectView,
 		    marksSelectView,
@@ -126,13 +132,13 @@ define([
 		    theodoliteSelectView,
 		    date,
 		    pierTemperature,
-		    observerName,
-		    idPrefix = IDPREFIX + (++SEQUENCE);
+		    observerName;
 
 		this._calculator = calculator;
 		this._observation = observation;
 		this._userFactory = this._options.UserFactory;
 		this._onChange = this._onChange.bind(this);
+		this._user = User.getCurrentUser();
 
 		el.innerHTML = [
 			'<section class="observation-meta-view">',
