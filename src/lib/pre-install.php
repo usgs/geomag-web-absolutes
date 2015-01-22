@@ -66,6 +66,7 @@ file_put_contents($APACHE_CONFIG_FILE, '
 		Order Allow,Deny
 		Allow from all
 	</Location>
+	RewriteEngine on
 	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observation_data/(.*)$ ' .
 			$CONFIG['MOUNT_PATH'] . '/observation_data.php?id=$1 [L,PT]
 	RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/observatory_detail_feed/(.*)$ ' .
