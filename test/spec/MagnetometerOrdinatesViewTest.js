@@ -187,7 +187,7 @@ define([
 			it('updates view elements for scaleValue', function () {
 				expect(view._scaleValue.textContent).to.equal(
 					'Ordinate Mean D is calculated using ' +
-					'(Corrected F * scaleValue / 60), where scaleValue = ' +
+					'(Corrected H * scaleValue / 60), where scaleValue = ' +
 					format4(14));
 			});
 

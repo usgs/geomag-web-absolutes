@@ -163,7 +163,7 @@ define([
 				Format.rawNanoteslas(calculator.pierCorrection());
 		this._scaleValue.innerHTML = [
 				'Ordinate Mean D is calculated using ',
-				'<code>(Corrected F * scaleValue / 60)</code>',
+				'<code>(Corrected H * scaleValue / 60)</code>',
 				', where <code>',
 						'scaleValue = ', calculator.scaleValue(reading).toFixed(4),
 				'</code>'].join('');
