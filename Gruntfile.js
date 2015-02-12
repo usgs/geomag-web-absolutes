@@ -31,8 +31,7 @@ module.exports = function (grunt) {
 	var appConfig = {
 		dev: 'src',
 		dist: 'dist',
-		test: 'test',
-		tmp: '.tmp'
+		test: 'test'
 	};
 
 	grunt.initConfig({
@@ -61,7 +60,7 @@ module.exports = function (grunt) {
 					'<%= app.dev %>/htdocs/**/*.html',
 					'<%= app.dev %>/htdocs/css/**/*.css',
 					'<%= app.dev %>/htdocs/img/**/*.{png,jpg,jpeg,gif}',
-					'.tmp/css/**/*.css'
+					config.src + '/**/*.scss'
 				]
 			},
 			gruntfile: {
@@ -109,14 +108,17 @@ module.exports = function (grunt) {
 			],
 			dev: {
 				options: {
-					base: '<%= app.dev %>/htdocs',
+					base: [
+						config.example,
+						config.build + '/' + config.src,
+						'<%= app.dev %>/htdocs'
+					],
 					port: 8080,
 					middleware: function (connect, options) {
 						return [
 							lrSnippet,
 							rewriteRulesSnippet,
 							proxySnippet,
-							mountFolder(connect, '.tmp'),
 							mountPHP(options.base),
 							mountFolder(connect, options.base),
 							mountFolder(connect, 'node_modules')
@@ -142,12 +144,16 @@ module.exports = function (grunt) {
 			},
 			test: {
 				options: {
-					base: '<%= app.test %>',
+					base: [
+						config.build + '/' + config.src,
+						config.build + '/' + config.test,
+						'node_modules',
+						'<%= app.test %>'
+					],
 					devBase: '<%= app.dev %>/htdocs',
 					port: 8000,
 					middleware: function (connect, options) {
 						return [
-							mountFolder(connect, '.tmp'),
 							mountFolder(connect, 'node_modules'),
 							mountFolder(connect, options.base),
 							mountPHP(options.devBase),
@@ -169,7 +175,7 @@ module.exports = function (grunt) {
 			dev: {
 				options: {
 					sassDir: '<%= app.dev %>/htdocs/css',
-					cssDir: '<%= app.tmp %>/css',
+					cssDir: config.build + '/' config.src,
 					environment: 'development'
 				}
 			}
@@ -223,8 +229,7 @@ module.exports = function (grunt) {
 		cssmin: {
 			dist: {
 				expand: true,
-				cwd: '.tmp/css',
-				src: ['*.css'],
+				src: [config.build + '/' + config.src + '/*.css'],
 				dest: '<%= app.dist %>/htdocs/css/'
 			}
 		},
@@ -316,7 +321,7 @@ module.exports = function (grunt) {
 		},
 		clean: {
 			dist: ['<%= app.dist %>'],
-			dev: ['<%= app.tmp %>', '.sass-cache']
+			dev: [config.build, '.sass-cache']
 		}
 	});
 
