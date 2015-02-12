@@ -8,7 +8,8 @@ var browserify = {
       debug: true,
       paths: [
         process.cwd() + '/' + config.src,
-        process.cwd() + '/node_modules/hazdev-webutils/src'
+        process.cwd() + '/node_modules/hazdev-webutils/src',
+        process.cwd() + '/node_modules/hazdev-tablist/src/tablist'
       ]
     }
   },
