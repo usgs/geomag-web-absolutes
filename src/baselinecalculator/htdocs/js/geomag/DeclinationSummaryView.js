@@ -1,76 +1,55 @@
-/* global define */
-define([
-  'mvc/View',
-  'util/Util',
+'use strict';
 
-  'geomag/Formatter',
-  'geomag/Measurement',
-  'geomag/ObservatoryFactory'
-], function (
-  View,
-  Util,
-
-  Format,
-  Measurement,
-  ObservatoryFactory
-) {
-  'use strict';
+var Format = require('geomag/Formatter'),
+    Measurement = require('geomag/Measurement'),
+    ObservatoryFactory = require('geomag/ObservatoryFactory'),
+    Util = require('util/Util'),
+    View = require('mvc/View');
 
 
-  var DEFAULTS = {
-    factory: new ObservatoryFactory()
-  };
+var _DEFAULTS = {
+  factory: new ObservatoryFactory()
+};
 
+  /**
+   * Construct a new DeclinationSummaryView.
+   *
+   * @param options {Object}
+   *        view options.
+   * @param options.calculator {geomag.ObservationBaselineCalculator}
+   *        the calculator to use.
+   * @param options.factory {geomag.ObservatoryFactory}
+   *        the factory to use.
+   * @parem options.reading {geomag.Reading}
+   *        the reading to display.
+   */
+var DeclinationSummaryView = function (options) {
+  var _this,
+      _initialize,
 
-  var DeclinationSummaryView = function (options) {
-    this._options = Util.extend({}, DEFAULTS, options);
-    View.call(this, this._options);
-  };
-  DeclinationSummaryView.prototype = Object.create(View.prototype);
+      _options,
 
+      _onChange;
 
-  DeclinationSummaryView.prototype.render = function () {
-    var reading = this._reading,
-        measurements = reading.get('measurements').data(),
-        factory = this._options.factory,
-        startTime = null,
-        endTime = null,
-        times;
-
-    this._name.innerHTML = reading.get('set_number');
-
-    this._valid.checked = (reading.get('declination_valid') === 'Y');
-
-    times = factory.getMeasurementValues(measurements, 'time');
-    if (times.length > 0) {
-      startTime = Math.min.apply(null, times);
-      endTime = Math.max.apply(null, times);
-    }
-    this._startTime.innerHTML = Format.time(startTime);
-    this._endTime.innerHTML = Format.time(endTime);
-
-    this._shift.value = reading.get('declination_shift');
-
-    this._absolute.innerHTML = Format.degreesMinutes(
-        this._calculator.magneticDeclination(reading));
-
-    this._ordMin.innerHTML =
-        Format.minutes(this._calculator.dComputed(reading)*60);
-    this._baselineMin.innerHTML =
-        Format.minutes(this._calculator.dBaseline(reading)*60);
-    this._eBaseline.innerHTML =
-        Format.nanoteslas(this._calculator.eBaseline(reading));
-    this._observer.innerHTML = this._reading.get('observer') || '';
-  };
-
-  DeclinationSummaryView.prototype._initialize = function () {
-    var el = this._el,
-        factory = this._options.factory,
-        reading = this._options.reading,
+  _this = View(options);
+  /**
+   * Initialize view, and call render.
+   * @param options {Object} same as constructor.
+   */
+  _initialize = function (options) {
+    var calculator,
+        el = _this.el,
+        factory,
         i = null,
-        len = null;
+        len = null,
+        reading;
 
-    el.innerHTML = [
+    _options = Util.extend({}, _DEFAULTS, options);
+    calculator = _options.calculator;
+    factory = _options.factory;
+    reading = _options.reading;
+
+    _this.el.innerHTML = [
       '<th class="name" scope="row"></th>',
       '<td class="valid"><input type="checkbox" /></td>',
       '<td class="start-time"></td>',
@@ -87,46 +66,85 @@ define([
           '<option value="180">+180</option>',
         '</select>',
       '</td>'
-
     ].join('');
 
-    this._name = el.querySelector('.name');
-    this._valid = el.querySelector('.valid > input');
-    this._startTime = el.querySelector('.start-time');
-    this._endTime = el.querySelector('.end-time');
-    this._absolute = el.querySelector('.absolute-declination');
-    this._ordMin = el.querySelector('.ord-min');
-    this._baselineMin = el.querySelector('.baseline-min');
-    this._eBaseline = el.querySelector('.baseline-nt');
-    this._observer = el.querySelector('.observer');
-    this._shift = el.querySelector('.shift > select');
+    // save references to elements that will be updated during render
+    _this._name = el.querySelector('.name');
+    _this._valid = el.querySelector('.valid > input');
+    _this._startTime = el.querySelector('.start-time');
+    _this._endTime = el.querySelector('.end-time');
+    _this._absolute = el.querySelector('.absolute-declination');
+    _this._ordMin = el.querySelector('.ord-min');
+    _this._baselineMin = el.querySelector('.baseline-min');
+    _this._eBaseline = el.querySelector('.baseline-nt');
+    _this._observer = el.querySelector('.observer');
+    _this._shift = el.querySelector('.shift > select');
 
-    this._reading = this._options.reading;
-    this._calculator = this._options.calculator;
+    _this._reading = reading;
+    _this._calculator = calculator;
 
-    this._measurements = factory.getDeclinationMeasurements(reading);
+    _this._measurements = factory.getDeclinationMeasurements(reading);
 
-    this._onChange = this._onChange.bind(this);
-    this._valid.addEventListener('change', this._onChange);
-    this._shift.addEventListener('change', this._onChange);
+    _this._valid.addEventListener('change', _onChange);
+    _this._shift.addEventListener('change', _onChange);
 
-    this._reading.on('change:declination_valid', this.render, this);
-    this._reading.on('change:declination_shift', this.render, this);
+    _this._reading.on('change:declination_valid', _this.render, _this);
+    _this._reading.on('change:declination_shift', _this.render, _this);
 
-    this._calculator.on('change', this.render, this);
+    // watches for changes in pier/mark
+    _this._calculator.on('change', _this.render, _this);
 
-    for (i = 0, len = this._measurements.length; i < len; i++) {
-      this._measurements[i].on('change', this.render, this);
+    for (i = 0, len = _this._measurements.length; i < len; i++) {
+      _this._measurements[i].on('change', _this.render, _this);
     }
-    this.render();
+
+    _this.render();
   };
 
-  DeclinationSummaryView.prototype._onChange = function () {
-    this._reading.set({
-      declination_valid: (this._valid.checked ? 'Y' : 'N'),
-      declination_shift: parseInt(this._shift.value, 10)
+  _onChange = function () {
+    _this._reading.set({
+      declination_valid: (_this._valid.checked ? 'Y' : 'N'),
+      declination_shift: parseInt(_this._shift.value, 10)
     });
   };
 
-  return DeclinationSummaryView;
-});
+  _this.render = function () {
+    var reading = _this._reading,
+        measurements = reading.get('measurements').data(),
+        factory = _options.factory,
+        startTime = null,
+        endTime = null,
+        times;
+
+    _this._name.innerHTML = reading.get('set_number');
+
+    _this._valid.checked = (reading.get('declination_valid') === 'Y');
+
+    times = factory.getMeasurementValues(measurements, 'time');
+    if (times.length > 0) {
+      startTime = Math.min.apply(null, times);
+      endTime = Math.max.apply(null, times);
+    }
+    _this._startTime.innerHTML = Format.time(startTime);
+    _this._endTime.innerHTML = Format.time(endTime);
+
+    _this._shift.value = reading.get('declination_shift');
+
+    _this._absolute.innerHTML = Format.degreesMinutes(
+        _this._calculator.magneticDeclination(reading));
+
+    _this._ordMin.innerHTML =
+        Format.minutes(_this._calculator.dComputed(reading)*60);
+    _this._baselineMin.innerHTML =
+        Format.minutes(_this._calculator.dBaseline(reading)*60);
+    _this._eBaseline.innerHTML =
+        Format.nanoteslas(_this._calculator.eBaseline(reading));
+    _this._observer.innerHTML = _this._reading.get('observer') || '';
+  };
+
+  _initialize(options);
+  options = null;
+  return _this;
+};
+
+module.exports = DeclinationSummaryView;
