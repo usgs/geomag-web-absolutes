@@ -1,26 +1,26 @@
 /* global define */
 define([
-	'mvc/Model',
-	'util/Util'
+  'mvc/Model',
+  'util/Util'
 ], function (
-	Model,
-	Util
+  Model,
+  Util
 ) {
-	'use strict';
+  'use strict';
 
-	var DEFAULTS = {
-		'id': null,
-		'name': null,
-		'type': null,
-		'serial_number': null,
-		'begin': null,
-		'end': null
-	};
+  var DEFAULTS = {
+    'id': null,
+    'name': null,
+    'type': null,
+    'serial_number': null,
+    'begin': null,
+    'end': null
+  };
 
-	var Instrument = function (attributes) {
-		Model.call(this, Util.extend({}, DEFAULTS, attributes));
-	};
-	Instrument.prototype = Object.create(Model.prototype);
+  var Instrument = function (attributes) {
+    Model.call(this, Util.extend({}, DEFAULTS, attributes));
+  };
+  Instrument.prototype = Object.create(Model.prototype);
 
-	return Instrument;
+  return Instrument;
 });

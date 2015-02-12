@@ -1,35 +1,35 @@
 /* global define, describe, it */
 define([
-	'chai',
+  'chai',
 
-	'geomag/Observation',
-	'geomag/ObservationBaselineCalculator',
-	'geomag/Reading',
-	'geomag/ReadingView'
+  'geomag/Observation',
+  'geomag/ObservationBaselineCalculator',
+  'geomag/Reading',
+  'geomag/ReadingView'
 ], function (
-	chai,
+  chai,
 
-	Observation,
-	ObservationBaselineCalculator,
-	Reading,
-	ReadingView
+  Observation,
+  ObservationBaselineCalculator,
+  Reading,
+  ReadingView
 ) {
-	'use strict';
+  'use strict';
 
-	var expect = chai.expect;
-	var viewOptions = {
-		reading: new Reading(),
-		observation: new Observation(),
-		baselineCalculator: new ObservationBaselineCalculator()
-	};
+  var expect = chai.expect;
+  var viewOptions = {
+    reading: new Reading(),
+    observation: new Observation(),
+    baselineCalculator: new ObservationBaselineCalculator()
+  };
 
-	describe('ReadingView Unit Tests', function () {
-		describe('Constructor', function () {
-			var m = new ReadingView(viewOptions);
+  describe('ReadingView Unit Tests', function () {
+    describe('Constructor', function () {
+      var m = new ReadingView(viewOptions);
 
-			it('should be an instance of a ReadingView', function () {
-				expect(m).to.be.an.instanceOf(ReadingView);
-			});
-		});
-	});
+      it('should be an instance of a ReadingView', function () {
+        expect(m).to.be.an.instanceOf(ReadingView);
+      });
+    });
+  });
 });

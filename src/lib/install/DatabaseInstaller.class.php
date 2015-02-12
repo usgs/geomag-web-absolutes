@@ -5,136 +5,136 @@
  */
 abstract class DatabaseInstaller {
 
-	// PDO handle
-	protected $dbh = null;
-	// PDO url
-	protected $url;
-	// PDO user
-	protected $user;
-	// PDO password
-	protected $pass;
+  // PDO handle
+  protected $dbh = null;
+  // PDO url
+  protected $url;
+  // PDO user
+  protected $user;
+  // PDO password
+  protected $pass;
 
-	/**
-	 * Factory method for a database installer based on driver type.
-	 *
-	 * @param $url {String}
-	 *        PDO url.
-	 * @param $user {$tring}
-	 *        DB username.
-	 * @param $pass {String}
-	 *        DB password.
-	 * @return SqliteDatabaseInstaller or MysqlDatabaseInstaller
-	 * @throws Exception if an unsupported PDO url.
-	 */
-	public static function getInstaller($url, $user=null, $pass=null) {
-		$type = substr($url, 0, strpos($url, ':'));
-		if ($type === 'sqlite') {
-			return new SqliteDatabaseInstaller($url, $user, $pass);
-		} else if ($type === 'mysql') {
-			return new MysqlDatabaseInstaller($url, $user, $pass);
-		} else {
-			throw new Exception('Unsupported database type "' . $type . '"');
-		}
-	}
+  /**
+   * Factory method for a database installer based on driver type.
+   *
+   * @param $url {String}
+   *        PDO url.
+   * @param $user {$tring}
+   *        DB username.
+   * @param $pass {String}
+   *        DB password.
+   * @return SqliteDatabaseInstaller or MysqlDatabaseInstaller
+   * @throws Exception if an unsupported PDO url.
+   */
+  public static function getInstaller($url, $user=null, $pass=null) {
+    $type = substr($url, 0, strpos($url, ':'));
+    if ($type === 'sqlite') {
+      return new SqliteDatabaseInstaller($url, $user, $pass);
+    } else if ($type === 'mysql') {
+      return new MysqlDatabaseInstaller($url, $user, $pass);
+    } else {
+      throw new Exception('Unsupported database type "' . $type . '"');
+    }
+  }
 
-	/**
-	 * Constructor, called by subclasses.
-	 *
-	 * @param $url {String}
-	 *        PDO url.
-	 * @param $user {$tring}
-	 *        DB username.
-	 * @param $pass {String}
-	 *        DB password.
-	 */
-	protected function __construct($url, $user, $pass) {
-		$this->url = $url;
-		$this->user = $user;
-		$this->pass = $pass;
-	}
+  /**
+   * Constructor, called by subclasses.
+   *
+   * @param $url {String}
+   *        PDO url.
+   * @param $user {$tring}
+   *        DB username.
+   * @param $pass {String}
+   *        DB password.
+   */
+  protected function __construct($url, $user, $pass) {
+    $this->url = $url;
+    $this->user = $user;
+    $this->pass = $pass;
+  }
 
-	/**
-	 * Connect to the database.
-	 *
-	 * @return {PDO} PDO connection with exception mode.
-	 */
-	public function connect () {
-		if ($this->dbh === null) {
-			$this->dbh = new PDO($this->url, $this->user, $this->pass);
-			$this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		}
-		return $this->dbh;
-	}
+  /**
+   * Connect to the database.
+   *
+   * @return {PDO} PDO connection with exception mode.
+   */
+  public function connect () {
+    if ($this->dbh === null) {
+      $this->dbh = new PDO($this->url, $this->user, $this->pass);
+      $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+    return $this->dbh;
+  }
 
-	/**
-	 * Disconnect from database.
-	 */
-	public function disconnect () {
-		$this->dbh = null;
-	}
+  /**
+   * Disconnect from database.
+   */
+  public function disconnect () {
+    $this->dbh = null;
+  }
 
-	/**
-	 * Run one or more sql statements.
-	 *
-	 * Removes c-style comments before execution.
-	 *
-	 * @param $statements {String}
-	 *        semi-colon delimited list of statements to execute.
-	 */
-	public function run ($statements) {
-		// make sure connected
-		$dbh = $this->connect();
+  /**
+   * Run one or more sql statements.
+   *
+   * Removes c-style comments before execution.
+   *
+   * @param $statements {String}
+   *        semi-colon delimited list of statements to execute.
+   */
+  public function run ($statements) {
+    // make sure connected
+    $dbh = $this->connect();
 
-		// Remove /* */ comments
-		$statements = preg_replace('#/\*.*\*/#', '', $statements);
-		$statements = explode(';', $statements);
-		foreach ($statements as $sql) {
-			$sql = trim($sql);
-			if ($sql !== '') {
-				try {
-					$this->dbh->exec($sql);
-				} catch (Exception $e) {
-					echo 'SQL Exception: ' . $e->getMessage() . PHP_EOL .
-							'While running:' . PHP_EOL . $sql . PHP_EOL;
-					throw $e;
-				}
-			}
-		}
-	}
+    // Remove /* */ comments
+    $statements = preg_replace('#/\*.*\*/#', '', $statements);
+    $statements = explode(';', $statements);
+    foreach ($statements as $sql) {
+      $sql = trim($sql);
+      if ($sql !== '') {
+        try {
+          $this->dbh->exec($sql);
+        } catch (Exception $e) {
+          echo 'SQL Exception: ' . $e->getMessage() . PHP_EOL .
+              'While running:' . PHP_EOL . $sql . PHP_EOL;
+          throw $e;
+        }
+      }
+    }
+  }
 
-	/**
-	 * Run sql statements from a file.
-	 *
-	 * Same as $this->run(file_get_contents($file)).
-	 *
-	 * @param $file {String}
-	 *        path to sql script.
-	 */
-	public function runScript ($file) {
-		$this->run(file_get_contents($file));
-	}
+  /**
+   * Run sql statements from a file.
+   *
+   * Same as $this->run(file_get_contents($file)).
+   *
+   * @param $file {String}
+   *        path to sql script.
+   */
+  public function runScript ($file) {
+    $this->run(file_get_contents($file));
+  }
 
-	/**
-	 * Check whether the database referred to by $url exists.
-	 *
-	 * @return {Boolean} true if database already exists, false otherwise.
-	 */
-	public abstract function databaseExists ();
+  /**
+   * Check whether the database referred to by $url exists.
+   *
+   * @return {Boolean} true if database already exists, false otherwise.
+   */
+  public abstract function databaseExists ();
 
-	/**
-	 * Drop database referred to by $url.
-	 */
-	public abstract function dropDatabase ();
+  /**
+   * Drop database referred to by $url.
+   */
+  public abstract function dropDatabase ();
 
-	/**
-	 * Create database referred to by $url.
-	 */
-	public abstract function createDatabase ();
+  /**
+   * Create database referred to by $url.
+   */
+  public abstract function createDatabase ();
 
-	/**
-	 * Create database user.
-	 */
-	public abstract function createUser ($roles, $user, $password);
+  /**
+   * Create database user.
+   */
+  public abstract function createUser ($roles, $user, $password);
 
 }
 
