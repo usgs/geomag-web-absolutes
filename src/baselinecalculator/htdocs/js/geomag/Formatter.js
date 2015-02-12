@@ -1,27 +1,83 @@
-/*global define*/
-define([
-], function (
-) {
-  'use strict';
+'use strict';
+
+var _CELSIUS = '°C',
+    _DEFAULT_DIGITS = 2,
+    _DEGREES = '°',
+    _FAHRENHEIT = '°F',
+    _MINUTES = '\'',
+    _NANOTESLAS = 'nT';
 
 
-  var NANOTESLAS = 'nT',
-      DEGREES = '°',
-      MINUTES = '\'',
-      DEFAULT_DIGITS = 2,
-      CELSIUS = '°C',
-      FAHRENHEIT = '°F';
+var Formatter = function () {
+  var _this,
 
-  var Formatter = {};
+      _units;
 
-  Formatter._units = function (units){
+  _this = {};
+
+  _units = function (units){
     return ['<span class="units">', units, '</span>'].join('');
   };
 
+  /**
+   * Degrees, as a temperature
+   *
+   * @param temperature {Number} Decimal degrees
+   * @param digits {Integer} Numbers after decimal place
+   *
+   * @return formatted number with units
+   *    {Float} Temperature degrees with (digits) decimal places
+   */
+  _this.celsius = function (temperature, digits) {
+    if (temperature === null) {
+      return '&ndash;';
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
-  // CONVERSIONS
-  /////////////////////////////////////////////////////////////////////////////
+    if (typeof digits === 'undefined') {
+      digits = _DEFAULT_DIGITS;
+    }
+    return _this.rawCelsius(temperature.toFixed(digits));
+  };
+
+  /**
+   * Date to String
+   *
+   * @param time {Date|Integer}
+   *      Date or millisecond epoch timestamp.
+   *
+   * @return {String}
+   *      A string formatted as UTC "YYYY-MM-DD".
+   */
+  _this.date = function (time) {
+    var y, m, d;
+
+    if (!(time instanceof Date)) {
+      time = new Date(time);
+    }
+
+    y = time.getUTCFullYear();
+    m = time.getUTCMonth() + 1;
+    d = time.getUTCDate();
+
+    return [y, (m<10?'-0':'-'), m, (d<10?'-0':'-'), d].join('');
+  };
+
+  /**
+   * Date Time to String
+   *
+   * @param date time {Date|Integer}
+   *      Date or millisecond epoch timestamp.
+   *
+   * @return {String}
+   *      A string formatted as UTC "YYYY-MM-DD HH:mm:ss".
+   */
+  _this.dateTime = function (time) {
+    if (!(time instanceof Date)) {
+      time = new Date(time);
+    }
+
+    return _this.date(time) + ' ' + _this.time(time);
+  };
 
   /**
    * Decimal angle to degrees, minutes, seconds
@@ -32,7 +88,7 @@ define([
    *
    * @see MeasurementViewTest#degree_inversion_check
    */
-  Formatter.decimalToDms = function (angle) {
+  _this.decimalToDms = function (angle) {
     var degrees = parseInt(angle, 10),
         minutes = (angle - degrees) * 60,
         seconds = Math.round((minutes - parseInt(minutes, 10)) * 60, 10);
@@ -46,6 +102,82 @@ define([
     }
 
     return [degrees, minutes, seconds];
+  };
+
+  /**
+   * Degrees, as an angle
+   *
+   * @param angle {Number} Decimal degrees
+   * @param digits {Integer} Numbers after decimal place
+   *
+   * @return formatted number with units
+   *    {Float} Angle degrees with (digits) decimal places
+   */
+  _this.degrees = function (angle, digits) {
+    if (typeof digits === 'undefined') {
+      digits = _DEFAULT_DIGITS;
+    }
+    return _this.rawDegrees(angle.toFixed(digits));
+  };
+
+  /**
+   * Degrees and Degrees Minutes, as an angle
+   *
+   * @param angle {Number} Decimal degrees
+   * @param digits {Integer} Numbers after decimal place
+   *
+   * @return 3 formatted numbers with units
+   *    {Float} Decimal angle degrees with (digits) decimal places
+   *    {Int} Angle degrees
+   *    {Float} Decimal angle minutes with (digits) decimal places
+   */
+  _this.degreesAndDegreesMinutes = function (angle, digits) {
+    var buf = [];
+
+    if (typeof digits === 'undefined') {
+      digits = _DEFAULT_DIGITS;
+    }
+
+    buf.push(
+        _this.degrees(angle, digits),
+        '<span class="degrees-minutes">',
+          _this.degreesMinutes(angle, digits),
+        '</span>');
+
+    return buf.join('');
+  };
+
+  /**
+   * Degrees Minutes, as an angle
+   *
+   * @param angle {Number} Decimal degrees
+   * @param digits {Integer} Numbers after decimal place
+   *
+   * @return 2 formatted numbers with units separated by a space
+   *    {Int} Angle degrees
+   *    {Float} Decimal angle minutes with (digits) decimal places
+   */
+  _this.degreesMinutes = function (angle, digits) {
+    var buf = [],
+        degrees,
+        minutes;
+
+    if (typeof digits === 'undefined') {
+      digits = _DEFAULT_DIGITS;
+    }
+
+    degrees = parseInt(angle, 10);
+    minutes = (angle - degrees) * 60;
+
+    if (isNaN(degrees) || isNaN(minutes)) {
+      buf.push('&ndash;');
+    } else {
+      buf.push(
+          _this.rawDegrees(degrees),
+          '&nbsp;',
+          _this.minutes(minutes, digits));
+    }
+    return buf.join('');
   };
 
   /**
@@ -65,9 +197,72 @@ define([
    *
    * @see MeasurementViewTest#degree_inversion_check
    */
-  Formatter.dmsToDecimal = function (degs, mins, secs) {
+  _this.dmsToDecimal = function (degs, mins, secs) {
     return (parseInt(secs, 10) / 3600) + (parseFloat(mins) / 60) +
         parseFloat(degs);
+  };
+
+  /**
+   * Degrees, as a temperature
+   *
+   * @param temperature {Number} Decimal degrees
+   * @param digits {Integer} Numbers after decimal place
+   *
+   * @return formatted number with units
+   *    {Float} Temperature degrees with (digits) decimal places
+   */
+  _this.fahrenheit = function (temperature, digits) {
+    if (temperature === null) {
+      return '&ndash;';
+    }
+
+    if (typeof digits === 'undefined') {
+      digits = _DEFAULT_DIGITS;
+    }
+
+    return _this.rawCelsius(temperature.toFixed(digits));
+  };
+
+  /**
+   * Minutes, as an angle
+   *
+   * @param angle {Number} Decimal minutes
+   * @param digits {Integer} Numbers after decimal place
+   *
+   * @return formatted number with units
+   *    {Float} Angle minutes with (digits) decimal places
+   */
+  _this.minutes = function (angle, digits) {
+    if (typeof digits === 'undefined') {
+      digits = _DEFAULT_DIGITS;
+    }
+
+    if (isNaN(angle)) {
+      return '&ndash;';
+    } else {
+      return _this.rawMinutes(angle.toFixed(digits));
+    }
+  };
+
+  /**
+   * nT (nano-teslas)
+   *
+   * @param {Number} nT
+   * @param digits {Integer} Numbers after decimal place
+   *
+   * @return formatted number with units
+   *    {Float} nT with (digits) decimal places
+   */
+  _this.nanoteslas = function (nT, digits) {
+    if (typeof digits === 'undefined') {
+      digits = _DEFAULT_DIGITS;
+    }
+
+    if (isNaN(nT)) {
+      return '&ndash;';
+    } else {
+      return _this.rawNanoteslas(nT.toFixed(digits));
+    }
   };
 
   /**
@@ -77,7 +272,7 @@ define([
    *        UTC date in format 'YYYY-MM-DD'.
    * @return {Number} corresponding epoch timestamp (for 00:00:00), or null.
    */
-  Formatter.parseDate = function(date) {
+  _this.parseDate = function(date) {
     if (date !== '') {
       var parts = date.split('-');
       return Date.UTC(parseInt(parts[0], 10),
@@ -101,7 +296,7 @@ define([
    * @return {Integer}
    *      The millisecond timestamp since the epoch.
    */
-  Formatter.parseRelativeTime = function (relativeTime, offset) {
+  _this.parseRelativeTime = function (relativeTime, offset) {
     var timeString = relativeTime.replace(/[^\d]/g, ''),
         calculatedTime = 0,
         hours = 0,
@@ -141,26 +336,27 @@ define([
     return calculatedTime;
   };
 
-
-  /////////////////////////////////////////////////////////////////////////////
-  // FORMATS
-  /////////////////////////////////////////////////////////////////////////////
-
-
   /**
-   * Degrees, as an angle
+   * Degrees, as a temperature, no rounding
    *
-   * @param angle {Number} Decimal degrees
-   * @param digits {Integer} Numbers after decimal place
+   * @param temperature {Number|String}
    *
    * @return formatted number with units
-   *    {Float} Angle degrees with (digits) decimal places
+   *    {Float} Temperature degrees
    */
-  Formatter.degrees = function (angle, digits) {
-    if (typeof digits === 'undefined') {
-      digits = DEFAULT_DIGITS;
+  _this.rawCelsius = function (temperature) {
+    var buf = [];
+
+    if (temperature === null) {
+      return '&ndash;';
     }
-    return this.rawDegrees(angle.toFixed(digits));
+
+    buf.push(
+      '<span class="temperature">',
+      temperature, _units(_CELSIUS),
+      '</span>');
+
+    return buf.join('');
   };
 
   /**
@@ -171,36 +367,15 @@ define([
    * @return formatted number with units
    *    {Float} Angle degrees
    */
-  Formatter.rawDegrees = function (angle) {
+  _this.rawDegrees = function (angle) {
     var buf = [];
 
     buf.push(
         '<span class="deg">',
-          angle, this._units(DEGREES),
+          angle, _units(_DEGREES),
         '</span>');
 
     return buf.join('');
-  };
-
-  /**
-   * Minutes, as an angle
-   *
-   * @param angle {Number} Decimal minutes
-   * @param digits {Integer} Numbers after decimal place
-   *
-   * @return formatted number with units
-   *    {Float} Angle minutes with (digits) decimal places
-   */
-  Formatter.minutes = function (angle, digits) {
-    if (typeof digits === 'undefined') {
-      digits = DEFAULT_DIGITS;
-    }
-
-    if (isNaN(angle)) {
-      return '&ndash;';
-    } else {
-      return this.rawMinutes(angle.toFixed(digits));
-    }
   };
 
   /**
@@ -211,96 +386,15 @@ define([
    * @return formatted number with units
    *    {Float} Angle minutes, 2 decimal places
    */
-  Formatter.rawMinutes = function (angle) {
+  _this.rawMinutes = function (angle) {
     var buf = [];
 
     buf.push(
         '<span class="minutes">',
-          angle, this._units(MINUTES),
+          angle, _units(_MINUTES),
         '</span>');
 
     return buf.join('');
-  };
-
-  /**
-   * Degrees Minutes, as an angle
-   *
-   * @param angle {Number} Decimal degrees
-   * @param digits {Integer} Numbers after decimal place
-   *
-   * @return 2 formatted numbers with units separated by a space
-   *    {Int} Angle degrees
-   *    {Float} Decimal angle minutes with (digits) decimal places
-   */
-  Formatter.degreesMinutes = function (angle, digits) {
-    var buf = [],
-        degrees,
-        minutes;
-
-    if (typeof digits === 'undefined') {
-      digits = DEFAULT_DIGITS;
-    }
-
-    degrees = parseInt(angle, 10);
-    minutes = (angle - degrees) * 60;
-
-    if (isNaN(degrees) || isNaN(minutes)) {
-      buf.push('&ndash;');
-    } else {
-      buf.push(
-          this.rawDegrees(degrees),
-          '&nbsp;',
-          this.minutes(minutes, digits));
-    }
-    return buf.join('');
-  };
-
-  /**
-   * Degrees and Degrees Minutes, as an angle
-   *
-   * @param angle {Number} Decimal degrees
-   * @param digits {Integer} Numbers after decimal place
-   *
-   * @return 3 formatted numbers with units
-   *    {Float} Decimal angle degrees with (digits) decimal places
-   *    {Int} Angle degrees
-   *    {Float} Decimal angle minutes with (digits) decimal places
-   */
-  Formatter.degreesAndDegreesMinutes = function (angle, digits) {
-    var buf = [];
-
-    if (typeof digits === 'undefined') {
-      digits = DEFAULT_DIGITS;
-    }
-
-    buf.push(
-        this.degrees(angle, digits),
-        '<span class="degrees-minutes">',
-          this.degreesMinutes(angle, digits),
-        '</span>');
-
-    return buf.join('');
-  };
-
-  /**
-   * nT (nano-teslas)
-   *
-   * @param {Number} nT
-   * @param digits {Integer} Numbers after decimal place
-   *
-   * @return formatted number with units
-   *    {Float} nT with (digits) decimal places
-   */
-  Formatter.nanoteslas = function (nT, digits) {
-    if (typeof digits === 'undefined') {
-      digits = DEFAULT_DIGITS;
-    }
-
-    if (isNaN(nT)) {
-      return '&ndash;';
-    } else {
-      return this.rawNanoteslas(nT.toFixed(digits));
-    }
   };
 
   /**
@@ -311,38 +405,38 @@ define([
    * @return formatted number with units
    *    {Float} nT
    */
-  Formatter.rawNanoteslas = function (nT) {
+  _this.rawNanoteslas = function (nT) {
     var buf = [];
 
     buf.push(
         '<span class="nano-teslas">',
-          nT, this._units(NANOTESLAS),
+          nT, _units(_NANOTESLAS),
         '</span>');
 
     return buf.join('');
   };
 
   /**
-   * Date to String
+   * Degrees, as a temperature, no rounding
    *
-   * @param time {Date|Integer}
-   *      Date or millisecond epoch timestamp.
+   * @param temperature {Number|String}
    *
-   * @return {String}
-   *      A string formatted as UTC "YYYY-MM-DD".
+   * @return formatted number with units
+   *    {Float} Temperature degrees
    */
-  Formatter.date = function (time) {
-    var y, m, d;
+  _this.rawFahrenheit = function (temperature) {
+    var buf = [];
 
-    if (!(time instanceof Date)) {
-      time = new Date(time);
+    if (temperature === null) {
+      return '&ndash;';
     }
 
-    y = time.getUTCFullYear();
-    m = time.getUTCMonth() + 1;
-    d = time.getUTCDate();
+    buf.push(
+      '<span class="temperature">',
+      temperature, _units(_FAHRENHEIT),
+      '</span>');
 
-    return [y, (m<10?'-0':'-'), m, (d<10?'-0':'-'), d].join('');
+    return buf.join('');
   };
 
   /**
@@ -354,7 +448,7 @@ define([
    * @return {String}
    *      A string formatted as UTC "HH:MM:SS".
    */
-  Formatter.time = function (time) {
+  _this.time = function (time) {
     var h, m, s;
 
     if (!(time instanceof Date)) {
@@ -368,110 +462,7 @@ define([
     return [(h<10?'0':''), h, (m<10?':0':':'), m, (s<10?':0':':'), s].join('');
   };
 
-  /**
-   * Date Time to String
-   *
-   * @param date time {Date|Integer}
-   *      Date or millisecond epoch timestamp.
-   *
-   * @return {String}
-   *      A string formatted as UTC "YYYY-MM-DD HH:mm:ss".
-   */
-  Formatter.dateTime = function (time) {
-    if (!(time instanceof Date)) {
-      time = new Date(time);
-    }
+  return _this;
+}
 
-    return this.date(time) + ' ' + this.time(time);
-  };
-
-  /**
-   * Degrees, as a temperature
-   *
-   * @param temperature {Number} Decimal degrees
-   * @param digits {Integer} Numbers after decimal place
-   *
-   * @return formatted number with units
-   *    {Float} Temperature degrees with (digits) decimal places
-   */
-  Formatter.celsius = function (temperature, digits) {
-    if (temperature === null) {
-      return '&ndash;';
-    }
-
-    if (typeof digits === 'undefined') {
-      digits = DEFAULT_DIGITS;
-    }
-
-    return this.rawCelsius(temperature.toFixed(digits));
-  };
-
-  /**
-   * Degrees, as a temperature, no rounding
-   *
-   * @param temperature {Number|String}
-   *
-   * @return formatted number with units
-   *    {Float} Temperature degrees
-   */
-  Formatter.rawCelsius = function (temperature) {
-    var buf = [];
-
-    if (temperature === null) {
-      return '&ndash;';
-    }
-
-    buf.push(
-      '<span class="temperature">',
-      temperature, this._units(CELSIUS),
-      '</span>');
-
-    return buf.join('');
-  };
-
-  /**
-   * Degrees, as a temperature
-   *
-   * @param temperature {Number} Decimal degrees
-   * @param digits {Integer} Numbers after decimal place
-   *
-   * @return formatted number with units
-   *    {Float} Temperature degrees with (digits) decimal places
-   */
-  Formatter.fahrenheit = function (temperature, digits) {
-    if (temperature === null) {
-      return '&ndash;';
-    }
-
-    if (typeof digits === 'undefined') {
-      digits = DEFAULT_DIGITS;
-    }
-
-    return this.rawCelsius(temperature.toFixed(digits));
-  };
-
-  /**
-   * Degrees, as a temperature, no rounding
-   *
-   * @param temperature {Number|String}
-   *
-   * @return formatted number with units
-   *    {Float} Temperature degrees
-   */
-  Formatter.rawFahrenheit = function (temperature) {
-    var buf = [];
-
-    if (temperature === null) {
-      return '&ndash;';
-    }
-
-    buf.push(
-      '<span class="temperature">',
-      temperature, this._units(FAHRENHEIT),
-      '</span>');
-
-    return buf.join('');
-  };
-
-  return Formatter;
-});
+module.exports = Formatter;
