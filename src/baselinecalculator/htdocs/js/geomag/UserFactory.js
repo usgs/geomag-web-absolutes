@@ -1,36 +1,41 @@
-/*global define*/
-define([
-  'util/Util',
-  'util/Xhr'
-], function(
-  Util,
-  Xhr
-){
+'use strict';
 
-  'use strict';
+var Util = require('util/Util')
+    Xhr = require('util/Xhr');
 
-  var DEFAULTS = {
-    url: 'user_data.php'
-  };
 
-    /**
-   * Construct a new UserFactory.
-   *
-   * @param options.url {String}
-   *        url for userfactory.
-   *        default 'user_data.php'.
-   */
-  var UserFactory = function (options) {
-    this._options = Util.extend({}, DEFAULTS, options);
+var _DEFAULTS = {
+  url: 'user_data.php'
+};
+
+
+/**
+ * Construct a new UserFactory.
+ *
+ * @param options.url {String}
+ *        url for userfactory.
+ *        default 'user_data.php'.
+ */
+var UserFactory = function (options) {
+  var _this,
+      _initialize,
+
+      _options;
+
+    _options = Util.extend({}, _DEFAULTS, options);
+
+  _this.destroy = function(options) {
+    options.success();
+    console.log('destroy');
   };
 
   /**
    * Get a list of observatories
    *
    */
-  UserFactory.prototype.get = function(options) {
+  _this.get = function(options) {
     Xhr.ajax({
-      url: this._options.url,
+      url: _options.url,
       data: options.data || {},
       success: function (data) {
         if (options.success) {
@@ -41,9 +46,9 @@ define([
     });
   };
 
-  UserFactory.prototype.save = function(options) {
+  _this.save = function(options) {
     Xhr.ajax({
-      url: this._options.url,
+      url: _options.url,
       rawdata: JSON.stringify(options.data),
       method: (options.data.id) ? 'PUT' : 'POST',
       success: function () {
@@ -55,15 +60,12 @@ define([
     console.log('create');
   };
 
-  UserFactory.prototype.update = function(options) {
+  _this.update = function(options) {
     options.success();
     console.log('create');
   };
 
-  UserFactory.prototype.destroy = function(options) {
-    options.success();
-    console.log('create');
-  };
+  return _this;
+};
 
-  return UserFactory;
-});
+module.exports = UserFactory;
