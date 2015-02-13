@@ -1,30 +1,41 @@
-/* global define, MOUNT_PATH */
-define([
-  'mvc/View',
-  'util/Util',
-  'geomag/ObservatoryFactory'
-], function (
-  View,
-  Util,
-  ObservatoryFactory
-) {
-  'use strict';
+/* global MOUNT_PATH */
+'use strict';
 
-  var DEFAULTS = {
-    observatoryId: null,
-    factory: new ObservatoryFactory()
-  };
+var ObservatoryFactory = require('geomag/ObservatoryFactory'),
+    Util = require('util/Util'),
+    View = require('mvc/View');
 
-  var ObservationsView = function (options) {
-    this._options = Util.extend({}, DEFAULTS, options);
-    View.call(this, this._options);
-  };
 
-  ObservationsView.prototype = Object.create(View.prototype);
+var _DEFAULTS = {
+  observatoryId: null,
+  factory: new ObservatoryFactory()
+};
 
-  ObservationsView.prototype._initialize = function () {
 
-    this._el.innerHTML = [
+/**
+ * Construct a new DeclinationSummaryView.
+ *
+ * @param options {Object}
+ *        view options.
+ */
+var ObservationsView = function (options) {
+  var _this,
+      _initialize,
+
+      _options,
+
+      _buildObservationList,
+      _formatDate;
+
+  _this = View(options);
+  /**
+   * Initialize view, and call render.
+   * @param options {Object} same as constructor.
+   */
+  _initialize = function (options) {
+    _options = Util.extend({}, _DEFAULTS, options);
+
+    _this.el.innerHTML = [
         '<h2>Observations</h2>',
         '<section class="observations-new"></section>',
         '<section class="observations-all"></section>'
@@ -33,113 +44,10 @@ define([
     ].join('');
 
     // load all observations from an observatory
-    this.getObservations(this._options.observatoryId);
-
+    _this.getObservations(_options.observatoryId);
   };
 
-  ObservationsView.prototype.render = function (observatory) {
-
-    // create, "add new observation" button
-    this.getAddObservationButton(observatory.get('id'));
-
-    // first pass, get all observations, this can be removed once
-    // observation status is implemented, see methods below
-    this.getAllObservations(observatory);
-
-    // TODO, build pending observations list
-    //this.getPendingObservations(observations);
-
-    // TODO, build completed observations list
-    //this.getCompletedObservations(observations);
-
-  };
-
-
-  // get observations from observatoryId
-  ObservationsView.prototype.getObservations = function (observatoryId) {
-
-    var _this = this,
-        factory = this._options.factory;
-
-    factory.getObservatory({
-      id: observatoryId,
-      success: function (observatory) {
-        _this.render(observatory);
-      },
-      error: function () {
-        _this._el.innerHTML = '<p>The observatory (id = ' + observatoryId +
-            ') that you requested does not exists in the database.</p>';
-      }
-    });
-  };
-
-
-  // create, "add new observation" button
-  ObservationsView.prototype.getAddObservationButton =
-      function (observatoryId) {
-    var el = this._el.querySelector('.observations-new'),
-        button = document.createElement('button');
-
-    button.role = 'button';
-    button.innerHTML = 'Add New Observation';
-
-    button.addEventListener('click', function () {
-      window.location = MOUNT_PATH + '/observation/#' + observatoryId;
-    });
-
-    el.appendChild(button);
-  };
-
-
-  // get all observations
-  ObservationsView.prototype.getAllObservations = function (observatory) {
-    var el = this._el.querySelector('.observations-all'),
-        observations = observatory.get('observations').data();
-
-    el.appendChild(this._buildObservationList(observations));
-  };
-
-
-  // TODO, get all pending observations
-  // ObservationsView.prototype.getPendingObservations =
-  //     function (observations) {
-  //   var el = this._el.querySelector('.observations-pending'),
-  //       pending = [],
-  //       observation;
-
-  //   for (var i = 0; i < observations.length; i++) {
-  //     observation = observations[i];
-
-  //     if (observation.reviewed === 'N') {
-  //       pending.push(observation);
-  //     }
-  //   }
-
-  //   el.innerHTML = '<h3>Pending</h3>';
-  //   el.appendChild(this._buildObservationList(pending));
-  // };
-
-  // TODO, get all completed observations
-  // ObservationsView.prototype.getCompletedObservations =
-  //     function (observations) {
-  //   var el = this._el.querySelector('.observations-completed'),
-  //       completed = [],
-  //       observation;
-
-  //   for (var i = 0; i < observations.length; i++) {
-  //     observation = observations[i];
-
-  //     if (observation.reviewed === 'Y') {
-  //       completed.push(observation);
-  //     }
-  //   }
-
-  //   el.innerHTML = '<h3>Completed</h3>';
-  //   el.appendChild(this._buildObservationList(completed));
-  // };
-
-
-  ObservationsView.prototype._buildObservationList = function (observations) {
+  _buildObservationList = function (observations) {
     var list = document.createElement('ul'),
         observation, markup = [], classname, tooltip;
 
@@ -171,7 +79,7 @@ define([
         '<li class="', classname, '" title="', tooltip, '">' +
           '<a href="' + MOUNT_PATH + '/observation/' + observation.get('id') +
               '">Observation ' +
-            this._formatDate(observation) +
+            _formatDate(observation) +
           '</a>' +
           //TODO, add delete button to observations
           //'<a href="#" class="delete">Delete</a>' +
@@ -184,7 +92,7 @@ define([
     return list;
   };
 
-  ObservationsView.prototype._formatDate = function (observation) {
+  _formatDate = function (observation) {
       var begin = new Date(observation.get('begin') || new Date().getTime()),
       y = begin.getUTCFullYear(),
       m = begin.getUTCMonth() + 1,
@@ -193,6 +101,104 @@ define([
     return y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
   };
 
-  return ObservationsView;
+  // create, "add new observation" button
+  _this.getAddObservationButton = function (observatoryId) {
+    var el = _this.el.querySelector('.observations-new'),
+        button = document.createElement('button');
 
-});
+    button.role = 'button';
+    button.innerHTML = 'Add New Observation';
+
+    button.addEventListener('click', function () {
+      window.location = MOUNT_PATH + '/observation/#' + observatoryId;
+    });
+
+    el.appendChild(button);
+  };
+
+  // get all observations
+  _this.getAllObservations = function (observatory) {
+    var el = _this.el.querySelector('.observations-all'),
+        observations = observatory.get('observations').data();
+
+    el.appendChild(this._buildObservationList(observations));
+  };
+
+  // get observations from observatoryId
+  _this.getObservations = function (observatoryId) {
+
+    var factory = _options.factory;
+
+    factory.getObservatory({
+      id: observatoryId,
+      success: function (observatory) {
+        _this.render(observatory);
+      },
+      error: function () {
+        _this.el.innerHTML = '<p>The observatory (id = ' + observatoryId +
+            ') that you requested does not exists in the database.</p>';
+      }
+    });
+  };
+
+  _this.render = function (observatory) {
+    // create, "add new observation" button
+    _this.getAddObservationButton(observatory.get('id'));
+
+    // first pass, get all observations, this can be removed once
+    // observation status is implemented, see methods below
+    _this.getAllObservations(observatory);
+
+    // TODO, build pending observations list
+    //this.getPendingObservations(observations);
+
+    // TODO, build completed observations list
+    //this.getCompletedObservations(observations);
+  };
+
+
+
+  // TODO, get all pending observations
+  // _this.getPendingObservations =
+  //     function (observations) {
+  //   var el = _this.el.querySelector('.observations-pending'),
+  //       pending = [],
+  //       observation;
+
+  //   for (var i = 0; i < observations.length; i++) {
+  //     observation = observations[i];
+
+  //     if (observation.reviewed === 'N') {
+  //       pending.push(observation);
+  //     }
+  //   }
+
+  //   el.innerHTML = '<h3>Pending</h3>';
+  //   el.appendChild(this._buildObservationList(pending));
+  // };
+
+  // TODO, get all completed observations
+  // _this.getCompletedObservations =
+  //     function (observations) {
+  //   var el = _this.el.querySelector('.observations-completed'),
+  //       completed = [],
+  //       observation;
+
+  //   for (var i = 0; i < observations.length; i++) {
+  //     observation = observations[i];
+
+  //     if (observation.reviewed === 'Y') {
+  //       completed.push(observation);
+  //     }
+  //   }
+
+  //   el.innerHTML = '<h3>Completed</h3>';
+  //   el.appendChild(this._buildObservationList(completed));
+  // };
+
+  _initialize(options);
+  options = null;
+  return _this;
+};
+
+module.exports = ObservationsView;
