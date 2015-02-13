@@ -1,29 +1,25 @@
-/* global define */
-define([
-  'mvc/Collection'
-], function (
-  Collection
-) {
-  'use strict';
+'use strict';
+
+var Collection = require('mvc/Collection');
 
 
-  /**
-   * A wrapper around realtime data.
-   *
-   * @param data {Object} realtime data object.
-   */
-  var RealtimeData = function (data) {
-    this._times = data.times;
-    this._data = new Collection(data.data);
+/**
+ * A wrapper around realtime data.
+ *
+ * @param data {Object} realtime data object.
+ */
+var RealtimeData = function (data) {
+  var _this;
+
+  _this._times = data.times;
+  _this._data = new Collection(data.data);
+
+  _this.getStarttime = function () {
+    return _this._times[0];
   };
 
-
-  RealtimeData.prototype.getStarttime = function () {
-    return this._times[0];
-  };
-
-  RealtimeData.prototype.getEndtime = function () {
-    return this._times[this._times.length - 1];
+  _this.getEndtime = function () {
+    return _this._times[_this._times.length - 1];
   };
 
   /**
@@ -37,7 +33,7 @@ define([
    * @return {Object} keys are channels, values are channel values at
    *         the second nearest to timeMs.  If time not in range, returns null.
    */
-  RealtimeData.prototype.getValues = function (timeMs, observatory) {
+  _this.getValues = function (timeMs, observatory) {
     var time,
         timeIndex,
         obj,
@@ -46,11 +42,11 @@ define([
         r = null;
 
     time = Math.round(timeMs / 1000);
-    timeIndex = this._times.indexOf(time);
+    timeIndex = _this._times.indexOf(time);
     if (timeIndex !== -1) {
       // find correct observatory
       if (observatory) {
-        obj = this._data.get(observatory);
+        obj = _this._data.get(observatory);
         if (obj === null) {
           return null;
         } else {
@@ -58,7 +54,7 @@ define([
         }
       } else {
         // default to first observatory
-        channels = this._data.data()[0].values;
+        channels = _this._data.data()[0].values;
       }
       // extract values for time
       r = {};
@@ -70,7 +66,7 @@ define([
     return r;
   };
 
+  return _this;
+};
 
-  // return constructor
-  return RealtimeData;
-});
+module.exports = RealtimeData;
