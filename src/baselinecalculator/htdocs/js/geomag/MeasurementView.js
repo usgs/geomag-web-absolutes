@@ -1,99 +1,69 @@
-/* global define */
-define([
-  'mvc/View',
-  'util/Util',
+'use strict';
 
-  'geomag/Formatter',
-  'geomag/Measurement',
-  'geomag/Validate'
-], function (
-  View,
-  Util,
-
-  Format,
-  Measurement,
-  Validate
-) {
-  'use strict';
-
-  var DEFAULTS = {
-
-  };
-
-  var MEASUREMENT_TYPE_LABELS = {};
-  MEASUREMENT_TYPE_LABELS[Measurement.FIRST_MARK_UP] = 'Mark Up';
-  MEASUREMENT_TYPE_LABELS[Measurement.FIRST_MARK_DOWN] = 'Mark Down';
-
-  MEASUREMENT_TYPE_LABELS[Measurement.WEST_DOWN] = 'West Down';
-  MEASUREMENT_TYPE_LABELS[Measurement.EAST_DOWN] = 'East Down';
-  MEASUREMENT_TYPE_LABELS[Measurement.WEST_UP] = 'West Up';
-  MEASUREMENT_TYPE_LABELS[Measurement.EAST_UP] = 'East Up';
-
-  MEASUREMENT_TYPE_LABELS[Measurement.SECOND_MARK_UP] = 'Mark Up';
-  MEASUREMENT_TYPE_LABELS[Measurement.SECOND_MARK_DOWN] = 'Mark Down';
-
-  MEASUREMENT_TYPE_LABELS[Measurement.SOUTH_DOWN] = 'South Down';
-  MEASUREMENT_TYPE_LABELS[Measurement.NORTH_UP] = 'North Up';
-  MEASUREMENT_TYPE_LABELS[Measurement.SOUTH_UP] = 'South Up';
-  MEASUREMENT_TYPE_LABELS[Measurement.NORTH_DOWN] = 'North Down';
+var Format = require('geomag/Formatter'),
+    Measurement = require('geomag/Measurement'),
+    Util = require('util/Util'),
+    Validate = require('geomag/Validate'),
+    View = require('mvc/View');
 
 
-  var MeasurementView = function (options) {
-    this._options = Util.extend({}, DEFAULTS, options);
-    View.call(this, options);
-  };
-  MeasurementView.prototype = Object.create(View.prototype);
+var DEFAULTS = {
+};
 
-  MeasurementView.prototype.render = function () {
-    var measurement = this._measurement,
-        time = measurement.get('time'),
-        time_error = measurement.get('time_error'),
-        angle = measurement.get('angle'),
-        angle_error = measurement.get('angle_error'),
-        timeString = null,
-        dms = null,
-        h = measurement.get('h'),
-        e = measurement.get('e'),
-        z = measurement.get('z'),
-        f = measurement.get('f');
 
-    if (time_error === null) {
-      if (time === null) {
-        timeString = '';
-      } else {
-        timeString = Format.time(time);
-      }
-      this._timeInput.value = timeString;
-    }
+var MEASUREMENT_TYPE_LABELS = {};
 
-    if (angle_error === null) {
-      if (angle === null) {
-        dms = ['', '', ''];
-      } else {
-        dms = Format.decimalToDms(angle);
-      }
-      this._degreesInput.value = dms[0];
-      this._minutesInput.value = dms[1];
-      this._secondsInput.value = dms[2];
-    }
+MEASUREMENT_TYPE_LABELS[Measurement.FIRST_MARK_UP] = 'Mark Up';
+MEASUREMENT_TYPE_LABELS[Measurement.FIRST_MARK_DOWN] = 'Mark Down';
 
-    this._hValue.innerHTML = (h === null ? '&ndash;' : Format.nanoteslas(h));
-    this._eValue.innerHTML = (e === null ? '&ndash;' : Format.nanoteslas(e));
-    this._zValue.innerHTML = (z === null ? '&ndash;' : Format.nanoteslas(z));
-    this._fValue.innerHTML = (f === null ? '&ndash;' : Format.nanoteslas(f));
-  };
+MEASUREMENT_TYPE_LABELS[Measurement.WEST_DOWN] = 'West Down';
+MEASUREMENT_TYPE_LABELS[Measurement.EAST_DOWN] = 'East Down';
+MEASUREMENT_TYPE_LABELS[Measurement.WEST_UP] = 'West Up';
+MEASUREMENT_TYPE_LABELS[Measurement.EAST_UP] = 'East Up';
 
-  MeasurementView.prototype._initialize = function () {
-    var _this = this,
+MEASUREMENT_TYPE_LABELS[Measurement.SECOND_MARK_UP] = 'Mark Up';
+MEASUREMENT_TYPE_LABELS[Measurement.SECOND_MARK_DOWN] = 'Mark Down';
+
+MEASUREMENT_TYPE_LABELS[Measurement.SOUTH_DOWN] = 'South Down';
+MEASUREMENT_TYPE_LABELS[Measurement.NORTH_UP] = 'North Up';
+MEASUREMENT_TYPE_LABELS[Measurement.SOUTH_UP] = 'South Up';
+MEASUREMENT_TYPE_LABELS[Measurement.NORTH_DOWN] = 'North Down';
+
+/**
+ * Construct a new DeclinationSummaryView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.measurement {geomag.Measurement}
+ * @param options.observation {geomag.Observation}
+ */
+var MeasurementView = function (options) {
+    var _this,
+      _initialize,
+
+      _options,
+
+      _updateErrorState,
+      _validateAngle,
+      _validateTime;
+
+  _this = View(options);
+  /**
+   * Initialize view, and call render.
+   * @param options {Object} same as constructor.
+   */
+  _initialize = function (options) {
+    var el = _this.el,
         onTimeChange = null,
         onAngleChange = null;
 
-    this._measurement = this._options.measurement;
-    this._observation = this._options.observation;
+    _options = Util.extend({}, DEFAULTS, options);
+    _this._measurement = _options.measurement;
+    _this._observation = _options.observation;
 
-    this._el.innerHTML = [
+    el.innerHTML = [
       '<th scope="row" class="measurement-type">',
-        MEASUREMENT_TYPE_LABELS[this._measurement.get('type')] || 'Type',
+        MEASUREMENT_TYPE_LABELS[_this._measurement.get('type')] || 'Type',
       '</th>',
       '<td class="measurement-time"><input type="text"/></td>',
       '<td class="measurement-degrees"><input type="text"/></td>',
@@ -106,15 +76,16 @@ define([
       '<td class="measurement-f">&ndash;</td>'
     ].join('');
 
-    this._timeInput = this._el.querySelector('.measurement-time > input');
-    this._degreesInput = this._el.querySelector('.measurement-degrees > input');
-    this._minutesInput = this._el.querySelector('.measurement-minutes > input');
-    this._secondsInput = this._el.querySelector('.measurement-seconds > input');
+    // save references to elements that will be updated during render
+    _this._timeInput = el.querySelector('.measurement-time > input');
+    _this._degreesInput = el.querySelector('.measurement-degrees > input');
+    _this._minutesInput = el.querySelector('.measurement-minutes > input');
+    _this._secondsInput = el.querySelector('.measurement-seconds > input');
 
-    this._hValue = this._el.querySelector('.measurement-h');
-    this._eValue = this._el.querySelector('.measurement-e');
-    this._zValue = this._el.querySelector('.measurement-z');
-    this._fValue = this._el.querySelector('.measurement-f');
+    _this._hValue = el.querySelector('.measurement-h');
+    _this._eValue = el.querySelector('.measurement-e');
+    _this._zValue = el.querySelector('.measurement-z');
+    _this._fValue = el.querySelector('.measurement-f');
 
     onTimeChange = function (/*evt*/) {
       var time = _this._timeInput.value,
@@ -158,61 +129,16 @@ define([
       }
     };
 
-    this._measurement.on('change', this.render, this);
-    this._timeInput.addEventListener('blur', onTimeChange);
-    this._degreesInput.addEventListener('blur', onAngleChange);
-    this._minutesInput.addEventListener('blur', onAngleChange);
-    this._secondsInput.addEventListener('blur', onAngleChange);
+    _this._measurement.on('change', _this.render, _this);
+    _this._timeInput.addEventListener('blur', onTimeChange);
+    _this._degreesInput.addEventListener('blur', onAngleChange);
+    _this._minutesInput.addEventListener('blur', onAngleChange);
+    _this._secondsInput.addEventListener('blur', onAngleChange);
 
-    this.render();
+    _this.render();
   };
 
-
-  MeasurementView.prototype._validateTime = function (time) {
-    var validTime = true,
-        helpText = null;
-
-    if (!Validate.validTime(time)) {
-      validTime = false;
-      helpText = 'Invalid Time. HH24:MI:SS';
-    }
-    this._updateErrorState(this._timeInput, validTime, helpText);
-
-    return helpText;
-  };
-
-  MeasurementView.prototype._validateAngle =
-      function (degrees, minutes, seconds) {
-    var validDegrees = true,
-        validMinutes = true,
-        validSeconds = true,
-        helpText = null;
-
-    // DEGREES
-    if (!Validate.validDegrees(degrees)) {
-      validDegrees = false;
-      helpText = 'Invalid Degrees. Must be between, 0-360.';
-    }
-    this._updateErrorState(this._degreesInput, validDegrees, helpText);
-
-    // MINUTES
-    if (!Validate.validMinutes(minutes)) {
-      validMinutes = false;
-      helpText = 'Invalid Minutes. Must be between, 0-60.';
-    }
-    this._updateErrorState(this._minutesInput, validMinutes, helpText);
-
-    // SECONDS
-    if (!Validate.validSeconds(seconds)) {
-      validSeconds = false;
-      helpText = 'Invalid Seconds. Must be between, 0-60.';
-    }
-    this._updateErrorState(this._secondsInput, validSeconds, helpText);
-
-    return helpText;
-  };
-
-  MeasurementView.prototype._updateErrorState = function (el, valid, helpText) {
+  _updateErrorState = function (el, valid, helpText) {
     if (valid){
       // passes validation
       Util.removeClass(el, 'error');
@@ -224,5 +150,91 @@ define([
     }
   };
 
-  return MeasurementView;
-});
+  _validateAngle = function (degrees, minutes, seconds) {
+    var validDegrees = true,
+        validMinutes = true,
+        validSeconds = true,
+        helpText = null;
+
+    // DEGREES
+    if (!Validate.validDegrees(degrees)) {
+      validDegrees = false;
+      helpText = 'Invalid Degrees. Must be between, 0-360.';
+    }
+    _this._updateErrorState(_this._degreesInput, validDegrees, helpText);
+
+    // MINUTES
+    if (!Validate.validMinutes(minutes)) {
+      validMinutes = false;
+      helpText = 'Invalid Minutes. Must be between, 0-60.';
+    }
+    _this._updateErrorState(_this._minutesInput, validMinutes, helpText);
+
+    // SECONDS
+    if (!Validate.validSeconds(seconds)) {
+      validSeconds = false;
+      helpText = 'Invalid Seconds. Must be between, 0-60.';
+    }
+    _this._updateErrorState(_this._secondsInput, validSeconds, helpText);
+
+    return helpText;
+  };
+
+  _validateTime = function (time) {
+    var validTime = true,
+        helpText = null;
+
+    if (!Validate.validTime(time)) {
+      validTime = false;
+      helpText = 'Invalid Time. HH24:MI:SS';
+    }
+    _this._updateErrorState(_this._timeInput, validTime, helpText);
+
+    return helpText;
+  };
+
+  _this.render = function () {
+    var measurement = _this._measurement,
+        time = measurement.get('time'),
+        time_error = measurement.get('time_error'),
+        angle = measurement.get('angle'),
+        angle_error = measurement.get('angle_error'),
+        timeString = null,
+        dms = null,
+        h = measurement.get('h'),
+        e = measurement.get('e'),
+        z = measurement.get('z'),
+        f = measurement.get('f');
+
+    if (time_error === null) {
+      if (time === null) {
+        timeString = '';
+      } else {
+        timeString = Format.time(time);
+      }
+      _this._timeInput.value = timeString;
+    }
+
+    if (angle_error === null) {
+      if (angle === null) {
+        dms = ['', '', ''];
+      } else {
+        dms = Format.decimalToDms(angle);
+      }
+      _this._degreesInput.value = dms[0];
+      _this._minutesInput.value = dms[1];
+      _this._secondsInput.value = dms[2];
+    }
+
+    _this._hValue.innerHTML = (h === null ? '&ndash;' : Format.nanoteslas(h));
+    _this._eValue.innerHTML = (e === null ? '&ndash;' : Format.nanoteslas(e));
+    _this._zValue.innerHTML = (z === null ? '&ndash;' : Format.nanoteslas(z));
+    _this._fValue.innerHTML = (f === null ? '&ndash;' : Format.nanoteslas(f));
+  };
+
+  _initialize(options);
+  options = null;
+  return _this;
+};
+
+module.exports = MeasurementView;
