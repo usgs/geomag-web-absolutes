@@ -1,50 +1,34 @@
-/* global define */
-define ([
-  'mvc/View',
-  'util/Util',
-  'mvcutil/CollectionSelectBox'
-], function (
-  View,
-  Util,
-  CollectionSelectBox
-) {
-  'use strict';
+'use strict';
 
-  var DEFAULTS = {
-  };
+var CollectionSelectBox = require('mvcutil/CollectionSelectBox'),
+    Util = require('util/Util'),
+    View = require('mvc/View');
 
-  var UserEditView = function (options) {
-    this._options = Util.extend({}, DEFAULTS, options);
-    View.call(this, this._options);
-  };
 
-  UserEditView.prototype = Object.create(View.prototype);
+var _DEFAULTS = {
+};
 
-  UserEditView.prototype.render = function () {
-    var user = this._options.user;
 
-    this._name.value = user.get('name');
-    this._username.value = user.get('username');
-    this._observatories.selectById(user.get('default_observatory_id'));
-    this._email.value = user.get('email');
-    this._password.value = '';
-    this._confirmpassword.value = '';
-    if (user.get('admin') === 'Y') {
-      this._admin.checked = 'checked';
-    } else {
-      this._admin.removeAttribute('checked');
-    }
+/**
+ * Construct a new UserEditView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.observatories
+ * @param options.user
+ */
+var UserEditView = function (options) {
+  var _this,
+      _initialize,
 
-    if (user.get('enabled') === 'Y') {
-      this._enabled.checked = 'checked';
-    } else {
-      this._enabled.removeAttribute('checked');
-    }
+      _options;
 
-  };
+  _this = View(options);
 
-  UserEditView.prototype._initialize = function () {
-    this._el.innerHTML = [
+  _initialize = function (options) {
+    _options = Util.extend({}, _DEFAULTS, options);
+
+    _this.el.innerHTML = [
       '<ul>',
         '<li>',
           '<label class="name" for="useredit-name">Name</label>',
@@ -90,40 +74,66 @@ define ([
       '</ul>'
     ].join('');
 
-    this._name = this._el.querySelector('#useredit-name');
-    this._username = this._el.querySelector('#useredit-username');
-    this._observatories = new CollectionSelectBox({
-        el: this._el.querySelector('#default-observatory-id'),
+    _this._name = _this.el.querySelector('#useredit-name');
+    _this._username = _this.el.querySelector('#useredit-username');
+    _this._observatories = new CollectionSelectBox({
+        el: _this.el.querySelector('#default-observatory-id'),
         allowDeselect: true,
-        collection: this._options.observatories
+        collection: _options.observatories
       });
-    this._email = this._el.querySelector('#email');
-    this._password = this._el.querySelector('#password');
-    this._confirmpassword = this._el.querySelector('#confirm-password');
-    this._admin = this._el.querySelector('#admin');
-    this._enabled = this._el.querySelector('#enabled');
+    _this._email = _this.el.querySelector('#email');
+    _this._password = _this.el.querySelector('#password');
+    _this._confirmpassword = _this.el.querySelector('#confirm-password');
+    _this._admin = _this.el.querySelector('#admin');
+    _this._enabled = _this.el.querySelector('#enabled');
   };
 
-  UserEditView.prototype.updateModel = function () {
+  _this.updateModel = function () {
     var values = {},
         observatory;
 
-    values.name = this._name.value;
-    values.username = this._username.value;
-    observatory = this._options.observatories.getSelected();
+    values.name = _this._name.value;
+    values.username = _this._username.value;
+    observatory = _options.observatories.getSelected();
     values.default_observatory_id = observatory === null ?
         null : observatory.id;
-    values.email = this._email.value;
-    values.admin = this._admin.checked ? 'Y' : 'N';
-    values.enabled = this._enabled.checked ? 'Y' : 'N';
-    if (this._password.value === this._confirmpassword.value &&
-        this._password.value !== '') {
-      values.password = this._password.value;
+    values.email = _this._email.value;
+    values.admin = _this._admin.checked ? 'Y' : 'N';
+    values.enabled = _this._enabled.checked ? 'Y' : 'N';
+    if (_this._password.value === _this._confirmpassword.value &&
+        _this._password.value !== '') {
+      values.password = _this._password.value;
     }
 
-    this._options.user.set(values);
+    _options.user.set(values);
   };
 
 
-  return UserEditView;
-});
+  _this.render = function () {
+    var user = _options.user;
+
+    _this._name.value = user.get('name');
+    _this._username.value = user.get('username');
+    _this._observatories.selectById(user.get('default_observatory_id'));
+    _this._email.value = user.get('email');
+    _this._password.value = '';
+    _this._confirmpassword.value = '';
+    if (user.get('admin') === 'Y') {
+      _this._admin.checked = 'checked';
+    } else {
+      _this._admin.removeAttribute('checked');
+    }
+
+    if (user.get('enabled') === 'Y') {
+      _this._enabled.checked = 'checked';
+    } else {
+      _this._enabled.removeAttribute('checked');
+    }
+  };
+
+  _initialize(options);
+  options = null;
+  return _this;
+};
+
+module.exports = UserEditView;
