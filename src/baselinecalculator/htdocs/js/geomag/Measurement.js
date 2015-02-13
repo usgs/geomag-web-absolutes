@@ -1,49 +1,47 @@
-/*global define*/
+'use strict';
 
-define([
-  'mvc/Model',
-  'util/Util'
-], function (
-  Model,
-  Util
-) {
-  'use strict';
+var Model = require('mvc/Model'),
+    Util = require('util/Util');
 
-  /** Define default attributes. */
-  var DEFAULTS = {
-    'id': null,
-    'type': null,
-    'time': null,
-    'angle': 0,
-    'h': null,
-    'e': null,
-    'z': null,
-    'f': null,
-    'time_error':null,
-    'angle_error':null
+
+var _DEFAULTS = {
+  'id': null,
+  'type': null,
+  'time': null,
+  'angle': 0,
+  'h': null,
+  'e': null,
+  'z': null,
+  'f': null,
+  'time_error':null,
+  'angle_error':null
+};
+
+
+/**
+ * Constructor.
+ *
+ * @param options {Object} Measurement attributes.
+ * @param options.id {int}
+ * @param options.type {string}
+ * @param options.time {epoch time}
+ * @param options.angle {float}
+ * @param options.h {float}
+ * @param options.e {float}
+ * @param options.z {float}
+ * @param options.f {float}
+ **/
+var Measurement = function (options) {
+  var _this,
+      _initialize,
+
+      _options;
+
+  _this = Model(options);
+
+  _initialize = function(options) {
+    _options = Util.extend({}, _DEFAULT_OPTIONS, options);
   };
-
-  /**
-   * Constructor.
-   *
-   * @param options {Object} Measurement attributes.
-   * @param options.id {int}
-   * @param options.type {string}
-   * @param options.time {epoch time}
-   * @param options.angle {float}
-   * @param options.h {float}
-   * @param options.e {float}
-   * @param options.z {float}
-   * @param options.f {float}
-   **/
-  var Measurement   = function (options) {
-    // Call parent constructor
-    Model.call(this, Util.extend({}, DEFAULTS, options));
-  };
-
-  // Observatory extends Model
-  Measurement.prototype = Object.create(Model.prototype);
-
 
   /**
    * Set realtime data values corresponding to measurement time.
@@ -51,7 +49,7 @@ define([
    * @param realtimeData {RealtimeData}
    *        as returned by RealtimeDataFactory.
    */
-  Measurement.prototype.setRealtimeData = function (realtimeData) {
+  _this.setRealtimeData = function (realtimeData) {
     var values = realtimeData.getValues(this.get('time')),
         toset;
     toset = {
@@ -69,7 +67,7 @@ define([
     this.set(toset);
   };
 
-  Measurement.prototype.getErrors = function () {
+  _this.getErrors = function () {
     var errors = [];
 
     if (this.get('time_error') !== null) {
@@ -97,6 +95,9 @@ define([
   Measurement.SOUTH_UP = 'SouthUp';
   Measurement.NORTH_DOWN = 'NorthDown';
 
-  // return constructor from closure
-  return Measurement;
-});
+  _initialize(options);
+  options = null;
+  return _this;
+};
+
+module.exports = Measurement;
