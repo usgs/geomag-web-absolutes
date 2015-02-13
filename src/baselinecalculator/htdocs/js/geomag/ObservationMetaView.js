@@ -1,106 +1,81 @@
-/* global define */
-define([
-  'mvc/View',
-  'mvc/Collection',
-  'util/Util',
+'use strict';
 
-  'mvcutil/CollectionSelectBox',
-
-  'geomag/Formatter'
-], function (
-  View,
-  Collection,
-  Util,
-
-  CollectionSelectBox,
-
-  Format
-) {
-  'use strict';
+var Collection = require('mvc/Collection'),
+    CollectionSelectBox = require('mvcutil/CollectionSelectBox'),
+    Format = require('geomag/Formatter'),
+    Util = require('util/Util'),
+    View = require('mvc/View');
 
 
-  // default constructor options
-  var DEFAULTS = {
-    observatoryId: null
-  };
+var _DEFAULTS = {
+  observatoryId: null
+};
 
-  // unique id prefix for form elements
-  var IDPREFIX = 'observationmetaview-';
+// unique id prefix for form elements
+var _IDPREFIX = 'observationmetaview-';
 
-  // unique id sequence for form elements
-  var SEQUENCE = 0;
+// unique id sequence for form elements
+var _SEQUENCE = 0;
 
 
-  /**
-   * Utility function to select a collection item based on item id.
-   *
-   * If collection is not null, selects collection item with id
-   * or triggers deselect if no matching item found.
-   *
-   * @param collection {Collection}
-   *        collection being selected.
-   * @param id {Number}
-   *        id of collection item to select.
-   */
-  var _selectById = function (collection, id) {
-    var item = null;
-    if (collection !== null) {
-      if (id !== null) {
-        item = collection.get(id);
-      }
-      if (item !== null) {
-        collection.select(item);
-      } else {
-        collection.deselect();
-      }
+/**
+ * Utility function to select a collection item based on item id.
+ *
+ * If collection is not null, selects collection item with id
+ * or triggers deselect if no matching item found.
+ *
+ * @param collection {Collection}
+ *        collection being selected.
+ * @param id {Number}
+ *        id of collection item to select.
+ */
+var _selectById = function (collection, id) {
+  var item = null;
+  if (collection !== null) {
+    if (id !== null) {
+      item = collection.get(id);
     }
-  };
+    if (item !== null) {
+      collection.select(item);
+    } else {
+      collection.deselect();
+    }
+  }
+};
 
 
+/**
+ * Construct a new ObservationMetaView.
+ *
+ * @param options {Object}
+ * @param options.calculator {geomag.ObservationBaselineCalculator}
+ *        the calculator to use.
+ * @param options.observation {Observation}
+ *        observation to display.
+ * @param options.observatories
+ */
+var ObservationMetaView = function (options) {
+  var _this,
+      _initialize,
+
+      _options,
+
+      _formatInstrument,
+      _formatMark,
+      _formatPier,
+      _onChange,
+      _setObservatory;
+
+  _this = View(options);
   /**
-   * Construct a new ObservationMetaView.
-   *
-   * @param options {Object}
-   * @param options.observation {Observation}
-   *        observation to display.
+   * Initialize view, and call render.
+   * @param options {Object} same as constructor.
    */
-  var ObservationMetaView = function (options) {
-    this._options = Util.extend({}, DEFAULTS, options);
-    View.call(this, this._options);
-  };
-  ObservationMetaView.prototype = Object.create(View.prototype);
-
-
-  ObservationMetaView.prototype.render = function () {
-    var obs = this._observation,
-        begin = new Date(obs.get('begin') || new Date().getTime()),
-        y = begin.getUTCFullYear(),
-        m = begin.getUTCMonth() + 1,
-        d = begin.getUTCDate();
-
-    this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
-    this._julianDay.value = this.getJulianDay(begin);
-    this._pierTemperature.value = obs.get('pier_temperature');
-  };
-
-
-  ObservationMetaView.prototype.getJulianDay = function (date) {
-    var y = date.getUTCFullYear(),
-        m = date.getUTCMonth(),
-        d = date.getUTCDate(),
-        janOne = new Date(y,0,1),
-        selectedDate = new Date(y,m,d);
-
-    return Math.round((selectedDate - janOne) / 86400000) + 1;
-  };
-
-
-  ObservationMetaView.prototype._initialize = function () {
-    var _this = this,
-        el = this._el,
-        calculator = this._options.calculator,
-        observation = this._options.observation,
-        observatories = this._options.observatories,
+  _initialize = function () {
+    var el = _this.el,
+        calculator = _options.calculator,
+        observation = _options.observation,
+        observatories = _options.observatories,
         observatorySelectView,
         pierSelectView,
         marksSelectView,
@@ -110,9 +85,9 @@ define([
         pierTemperature,
         idPrefix = IDPREFIX + (++SEQUENCE);
 
-    this._calculator = calculator;
-    this._observation = observation;
-    this._onChange = this._onChange.bind(this);
+    _options = Util.extend({}, _DEFAULTS, options);
+    _this._calculator = calculator;
+    _this._observation = observation;
 
     el.innerHTML = [
       '<section class="observation-meta-view">',
@@ -151,46 +126,45 @@ define([
     ].join('');
 
     // observatory information inputs
-    this._observatorySelectView = observatorySelectView =
+    _this._observatorySelectView = observatorySelectView =
         new CollectionSelectBox({
           el: el.querySelector('.observatory'),
           emptyText: 'Loading observatories...'
         });
-    this._pierSelectView = pierSelectView =
+    _this._pierSelectView = pierSelectView =
         new CollectionSelectBox({
           el: el.querySelector('.pier'),
           emptyText: 'Select observatory...',
-          formatOption: this._formatPier
+          formatOption: _formatPier
         });
-    this._marksSelectView = marksSelectView =
+    _this._marksSelectView = marksSelectView =
         new CollectionSelectBox({
           el: el.querySelector('.mark'),
           emptyText: 'Select pier...',
-          formatOption: this._formatMark
+          formatOption: _formatMark
         });
-    this._electronicsSelectView = electronicsSelectView =
+    _this._electronicsSelectView = electronicsSelectView =
         new CollectionSelectBox({
           el: el.querySelector('.electronics'),
           emptyText: 'Select observatory...',
-          formatOption: this._formatInstrument
+          formatOption: _formatInstrument
         });
-    this._theodoliteSelectView = theodoliteSelectView =
+    _this._theodoliteSelectView = theodoliteSelectView =
         new CollectionSelectBox({
           el: el.querySelector('.theodolite'),
           emptyText: 'Select observatory...',
-          formatOption: this._formatInstrument
+          formatOption: _this._formatInstrument
         });
     // observation inputs
-    this._date = date = el.querySelector('.observation-date');
-    this._julianDay = this._el.querySelector('.julian-day-value');
-    this._pierTemperature = pierTemperature =
+    _this._date = date = el.querySelector('.observation-date');
+    _this._julianDay = el.querySelector('.julian-day-value');
+    _this._pierTemperature = pierTemperature =
         el.querySelector('.pier-temperature');
 
-    date.addEventListener('change', this._onChange);
+    date.addEventListener('change', _onChange);
     // This makes sure the Julian day updates, among other things
-    observation.on('change', this.render, this);
-    pierTemperature.addEventListener('change', this._onChange);
-
+    observation.on('change', _this.render, _this);
+    pierTemperature.addEventListener('change', _onChange);
 
     this._observatorySelectView.on('change', function (selected) {
       // currently selected observatory
@@ -292,10 +266,63 @@ define([
 
     // load observatories collection
     observatorySelectView.setCollection(observatories);
-    observatorySelectView.selectById(this._options.observatoryId);
+    observatorySelectView.selectById(_options.observatoryId);
 
     // fill in observation inputs
-    this.render();
+    _this.render();
+  };
+
+  /**
+   * Formatting callback for electronics and theodolite select views.
+   *
+   * @param instrument {Instrument}
+   * @return {String} content for option element.
+   */
+  _formatInstrument = function (instrument) {
+    return instrument.get('name') +
+        ' (' + instrument.get('serial_number') + ')';
+  };
+
+  /**
+   * Formatting callback for mark select view.
+   *
+   * @param mark {Mark}
+   * @return {String} content for option element.
+   */
+  _formatMark = function (mark) {
+    return mark.get('name') +
+        ' (' + mark.get('azimuth') + '&deg;)';
+  };
+
+  /**
+   * Formatting callback for pier select view.
+   *
+   * @param pier {Pier}
+   * @return {String} content for option element.
+   */
+  _formatPier = function (pier) {
+    return pier.get('name') +
+        ' (' + pier.get('correction') + ' nT)';
+  };
+
+  /**
+   * Input element change handler.
+   *
+   * Updated observation begin and pier_temperature attributes from form.
+   */
+  _onChange = function () {
+    var observation = this._observation,
+        date = this._date.value,
+        pierTemperature = this._pierTemperature.value;
+
+    date = Format.parseDate(date);
+    pierTemperature = (pierTemperature === '' ?
+        null : parseFloat(pierTemperature));
+
+    observation.set({
+      begin: date,
+      pier_temperature: pierTemperature
+    });
   };
 
   /**
@@ -303,12 +330,12 @@ define([
    *
    * @param {[type]} observatory [description]
    */
-  ObservationMetaView.prototype._setObservatory = function (observatory) {
+  _setObservatory = function (observatory) {
     var pierSelectView = this._pierSelectView,
         electronicsSelectView = this._electronicsSelectView,
         theodoliteSelectView = this._theodoliteSelectView,
         // observation selections
-        observation = this._observation,
+        observation = _this._observation,
         mark_id,
         electronics_id,
         theodolite_id,
@@ -358,60 +385,31 @@ define([
     pierSelectView.setCollection(piers);
   };
 
-  /**
-   * Input element change handler.
-   *
-   * Updated observation begin and pier_temperature attributes from form.
-   */
-  ObservationMetaView.prototype._onChange = function () {
-    var observation = this._observation,
-        date = this._date.value,
-        pierTemperature = this._pierTemperature.value;
+  _this.getJulianDay = function (date) {
+    var y = date.getUTCFullYear(),
+        m = date.getUTCMonth(),
+        d = date.getUTCDate(),
+        janOne = new Date(y,0,1),
+        selectedDate = new Date(y,m,d);
 
-    date = Format.parseDate(date);
-    pierTemperature = (pierTemperature === '' ?
-        null : parseFloat(pierTemperature));
-
-    observation.set({
-      begin: date,
-      pier_temperature: pierTemperature
-    });
+    return Math.round((selectedDate - janOne) / 86400000) + 1;
   };
 
-  /**
-   * Formatting callback for pier select view.
-   *
-   * @param pier {Pier}
-   * @return {String} content for option element.
-   */
-  ObservationMetaView.prototype._formatPier = function (pier) {
-    return pier.get('name') +
-        ' (' + pier.get('correction') + ' nT)';
+  _this.render = function () {
+    var obs = _this._observation,
+        begin = new Date(obs.get('begin') || new Date().getTime()),
+        y = begin.getUTCFullYear(),
+        m = begin.getUTCMonth() + 1,
+        d = begin.getUTCDate();
+
+    _this._date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
+    _this._julianDay.value = _this.getJulianDay(begin);
+    _this._pierTemperature.value = obs.get('pier_temperature');
   };
 
-  /**
-   * Formatting callback for mark select view.
-   *
-   * @param mark {Mark}
-   * @return {String} content for option element.
-   */
-  ObservationMetaView.prototype._formatMark = function (mark) {
-    return mark.get('name') +
-        ' (' + mark.get('azimuth') + '&deg;)';
-  };
+  _initialize(options);
+  options = null;
+  return _this;
+};
 
-
-  /**
-   * Formatting callback for electronics and theodolite select views.
-   *
-   * @param instrument {Instrument}
-   * @return {String} content for option element.
-   */
-  ObservationMetaView.prototype._formatInstrument = function (instrument) {
-    return instrument.get('name') +
-        ' (' + instrument.get('serial_number') + ')';
-  };
-
-
-  return ObservationMetaView;
-});
+module.exports =  ObservationMetaView;
