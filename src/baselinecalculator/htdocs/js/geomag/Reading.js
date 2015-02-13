@@ -1,66 +1,60 @@
-/*global define*/
-define([
-  'mvc/Model',
-  'mvc/Collection',
-  'util/Util',
+'use strict';
 
-  'geomag/Measurement'
-], function (
-  Model,
-  Collection,
-  Util,
-
-  Measurement
-) {
-  'use strict';
+var Collection = require('mvc/Collection'),
+    Measurement = require('geomag/Measurement'),
+    Model = require('mvc/Model'),
+    Util = require('util/Util');
 
 
-  /** Define default attributes. */
-  var DEFAULTS = {
-    'id': null,
-    'set_number': null,
-    'declination_valid': 'Y',
-    'declination_shift': 0,
-    'horizontal_intensity_valid': 'Y',
-    'vertical_intensity_valid': 'Y',
-    'annotation': null,
-    'measurements': null,
-    'absD': null,
-    'absH': null,
-    'absZ': null,
-    'baseD': null,
-    'baseH': null,
-    'baseZ': null,
-    'startD': null,
-    'startH': null,
-    'startZ': null,
-    'endD': null,
-    'endH': null,
-    'endZ': null
-  };
+var _DEFAULTS = {
+  'id': null,
+  'set_number': null,
+  'declination_valid': 'Y',
+  'declination_shift': 0,
+  'horizontal_intensity_valid': 'Y',
+  'vertical_intensity_valid': 'Y',
+  'annotation': null,
+  'measurements': null,
+  'absD': null,
+  'absH': null,
+  'absZ': null,
+  'baseD': null,
+  'baseH': null,
+  'baseZ': null,
+  'startD': null,
+  'startH': null,
+  'startZ': null,
+  'endD': null,
+  'endH': null,
+  'endZ': null
+};
 
+
+/**
+ * Constructor.
+ *
+ * @param  options {Object} observatory attributes.
+ */
+var Reading = function (options) {
+  var _this,
+      _initialize,
+
+      _options;
+
+  _this = Model(options);
 
   /**
-   * Constructor.
-   *
-   * @param  options {Object} observatory attributes.
+   * Initialize view, and call render.
+   * @param options {Object} same as constructor.
    */
-  var Reading = function (options) {
-    // Call parent constructor
-    Model.call(this, Util.extend({}, DEFAULTS, options));
-    this._initialize();
-  };
-  // Reading extends Model
-  Reading.prototype = Object.create(Model.prototype);
-
-
-  Reading.prototype._initialize = function () {
-    var _this = this,
-        measurements = this.get('measurements'),
+  _initialize = function () {
+    var measurements = this.get('measurements'),
         data = null,
         i = null,
         len = null,
         onChangeHandler = null;
+
+    _options = Util.extend({}, _DEFAULTS, options);
 
     if (measurements === null) {
       measurements = new Collection([
@@ -94,6 +88,21 @@ define([
   };
 
   /**
+   * Utility method to call a function on each measurement in this reading.
+   *
+   * @param callback {Function}
+   *        function to call with each measurement.
+   */
+  _this.eachMeasurement = function (callback) {
+    var measurements = this.get('measurements').data(),
+        i,
+        len;
+    for (i = 0, len = measurements.length; i < len; i++) {
+      callback(measurements[i]);
+    }
+  };
+
+  /**
    * Get the Measurements for this reading.
    *
    * @return a key:array of type:[measurements]
@@ -102,7 +111,7 @@ define([
    * measurements per type.  Use this call so we don't have to refactor
    * everything later.
    */
-  Reading.prototype.getMeasurements = function () {
+  _this.getMeasurements = function () {
     var measurements = this.get('measurements'),
         r = {},
         data,
@@ -126,22 +135,9 @@ define([
     return r;
   };
 
-  /**
-   * Utility method to call a function on each measurement in this reading.
-   *
-   * @param callback {Function}
-   *        function to call with each measurement.
-   */
-  Reading.prototype.eachMeasurement = function (callback) {
-    var measurements = this.get('measurements').data(),
-        i,
-        len;
-    for (i = 0, len = measurements.length; i < len; i++) {
-      callback(measurements[i]);
-    }
-  };
+  _initialize(options);
+  options = null;
+  return _this;
+};
 
-
-  // return constructor from closure
-  return Reading;
-});
+module.exports = Reading;
