@@ -1,39 +1,53 @@
-/* global define */
-define([
-  'mvc/Collection',
-  'mvc/Model',
-  'util/Util',
+'use strict';
 
-  'geomag/Reading'
-], function (
-  Collection,
-  Model,
-  Util,
+var Collection = require('mvc/Collection'),
+    Model = require('mvc/Model'),
+    Reading = require('geomag/Reading'),
+    Util = require('util/Util');
 
-  Reading
-) {
-  'use strict';
 
-  var DEFAULTS = {
-    'id': null,
-    'begin': null,
-    'end': null,
-    'reviewer_user_id': null,
-    'observer_user_id': null,
-    'mark_id': null,
-    'electronics_id': null,
-    'theodolite_id': null,
-    'pier_temperature': null,
-    'elect_temperature': null,
-    'flux_temperature': null,
-    'proton_temperature': null,
-    'reviewed': 'N',
-    'annotation': null,
-    'readings': null
-  };
+var _DEFAULTS = {
+  'id': null,
+  'begin': null,
+  'end': null,
+  'reviewer_user_id': null,
+  'observer_user_id': null,
+  'mark_id': null,
+  'electronics_id': null,
+  'theodolite_id': null,
+  'pier_temperature': null,
+  'elect_temperature': null,
+  'flux_temperature': null,
+  'proton_temperature': null,
+  'reviewed': 'N',
+  'annotation': null,
+  'readings': null
+};
 
-  var Observation = function (attributes) {
-    Model.call(this, Util.extend({}, DEFAULTS, attributes));
+
+/**
+ * Construct a new DeclinationView.
+ *
+ * @param option {Object}
+ *        view options.
+ * @param option.baselineCalculator {geomag.ObservationBaselineCalculator}
+ *        the calculator to use.
+ * @param option.reading {geomag.Reading}
+ *        the reading to display.
+ */
+var Observation = function (attributes) {
+  var _this,
+      _initialize,
+
+      _attributes;
+
+  _this = Model(attributes);
+  /**
+   * Initialize view, and call render.
+   * @param options {Object} same as constructor.
+   */
+  _initialize = function (attributes) {
+    _attributes = Util.extend({}, _DEFAULTS, attributes);
     if (this.get('readings') === null) {
       this.set({
         readings: new Collection([
@@ -50,23 +64,6 @@ define([
       });
     }
   };
-  Observation.prototype = Object.create(Model.prototype);
-
-
-  /**
-   * Utility method to call a function on each reading in this observation.
-   *
-   * @param callback {Function}
-   *        function to call with each reading.
-   */
-  Observation.prototype.eachReading = function (callback) {
-    var readings = this.get('readings').data(),
-        i,
-        len;
-    for (i = 0, len = readings.length; i < len; i++) {
-      callback(readings[i]);
-    }
-  };
 
   /**
    * Utility method to call a function on each measurement on each reading
@@ -75,12 +72,30 @@ define([
    * @param callback {Function}
    *        function to call with each measurement.
    */
-  Observation.prototype.eachMeasurement = function (callback) {
+  _this.eachMeasurement = function (callback) {
     this.eachReading(function (reading) {
       reading.eachMeasurement(callback);
     });
   };
 
+  /**
+   * Utility method to call a function on each reading in this observation.
+   *
+   * @param callback {Function}
+   *        function to call with each reading.
+   */
+  _this.eachReading = function (callback) {
+    var readings = this.get('readings').data(),
+        i,
+        len;
+    for (i = 0, len = readings.length; i < len; i++) {
+      callback(readings[i]);
+    }
+  };
 
-  return Observation;
-});
+  _initialize(attributes);
+  attributes = null
+  return _this;
+};
+
+module.exports =  Observation;
