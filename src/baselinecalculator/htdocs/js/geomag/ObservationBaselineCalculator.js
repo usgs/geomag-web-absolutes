@@ -1,328 +1,51 @@
-/* global define */
+'use strict';
 
-define([
-  'mvc/Model',
-  'util/Util',
-
-  'geomag/BaselineCalculator',
-  'geomag/Measurement'
-], function (
-  Model,
-  Util,
-
-  BaselineCalculator,
-  Measurement
-) {
-  'use strict';
+var BaselineCalculator = require('geomag/BaselineCalculator'),
+    Measurement = require('geomag/Measurement'),
+    Model = require('mvc/Model'),
+    Util = require('util/Util');
 
 
-  var DEFAULTS = {
-    calculator: new BaselineCalculator(),
-    // model options
-    pierCorrection: 0,
-    trueAzimuthOfMark: 0
-  };
+var _DEFAULTS = {
+  calculator: new BaselineCalculator(),
+  // model options
+  pierCorrection: 0,
+  trueAzimuthOfMark: 0
+};
 
 
-  var ObservationBaselineCalculator = function (options) {
-    options = Util.extend({}, DEFAULTS, options);
+/**
+ * Construct a new DeclinationSummaryView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.calculator {geomag.ObservationBaselineCalculator}
+ *        the calculator to use.
+ */
+var ObservationBaselineCalculator = function (options) {
+  var _this,
+      _initialize,
+
+      _options;
+
+    _options = Util.extend({}, _DEFAULTS, options);
     // keep calculator outside model
-    this._calculator = options.calculator;
+    _this._calculator = options.calculator;
     delete options.calculator;
-    // initialize model
-    Model.call(this, options);
-  };
 
-
-  // extend Model class
-  ObservationBaselineCalculator.prototype = Object.create(Model.prototype);
+    _this - Model(options);
 
   /**
-   * meanMark
-   *
-   * @param {Object} reading, an observation reading
-   *
-   * @return {Number} meanMark
-   */
-  ObservationBaselineCalculator.prototype.meanMark = function (reading) {
-    var measurements = reading.getMeasurements();
-
-    // measurement.type
-    return this._calculator._mean(
-        measurements[Measurement.FIRST_MARK_UP][0].get('angle'),
-        measurements[Measurement.FIRST_MARK_DOWN][0].get('angle'),
-        measurements[Measurement.SECOND_MARK_UP][0].get('angle'),
-        measurements[Measurement.SECOND_MARK_DOWN][0].get('angle')
-    );
-  };
-
-  ObservationBaselineCalculator.prototype.meanH = function (reading) {
-    var measurements = reading.getMeasurements();
-
-    return this._calculator._mean(
-      measurements[Measurement.SOUTH_DOWN][0].get('h'),
-      measurements[Measurement.NORTH_UP][0].get('h'),
-      measurements[Measurement.SOUTH_UP][0].get('h'),
-      measurements[Measurement.NORTH_DOWN][0].get('h')
-    );
-  };
-  ObservationBaselineCalculator.prototype.meanE = function (reading) {
-    var measurements = reading.getMeasurements();
-
-    return this._calculator._mean(
-      measurements[Measurement.WEST_DOWN][0].get('e'),
-      measurements[Measurement.EAST_DOWN][0].get('e'),
-      measurements[Measurement.WEST_UP][0].get('e'),
-      measurements[Measurement.EAST_UP][0].get('e')
-    );
-  };
-  ObservationBaselineCalculator.prototype.meanZ = function (reading) {
-    var measurements = reading.getMeasurements();
-
-    return this._calculator._mean(
-      measurements[Measurement.SOUTH_DOWN][0].get('z'),
-      measurements[Measurement.NORTH_UP][0].get('z'),
-      measurements[Measurement.SOUTH_UP][0].get('z'),
-      measurements[Measurement.NORTH_DOWN][0].get('z')
-    );
-  };
-  ObservationBaselineCalculator.prototype.meanF = function (reading) {
-    var measurements = reading.getMeasurements();
-
-    return this._calculator._mean(
-      measurements[Measurement.SOUTH_DOWN][0].get('f'),
-      measurements[Measurement.NORTH_UP][0].get('f'),
-      measurements[Measurement.SOUTH_UP][0].get('f'),
-      measurements[Measurement.NORTH_DOWN][0].get('f')
-    );
-  };
-
-  /**
-   * magneticSouthMeridian
-   *
-   * @param {Object} reading, an observation reading
-   *
-   * @return {Number} magneticSouthMeridian
-   */
-  ObservationBaselineCalculator.prototype.magneticSouthMeridian =
-      function (reading) {
-    var measurements = reading.getMeasurements();
-
-    // measurement.type
-    return this._calculator.magneticSouthMeridian(
-        measurements[Measurement.WEST_DOWN][0].get('angle'),
-        measurements[Measurement.WEST_UP][0].get('angle'),
-        measurements[Measurement.EAST_DOWN][0].get('angle'),
-        measurements[Measurement.EAST_UP][0].get('angle')
-    );
-  };
-
-  /**
-   * magneticAzimuthMark
-   *
-   * @param {Object} reading, an observation reading
-   *
-   * @return {Number} magneticAzimuthMark
-   */
-  ObservationBaselineCalculator.prototype.magneticAzimuthMark =
-      function (reading) {
-    var measurements = reading.getMeasurements(),
-        meanMark = null;
-
-    meanMark = (
-        measurements[Measurement.FIRST_MARK_UP][0].get('angle') +
-        measurements[Measurement.FIRST_MARK_DOWN][0].get('angle') +
-        measurements[Measurement.SECOND_MARK_UP][0].get('angle') +
-        measurements[Measurement.SECOND_MARK_DOWN][0].get('angle')) / 4;
-
-    // meanMark = mark1/mark2(up/down) / 4
-    return this._calculator.magneticAzimuthMark(
-        meanMark,
-        this.magneticSouthMeridian(reading)
-    );
-  };
-
-
-  /**
-   * geographicMeridian
+   * D Baseline
    *
    * @param {Object} reading, a reading from an observation
    *
-   * @return {Number} geographicMeridian
+   * @return {Number} dBaseline
    */
-  ObservationBaselineCalculator.prototype.geographicMeridian =
-      function (reading) {
-    // measurement.type (markup1, markup2)
-    var measurements = reading.getMeasurements();
-
-    return this._calculator.geographicMeridian(
-        measurements[Measurement.FIRST_MARK_UP][0].get('angle'),
-        measurements[Measurement.SECOND_MARK_UP][0].get('angle'),
-        this.trueAzimuthOfMark()
-    );
-  };
-
-
-  /**
-   * magneticDeclination
-   *
-   * @param {Object} reading, a reading from an observation
-   *
-   * @return {Number} magneticDeclination
-   */
-  ObservationBaselineCalculator.prototype.magneticDeclination =
-      function (reading) {
-    return this._calculator.magneticDeclination(
-        this.magneticSouthMeridian(reading),
-        this.geographicMeridian(reading),
-        reading.get('declination_shift')
-    );
-  };
-
-  /**
-   * w
-   *
-   * @param {Object} reading, an observation reading
-   *
-   * @return {Number} w
-   */
-  ObservationBaselineCalculator.prototype.westUpMinusEastDown =
-      function (reading) {
-    var measurements = reading.getMeasurements();
-
-    return this._calculator.westUpMinusEastDown(
-        measurements[Measurement.WEST_UP][0].get('angle'),
-        measurements[Measurement.EAST_DOWN][0].get('angle')
-    );
-  };
-
-  /**
-   * e
-   *
-   * @param {Object} reading, an observation reading
-   *
-   * @return {Number} e
-   */
-  ObservationBaselineCalculator.prototype.eastUpMinusWestDown =
-      function (reading){
-    var measurements = reading.getMeasurements();
-
-    return this._calculator.eastUpMinusWestDown(
-        measurements[Measurement.EAST_UP][0].get('angle'),
-        measurements[Measurement.WEST_DOWN][0].get('angle')
-    );
-  };
-
-  /**
-   * F Corrected
-   *
-   * @param {Object} reading, a reading from an observation
-   *
-   * @return {Number} fCorrected
-   */
-  ObservationBaselineCalculator.prototype.fCorrected =
-      function (reading) {
-    // dont need to check each measurement, use ns(ud)
-    // (value will be null for measurement values that don't matter)
-
-    return this._calculator.fCorrected(
-        this.meanF(reading),
-        this.pierCorrection()
-    );
-  };
-
-  /**
-   * inclination
-   *
-   * @param {Object} reading, an observation reading
-   *
-   * @return {Number} inclination
-   */
-  ObservationBaselineCalculator.prototype.inclination = function (reading) {
-    var measurements = reading.getMeasurements();
-
-    // measurement.type
-    return this._calculator.inclination(
-        measurements[Measurement.SOUTH_DOWN][0].get('angle'),
-        measurements[Measurement.SOUTH_UP][0].get('angle'),
-        measurements[Measurement.NORTH_DOWN][0].get('angle'),
-        measurements[Measurement.NORTH_UP][0].get('angle')
-    );
-  };
-
-  /**
-   * horizontalComponent
-   *
-   * @param {Object} reading, a reading from an observation
-   *
-   * @return {Number} horizontalComponent
-   */
-  ObservationBaselineCalculator.prototype.horizontalComponent =
-      function (reading) {
-    return this._calculator.horizontalComponent(
-        this.fCorrected(reading),
-        this.inclination(reading)
-    );
-  };
-
-  /**
-   * verticalComponent
-   *
-   * @param {Object} reading, a reading from an observation
-   *
-   * @return {Number} verticalComponent
-   */
-  ObservationBaselineCalculator.prototype.verticalComponent =
-      function (reading) {
-    return this._calculator.verticalComponent(
-        this.fCorrected(reading),
-        this.inclination(reading)
-    );
-  };
-
-  /**
-   * s
-   *
-   * @param {Object} reading, an observation reading
-   *
-   * @return {Number} s
-   */
-  ObservationBaselineCalculator.prototype.southDownMinusNorthUp =
-      function (reading) {
-    var measurements = reading.getMeasurements();
-
-    return this._calculator.southDownMinusNorthUp(
-        measurements[Measurement.SOUTH_DOWN][0].get('angle'),
-        measurements[Measurement.NORTH_UP][0].get('angle')
-    );
-  };
-
-  /**
-   * n
-   *
-   * @param {Object} reading, an observation reading
-   *
-   * @return {Number} n
-   */
-  ObservationBaselineCalculator.prototype.northDownMinusSouthUp =
-      function (reading) {
-    var measurements = reading.getMeasurements();
-
-    return this._calculator.northDownMinusSouthUp(
-        measurements[Measurement.NORTH_DOWN][0].get('angle'),
-        measurements[Measurement.SOUTH_UP][0].get('angle')
-    );
-  };
-  /**
-   * scaleValue
-   *
-   * @param {Object} reading, a reading from an observation
-   *
-   * @return {Number} scaleValue
-   */
-  ObservationBaselineCalculator.prototype.scaleValue = function (reading) {
-    return this._calculator.scaleValue(
-        this.horizontalComponent(reading)
+  _this.dBaseline = function (reading) {
+    return _this._calculator.dBaseline(
+        _this.magneticDeclination(reading),
+        _this.dComputed(reading)
     );
   };
 
@@ -333,24 +56,26 @@ define([
    *
    * @return {Number} computedE
    */
-  ObservationBaselineCalculator.prototype.dComputed = function (reading) {
-    return this._calculator.dComputed(
-        this.meanE(reading),
-        this.scaleValue(reading)
+  _this.dComputed = function (reading) {
+    return _this._calculator.dComputed(
+        _this.meanE(reading),
+        _this.scaleValue(reading)
     );
   };
 
   /**
-   * H Baseline
+   * e
    *
-   * @param {Object} reading, a reading from an observation
+   * @param {Object} reading, an observation reading
    *
-   * @return {Number} hBaseline
+   * @return {Number} e
    */
-  ObservationBaselineCalculator.prototype.hBaseline = function (reading) {
-    return this._calculator.hBaseline(
-        this.horizontalComponent(reading),
-        this.meanH(reading)
+  _this.eastUpMinusWestDown = function (reading){
+    var measurements = reading.getMeasurements();
+
+    return _this._calculator.eastUpMinusWestDown(
+        measurements[Measurement.EAST_UP][0].get('angle'),
+        measurements[Measurement.WEST_DOWN][0].get('angle')
     );
   };
 
@@ -361,59 +86,46 @@ define([
    *
    * @return {Number} eBaseline
    */
-  ObservationBaselineCalculator.prototype.eBaseline = function (reading) {
-    return this._calculator.eBaseline(
-        this.dBaseline(reading),
-        this.scaleValue(reading)
+  _this.eBaseline = function (reading) {
+    return _this._calculator.eBaseline(
+        _this.dBaseline(reading),
+        _this.scaleValue(reading)
     ); //
   };
 
   /**
-   * D Baseline
+   * F Corrected
    *
    * @param {Object} reading, a reading from an observation
    *
-   * @return {Number} dBaseline
+   * @return {Number} fCorrected
    */
-  ObservationBaselineCalculator.prototype.dBaseline = function (reading) {
-    return this._calculator.dBaseline(
-        this.magneticDeclination(reading),
-        this.dComputed(reading)
+  _this.fCorrected = function (reading) {
+    // dont need to check each measurement, use ns(ud)
+    // (value will be null for measurement values that don't matter)
+
+    return _this._calculator.fCorrected(
+        _this.meanF(reading),
+        _this.pierCorrection()
     );
   };
 
   /**
-   * Z Baseline
+   * geographicMeridian
    *
    * @param {Object} reading, a reading from an observation
    *
-   * @return {Number} zBaseline
+   * @return {Number} geographicMeridian
    */
-  ObservationBaselineCalculator.prototype.zBaseline = function (reading) {
-    return this._calculator.zBaseline(
-        this.verticalComponent(reading),
-        this.meanZ(reading)
+  _this.geographicMeridian = function (reading) {
+    // measurement.type (markup1, markup2)
+    var measurements = reading.getMeasurements();
+
+    return _this._calculator.geographicMeridian(
+        measurements[Measurement.FIRST_MARK_UP][0].get('angle'),
+        measurements[Measurement.SECOND_MARK_UP][0].get('angle'),
+        _this.trueAzimuthOfMark()
     );
-  };
-
-
-
-  /**
-   * pierCorrection
-   *
-   * @return {Number} pierCorrection
-   */
-  ObservationBaselineCalculator.prototype.pierCorrection = function () {
-    return this.get('pierCorrection');
-  };
-
-  /**
-   * trueAzimuthOfMark
-   *
-   * @return {Number} trueAzimuthOfMark
-   */
-  ObservationBaselineCalculator.prototype.trueAzimuthOfMark = function () {
-    return this.get('trueAzimuthOfMark');
   };
 
   /**
@@ -424,8 +136,7 @@ define([
    *
    * @return {Number} mean of the selected channel
    */
-  ObservationBaselineCalculator.prototype.getMeanValue =
-      function (reading, channel) {
+  _this.getMeanValue = function (reading, channel) {
     var measurements = reading.get('measurements'),
         total = 0,
         count = 0,
@@ -447,11 +158,8 @@ define([
       return 0;
     }
 
-    return total / count;
-  };
-
-  ObservationBaselineCalculator.prototype.getStats = function (data) {
-    var mean = this._calculator._mean.apply(this._calculator, data),
+  _this.getStats = function (data) {
+    var mean = _this._calculator._mean.apply(_this._calculator, data),
         min = Math.min.apply(Math, data),
         max = Math.max.apply(Math, data),
         i = null,
@@ -481,6 +189,285 @@ define([
     };
   };
 
-  return ObservationBaselineCalculator;
+    return total / count;
+  };
 
-});
+  /**
+   * H Baseline
+   *
+   * @param {Object} reading, a reading from an observation
+   *
+   * @return {Number} hBaseline
+   */
+  _this.hBaseline = function (reading) {
+    return _this._calculator.hBaseline(
+        _this.horizontalComponent(reading),
+        _this.meanH(reading)
+    );
+  };
+
+  /**
+   * horizontalComponent
+   *
+   * @param {Object} reading, a reading from an observation
+   *
+   * @return {Number} horizontalComponent
+   */
+  _this.horizontalComponent = function (reading) {
+    return _this._calculator.horizontalComponent(
+        _this.fCorrected(reading),
+        _this.inclination(reading)
+    );
+  };
+
+  /**
+   * inclination
+   *
+   * @param {Object} reading, an observation reading
+   *
+   * @return {Number} inclination
+   */
+  _this.inclination = function (reading) {
+    var measurements = reading.getMeasurements();
+
+    // measurement.type
+    return _this._calculator.inclination(
+        measurements[Measurement.SOUTH_DOWN][0].get('angle'),
+        measurements[Measurement.SOUTH_UP][0].get('angle'),
+        measurements[Measurement.NORTH_DOWN][0].get('angle'),
+        measurements[Measurement.NORTH_UP][0].get('angle')
+    );
+  };
+
+  /**
+   * magneticAzimuthMark
+   *
+   * @param {Object} reading, an observation reading
+   *
+   * @return {Number} magneticAzimuthMark
+   */
+  _this.magneticAzimuthMark = function (reading) {
+    var measurements = reading.getMeasurements(),
+        meanMark = null;
+
+    meanMark = (
+        measurements[Measurement.FIRST_MARK_UP][0].get('angle') +
+        measurements[Measurement.FIRST_MARK_DOWN][0].get('angle') +
+        measurements[Measurement.SECOND_MARK_UP][0].get('angle') +
+        measurements[Measurement.SECOND_MARK_DOWN][0].get('angle')) / 4;
+
+    // meanMark = mark1/mark2(up/down) / 4
+    return _this._calculator.magneticAzimuthMark(
+        meanMark,
+        _this.magneticSouthMeridian(reading)
+    );
+  };
+
+  /**
+   * magneticDeclination
+   *
+   * @param {Object} reading, a reading from an observation
+   *
+   * @return {Number} magneticDeclination
+   */
+  _this.magneticDeclination = function (reading) {
+    return _this._calculator.magneticDeclination(
+        _this.magneticSouthMeridian(reading),
+        _this.geographicMeridian(reading),
+        reading.get('declination_shift')
+    );
+  };
+
+  /**
+   * magneticSouthMeridian
+   *
+   * @param {Object} reading, an observation reading
+   *
+   * @return {Number} magneticSouthMeridian
+   */
+  _this.magneticSouthMeridian = function (reading) {
+    var measurements = reading.getMeasurements();
+
+    // measurement.type
+    return _this._calculator.magneticSouthMeridian(
+        measurements[Measurement.WEST_DOWN][0].get('angle'),
+        measurements[Measurement.WEST_UP][0].get('angle'),
+        measurements[Measurement.EAST_DOWN][0].get('angle'),
+        measurements[Measurement.EAST_UP][0].get('angle')
+    );
+  };
+
+  _this.meanE = function (reading) {
+    var measurements = reading.getMeasurements();
+
+    return _this._calculator._mean(
+      measurements[Measurement.WEST_DOWN][0].get('e'),
+      measurements[Measurement.EAST_DOWN][0].get('e'),
+      measurements[Measurement.WEST_UP][0].get('e'),
+      measurements[Measurement.EAST_UP][0].get('e')
+    );
+  };
+
+  _this.meanF = function (reading) {
+    var measurements = reading.getMeasurements();
+
+    return _this._calculator._mean(
+      measurements[Measurement.SOUTH_DOWN][0].get('f'),
+      measurements[Measurement.NORTH_UP][0].get('f'),
+      measurements[Measurement.SOUTH_UP][0].get('f'),
+      measurements[Measurement.NORTH_DOWN][0].get('f')
+    );
+  };
+
+  _this.meanH = function (reading) {
+    var measurements = reading.getMeasurements();
+
+    return _this._calculator._mean(
+      measurements[Measurement.SOUTH_DOWN][0].get('h'),
+      measurements[Measurement.NORTH_UP][0].get('h'),
+      measurements[Measurement.SOUTH_UP][0].get('h'),
+      measurements[Measurement.NORTH_DOWN][0].get('h')
+    );
+  };
+
+  /**
+   * meanMark
+   *
+   * @param {Object} reading, an observation reading
+   *
+   * @return {Number} meanMark
+   */
+  _this.meanMark = function (reading) {
+    var measurements = reading.getMeasurements();
+
+    // measurement.type
+    return _this._calculator._mean(
+        measurements[Measurement.FIRST_MARK_UP][0].get('angle'),
+        measurements[Measurement.FIRST_MARK_DOWN][0].get('angle'),
+        measurements[Measurement.SECOND_MARK_UP][0].get('angle'),
+        measurements[Measurement.SECOND_MARK_DOWN][0].get('angle')
+    );
+  };
+
+  _this.meanZ = function (reading) {
+    var measurements = reading.getMeasurements();
+
+    return _this._calculator._mean(
+      measurements[Measurement.SOUTH_DOWN][0].get('z'),
+      measurements[Measurement.NORTH_UP][0].get('z'),
+      measurements[Measurement.SOUTH_UP][0].get('z'),
+      measurements[Measurement.NORTH_DOWN][0].get('z')
+    );
+  };
+
+  /**
+   * n
+   *
+   * @param {Object} reading, an observation reading
+   *
+   * @return {Number} n
+   */
+  _this.northDownMinusSouthUp = function (reading) {
+    var measurements = reading.getMeasurements();
+
+    return _this._calculator.northDownMinusSouthUp(
+        measurements[Measurement.NORTH_DOWN][0].get('angle'),
+        measurements[Measurement.SOUTH_UP][0].get('angle')
+    );
+  };
+
+  /**
+   * pierCorrection
+   *
+   * @return {Number} pierCorrection
+   */
+  _this.pierCorrection = function () {
+    return _this.get('pierCorrection');
+  };
+
+  /**
+   * scaleValue
+   *
+   * @param {Object} reading, a reading from an observation
+   *
+   * @return {Number} scaleValue
+   */
+  _this.scaleValue = function (reading) {
+    return _this._calculator.scaleValue(
+        _this.horizontalComponent(reading)
+    );
+  };
+
+  /**
+   * s
+   *
+   * @param {Object} reading, an observation reading
+   *
+   * @return {Number} s
+   */
+  _this.southDownMinusNorthUp = function (reading) {
+    var measurements = reading.getMeasurements();
+
+    return _this._calculator.southDownMinusNorthUp(
+        measurements[Measurement.SOUTH_DOWN][0].get('angle'),
+        measurements[Measurement.NORTH_UP][0].get('angle')
+    );
+  };
+
+  /**
+   * trueAzimuthOfMark
+   *
+   * @return {Number} trueAzimuthOfMark
+   */
+  _this.trueAzimuthOfMark = function () {
+    return _this.get('trueAzimuthOfMark');
+  };
+
+  /**
+   * verticalComponent
+   *
+   * @param {Object} reading, a reading from an observation
+   *
+   * @return {Number} verticalComponent
+   */
+  _this.verticalComponent = function (reading) {
+    return _this._calculator.verticalComponent(
+        _this.fCorrected(reading),
+        _this.inclination(reading)
+    );
+  };
+
+  /**
+   * w
+   *
+   * @param {Object} reading, an observation reading
+   *
+   * @return {Number} w
+   */
+  _this.westUpMinusEastDown = function (reading) {
+    var measurements = reading.getMeasurements();
+
+    return _this._calculator.westUpMinusEastDown(
+        measurements[Measurement.WEST_UP][0].get('angle'),
+        measurements[Measurement.EAST_DOWN][0].get('angle')
+    );
+  };
+
+  /**
+   * Z Baseline
+   *
+   * @param {Object} reading, a reading from an observation
+   *
+   * @return {Number} zBaseline
+   */
+  _this.zBaseline = function (reading) {
+    return _this._calculator.zBaseline(
+        _this.verticalComponent(reading),
+        _this.meanZ(reading)
+    );
+  };
+
+  return _this;
+};
+
+module.exports = ObservationBaselineCalculator;
