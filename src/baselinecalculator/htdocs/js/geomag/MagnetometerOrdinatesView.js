@@ -1,42 +1,45 @@
-/* global define */
-define([
-  'mvc/View',
-  'util/Util',
+'use strict';
 
-  'geomag/Formatter',
-  'geomag/Measurement'
-], function (
-  View,
-  Util,
-
-  Format,
-  Measurement
-) {
-  'use strict';
+var Format = require('geomag/Formatter'),
+    Measurement = require('geomag/Measurement'),
+    Util = require('util/Util'),
+    View = require('mvc/View');
 
 
-  var DEFAULTS = {
-    'observation': null,
-    'baselineCalculator': null,
-    'readings': null
-  };
+var _DEFAULTS = {
+  'observation': null,
+  'baselineCalculator': null,
+  'readings': null
+};
 
 
-  var MagnetometerOrdinatesView = function (options) {
-    this._options = Util.extend({}, DEFAULTS, options);
-    View.call(this, this._options);
-  };
+  /**
+   * Construct a new MagnetometerOrdinatesView.
+   *
+   * @param option {Object}
+   *        view options.
+   */
+var MagnetometerOrdinatesView = function (options) {
+  var _this,
+      _initialize,
 
-  MagnetometerOrdinatesView.prototype = Object.create(View.prototype);
+      _options;
 
+  _this = View(options);
+  /**
+   * Initialize view, and call render.
+   * @param options {Object} same as constructor.
+   */
+  _initialize = function (options) {
+    var el = _this.el,
+        measurements;
 
-  MagnetometerOrdinatesView.prototype._initialize = function () {
-    var measurements = this._options.reading.getMeasurements();
+    _options = Util.extend({}, _DEFAULTS, options);
+    measurements = _options.reading.getMeasurements();
+    _this._reading = _options.reading;
+    _this._calculator = _options.baselineCalculator;
 
-    this._reading = this._options.reading;
-    this._calculator = this._options.baselineCalculator;
-
-    this._el.innerHTML = [
+    el.innerHTML = [
       '<table>',
         '<thead>',
           '<tr>',
@@ -89,79 +92,80 @@ define([
       '<p class="scaleValue"></p>'
     ].join('');
 
-    this._hMean = this._el.querySelector('.hMean');
-    this._eMean = this._el.querySelector('.eMean');
-    this._dMean = this._el.querySelector('.dMean');
-    this._zMean = this._el.querySelector('.zMean');
-    this._fMean = this._el.querySelector('.fMean');
+    // save references to elements that will be updated during render
+    _this._hMean = el.querySelector('.hMean');
+    _this._eMean = el.querySelector('.eMean');
+    _this._dMean = el.querySelector('.dMean');
+    _this._zMean = el.querySelector('.zMean');
+    _this._fMean = el.querySelector('.fMean');
 
-    this._absoluteH = this._el.querySelector('.hAbsolute');
-    this._absoluteD = this._el.querySelector('.dAbsolute');
-    this._absoluteZ = this._el.querySelector('.zAbsolute');
-    this._absoluteF = this._el.querySelector('.fAbsolute');
+    _this._absoluteH = el.querySelector('.hAbsolute');
+    _this._absoluteD = el.querySelector('.dAbsolute');
+    _this._absoluteZ = el.querySelector('.zAbsolute');
+    _this._absoluteF = el.querySelector('.fAbsolute');
 
-    this._hBaseline = this._el.querySelector('.hBaseline');
-    this._eBaseline = this._el.querySelector('.eBaseline');
-    this._dBaseline = this._el.querySelector('.dBaseline');
-    this._zBaseline = this._el.querySelector('.zBaseline');
+    _this._hBaseline = el.querySelector('.hBaseline');
+    _this._eBaseline = el.querySelector('.eBaseline');
+    _this._dBaseline = el.querySelector('.dBaseline');
+    _this._zBaseline = el.querySelector('.zBaseline');
 
-    this._pierCorrection = this._el.querySelector('.pier-correction-value');
-    this._scaleValue = this._el.querySelector('.scaleValue');
+    _this._pierCorrection = el.querySelector('.pier-correction-value');
+    _this._scaleValue = el.querySelector('.scaleValue');
 
     // hook up to measurements on change.
     // Only need time/angles not markup/markdown
-    measurements[Measurement.WEST_DOWN][0].on('change', this.render, this);
-    measurements[Measurement.EAST_DOWN][0].on('change', this.render, this);
-    measurements[Measurement.WEST_UP][0].on('change', this.render, this);
-    measurements[Measurement.EAST_UP][0].on('change', this.render, this);
-    measurements[Measurement.SOUTH_DOWN][0].on('change', this.render, this);
-    measurements[Measurement.NORTH_UP][0].on('change', this.render, this);
-    measurements[Measurement.SOUTH_UP][0].on('change', this.render, this);
-    measurements[Measurement.NORTH_DOWN][0].on('change', this.render, this);
-    // hook up to calculator on change.
-    // for changes to pier and mark.
-    this._calculator.on('change', this.render, this);
-    this._reading.on('change', this.render, this);
+    measurements[Measurement.WEST_DOWN][0].on('change', _this.render, _this);
+    measurements[Measurement.EAST_DOWN][0].on('change', _this.render, _this);
+    measurements[Measurement.WEST_UP][0].on('change', _this.render, _this);
+    measurements[Measurement.EAST_UP][0].on('change', _this.render, _this);
+    measurements[Measurement.SOUTH_DOWN][0].on('change', _this.render, _this);
+    measurements[Measurement.NORTH_UP][0].on('change', _this.render, _this);
+    measurements[Measurement.SOUTH_UP][0].on('change', _this.render, _this);
+    measurements[Measurement.NORTH_DOWN][0].on('change', _this.render, _this);
 
-    this.render();
+    // hook up to calculator on change, for changes to pier and mark.
+    _this._calculator.on('change', _this.render, _this);
+    _this._reading.on('change', _this.render, _this);
+
+    _this.render();
   };
 
-  MagnetometerOrdinatesView.prototype.render = function () {
-    var calculator = this._calculator,
-        reading = this._reading;
+  _this.render = function () {
+    var calculator = _this._calculator,
+        reading = _this._reading;
 
-    this._hMean.innerHTML =
+    _this._hMean.innerHTML =
         Format.nanoteslas(calculator.meanH(reading));
-    this._eMean.innerHTML =
+    _this._eMean.innerHTML =
         Format.nanoteslas(calculator.meanE(reading));
-    this._dMean.innerHTML =
+    _this._dMean.innerHTML =
         Format.minutes(calculator.dComputed(reading)*60);
-    this._zMean.innerHTML =
+    _this._zMean.innerHTML =
         Format.nanoteslas(calculator.meanZ(reading));
-    this._fMean.innerHTML =
+    _this._fMean.innerHTML =
         Format.nanoteslas(calculator.meanF(reading));
 
-    this._absoluteH.innerHTML =
+    _this._absoluteH.innerHTML =
         Format.nanoteslas(calculator.horizontalComponent(reading));
-    this._absoluteD.innerHTML =
+    _this._absoluteD.innerHTML =
         Format.minutes((calculator.magneticDeclination(reading) * 60));
-    this._absoluteZ.innerHTML =
+    _this._absoluteZ.innerHTML =
         Format.nanoteslas(calculator.verticalComponent(reading));
-    this._absoluteF.innerHTML =
+    _this._absoluteF.innerHTML =
       Format.nanoteslas(calculator.fCorrected(reading));
 
-    this._hBaseline.innerHTML =
+    _this._hBaseline.innerHTML =
       Format.nanoteslas(calculator.hBaseline(reading));
-    this._eBaseline.innerHTML =
+    _this._eBaseline.innerHTML =
       Format.nanoteslas(calculator.eBaseline(reading));
-    this._dBaseline.innerHTML =
+    _this._dBaseline.innerHTML =
       Format.minutes(calculator.dBaseline(reading) * 60);
-    this._zBaseline.innerHTML =
+    _this._zBaseline.innerHTML =
       Format.nanoteslas(calculator.zBaseline(reading));
 
-    this._pierCorrection.innerHTML =
+    _this._pierCorrection.innerHTML =
         Format.rawNanoteslas(calculator.pierCorrection());
-    this._scaleValue.innerHTML = [
+    _this._scaleValue.innerHTML = [
         'Ordinate Mean D is calculated using ',
         '<code>(Corrected F * scaleValue / 60)</code>',
         ', where <code>',
@@ -169,5 +173,9 @@ define([
         '</code>'].join('');
   };
 
-  return MagnetometerOrdinatesView;
-});
+  _initialize(options);
+  options = null;
+  return _this;
+};
+
+module.exports = MagnetometerOrdinatesView;
