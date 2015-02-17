@@ -83,7 +83,7 @@ var ObservatoryView = function (options) {
 
       // on a URL change, update the observatory
       Events.on('hashchange', function() {
-        _this.render(._getHash());
+        _this.render(_getHash());
       });
     }
   };
