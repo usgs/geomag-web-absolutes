@@ -1,7 +1,6 @@
 'use strict';
 
-var CurrentUser = require('CurrentUser'),
-    Model = require('mvc/Model'),
+var Model = require('mvc/Model'),
     Util = require('util/Util');
 
 
