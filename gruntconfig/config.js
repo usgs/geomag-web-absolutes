@@ -3,7 +3,6 @@
 var config = {
   build: '.build',
   dist: 'dist',
-  example: 'example',
   src: 'src',
   test: 'test'
 };

@@ -36,23 +36,21 @@ var connect = {
   dev: {
     options: {
       base: [
-        config.example,
         config.build + '/' + config.src
       ],
       livereload: true,
-      open: 'http://localhost:8000/example.html',
+      open: 'http://localhost:8000/index.html',
       port: 8000
     }
   },
   dist: {
     options: {
       base: [
-        config.dist,
-        config.example
+        config.dist
       ],
       keepalive: true,
       livereload: true,
-      open: 'http://localhost:8002/example.html',
+      open: 'http://localhost:8002/index.html',
       port: 8002
     }
   },
