@@ -1,7 +1,7 @@
 /* global chai, describe, it */
 'use strict';
 
-var = Measurement = require('geomag/Measurement');
+var Measurement = require('geomag/Measurement');
 
 
 var expect = chai.expect;
