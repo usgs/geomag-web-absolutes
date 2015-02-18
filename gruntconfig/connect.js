@@ -39,19 +39,8 @@ var connect = {
         config.build + '/' + config.src
       ],
       livereload: true,
-      open: 'http://localhost:8000/index.html',
+      open: 'http://localhost:8000/index.php',
       port: 8000
-    }
-  },
-  dist: {
-    options: {
-      base: [
-        config.dist
-      ],
-      keepalive: true,
-      livereload: true,
-      open: 'http://localhost:8002/index.html',
-      port: 8002
     }
   },
   test: {
@@ -63,6 +52,17 @@ var connect = {
       ],
       open: 'http://localhost:8001/test.html',
       port: 8001
+    }
+  },
+  dist: {
+    options: {
+      base: [
+        config.dist
+      ],
+      keepalive: true,
+      livereload: true,
+      open: 'http://localhost:8002/index.php',
+      port: 8002
     }
   }
 };

@@ -1,3 +1,5 @@
+/* global mocha */
+
 // PhantomJS is missing native bind support,
 //     https://github.com/ariya/phantomjs/issues/10522
 // Polyfill from:
@@ -28,74 +30,47 @@ if (!Function.prototype.bind) {
   };
 }
 
-define('CurrentUser', null);
-
-require.config({
-  baseUrl: '..',
-  paths: {
-    mocha: 'mocha/mocha',
-    chai: 'chai/chai',
-    sinon: 'sinon/pkg/sinon',
-    mvc: '/hazdev-webutils/src/mvc',
-    util: '/hazdev-webutils/src/util',
-    tablist: '/hazdev-tablist/src/tablist'
-  },
-  shim: {
-    mocha: {
-      exports: 'mocha'
-    },
-    chai: {
-      deps: ['mocha'],
-      exports: 'chai'
-    },
-    sinon: {
-      exports: 'sinon'
-    }
-  }
-});
-
-require([
-  'mocha',
-], function (mocha) {
+(function () {
   'use strict';
 
-  mocha.setup('bdd');
+  mocha.ui('bdd');
+  mocha.reporter('html');
 
-  require([
-    'spec/ObservatoryTest',
-    'spec/MarkTest',
-    'spec/MeasurementTest',
-    'spec/PierTest',
-    'spec/BaselineCalculatorTest',
-    'spec/InstrumentTest',
-    'spec/ObservationTest',
-    'spec/UserTest',
-    'spec/UserAdminViewTest',
-    'spec/ReadingTest',
-    'spec/MeasurementViewTest',
-    'spec/ReadingGroupViewTest',
-    'spec/DeclinationViewTest',
-    'spec/InclinationViewTest',
-    'spec/ReadingViewTest',
-    'spec/RealtimeDataTest',
-    'spec/RealtimeDataFactoryTest',
-    'spec/observation_data_Test',
-    'spec/ObservationBaselineCalculatorTest',
-    'spec/ObservationMetaViewTest',
-    'spec/mvcutil/CollectionSelectBoxTest',
-    'spec/ObservatoryViewTest',
-    'spec/ObservationsViewTest',
-    'spec/FormatterTest',
-    'spec/MagnetometerOrdinatesViewTest',
-    'spec/DeclinationSummaryViewTest',
-    'spec/HorizontalIntensitySummaryViewTest',
-    'spec/VerticalIntensitySummaryViewTest',
-    'spec/ObservationSummaryViewTest'
-  ], function () {
-    if (window.mochaPhantomJS) {
+  // Add each test class here as they are implemented
+  require('./spec/QuestionViewTest');
+  require('./spec/ObservatoryTest');
+  require('./spec/MarkTest');
+  require('./spec/MeasurementTest');
+  require('./spec/PierTest');
+  require('./spec/BaselineCalculatorTest');
+  require('./spec/InstrumentTest');
+  require('./spec/ObservationTest');
+  require('./spec/UserTest');
+  require('./spec/UserAdminViewTest');
+  require('./spec/ReadingTest');
+  require('./spec/MeasurementViewTest');
+  require('./spec/ReadingGroupViewTest');
+  require('./spec/DeclinationViewTest');
+  require('./spec/InclinationViewTest');
+  require('./spec/ReadingViewTest');
+  require('./spec/RealtimeDataTest');
+  require('./spec/RealtimeDataFactoryTest');
+  require('./spec/observation_data_Test');
+  require('./spec/ObservationBaselineCalculatorTest');
+  require('./spec/ObservationMetaViewTest');
+  require('./spec/mvcutil/CollectionSelectBoxTest');
+  require('./spec/ObservatoryViewTest');
+  require('./spec/ObservationsViewTest');
+  require('./spec/FormatterTest');
+  require('./spec/MagnetometerOrdinatesViewTest');
+  require('./spec/DeclinationSummaryViewTest');
+  require('./spec/HorizontalIntensitySummaryViewTest');
+  require('./spec/VerticalIntensitySummaryViewTest');
+  require('./spec/ObservationSummaryViewTest');
+
+  if (window.mochaPhantomJS) {
       window.mochaPhantomJS.run();
-    } else {
-      mocha.run();
-    }
-  });
-});
+  } else {
+    mocha.run();
+  }
+})(this);

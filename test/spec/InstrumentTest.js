@@ -1,32 +1,25 @@
-/* global define, describe, it */
-define([
-  'chai',
-  'mvc/Model',
+/* global chai, describe, it */
+'use strict';
 
-  'geomag/Instrument'
-], function (
-  chai,
-  Model,
+var Instrument = require('geomag/Instrument'),
+    Model = require('mvc/Model');
 
-  Instrument
-) {
-  'use strict';
-  var expect = chai.expect;
 
-  describe('Instrument Unit Tests', function () {
+var expect = chai.expect;
 
-    describe('Constructor', function () {
-      var i = new Instrument();
+describe('Instrument Unit Tests', function () {
 
-      it('should be an instance of an Instrument', function () {
-        expect(i).to.be.an.instanceOf(Instrument);
-      });
+  describe('Constructor', function () {
+    var i = new Instrument();
 
-      it('should be an instance of a Model', function () {
-        expect(i).to.be.an.instanceOf(Model);
-      });
+    it('should be an instance of an Instrument', function () {
+      expect(i).to.be.an.instanceOf(Instrument);
+    });
 
-    }); // END :: Constructor
+    it('should be an instance of a Model', function () {
+      expect(i).to.be.an.instanceOf(Model);
+    });
 
-  }); // END :: Instrument Unit Tests
-});
+  }); // END :: Constructor
+
+}); // END :: Instrument Unit Tests

@@ -1,79 +1,66 @@
-/* global define */
-/* global describe */
-/* global it */
+/* global chai, describe, it */
+'use strict';
 
-define([
-  'chai',
-  'mvc/Collection',
-  'mvc/Model',
-  'util/Util',
-
-  'geomag/Pier'
-], function (
-  chai,
-  Collection,
-  Model,
-  Util,
-
-  Pier
-) {
-  'use strict';
-  var expect = chai.expect;
+var Collection = require('mvc/Collection'),
+    Model = require('mvc/Model'),
+    Pier = require('geomag/Pier'),
+    Util = require('util/Util');
 
 
-  var TEST_PIER_DATA = {
-    'id': 'example_pier_001',
-    'marks': new Collection([
-      {
-        'id': 'test_mark_1'
-      },
-      {
-        'id': 'test_mark_2'
-      },
-      {
-        'id': 'test_mark_3'
-      }
-    ]),
-    'default_mark_id': null
-  };
+var expect = chai.expect;
 
 
-  describe('Unit tests for the "Pier" class', function () {
+var TEST_PIER_DATA = {
+  'id': 'example_pier_001',
+  'marks': new Collection([
+    {
+      'id': 'test_mark_1'
+    },
+    {
+      'id': 'test_mark_2'
+    },
+    {
+      'id': 'test_mark_3'
+    }
+  ]),
+  'default_mark_id': null
+};
 
-    describe('constructor()', function () {
 
-      it('is an instance of Model', function () {
-        var myPier = new Pier(TEST_PIER_DATA);
-        expect(myPier).to.be.instanceOf(Model);
-      });
+describe('Unit tests for the "Pier" class', function () {
 
-      it('is an instance of Pier', function () {
-        var myPier = new Pier(TEST_PIER_DATA);
-        expect(myPier).to.be.instanceOf(Pier);
-      });
+  describe('constructor()', function () {
 
+    it('is an instance of Model', function () {
+      var myPier = new Pier(TEST_PIER_DATA);
+      expect(myPier).to.be.instanceOf(Model);
     });
 
-    describe('getDefaultMark()', function () {
+    it('is an instance of Pier', function () {
+      var myPier = new Pier(TEST_PIER_DATA);
+      expect(myPier).to.be.instanceOf(Pier);
+    });
 
-      it('returns the default mark when specified', function () {
-        var myPier = new Pier(Util.extend({}, TEST_PIER_DATA,
-            {'default_mark_id': 'test_mark_1'}));
-        var defaultMark = myPier.getDefaultMark();
-        expect(defaultMark.id).to.equal('test_mark_1');
-      });
+  });
 
-      it('returns null when no default specified', function () {
-        var myPier = new Pier(TEST_PIER_DATA);
-        var defaultMark = myPier.getDefaultMark();
+  describe('getDefaultMark()', function () {
 
-        /* jshint expr : true */
-        expect(defaultMark).to.be.null;
-        /* jshint expr : false */
-      });
+    it('returns the default mark when specified', function () {
+      var myPier = new Pier(Util.extend({}, TEST_PIER_DATA,
+          {'default_mark_id': 'test_mark_1'}));
+      var defaultMark = myPier.getDefaultMark();
+      expect(defaultMark.id).to.equal('test_mark_1');
+    });
 
-    });  // END :: getDefaultMark
+    it('returns null when no default specified', function () {
+      var myPier = new Pier(TEST_PIER_DATA);
+      var defaultMark = myPier.getDefaultMark();
 
-  });  // END :: Tests for Pier class
+      /* jshint expr : true */
+      expect(defaultMark).to.be.null;
+      /* jshint expr : false */
+    });
 
-});
+  });  // END :: getDefaultMark
+
+});  // END :: Tests for Pier class

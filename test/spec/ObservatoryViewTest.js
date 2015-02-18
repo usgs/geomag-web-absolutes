@@ -1,112 +1,100 @@
-/* global define, describe, it, before, after */
+/* global chai, sinon, describe, it, before, after */
+'use strict';
 
-define([
-  'chai',
-  'sinon',
-  './observatories',
-  'util/Xhr',
+var observatories = require('./observatories'),
+    ObservatoryView = require('geomag/ObservatoryView'),
+    Xhr = require('util/Xhr');
 
-  'geomag/ObservatoryView'
-], function (
-  chai,
-  sinon,
-  observatories,
-  Xhr,
 
-  ObservatoryView
-) {
+var expect = chai.expect;
+var stub, ignore;
+var DEFAULTS = {
+  observatoryId: null
+};
+var observatoryView;
 
-  'use strict';
-  var expect = chai.expect;
-  var stub, ignore;
-  var DEFAULTS = {
-    observatoryId: null
-  };
-  var observatoryView;
+var getChangeEvent = function () {
+  var changeEvent = document.createEvent('HTMLEvents');
+  changeEvent.initEvent('change', true, true, window, 1, 0, 0);
+  return changeEvent;
+};
 
-  var getChangeEvent = function () {
-    var changeEvent = document.createEvent('HTMLEvents');
-    changeEvent.initEvent('change', true, true, window, 1, 0, 0);
-    return changeEvent;
-  };
+describe('ObservatoryView Unit Tests', function () {
 
-  describe('ObservatoryView Unit Tests', function () {
-
-    before(function () {
-      stub = sinon.stub(Xhr, 'ajax', function (options) {
-        options.success(observatories);
-      });
-
-      ignore = sinon.stub(ObservatoryView.prototype, '_getObservations',
-          function () {
-        // Do nothing.
-      });
-
-      observatoryView = new ObservatoryView(DEFAULTS);
+  before(function () {
+    stub = sinon.stub(Xhr, 'ajax', function (options) {
+      options.success(observatories);
     });
 
-    after(function() {
-      window.location.hash = '';
-      stub.restore();
-      ignore.restore();
+    ignore = sinon.stub(ObservatoryView.prototype, '_getObservations',
+        function () {
+      // Do nothing.
     });
 
-    describe('Constructor', function () {
+    observatoryView = new ObservatoryView(DEFAULTS);
+  });
 
-      it('Can be defined', function () {
-        /* jshint -W030 */
-        expect(ObservatoryView).to.not.be.undefined;
-        /* jshint +W030 */
-      });
+  after(function() {
+    window.location.hash = '';
+    stub.restore();
+    ignore.restore();
+  });
 
-      it('Can be instantiated', function () {
-        expect(observatoryView).to.be.an.instanceOf(ObservatoryView);
-      });
+  describe('Constructor', function () {
+
+    it('Can be defined', function () {
+      /* jshint -W030 */
+      expect(ObservatoryView).to.not.be.undefined;
+      /* jshint +W030 */
     });
 
+    it('Can be instantiated', function () {
+      expect(observatoryView).to.be.an.instanceOf(ObservatoryView);
+    });
+  });
 
-    describe('Observatory details', function () {
 
-      it('can get all observatories', function () {
-        var all = observatoryView._el.querySelector('.observatories');
-            observatories = all.querySelectorAll('option');
-        expect(observatories.length).to.equal(15);
-      });
+  describe('Observatory details', function () {
 
-      it('can select an observatory by default', function () {
-        var all = observatoryView._el.querySelector('.observatories'),
-            selected = all.value;
-        expect(selected).to.equal('observatory_2');
-      });
-
+    it('can get all observatories', function () {
+      var all = observatoryView._el.querySelector('.observatories');
+          observatories = all.querySelectorAll('option');
+      expect(observatories.length).to.equal(15);
     });
 
-
-    describe('Event bindings', function () {
-
-      it('can select a default observatory', function () {
-        var container = observatoryView._el,
-            select = container.querySelector('.observatories'),
-            option = container.querySelector('#observatory_2');
-        expect(option.value).to.equal(select.value);
-      });
-
-      it('can generate a hash change onClick', function () {
-        var select = observatoryView._el.querySelector('.observatories'),
-            hashBefore = window.location.hash,
-            hashAfter = hashBefore;
-
-        // change value and dispatch event, should update hash
-        select.value = 'observatory_1';
-        select.dispatchEvent(getChangeEvent());
-
-        hashAfter = window.location.hash;
-
-        expect(hashBefore).to.not.equal(hashAfter);
-        expect(hashAfter).to.equal('#1');
-      });
-
+    it('can select an observatory by default', function () {
+      var all = observatoryView._el.querySelector('.observatories'),
+          selected = all.value;
+      expect(selected).to.equal('observatory_2');
     });
 
   });
+
+
+  describe('Event bindings', function () {
+
+    it('can select a default observatory', function () {
+      var container = observatoryView._el,
+          select = container.querySelector('.observatories'),
+          option = container.querySelector('#observatory_2');
+      expect(option.value).to.equal(select.value);
+    });
+
+    it('can generate a hash change onClick', function () {
+      var select = observatoryView._el.querySelector('.observatories'),
+          hashBefore = window.location.hash,
+          hashAfter = hashBefore;
+
+      // change value and dispatch event, should update hash
+      select.value = 'observatory_1';
+      select.dispatchEvent(getChangeEvent());
+
+      hashAfter = window.location.hash;
+
+      expect(hashBefore).to.not.equal(hashAfter);
+      expect(hashAfter).to.equal('#1');
+    });
+
+  });
+
 });
