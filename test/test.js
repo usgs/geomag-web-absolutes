@@ -37,7 +37,6 @@ if (!Function.prototype.bind) {
   mocha.reporter('html');
 
   // Add each test class here as they are implemented
-  require('./spec/QuestionViewTest');
   require('./spec/ObservatoryTest');
   require('./spec/MarkTest');
   require('./spec/MeasurementTest');
