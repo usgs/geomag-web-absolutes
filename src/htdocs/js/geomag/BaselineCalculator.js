@@ -11,7 +11,7 @@ var BaselineCalculator = function () {
   var _this,
       _initialize,
 
-      _mean
+      _mean,
       _toRadians;
 
   _this = {};
