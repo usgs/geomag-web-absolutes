@@ -55,7 +55,6 @@ define([
 				Format.nanoteslas(this._calculator.meanH(reading));
 		this._baselineValues.innerHTML =
 				Format.nanoteslas(this._calculator.hBaseline(reading));
-		this._observer.innerHTML = this._reading.get('observer') || '';
 	};
 
 	HorizontalIntensitySummaryView.prototype._initialize = function () {
@@ -72,8 +71,7 @@ define([
 			'<td class="end-time"></td>',
 			'<td class="abs-value"></td>',
 			'<td class="ord"></td>',
-			'<td class="baseline-values"></td>',
-			'<td class="observer"></td>'
+			'<td class="baseline-values"></td>'
 		].join('');
 
 		this._name = el.querySelector('.name');
@@ -83,7 +81,6 @@ define([
 		this._absValue = el.querySelector('.abs-value');
 		this._ord = el.querySelector('.ord');
 		this._baselineValues = el.querySelector('.baseline-values');
-		this._observer = el.querySelector('.observer');
 
 		this._reading = this._options.reading;
 		this._calculator = this._options.calculator;
