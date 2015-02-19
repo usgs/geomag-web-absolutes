@@ -8,7 +8,7 @@ define([
 	var NANOTESLAS = 'nT',
 	    DEGREES = '°',
 	    MINUTES = '\'',
-	    DEFAULT_DIGITS = 2,
+	    DEFAULT_DIGITS = 3,
 	    CELSIUS = '°C',
 	    FAHRENHEIT = '°F';
 
