@@ -70,22 +70,7 @@ var TESTMEASUREMENTS = {
 
 describe('Unit tests for the "Reading" class', function () {
 
-  describe('constructor()', function () {
-
-    it('calls Reading constructor', function () {
-      var reading = Reading();
-      expect( reading ).to.be.an.instanceOf(Reading);
-      expect( reading ).to.be.an.instanceOf(Model);
-    });
-
-  });
-
   describe('getMeasurements()',function () {
-
-    it('gets back type:array pairs', function () {
-      var reading = Reading(TESTOBJECT);
-      expect(reading.getMeasurements()).to.deep.equal(TESTMEASUREMENTS);
-    });
 
     //Note, the following code will add a measurement to TESTOBJECT.
     it('add a mesurement to underlying measurements collection', function(){
