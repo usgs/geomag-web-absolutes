@@ -45,7 +45,7 @@ describe('Observations Unit Tests', function () {
   describe('Observations', function () {
 
     it('can add a new observation button', function () {
-      var el = observationsView._el.querySelector('.observations-new'),
+      var el = observationsView.el.querySelector('.observations-new'),
           button = el.querySelector('.button');
       /* jshint -W030 */
       expect(button).to.not.be.undefined;
@@ -53,7 +53,7 @@ describe('Observations Unit Tests', function () {
     });
 
     it('can get all existing observations', function () {
-      var el = observationsView._el.querySelector('.observations-all'),
+      var el = observationsView.el.querySelector('.observations-all'),
           observations = el.querySelectorAll('li');
       expect(observations.length).to.equal(11);
     });

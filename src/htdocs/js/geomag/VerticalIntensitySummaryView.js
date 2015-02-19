@@ -21,7 +21,7 @@ var VerticalIntensitySummaryView = function (options) {
       _onChange;
 
   _initialize = function () {
-    var el = _this._el,
+    var el = _this.el,
         factory = _this._options.factory,
         reading = _this._options.reading,
         i = null,

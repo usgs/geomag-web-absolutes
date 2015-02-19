@@ -47,7 +47,7 @@ describe('ObservationSummaryViewTest', function () {
     it('should render when Pier temp changes', function () {
       observation.set({'pier_temperature':40});
       var pierTemperature =
-          view._el.querySelector('.pier-temp-value').innerHTML;
+          view.el.querySelector('.pier-temp-value').innerHTML;
 
       expect(pierTemperature).to.equal(
           '<span class="temperature">' +
@@ -58,7 +58,7 @@ describe('ObservationSummaryViewTest', function () {
     it('should render when annotation changes', function () {
       observation.set({'annotation':'This is an annotation test'});
       var annotation =
-          view._el.querySelector('.reviewer > textarea').innerHTML;
+          view.el.querySelector('.reviewer > textarea').innerHTML;
 
       expect(annotation).to.equal('This is an annotation test');
     });

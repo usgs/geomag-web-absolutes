@@ -93,7 +93,7 @@ var CollectionSelectBox = function (options) {
    * Add "disabled" attribute to element.
    */
   _this.disable = function () {
-    this._el.setAttribute('disabled', 'disabled');
+    _this.el.setAttribute('disabled', 'disabled');
   };
 
   /**

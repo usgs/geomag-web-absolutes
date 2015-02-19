@@ -59,13 +59,13 @@ describe('MeasurementView Unit Tests', function () {
   describe('validation', function () {
 
     var m = new MeasurementView(viewOptions),
-        time = m._el.querySelector('.measurement-time').
+        time = m.el.querySelector('.measurement-time').
             querySelector('input'),
-        degrees = m._el.querySelector('.measurement-degrees').
+        degrees = m.el.querySelector('.measurement-degrees').
             querySelector('input'),
-        minutes = m._el.querySelector('.measurement-minutes').
+        minutes = m.el.querySelector('.measurement-minutes').
             querySelector('input'),
-        seconds = m._el.querySelector('.measurement-seconds').
+        seconds = m.el.querySelector('.measurement-seconds').
             querySelector('input');
 
     var getBlurEvent = function () {
