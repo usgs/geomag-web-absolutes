@@ -19,12 +19,12 @@ describe('Unit tests for the "Measurement" class', function () {
   };
   describe('constructor()', function () {
     it('evaluates to instanceof "Measurement"', function () {
-      var measurement = new Measurement();
+      var measurement = Measurement();
       expect(measurement).to.be.an.instanceOf(Measurement);
     });
 
     it('works when passed a test object', function () {
-      var measurement = new Measurement(testObject);
+      var measurement = Measurement(testObject);
       expect(measurement.get('id')).to.equal(testObject.id);
       expect(measurement.get('type')).to.equal(testObject.type);
       expect(measurement.get('time')).to.equal(testObject.time);

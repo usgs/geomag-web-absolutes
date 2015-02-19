@@ -11,7 +11,7 @@ var DeclinationSummaryView = require('geomag/DeclinationSummaryView'),
 
 
 var _DEFAULTS = {
-  UserFactory: new UserFactory({
+  UserFactory: UserFactory({
     url: MOUNT_PATH + '/user_data.php'
   })
 };
@@ -277,7 +277,7 @@ var ObservationSummaryView = function (options) {
       reading = readings[i];
       // create view if it does not exist
       if (!reading.hasOwnProperty('_declinationSummary')) {
-        reading._declinationSummary = new DeclinationSummaryView({
+        reading._declinationSummary = DeclinationSummaryView({
           el: document.createElement('tr'),
           reading: reading,
           calculator: calculator
@@ -330,7 +330,7 @@ var ObservationSummaryView = function (options) {
 
       if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
         reading._horizontalIntensitySummary =
-            new HorizontalIntensitySummaryView({
+            HorizontalIntensitySummaryView({
           el:document.createElement('tr'),
           reading:reading,
           calculator:calculator
@@ -404,7 +404,7 @@ var ObservationSummaryView = function (options) {
 
       // Create view if it does not exits
       if (!reading.hasOwnProperty('_verticalIntensitySummary')) {
-        reading._verticalIntensitySummary = new VerticalIntensitySummaryView({
+        reading._verticalIntensitySummary = VerticalIntensitySummaryView({
           el: document.createElement('tr'),
           reading: reading,
           calculator: calculator

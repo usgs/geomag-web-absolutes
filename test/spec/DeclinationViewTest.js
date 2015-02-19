@@ -13,7 +13,7 @@ var DeclinationView = require('geomag/DeclinationView'),
 var expect = chai.expect;
 
 // dummy ObservationBaselineCalculator for testing
-var testObservationBaselineCalculator = Util.extend(new Model(), {
+var testObservationBaselineCalculator = Util.extend(Model(), {
   magneticSouthMeridian: function() { return 1; },
   meanMark: function () { return 2; },
   magneticAzimuthMark: function () { return 3; },
@@ -38,8 +38,8 @@ TestDeclinationView.prototype.render = function() {
 };
 
 var viewOptions = {
-  reading: new Reading(),
-  observation: new Observation(),
+  reading: Reading(),
+  observation: Observation(),
   baselineCalculator: testObservationBaselineCalculator
 };
 
@@ -52,8 +52,8 @@ describe('Unit tests for DeclinationView class', function () {
   });
 
   it('can be instantiated', function () {
-    var view = new DeclinationView({
-      reading: new Reading(),
+    var view = DeclinationView({
+      reading: Reading(),
       baselineCalculator: testObservationBaselineCalculator
     });
 
@@ -69,24 +69,15 @@ describe('Unit tests for DeclinationView class', function () {
     /*jshint +W030*/
   });
 
-  describe('Constructor', function () {
-    var m = new DeclinationView(viewOptions);
-
-    it('should be an instance of a DeclinationView', function () {
-      expect(m).to.be.an.instanceOf(DeclinationView);
-    });
-
-  });
-
   describe('Initialize', function () {
     var i = 0,
         len = 0,
-        reading = new Reading(),
+        reading = Reading(),
         measurements = reading.getMeasurements(),
-        observation = new Observation(),
+        observation = Observation(),
         view;
 
-    view = new TestDeclinationView({
+    view = TestDeclinationView({
       reading: reading,
       observation: observation,
       baselineCalculator: testObservationBaselineCalculator
@@ -124,9 +115,9 @@ describe('Unit tests for DeclinationView class', function () {
           view;
 
     it('updates view elements', function () {
-      view = new DeclinationView({
-        reading: new Reading(),
-        observation: new Observation(),
+      view = DeclinationView({
+        reading: Reading(),
+        observation: Observation(),
         baselineCalculator: calculator
       });
 

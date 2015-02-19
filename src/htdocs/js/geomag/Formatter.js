@@ -110,6 +110,10 @@ var degrees = function (angle, digits) {
   if (typeof digits === 'undefined') {
     digits = _DEFAULT_DIGITS;
   }
+  if (isNaN(angle)){
+    return angle;
+  }
+
   return rawDegrees(angle.toFixed(digits));
 };
 
@@ -153,22 +157,22 @@ var degreesAndDegreesMinutes = function (angle, digits) {
 var degreesMinutes = function (angle, digits) {
   var buf = [],
       degrees,
-      minutes;
+      localMinutes;
 
   if (typeof digits === 'undefined') {
     digits = _DEFAULT_DIGITS;
   }
 
   degrees = parseInt(angle, 10);
-  minutes = (angle - degrees) * 60;
+  localMinutes = (angle - degrees) * 60;
 
-  if (isNaN(degrees) || isNaN(minutes)) {
+  if (isNaN(degrees) || isNaN(localMinutes)) {
     buf.push('&ndash;');
   } else {
     buf.push(
         rawDegrees(degrees),
         '&nbsp;',
-        minutes(minutes, digits));
+        minutes(localMinutes, digits));
   }
   return buf.join('');
 };
@@ -228,6 +232,9 @@ var fahrenheit = function (temperature, digits) {
 var minutes = function (angle, digits) {
   if (typeof digits === 'undefined') {
     digits = _DEFAULT_DIGITS;
+  }
+  if (isNaN(angle)){
+    return angle;
   }
 
   if (isNaN(angle)) {

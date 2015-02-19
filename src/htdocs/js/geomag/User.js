@@ -38,7 +38,7 @@ var User = function (options) {
    */
   _this.getCurrentUser = function () {
     if (_CURRENT_USER === null) {
-      _CURRENT_USER = new User(CurrentUser);
+      _CURRENT_USER = User(CurrentUser);
     }
     return _CURRENT_USER;
   };

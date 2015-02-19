@@ -31,7 +31,7 @@ describe('ObservatoryView Unit Tests', function () {
       // Do nothing.
     });
 
-    observatoryView = new ObservatoryView(DEFAULTS);
+    observatoryView = ObservatoryView(DEFAULTS);
   });
 
   after(function() {

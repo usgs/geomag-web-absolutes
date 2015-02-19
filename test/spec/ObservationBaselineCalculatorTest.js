@@ -11,14 +11,14 @@ var BaselineCalculator = require('geomag/BaselineCalculator'),
 
 var expect = chai.expect;
 
-var calc = new ObservationBaselineCalculator({
-    calculator: new BaselineCalculator(),
+var calc = ObservationBaselineCalculator({
+    calculator: BaselineCalculator(),
     pierCorrection: -23.1,
     trueAzimuthOfMark: 199.1383
 });
 
 // data from BOU20132861836.bns
-var meas1 = new Measurement({
+var meas1 = Measurement({
     'id': 1,
     'type': Measurement.FIRST_MARK_UP,
     'time': null,
@@ -30,7 +30,7 @@ var meas1 = new Measurement({
 });
 
 // data from BOU20132861836.bns
-var meas2 = new Measurement({
+var meas2 = Measurement({
     'id': 2,
     'type': Measurement.FIRST_MARK_DOWN,
     'time': null,
@@ -42,7 +42,7 @@ var meas2 = new Measurement({
 });
 
 // data from BOU20132861836.bns
-var meas3 = new Measurement({'id': 3,
+var meas3 = Measurement({'id': 3,
     'type': Measurement.WEST_DOWN,
     'time': 183639,
     'angle': 270.15749999999997,// 270.1575, // 270 9 27
@@ -53,7 +53,7 @@ var meas3 = new Measurement({'id': 3,
 });
 
 // data from BOU20132861836.bns
-var meas4 = new Measurement({
+var meas4 = Measurement({
     'id': 4,
     'type': Measurement.EAST_DOWN,
     'time': 183733,
@@ -65,7 +65,7 @@ var meas4 = new Measurement({
 });
 
 // data from BOU20132861836.bns
-var meas5 = new Measurement({
+var meas5 = Measurement({
     'id': 5,
     'type': Measurement.WEST_UP,
     'time': 183820,
@@ -77,7 +77,7 @@ var meas5 = new Measurement({
 });
 
 // data from BOU20132861836.bns
-var meas6 = new Measurement({
+var meas6 = Measurement({
     'id': 6,
     'type': Measurement.EAST_UP,
     'time': 183916,
@@ -89,7 +89,7 @@ var meas6 = new Measurement({
 });
 
 // data from BOU20132861836.bns
-var meas7 = new Measurement({
+var meas7 = Measurement({
     'id': 7,
     'type': Measurement.SECOND_MARK_UP,
     'time': null,
@@ -101,7 +101,7 @@ var meas7 = new Measurement({
 });
 
 // data from BOU20132861836.bns
-var meas8 = new Measurement({
+var meas8 = Measurement({
     'id': 8,
     'type': Measurement.SECOND_MARK_DOWN,
     'time': null,
@@ -113,7 +113,7 @@ var meas8 = new Measurement({
 });
 
 // data from BOU20132861836.bns
-var meas9 = new Measurement({
+var meas9 = Measurement({
     'id': 9,
     'type': Measurement.SOUTH_DOWN,
     'time': 184200,
@@ -125,7 +125,7 @@ var meas9 = new Measurement({
 });
 
 // data from BOU20132861836.bns
-var measA = new Measurement({
+var measA = Measurement({
     'id': 10,
     'type': Measurement.NORTH_UP,
     'time': 184247,
@@ -137,7 +137,7 @@ var measA = new Measurement({
 });
 
 // data from BOU20132861836.bns
-var measB = new Measurement({
+var measB = Measurement({
     'id': 11,
     'type': Measurement.SOUTH_UP,
     'time': 184347,
@@ -149,7 +149,7 @@ var measB = new Measurement({
 });
 
 // data from BOU20132861836.bns
-var measC = new Measurement({
+var measC = Measurement({
     'id': 12,
     'type': Measurement.NORTH_DOWN,
     'time': 184513,
@@ -161,7 +161,7 @@ var measC = new Measurement({
 });
 
 // data from BOU20132861836.bns
-var READING = new Reading({
+var READING = Reading({
   'id': 1,
   'set_number': 1,
   'declination_valid': true,
@@ -169,7 +169,7 @@ var READING = new Reading({
   'vertical_intensity_valid': true,
   'observer': 'Eddie',
   'annotation': 'This is a test',
-  'measurements': new Collection([
+  'measurements': Collection([
     meas1, meas2, meas3, meas4, meas5, meas6,
     meas7, meas8, meas9, measA, measB, measC
   ]),

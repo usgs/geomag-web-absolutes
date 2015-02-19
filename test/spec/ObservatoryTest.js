@@ -11,7 +11,7 @@ var expect = chai.expect;
 
 var TEST_OBSERVATORY_DATA = {
   'id': 'example_obs_001',
-  'piers': new Collection([
+  'piers': Collection([
     {
       'id': 'test_pier_1'
     },
@@ -27,14 +27,14 @@ describe('Unit tests for the "Observatory" class', function () {
 
   describe('constructor()', function () {
     it('calls Model constructor', function () {
-      var observatory = new Observatory(TEST_OBSERVATORY_DATA);
+      var observatory = Observatory(TEST_OBSERVATORY_DATA);
       expect(observatory.get('id')).to.equal('example_obs_001');
     });
   });
 
   describe('getDefaultPier()', function () {
     it('returns the default pier when specified', function () {
-      var observatory = new Observatory(
+      var observatory = Observatory(
           Util.extend({}, TEST_OBSERVATORY_DATA,
               {'default_pier_id': 'test_pier_1'}));
       var defaultPier = observatory.getDefaultPier();
@@ -42,7 +42,7 @@ describe('Unit tests for the "Observatory" class', function () {
     });
 
     it('returns null when no default specified', function () {
-      var observatory = new Observatory(TEST_OBSERVATORY_DATA);
+      var observatory = Observatory(TEST_OBSERVATORY_DATA);
       var defaultPier = observatory.getDefaultPier();
       expect(defaultPier).to.equal(null);
     });

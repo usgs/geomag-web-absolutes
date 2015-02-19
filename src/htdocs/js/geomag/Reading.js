@@ -57,19 +57,19 @@ var Reading = function (options) {
     _options = Util.extend({}, _DEFAULTS, options);
 
     if (measurements === null) {
-      measurements = new Collection([
-        new Measurement({type: Measurement.FIRST_MARK_UP}),
-        new Measurement({type: Measurement.FIRST_MARK_DOWN}),
-        new Measurement({type: Measurement.WEST_DOWN}),
-        new Measurement({type: Measurement.EAST_DOWN}),
-        new Measurement({type: Measurement.WEST_UP}),
-        new Measurement({type: Measurement.EAST_UP}),
-        new Measurement({type: Measurement.SECOND_MARK_UP}),
-        new Measurement({type: Measurement.SECOND_MARK_DOWN}),
-        new Measurement({type: Measurement.SOUTH_DOWN}),
-        new Measurement({type: Measurement.NORTH_UP}),
-        new Measurement({type: Measurement.SOUTH_UP}),
-        new Measurement({type: Measurement.NORTH_DOWN})
+      measurements = Collection([
+        Measurement({type: Measurement.FIRST_MARK_UP}),
+        Measurement({type: Measurement.FIRST_MARK_DOWN}),
+        Measurement({type: Measurement.WEST_DOWN}),
+        Measurement({type: Measurement.EAST_DOWN}),
+        Measurement({type: Measurement.WEST_UP}),
+        Measurement({type: Measurement.EAST_UP}),
+        Measurement({type: Measurement.SECOND_MARK_UP}),
+        Measurement({type: Measurement.SECOND_MARK_DOWN}),
+        Measurement({type: Measurement.SOUTH_DOWN}),
+        Measurement({type: Measurement.NORTH_UP}),
+        Measurement({type: Measurement.SOUTH_UP}),
+        Measurement({type: Measurement.NORTH_DOWN})
       ]);
 
       _this.set({'measurements': measurements});

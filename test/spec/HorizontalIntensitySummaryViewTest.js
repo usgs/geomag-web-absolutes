@@ -27,10 +27,10 @@ describe('HorizontalIntensitySummaryViewTest', function () {
     beforeEach(function () {
       renderSpy =
           sinon.spy(HorizontalIntensitySummaryView.prototype, 'render');
-      reading = new Reading();
-      calculator = new ObservationBaselineCalculator();
-      factory = new ObservatoryFactory();
-      view = new HorizontalIntensitySummaryView({
+      reading = Reading();
+      calculator = ObservationBaselineCalculator();
+      factory = ObservatoryFactory();
+      view = HorizontalIntensitySummaryView({
         el: document.createElement('tr'),
         reading: reading,
         calculator: calculator,
@@ -82,10 +82,10 @@ describe('HorizontalIntensitySummaryViewTest', function () {
           checkBox,
           checkBoxBefore,
           checkBoxAfter,
-          reading = new Reading(),
-          calculator = new ObservationBaselineCalculator();
+          reading = Reading(),
+          calculator = ObservationBaselineCalculator();
 
-      view = new HorizontalIntensitySummaryView({
+      view = HorizontalIntensitySummaryView({
         el: document.createElement('tr'),
         reading: reading,
         calculator: calculator

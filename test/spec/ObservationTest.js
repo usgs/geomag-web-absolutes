@@ -9,24 +9,11 @@ var expect = chai.expect;
 
 describe('Observation Unit Tests', function () {
 
-  describe('Constructor', function () {
-    var o = new Observation();
-
-    it('should be an instance of an Observation', function () {
-      expect(o).to.be.an.instanceOf(Observation);
-    });
-
-    it('should be an instance of a Model', function () {
-      expect(o).to.be.an.instanceOf(Model);
-    });
-
-  }); // END :: Constructor
-
   describe('eachReading()', function () {
 
     it ('calls callback for each reading', function () {
       var callback = sinon.spy(),
-          observation = new Observation(),
+          observation = Observation(),
           readings = observation.get('readings').data(),
           r,
           rlen;
@@ -47,7 +34,7 @@ describe('Observation Unit Tests', function () {
 
     it ('calls callback for each measurement', function () {
       var callback = sinon.spy(),
-          observation = new Observation(),
+          observation = Observation(),
           readings = observation.get('readings').data(),
           reading,
           r,

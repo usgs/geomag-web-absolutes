@@ -26,10 +26,10 @@ describe('VerticalIntensitySummaryViewTest', function () {
 
     beforeEach(function () {
       renderSpy = sinon.spy(VerticalIntensitySummaryView.prototype, 'render');
-      reading = new Reading();
-      calculator = new ObservationBaselineCalculator();
-      factory = new ObservatoryFactory();
-      view = new VerticalIntensitySummaryView({
+      reading = Reading();
+      calculator = ObservationBaselineCalculator();
+      factory = ObservatoryFactory();
+      view = VerticalIntensitySummaryView({
         el: document.createElement('tr'),
         reading: reading,
         calculator: calculator,
@@ -83,10 +83,10 @@ describe('VerticalIntensitySummaryViewTest', function () {
           checkBox,
           checkBoxBefore,
           checkBoxAfter,
-          reading = new Reading(),
-          calculator = new ObservationBaselineCalculator();
+          reading = Reading(),
+          calculator = ObservationBaselineCalculator();
 
-      view = new VerticalIntensitySummaryView({
+      view = VerticalIntensitySummaryView({
         el: document.createElement('tr'),
         reading: reading,
         calculator: calculator

@@ -21,7 +21,7 @@ describe('Observations Unit Tests', function () {
       options.success(observatory1);
     });
 
-    observationsView = new ObservationsView(DEFAULTS);
+    observationsView = ObservationsView(DEFAULTS);
   });
 
   after(function() {

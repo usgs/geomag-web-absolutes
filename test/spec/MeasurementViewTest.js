@@ -11,7 +11,7 @@ var Format = require('geomag/Formatter'),
 var expect = chai.expect;
 var viewOptions = {
   el: document.createElement('tr'),
-  measurement: new Measurement({
+  measurement: Measurement({
       'id': 1,
       'type': Measurement.FIRST_MARK_UP,
       'time': null,
@@ -21,26 +21,18 @@ var viewOptions = {
       'z': null,
       'f': null,
     }),
-  observation: new Observation({
+  observation: Observation({
     'begin': 1393432420000
   })
 };
 
 describe('MeasurementView Unit Tests', function () {
 
-  describe('Constructor', function () {
-    var m = new MeasurementView(viewOptions);
-
-    it('should be an instance of a MeasurementView', function () {
-      expect(m).to.be.an.instanceOf(MeasurementView);
-    });
-  });
-
   // These are currently passing but take a long time (~10 sec) to complete.
   // We should re-check this test any time the _dmsToDecimal or _decimalToDms
   // methods are updated
   describe.skip('degree_inversion_check', function () {
-    var m = new MeasurementView(viewOptions);
+    var m = MeasurementView(viewOptions);
 
     it('gives back original input', function () {
       var deg, min, sec, result;
@@ -58,7 +50,7 @@ describe('MeasurementView Unit Tests', function () {
 
   describe('validation', function () {
 
-    var m = new MeasurementView(viewOptions),
+    var m = MeasurementView(viewOptions),
         time = m.el.querySelector('.measurement-time').
             querySelector('input'),
         degrees = m.el.querySelector('.measurement-degrees').

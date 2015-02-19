@@ -9,7 +9,7 @@ var Collection = require('mvc/Collection'),
 
 var expect = chai.expect;
 
-var factory = new ObservatoryFactory();
+var factory = ObservatoryFactory();
 
 // stub in methods
 factory.getObservatory = function (options) {
@@ -39,7 +39,7 @@ factory.getObservatory = function (options) {
 describe('Unit tests for ObservationMetaView', function () {
 
   var observation = factory.newObservation(),
-      calculator = new Model(),
+      calculator = Model(),
       view;
 
 
@@ -50,10 +50,10 @@ describe('Unit tests for ObservationMetaView', function () {
   describe('setObservatory()', function () {
 
     it('sets defaults for empty observation', function () {
-      view = new ObservationMetaView({
+      view = ObservationMetaView({
         observation: observation,
         calculator: calculator,
-        observatories: new Collection(factory._getObservatories([
+        observatories: Collection(factory._getObservatories([
           {id: 1, name: 'Observatory 1'},
           {id: 5, name: 'Observatory 5'}
         ]))

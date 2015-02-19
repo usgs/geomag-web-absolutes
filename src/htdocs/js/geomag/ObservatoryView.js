@@ -10,7 +10,7 @@ var Events = require('util/Events'),
 
 var _DEFAULTS = {
   observatoryId: null,
-  factory: new ObservatoryFactory()
+  factory: ObservatoryFactory()
 };
 
 
@@ -131,7 +131,7 @@ var ObservatoryView = function (options) {
     _this._observationsView = null;
 
     if (typeof id !== 'undefined' && id !== null) {
-      _this._observationsView = new ObservationsView({
+      _this._observationsView = ObservationsView({
           el: el.querySelector('.observations-view'),
           observatoryId: id
       });

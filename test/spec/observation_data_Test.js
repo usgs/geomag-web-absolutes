@@ -10,7 +10,7 @@ var Measurement = require('geomag/Measurement'),
 var expect = chai.expect;
 
 var URL = '/observation_data.php';
-var FACTORY = new ObservatoryFactory();
+var FACTORY = ObservatoryFactory();
 var anyErrors = false;
 
 
@@ -28,7 +28,7 @@ describe.skip('Unit tests for observation_data.php', function () {
       measurementAngle = 123.4,
       updatedMeasurementAngle = 2.2345;
 
-  observation = new Observation({
+  observation = Observation({
     // TODO: this depends on specific test data...
     observatory_id: 3,
     mark_id: 3

@@ -8,11 +8,19 @@ var Collection = require('mvc/Collection');
  *
  * @param data {Object} realtime data object.
  */
-var RealtimeData = function (data) {
-  var _this;
+var RealtimeData = function (options) {
+  var _this,
+      _initialize,
 
-  _this._times = data.times;
-  _this._data = new Collection(data.data);
+      _data,
+      _times;
+
+  _this = {};
+
+  _initialize = function (options) {
+    _times = options.times;
+    _data = Collection(options.data);
+  };
 
   _this.getStarttime = function () {
     return _this._times[0];
@@ -66,6 +74,8 @@ var RealtimeData = function (data) {
     return r;
   };
 
+  _initialize(options);
+  options = null;
   return _this;
 };
 

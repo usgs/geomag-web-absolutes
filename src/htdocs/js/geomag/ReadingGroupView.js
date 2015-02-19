@@ -11,7 +11,7 @@ var ObservationBaselineCalculator =
 
 
 var _DEFAULTS = {
-  baselineCalculator: new ObservationBaselineCalculator()
+  baselineCalculator: ObservationBaselineCalculator()
 };
 
 
@@ -34,7 +34,7 @@ var ReadingGroupView = function (options) {
     _this._observation = _options.observation;
     _this._calculator = _options.baselineCalculator;
 
-    _this._tablist = new TabList({tabPosition: 'top'});
+    _this._tablist = TabList({tabPosition: 'top'});
     _this._tablist.el.classList.add('reading-group-view');
     _this.el.appendChild(_this._tablist.el);
 
@@ -48,7 +48,7 @@ var ReadingGroupView = function (options) {
         readingView = null;
 
     el.classList.add('reading-wrapper');
-    readingView = new ReadingView({
+    readingView = ReadingView({
       el: el,
       observation: observation,
       reading: reading,
@@ -66,7 +66,7 @@ var ReadingGroupView = function (options) {
         summaryView = null;
 
     el.classList.add('summary-wrapper');
-    summaryView = new ObservationSummaryView({
+    summaryView = ObservationSummaryView({
       el: el,
       observation: observation,
       baselineCalculator: _this._calculator

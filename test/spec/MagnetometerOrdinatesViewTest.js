@@ -26,11 +26,11 @@ describe('Unit tests for MagnetometerOrdinatesView', function () {
 
     beforeEach(function () {
       renderSpy = sinon.spy(MagnetometerOrdinatesView.prototype, 'render');
-      reading = new Reading();
-      observation = new Observation();
-      calculator = new ObservationBaselineCalculator();
+      reading = Reading();
+      observation = Observation();
+      calculator = ObservationBaselineCalculator();
 
-      view = new MagnetometerOrdinatesView({
+      view = MagnetometerOrdinatesView({
         reading: reading,
         observation: observation,
         baselineCalculator: calculator
@@ -83,43 +83,44 @@ describe('Unit tests for MagnetometerOrdinatesView', function () {
 
     function format4 (number) {return number.toFixed(4);}
 
+    calculator = ObservationBaselineCalculator();
+
     //Stub function in ObservationBaselineCalculator.
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'meanH', function () {return 1;});
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'meanE', function () {return 2;});
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'dComputed', function () {return 2;});
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'meanZ', function () {return 3;});
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'meanF', function () {return 4;});
 
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'horizontalComponent', function () {return 5;});
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'magneticDeclination', function () {return 6;});
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'verticalComponent', function () {return 7;});
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'fCorrected', function () {return 8;});
 
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'hBaseline', function () {return 9;});
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'eBaseline', function () {return 10;});
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'dBaseline', function () {return 11;});
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'zBaseline', function () {return 12;});
-    sinon.stub(ObservationBaselineCalculator.prototype,
+    sinon.stub(calculator,
         'scaleValue', function () {return 14;});
 
-    reading = new Reading();
-    observation = new Observation();
-    calculator = new ObservationBaselineCalculator();
+    reading = Reading();
+    observation = Observation();
 
-    view = new MagnetometerOrdinatesView({
+    view = MagnetometerOrdinatesView({
       reading: reading,
       observation: observation,
       baselineCalculator: calculator
@@ -174,20 +175,20 @@ describe('Unit tests for MagnetometerOrdinatesView', function () {
         format4(14));
     });
 
-    ObservationBaselineCalculator.prototype.meanH.restore();
-    ObservationBaselineCalculator.prototype.meanE.restore();
-    ObservationBaselineCalculator.prototype.dComputed.restore();
-    ObservationBaselineCalculator.prototype.meanZ.restore();
-    ObservationBaselineCalculator.prototype.meanF.restore();
-    ObservationBaselineCalculator.prototype.horizontalComponent.restore();
-    ObservationBaselineCalculator.prototype.magneticDeclination.restore();
-    ObservationBaselineCalculator.prototype.verticalComponent.restore();
-    ObservationBaselineCalculator.prototype.fCorrected.restore();
-    ObservationBaselineCalculator.prototype.hBaseline.restore();
-    ObservationBaselineCalculator.prototype.dBaseline.restore();
-    ObservationBaselineCalculator.prototype.eBaseline.restore();
-    ObservationBaselineCalculator.prototype.zBaseline.restore();
-    ObservationBaselineCalculator.prototype.scaleValue.restore();
+    calculator.meanH.restore();
+    calculator.meanE.restore();
+    calculator.dComputed.restore();
+    calculator.meanZ.restore();
+    calculator.meanF.restore();
+    calculator.horizontalComponent.restore();
+    calculator.magneticDeclination.restore();
+    calculator.verticalComponent.restore();
+    calculator.fCorrected.restore();
+    calculator.hBaseline.restore();
+    calculator.dBaseline.restore();
+    calculator.eBaseline.restore();
+    calculator.zBaseline.restore();
+    calculator.scaleValue.restore();
   });
 
 });

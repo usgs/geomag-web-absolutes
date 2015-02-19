@@ -9,10 +9,10 @@ var Collection = require('mvc/Collection'),
 var expect = chai.expect;
 
 // collection object for testing.
-var COLLECTION = new Collection([
-  new Model({id: 11, name: 'test 11'}),
-  new Model({id:  5, name: 'test 5'}),
-  new Model({id: 17, name: 'test 17'})
+var COLLECTION = Collection([
+  Model({id: 11, name: 'test 11'}),
+  Model({id:  5, name: 'test 5'}),
+  Model({id: 17, name: 'test 17'})
 ]);
 
 var SELECT_EL = document.createElement('select');
@@ -20,7 +20,7 @@ var SELECT_EL = document.createElement('select');
 
 describe('Unit tests for CollectionSelectBox', function () {
 
-  var selectBox = new CollectionSelectBox({
+  var selectBox = CollectionSelectBox({
     el: SELECT_EL,
     collection: COLLECTION
   });
@@ -76,7 +76,7 @@ describe('Unit tests for CollectionSelectBox', function () {
       };
 
       selectBox.on('change', onChange);
-      COLLECTION.add(new Model({id: 1, name: 'test 1'}));
+      COLLECTION.add(Model({id: 1, name: 'test 1'}));
     });
 
   });

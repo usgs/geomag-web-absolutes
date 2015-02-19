@@ -64,7 +64,7 @@
     "grunt-contrib-uglify": "^0.7.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-phantomjs": "^0.6.0",
-    "hazdev-tablist": "0.0.6",
+    "hazdev-tablist": "usgs/hazdev-tablist",
     "hazdev-template": "git+https://github.com/usgs/hazdev-template.git",
     "hazdev-webutils": "usgs/hazdev-webutils",
     "mocha": "^2.1.0",

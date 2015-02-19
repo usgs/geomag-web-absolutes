@@ -9,9 +9,7 @@ var _SCALE_VALUE_COEFFICIENT = getScaleValueCoefficient();
 
 var BaselineCalculator = function () {
   var _this,
-      _initialize,
 
-      _mean,
       _toRadians;
 
   _this = {};
@@ -29,7 +27,7 @@ var BaselineCalculator = function () {
    *      should be numeric. Non-numeric parameters are excluded from the
    *      computed mean.
    */
-  _mean = function () {
+  _this.mean = function () {
     var sum = 0.0,
         count = 0,
         numArgs = arguments.length,
@@ -133,7 +131,7 @@ var BaselineCalculator = function () {
    * @return {Number} Decimal degrees
    */
   _this.geographicMeridian = function (markUp1, markUp2, trueAzimuthMark) {
-    return (_mean(markUp1, markUp2) - trueAzimuthMark);
+    return (_this.mean(markUp1, markUp2) - trueAzimuthMark);
   };
 
   /**
@@ -221,7 +219,7 @@ var BaselineCalculator = function () {
    * @return {Number} Decimal degrees
    */
   _this.magneticSouthMeridian = function (westDown, westUp, eastDown, eastUp) {
-    return _mean(westDown, westUp, eastDown, eastUp);
+    return _this.mean(westDown, westUp, eastDown, eastUp);
   };
 
   /**

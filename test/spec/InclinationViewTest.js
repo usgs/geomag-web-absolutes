@@ -13,7 +13,7 @@ var Format = require('geomag/Formatter'),
 var expect = chai.expect;
 
 // dummy ObservationBaselineCalculator for testing
-var testObservationBaselineCalculator = Util.extend(new Model(), {
+var testObservationBaselineCalculator = Util.extend(Model(), {
   inclination: function() { return 1; },
   horizontalComponent: function () { return 2; },
   verticalComponent: function () { return 3; },
@@ -33,8 +33,8 @@ TestInclinationView.prototype.render = function() {
 };
 
 var viewOptions = {
-  reading: new Reading(),
-  observation: new Observation(),
+  reading: Reading(),
+  observation: Observation(),
   baselineCalculator: testObservationBaselineCalculator
 };
 
@@ -47,8 +47,8 @@ describe('Unit tests for InclinationView class', function () {
   });
 
   it('can be instantiated', function () {
-    var view = new InclinationView({
-      reading: new Reading(),
+    var view = InclinationView({
+      reading: Reading(),
       baselineCalculator: testObservationBaselineCalculator
     });
 
@@ -62,24 +62,15 @@ describe('Unit tests for InclinationView class', function () {
     /*jshint +W030*/
   });
 
-  describe('Constructor', function () {
-    var m = new InclinationView(viewOptions);
-
-    it('should be an instance of a InclinationView', function () {
-      expect(m).to.be.an.instanceOf(InclinationView);
-    });
-
-  });
-
   describe('Initialize', function () {
     var i = 0,
         len = 0,
-        reading = new Reading(),
+        reading = Reading(),
         measurements = reading.getMeasurements(),
-        observation = new Observation(),
+        observation = Observation(),
         view;
 
-    view = new TestInclinationView({
+    view = TestInclinationView({
       reading: reading,
       observation: observation,
       baselineCalculator: testObservationBaselineCalculator
@@ -114,9 +105,9 @@ describe('Unit tests for InclinationView class', function () {
       var calculator = testObservationBaselineCalculator,
           view;
 
-      view = new InclinationView({
-        reading: new Reading(),
-        observation: new Observation(),
+      view = InclinationView({
+        reading: Reading(),
+        observation: Observation(),
         baselineCalculator: calculator
       });
 

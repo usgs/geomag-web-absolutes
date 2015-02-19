@@ -15,11 +15,5 @@ var viewOptions = {
 };
 
 describe('ReadingView Unit Tests', function () {
-  describe('Constructor', function () {
-    var m = new ReadingView(viewOptions);
 
-    it('should be an instance of a ReadingView', function () {
-      expect(m).to.be.an.instanceOf(ReadingView);
-    });
-  });
 });

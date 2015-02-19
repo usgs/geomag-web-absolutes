@@ -16,9 +16,9 @@ describe('ObservationSummaryViewTest', function () {
 
   beforeEach(function () {
     renderSpy = sinon.spy(ObservationSummaryView.prototype, 'render');
-    calculator = new ObservationBaselineCalculator();
-    observation = new Observation();
-    view = new ObservationSummaryView({
+    calculator = ObservationBaselineCalculator();
+    observation = Observation();
+    view = ObservationSummaryView({
       baselineCalculator: calculator,
       observation: observation
     });
@@ -29,18 +29,6 @@ describe('ObservationSummaryViewTest', function () {
     view = null;
     calculator = null;
     observation = null;
-  });
-
-  describe('constructor', function () {
-    it('Is an instance of ObservationSummaryView', function () {
-      var o = new ObservationSummaryView({
-        observation: new Observation(),
-        baselineCalculator: new ObservationBaselineCalculator()
-      });
-      /* jshint -W030 */
-      expect(o).to.be.an.instanceOf(ObservationSummaryView);
-      /* jshint +W030 */
-    });
   });
 
   describe('Proper event bindings', function () {

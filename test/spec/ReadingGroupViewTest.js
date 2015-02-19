@@ -9,8 +9,8 @@ var Observation = require('geomag/Observation'),
 
 var expect = chai.expect;
 var viewOptions = {
-  observation: new Observation(),
-  baselineCalculator: new ObservationBaselineCalculator()
+  observation: Observation(),
+  baselineCalculator: ObservationBaselineCalculator()
 };
 
 describe('ReadingGroupView test suite.', function () {
@@ -22,7 +22,7 @@ describe('ReadingGroupView test suite.', function () {
     });
 
     it('Can be instantiated', function () {
-      var c = new ReadingGroupView(viewOptions);
+      var c = ReadingGroupView(viewOptions);
       expect(c).to.be.an.instanceOf(ReadingGroupView);
     });
   });
@@ -30,14 +30,14 @@ describe('ReadingGroupView test suite.', function () {
   describe('_createTab()', function () {
     it('has such a method', function () {
       /* jshint -W030 */
-      expect((new ReadingGroupView(viewOptions))._createTab)
+      expect((ReadingGroupView(viewOptions))._createTab)
           .to.not.be.undefined;
       /* jshint +W030 */
     });
 
     it('returns an object with proper keys', function () {
-      var r = new ReadingGroupView(viewOptions),
-          t = r._createTab(null, new Reading());
+      var r = ReadingGroupView(viewOptions),
+          t = r._createTab(null, Reading());
 
       /* jshint -W030 */
       expect(t).to.be.an.instanceOf(Object);

@@ -40,7 +40,7 @@ var InclinationView = function (options) {
     _this._observation = _options.observation;
     _this._reading = _options.reading;
     _this._calculator = _options.baselineCalculator;
-    _this._measurements = _reading.getMeasurements();
+    _this._measurements = _this._reading.getMeasurements();
 
     el.classList.add('inclination-view');
     el.innerHTML = [

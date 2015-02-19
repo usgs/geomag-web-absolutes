@@ -9,38 +9,38 @@ var Collection = require('mvc/Collection'),
 var expect = chai.expect;
 
 
-var meas1 = new Measurement({'id': 1,'type': Measurement.FIRST_MARK_UP,
+var meas1 = Measurement({'id': 1,'type': Measurement.FIRST_MARK_UP,
     'time': null,'angle':10.113, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0 });
-var meas2 = new Measurement({'id': 2,'type': Measurement.FIRST_MARK_DOWN,
+var meas2 = Measurement({'id': 2,'type': Measurement.FIRST_MARK_DOWN,
     'time': null,'angle':190.105, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
-var meas3 = new Measurement({'id': 3,'type': Measurement.WEST_DOWN,
+var meas3 = Measurement({'id': 3,'type': Measurement.WEST_DOWN,
     'time': null,'angle':287, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
-var meas4 = new Measurement({'id': 4,'type': Measurement.EAST_DOWN,
+var meas4 = Measurement({'id': 4,'type': Measurement.EAST_DOWN,
     'time': null,'angle':99, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
-var meas5 = new Measurement({'id': 5,'type': Measurement.WEST_UP,
+var meas5 = Measurement({'id': 5,'type': Measurement.WEST_UP,
     'time': null,'angle':101, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
-var meas6 = new Measurement({'id': 6,'type': Measurement.EAST_UP,
+var meas6 = Measurement({'id': 6,'type': Measurement.EAST_UP,
     'time': null,'angle':286, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
-var meas7 = new Measurement({'id': 7,'type': Measurement.SECOND_MARK_UP,
+var meas7 = Measurement({'id': 7,'type': Measurement.SECOND_MARK_UP,
     'time': null,'angle':10.113, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
-var meas8 = new Measurement({'id': 8,'type': Measurement.SECOND_MARK_DOWN,
+var meas8 = Measurement({'id': 8,'type': Measurement.SECOND_MARK_DOWN,
     'time': null,'angle':190.105, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
-var meas9 = new Measurement({'id': 9,'type': Measurement.SOUTH_DOWN,
+var meas9 = Measurement({'id': 9,'type': Measurement.SOUTH_DOWN,
     'time': null,'angle':238, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
-var measA = new Measurement({'id': 10,'type': Measurement.NORTH_UP,
+var measA = Measurement({'id': 10,'type': Measurement.NORTH_UP,
     'time': null,'angle':58, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
-var measB = new Measurement({'id': 11,'type': Measurement.SOUTH_UP,
+var measB = Measurement({'id': 11,'type': Measurement.SOUTH_UP,
     'time': null,'angle':118, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
-var measC = new Measurement({'id': 12,'type': Measurement.NORTH_DOWN,
+var measC = Measurement({'id': 12,'type': Measurement.NORTH_DOWN,
     'time': null,'angle':297, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
-var testmeasure = new Measurement({'id': 14,'type': Measurement.NORTH_DOWN,
+var testmeasure = Measurement({'id': 14,'type': Measurement.NORTH_DOWN,
     'time': 10,'angle':297, 'h': 0.0, 'e': 0.0, 'z': 0.0, 'f':0.0});
 
 var TESTOBJECT = {
   'id': 1,
   'set_number': 1,
   'annotation': 'This is a test',
-  'measurements': new Collection([
+  'measurements': Collection([
     meas1, meas2, meas3, meas4, meas5, meas6,
     meas7, meas8, meas9, measA, measB, measC
   ]),
@@ -73,7 +73,7 @@ describe('Unit tests for the "Reading" class', function () {
   describe('constructor()', function () {
 
     it('calls Reading constructor', function () {
-      var reading = new Reading();
+      var reading = Reading();
       expect( reading ).to.be.an.instanceOf(Reading);
       expect( reading ).to.be.an.instanceOf(Model);
     });
@@ -83,13 +83,13 @@ describe('Unit tests for the "Reading" class', function () {
   describe('getMeasurements()',function () {
 
     it('gets back type:array pairs', function () {
-      var reading = new Reading(TESTOBJECT);
+      var reading = Reading(TESTOBJECT);
       expect(reading.getMeasurements()).to.deep.equal(TESTMEASUREMENTS);
     });
 
     //Note, the following code will add a measurement to TESTOBJECT.
     it('add a mesurement to underlying measurements collection', function(){
-      var reading = new Reading(TESTOBJECT);
+      var reading = Reading(TESTOBJECT);
       var measurements = reading.get('measurements');
       measurements.add(testmeasure);
       measurements = reading.get('measurements');
@@ -103,7 +103,7 @@ describe('Unit tests for the "Reading" class', function () {
 
     it ('calls callback for each measurement', function () {
       var callback = sinon.spy(),
-          reading = new Reading(),
+          reading = Reading(),
           measurements = reading.get('measurements').data(),
           m,
           mlen;

@@ -5,7 +5,7 @@ var BaselineCalculator = require('geomag/BaselineCalculator');
 
 
 var expect = chai.expect,
-    calc = new BaselineCalculator();
+    calc = BaselineCalculator();
 
 describe('Unit tests for BaselineCalculator', function () {
 
@@ -13,30 +13,30 @@ describe('Unit tests for BaselineCalculator', function () {
   // Tests for helper methods
   // --------------------------------------------------------------
 
-  describe('_mean()', function () {
+  describe('mean()', function () {
 
     it('returns NaN when no values are given', function () {
-      expect(isNaN(calc._mean())).to.equal(true);
+      expect(isNaN(calc.mean())).to.equal(true);
     });
 
     it('works with a single value', function () {
-      expect(calc._mean(42)).to.equal(42);
-      expect(calc._mean(9.2)).to.equal(9.2);
+      expect(calc.mean(42)).to.equal(42);
+      expect(calc.mean(9.2)).to.equal(9.2);
     });
 
     it('works with several values', function () {
-      expect(calc._mean(1, 2, 3, 4, 5)).to.equal(3);
-      expect(calc._mean(0.0, 0.5, 1.0, 1.5, 2.0)).to.equal(1.0);
+      expect(calc.mean(1, 2, 3, 4, 5)).to.equal(3);
+      expect(calc.mean(0.0, 0.5, 1.0, 1.5, 2.0)).to.equal(1.0);
     });
 
     it('works when some non-numeric values are given', function () {
-      expect(calc._mean(1, 2, 3, 'hello', 4, 5)).to.equal(3);
-      expect(calc._mean(0.0, 0.5, 'goodbye', 1.0, 1.5, 2.0)).to.equal(1.0);
+      expect(calc.mean(1, 2, 3, 'hello', 4, 5)).to.equal(3);
+      expect(calc.mean(0.0, 0.5, 'goodbye', 1.0, 1.5, 2.0)).to.equal(1.0);
     });
 
     it('works when some number-ish strings are given', function () {
-      expect(calc._mean(1, 2, 3, '5000', 4, 5)).to.equal(3);
-      expect(calc._mean(0.0, 0.5, '999.9', 1.0, 1.5, 2.0)).to.equal(1.0);
+      expect(calc.mean(1, 2, 3, '5000', 4, 5)).to.equal(3);
+      expect(calc.mean(0.0, 0.5, '999.9', 1.0, 1.5, 2.0)).to.equal(1.0);
     });
 
   }); // END :: _mean

@@ -26,12 +26,13 @@ var ObservationBaselineCalculator = function (options) {
   var _this,
       _initialize,
 
+      _calculator,
       _options;
 
     _this = Model(options);
     _options = Util.extend({}, _DEFAULTS, options);
     // keep calculator outside model
-    // _this._calculator = options.calculator;
+    _calculator = _options.calculator;
     // delete options.calculator;
 
   /**
@@ -42,7 +43,7 @@ var ObservationBaselineCalculator = function (options) {
    * @return {Number} dBaseline
    */
   _this.dBaseline = function (reading) {
-    return _this._calculator.dBaseline(
+    return _calculator.dBaseline(
         _this.magneticDeclination(reading),
         _this.dComputed(reading)
     );
@@ -56,7 +57,7 @@ var ObservationBaselineCalculator = function (options) {
    * @return {Number} computedE
    */
   _this.dComputed = function (reading) {
-    return _this._calculator.dComputed(
+    return _calculator.dComputed(
         _this.meanE(reading),
         _this.scaleValue(reading)
     );
@@ -72,7 +73,7 @@ var ObservationBaselineCalculator = function (options) {
   _this.eastUpMinusWestDown = function (reading){
     var measurements = reading.getMeasurements();
 
-    return _this._calculator.eastUpMinusWestDown(
+    return _calculator.eastUpMinusWestDown(
         measurements[Measurement.EAST_UP][0].get('angle'),
         measurements[Measurement.WEST_DOWN][0].get('angle')
     );
@@ -86,7 +87,7 @@ var ObservationBaselineCalculator = function (options) {
    * @return {Number} eBaseline
    */
   _this.eBaseline = function (reading) {
-    return _this._calculator.eBaseline(
+    return _calculator.eBaseline(
         _this.dBaseline(reading),
         _this.scaleValue(reading)
     ); //
@@ -103,7 +104,7 @@ var ObservationBaselineCalculator = function (options) {
     // dont need to check each measurement, use ns(ud)
     // (value will be null for measurement values that don't matter)
 
-    return _this._calculator.fCorrected(
+    return _calculator.fCorrected(
         _this.meanF(reading),
         _this.pierCorrection()
     );
@@ -120,7 +121,7 @@ var ObservationBaselineCalculator = function (options) {
     // measurement.type (markup1, markup2)
     var measurements = reading.getMeasurements();
 
-    return _this._calculator.geographicMeridian(
+    return _calculator.geographicMeridian(
         measurements[Measurement.FIRST_MARK_UP][0].get('angle'),
         measurements[Measurement.SECOND_MARK_UP][0].get('angle'),
         _this.trueAzimuthOfMark()
@@ -161,7 +162,7 @@ var ObservationBaselineCalculator = function (options) {
   };
 
   _this.getStats = function (data) {
-    var mean = _this._calculator._mean.apply(_this._calculator, data),
+    var mean = _calculator.mean.apply(_calculator, data),
         min = Math.min.apply(Math, data),
         max = Math.max.apply(Math, data),
         i = null,
@@ -199,7 +200,7 @@ var ObservationBaselineCalculator = function (options) {
    * @return {Number} hBaseline
    */
   _this.hBaseline = function (reading) {
-    return _this._calculator.hBaseline(
+    return _calculator.hBaseline(
         _this.horizontalComponent(reading),
         _this.meanH(reading)
     );
@@ -213,7 +214,7 @@ var ObservationBaselineCalculator = function (options) {
    * @return {Number} horizontalComponent
    */
   _this.horizontalComponent = function (reading) {
-    return _this._calculator.horizontalComponent(
+    return _calculator.horizontalComponent(
         _this.fCorrected(reading),
         _this.inclination(reading)
     );
@@ -230,7 +231,7 @@ var ObservationBaselineCalculator = function (options) {
     var measurements = reading.getMeasurements();
 
     // measurement.type
-    return _this._calculator.inclination(
+    return _calculator.inclination(
         measurements[Measurement.SOUTH_DOWN][0].get('angle'),
         measurements[Measurement.SOUTH_UP][0].get('angle'),
         measurements[Measurement.NORTH_DOWN][0].get('angle'),
@@ -256,7 +257,7 @@ var ObservationBaselineCalculator = function (options) {
         measurements[Measurement.SECOND_MARK_DOWN][0].get('angle')) / 4;
 
     // meanMark = mark1/mark2(up/down) / 4
-    return _this._calculator.magneticAzimuthMark(
+    return _calculator.magneticAzimuthMark(
         meanMark,
         _this.magneticSouthMeridian(reading)
     );
@@ -270,7 +271,7 @@ var ObservationBaselineCalculator = function (options) {
    * @return {Number} magneticDeclination
    */
   _this.magneticDeclination = function (reading) {
-    return _this._calculator.magneticDeclination(
+    return _calculator.magneticDeclination(
         _this.magneticSouthMeridian(reading),
         _this.geographicMeridian(reading),
         reading.get('declination_shift')
@@ -288,7 +289,7 @@ var ObservationBaselineCalculator = function (options) {
     var measurements = reading.getMeasurements();
 
     // measurement.type
-    return _this._calculator.magneticSouthMeridian(
+    return _calculator.magneticSouthMeridian(
         measurements[Measurement.WEST_DOWN][0].get('angle'),
         measurements[Measurement.WEST_UP][0].get('angle'),
         measurements[Measurement.EAST_DOWN][0].get('angle'),
@@ -299,7 +300,7 @@ var ObservationBaselineCalculator = function (options) {
   _this.meanE = function (reading) {
     var measurements = reading.getMeasurements();
 
-    return _this._calculator._mean(
+    return _calculator.mean(
       measurements[Measurement.WEST_DOWN][0].get('e'),
       measurements[Measurement.EAST_DOWN][0].get('e'),
       measurements[Measurement.WEST_UP][0].get('e'),
@@ -310,7 +311,7 @@ var ObservationBaselineCalculator = function (options) {
   _this.meanF = function (reading) {
     var measurements = reading.getMeasurements();
 
-    return _this._calculator._mean(
+    return _calculator.mean(
       measurements[Measurement.SOUTH_DOWN][0].get('f'),
       measurements[Measurement.NORTH_UP][0].get('f'),
       measurements[Measurement.SOUTH_UP][0].get('f'),
@@ -321,7 +322,7 @@ var ObservationBaselineCalculator = function (options) {
   _this.meanH = function (reading) {
     var measurements = reading.getMeasurements();
 
-    return _this._calculator._mean(
+    return _calculator.mean(
       measurements[Measurement.SOUTH_DOWN][0].get('h'),
       measurements[Measurement.NORTH_UP][0].get('h'),
       measurements[Measurement.SOUTH_UP][0].get('h'),
@@ -340,7 +341,7 @@ var ObservationBaselineCalculator = function (options) {
     var measurements = reading.getMeasurements();
 
     // measurement.type
-    return _this._calculator._mean(
+    return _calculator.mean(
         measurements[Measurement.FIRST_MARK_UP][0].get('angle'),
         measurements[Measurement.FIRST_MARK_DOWN][0].get('angle'),
         measurements[Measurement.SECOND_MARK_UP][0].get('angle'),
@@ -351,7 +352,7 @@ var ObservationBaselineCalculator = function (options) {
   _this.meanZ = function (reading) {
     var measurements = reading.getMeasurements();
 
-    return _this._calculator._mean(
+    return _calculator.mean(
       measurements[Measurement.SOUTH_DOWN][0].get('z'),
       measurements[Measurement.NORTH_UP][0].get('z'),
       measurements[Measurement.SOUTH_UP][0].get('z'),
@@ -369,7 +370,7 @@ var ObservationBaselineCalculator = function (options) {
   _this.northDownMinusSouthUp = function (reading) {
     var measurements = reading.getMeasurements();
 
-    return _this._calculator.northDownMinusSouthUp(
+    return _calculator.northDownMinusSouthUp(
         measurements[Measurement.NORTH_DOWN][0].get('angle'),
         measurements[Measurement.SOUTH_UP][0].get('angle')
     );
@@ -392,7 +393,7 @@ var ObservationBaselineCalculator = function (options) {
    * @return {Number} scaleValue
    */
   _this.scaleValue = function (reading) {
-    return _this._calculator.scaleValue(
+    return _calculator.scaleValue(
         _this.horizontalComponent(reading)
     );
   };
@@ -407,7 +408,7 @@ var ObservationBaselineCalculator = function (options) {
   _this.southDownMinusNorthUp = function (reading) {
     var measurements = reading.getMeasurements();
 
-    return _this._calculator.southDownMinusNorthUp(
+    return _calculator.southDownMinusNorthUp(
         measurements[Measurement.SOUTH_DOWN][0].get('angle'),
         measurements[Measurement.NORTH_UP][0].get('angle')
     );
@@ -430,7 +431,7 @@ var ObservationBaselineCalculator = function (options) {
    * @return {Number} verticalComponent
    */
   _this.verticalComponent = function (reading) {
-    return _this._calculator.verticalComponent(
+    return _calculator.verticalComponent(
         _this.fCorrected(reading),
         _this.inclination(reading)
     );
@@ -446,7 +447,7 @@ var ObservationBaselineCalculator = function (options) {
   _this.westUpMinusEastDown = function (reading) {
     var measurements = reading.getMeasurements();
 
-    return _this._calculator.westUpMinusEastDown(
+    return _calculator.westUpMinusEastDown(
         measurements[Measurement.WEST_UP][0].get('angle'),
         measurements[Measurement.EAST_DOWN][0].get('angle')
     );
@@ -460,7 +461,7 @@ var ObservationBaselineCalculator = function (options) {
    * @return {Number} zBaseline
    */
   _this.zBaseline = function (reading) {
-    return _this._calculator.zBaseline(
+    return _calculator.zBaseline(
         _this.verticalComponent(reading),
         _this.meanZ(reading)
     );

@@ -11,7 +11,7 @@ var DeclinationView = require('geomag/DeclinationView'),
 
 
 var _DEFAULTS = {
-  baselineCalculator:new ObservationBaselineCalculator()
+  baselineCalculator: ObservationBaselineCalculator()
 };
 
 
@@ -128,55 +128,55 @@ var ReadingView = function (options) {
       '</section>'
     ].join('');
 
-    _this._firstMarkUpView = new MeasurementView({
+    _this._firstMarkUpView = MeasurementView({
       el: _this.el.querySelector('.first-mark-up'),
       measurement: _this._firstMarkUpMeasurement,
       observation: _this._observation
     });
 
-    _this._firstMarkDownView = new MeasurementView({
+    _this._firstMarkDownView = MeasurementView({
       el: _this.el.querySelector('.first-mark-down'),
       measurement: _this._firstMarkDownMeasurement,
       observation: _this._observation
     });
 
-    _this._westDownView = new MeasurementView({
+    _this._westDownView = MeasurementView({
       el: _this.el.querySelector('.west-down'),
       measurement: _this._westDownMeasurement,
       observation: _this._observation
     });
 
-    _this._eastDownView = new MeasurementView({
+    _this._eastDownView = MeasurementView({
       el: _this.el.querySelector('.east-down'),
       measurement: _this._eastDownMeasurement,
       observation: _this._observation
     });
 
-    _this._westUpView = new MeasurementView({
+    _this._westUpView = MeasurementView({
       el: _this.el.querySelector('.west-up'),
       measurement: _this._westUpMeasurement,
       observation: _this._observation
     });
 
-    _this._eastUpView = new MeasurementView({
+    _this._eastUpView = MeasurementView({
       el: _this.el.querySelector('.east-up'),
       measurement: _this._eastUpMeasurement,
       observation: _this._observation
     });
 
-    _this._secondMarkUpView = new MeasurementView({
+    _this._secondMarkUpView = MeasurementView({
       el: _this.el.querySelector('.second-mark-up'),
       measurement: _this._secondMarkUpMeasurement,
       observation: _this._observation
     });
 
-    _this._secondMarkDownView = new MeasurementView({
+    _this._secondMarkDownView = MeasurementView({
       el: _this.el.querySelector('.second-mark-down'),
       measurement: _this._secondMarkDownMeasurement,
       observation: _this._observation
     });
 
-    _this._declinationView = new DeclinationView({
+    _this._declinationView = DeclinationView({
       el: _this.el.querySelector('.declination-output'),
       reading: _this._reading,
       observation: _this._observation,
@@ -184,31 +184,31 @@ var ReadingView = function (options) {
     });
 
 
-    _this._southDownView = new MeasurementView({
+    _this._southDownView = MeasurementView({
       el: _this.el.querySelector('.south-down'),
       measurement: _this._southDownMeasurement,
       observation: _this._observation
     });
 
-    _this._northUpView = new MeasurementView({
+    _this._northUpView = MeasurementView({
       el: _this.el.querySelector('.north-up'),
       measurement: _this._northUpMeasurement,
       observation: _this._observation
     });
 
-    _this._southUpView = new MeasurementView({
+    _this._southUpView = MeasurementView({
       el: _this.el.querySelector('.south-up'),
       measurement: _this._southUpMeasurement,
       observation: _this._observation
     });
 
-    _this._northDownView = new MeasurementView({
+    _this._northDownView = MeasurementView({
       el: _this.el.querySelector('.north-down'),
       measurement: _this._northDownMeasurement,
       observation: _this._observation
     });
 
-    _this._inclinationView = new InclinationView({
+    _this._inclinationView = InclinationView({
       el: _this.el.querySelector('.inclination-output'),
       reading: _this._reading,
       observation: _this._observation,
@@ -216,7 +216,7 @@ var ReadingView = function (options) {
     });
 
 
-    _this._magnetometerOrdinatesView = new MagnetometerOrdinatesView({
+    _this._magnetometerOrdinatesView = MagnetometerOrdinatesView({
       el: _this.el.querySelector('.magnetometer-ordinates-output'),
       reading: _this._reading,
       observation: _this._observation,

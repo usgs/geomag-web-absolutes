@@ -36,10 +36,10 @@ describe('DeclinationSummaryViewTest', function () {
 
     beforeEach(function () {
       renderSpy = sinon.spy(DeclinationSummaryView.prototype, 'render');
-      reading = new Reading();
-      calculator = new ObservationBaselineCalculator();
-      factory = new ObservatoryFactory();
-      view = new DeclinationSummaryView({
+      reading = Reading();
+      calculator = ObservationBaselineCalculator();
+      factory = ObservatoryFactory();
+      view = DeclinationSummaryView({
         el: document.createElement('tr'),
         reading: reading,
         calculator: calculator,
@@ -96,10 +96,10 @@ describe('DeclinationSummaryViewTest', function () {
           checkBox,
           checkBoxBefore,
           checkBoxAfter,
-          reading = new Reading(),
-          calculator = new ObservationBaselineCalculator();
+          reading = Reading(),
+          calculator = ObservationBaselineCalculator();
 
-      view = new DeclinationSummaryView({
+      view = DeclinationSummaryView({
         el: document.createElement('tr'),
         reading: reading,
         calculator: calculator
@@ -118,10 +118,10 @@ describe('DeclinationSummaryViewTest', function () {
 
     it('Should set shift +/- 180', function () {
       var view,
-          reading = new Reading(),
-          calculator = new ObservationBaselineCalculator();
+          reading = Reading(),
+          calculator = ObservationBaselineCalculator();
 
-      view = new DeclinationSummaryView({
+      view = DeclinationSummaryView({
         el: document.createElement('tr'),
         reading: reading,
         calculator: calculator

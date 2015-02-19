@@ -8,7 +8,7 @@ var ObservatoryFactory = require('geomag/ObservatoryFactory'),
 
 var _DEFAULTS = {
   observatoryId: null,
-  factory: new ObservatoryFactory()
+  factory: ObservatoryFactory()
 };
 
 

@@ -58,10 +58,10 @@ var UserAdminView = function (options) {
         '<section class="users-view-wrapper"></section>'
     ].join('');
 
-    _this._users = new Collection([]);
+    _this._users = Collection([]);
     _this._user = null;
 
-    _this._usersView = new UsersView({
+    _this._usersView = UsersView({
       el: _this.el.querySelector('.users-view-wrapper'),
       collection: _this._users
     });
@@ -74,7 +74,7 @@ var UserAdminView = function (options) {
   _getUsers = function () {
     _options.factory.get({
       success: function (data) {
-        data = data.map(function (info) {return new User(info);});
+        data = data.map(function (info) {return User(info);});
         _this._users.reset(data);
       },
       error: function () {/* TODO :: Show modal dialog error message */}
@@ -94,7 +94,7 @@ var UserAdminView = function (options) {
     user = _this._users.get(id);
 
     if (user === null) {
-      user = new User();
+      user = User();
     }
 
     _this._user = user;
@@ -102,14 +102,14 @@ var UserAdminView = function (options) {
     _this._user.on('canceledit', _onUserCancel, _this);
     _this._user.on('save', _onUserSave, _this);
 
-    _this._editview = new UserEditView({
+    _this._editview = UserEditView({
       user: user,
       observatories: _options.observatories
     });
 
     _this._editview.render();
 
-    _this._modalview = new ModalView(
+    _this._modalview = ModalView(
           _this._editview._el,
           {
             title: _this._user.get('id') ? 'Edit User' : 'Create User',

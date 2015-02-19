@@ -52,7 +52,7 @@ var TESTDATA = {
 
 describe('Unit tests for the "RealtimeData" class', function () {
 
-  var realtimeData = new RealtimeData(TESTDATA);
+  var realtimeData = RealtimeData(TESTDATA);
 
   describe('getStarttime()', function () {
     it('returns the first time', function () {

@@ -37,7 +37,10 @@ var CollectionSelectBox = function (options) {
   var _this,
       _initialize,
 
-      _options;
+      _options,
+
+      _onChange,
+      _onSelect;
 
     _this = View(options);
   /**
@@ -177,25 +180,26 @@ var CollectionSelectBox = function (options) {
    *        a collection with items to display.
    */
   _this.setCollection = function (collection) {
-    var select = _onSelect,
+    var render = _this.render,
+        select = _onSelect,
         oldCollection;
 
     // remove existing bindings
     oldCollection = _this._collection;
     if (oldCollection !== null) {
-      oldCollection.off('add', _this.render, _this);
-      oldCollection.off('remove', _this.render, _this);
-      oldCollection.off('reset', _this.render, _this);
+      oldCollection.off('add', render, _this);
+      oldCollection.off('remove', render, _this);
+      oldCollection.off('reset', render, _this);
       oldCollection.off('select', select, _this);
       oldCollection = null;
     }
     // add new bindings
     _this._collection = collection;
     if (collection !== null) {
-      collection.on('add', _this.render, _this);
-      collection.on('remove', _this.render, _this);
-      collection.on('reset', _this.render, _this);
-      collection.on('select', _this.select, _this);
+      collection.on('add', render, _this);
+      collection.on('remove', render, _this);
+      collection.on('reset', render, _this);
+      collection.on('select', select, _this);
     }
     // redraw
     _this.render();

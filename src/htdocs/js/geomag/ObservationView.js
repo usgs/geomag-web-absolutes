@@ -16,9 +16,9 @@ var Collection = require('mvc/Collection'),
 
 var _DEFAULTS = {
   observationId: null,
-  factory: new ObservatoryFactory(),
-  baselineCalculator: new ObservationBaselineCalculator(),
-  realtimeDataFactory: new RealtimeDataFactory()
+  factory: ObservatoryFactory(),
+  baselineCalculator: ObservationBaselineCalculator(),
+  realtimeDataFactory: RealtimeDataFactory()
 };
 
 
@@ -205,7 +205,7 @@ var ObservationView = function (options) {
     try {
       _this._saveObservation(function () {
           _publishObservation(function () {
-            (new ModalView(
+            (ModalView(
               '<p>Your observation has been published.</p>',
               {
                 title: 'Publish Successful',
@@ -323,7 +323,7 @@ var ObservationView = function (options) {
     // calculate calibrations for summary view
     _this.updateCalibrations();
     // create reading group view
-    _this._readingGroupView = new ReadingGroupView({
+    _this._readingGroupView = ReadingGroupView({
       el: el.querySelector('.reading-group-view-wrapper'),
       observation: observation,
       baselineCalculator: calculator
@@ -393,7 +393,7 @@ var ObservationView = function (options) {
     }
 
     // convert to collection
-    _this._observatories = observatories = new Collection(observatories);
+    _this._observatories = observatories = Collection(observatories);
     // bind before select code below, so this will run for first select
     observatories.on('select', _onObservatorySelect, _this);
     // select observation observatory if set
@@ -406,7 +406,7 @@ var ObservationView = function (options) {
     }
 
     // create observation meta view
-    this._observationMetaView = new ObservationMetaView({
+    this._observationMetaView = ObservationMetaView({
       el: el.querySelector('.observation-meta-wrapper'),
       observation: observation,
       observatories: observatories,
@@ -424,7 +424,7 @@ var ObservationView = function (options) {
    *        XHR object with error information.
    */
   __publishError = function (status, xhr) {
-    (new ModalView(
+    (ModalView(
       '<h3>Error</h3><p>' + xhr.response + '</p>',
       {
         title: 'Publish Failed',
@@ -443,7 +443,7 @@ var ObservationView = function (options) {
    *        XHR object with error information.
    */
   __publishSuccess = function () {
-    (new ModalView(
+    (ModalView(
       '<h3>Success!</h3><p>Your observation has been published.</p>',
       {
         title: 'Publish Successful',
@@ -462,7 +462,7 @@ var ObservationView = function (options) {
    *        XHR object with error information.
    */
   __saveError = function (status, xhr) {
-    (new ModalView(
+    (ModalView(
       '<h3>Error</h3><p>' + xhr.response + '</p>',
       {
         title: 'Save Failed',
@@ -481,7 +481,7 @@ var ObservationView = function (options) {
    *        XHR object with error information.
    */
   __saveSuccess = function () {
-    (new ModalView(
+    (ModalView(
       '<h3>Success!</h3><p>Your observation has been saved.</p>',
       {
         title: 'Save Successful',

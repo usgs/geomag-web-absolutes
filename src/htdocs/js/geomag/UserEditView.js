@@ -76,7 +76,7 @@ var UserEditView = function (options) {
 
     _this._name = _this.el.querySelector('#useredit-name');
     _this._username = _this.el.querySelector('#useredit-username');
-    _this._observatories = new CollectionSelectBox({
+    _this._observatories = CollectionSelectBox({
         el: _this.el.querySelector('#default-observatory-id'),
         allowDeselect: true,
         collection: _options.observatories
