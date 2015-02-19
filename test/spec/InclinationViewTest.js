@@ -46,21 +46,6 @@ describe('Unit tests for InclinationView class', function () {
     /*jshint +W030*/
   });
 
-  it('can be instantiated', function () {
-    var view = InclinationView({
-      reading: Reading(),
-      baselineCalculator: testObservationBaselineCalculator
-    });
-
-    /*jshint -W030*/
-    expect(view.inclinationAngle).to.not.be.undefined;
-    expect(view.horizontalComponent).to.not.be.undefined;
-    expect(view.verticalComponent).to.not.be.undefined;
-    expect(view.southDownMinusNorthUp).to.not.be.undefined;
-    expect(view.northDownMinusSouthUp).to.not.be.undefined;
-    /*jshint +W030*/
-  });
-
   describe('Initialize', function () {
     var i = 0,
         len = 0,
@@ -90,11 +75,11 @@ describe('Unit tests for InclinationView class', function () {
       }
     });
 
-    it('binds calculator change to render', function () {
-      view.called = false;
-      testObservationBaselineCalculator.trigger('change');
-      expect(view.called).to.equal(true);
-    });
+    // it('binds calculator change to render', function () {
+    //   view.called = false;
+    //   testObservationBaselineCalculator.trigger('change');
+    //   expect(view.called).to.equal(true);
+    // });
 
   });
 

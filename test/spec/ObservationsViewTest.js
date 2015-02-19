@@ -36,10 +36,6 @@ describe('Observations Unit Tests', function () {
       /* jshint +W030 */
     });
 
-    it('Can be instantiated', function () {
-      expect(observationsView).to.be.an.instanceOf(ObservationsView);
-    });
-
   });
 
   describe('Observations', function () {

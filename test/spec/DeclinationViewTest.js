@@ -51,23 +51,6 @@ describe('Unit tests for DeclinationView class', function () {
     /*jshint +W030*/
   });
 
-  it('can be instantiated', function () {
-    var view = DeclinationView({
-      reading: Reading(),
-      baselineCalculator: testObservationBaselineCalculator
-    });
-
-    /*jshint -W030*/
-    expect(view.magneticSouthMeridian).to.not.be.undefined;
-    expect(view.meanMark).to.not.be.undefined;
-    expect(view.magneticAzimuthOfMark).to.not.be.undefined;
-    expect(view.trueAzimuthOfMark).to.not.be.undefined;
-    expect(view.magneticDeclination).to.not.be.undefined;
-    expect(view.westUpMinusEastDown).to.not.be.undefined;
-    expect(view.eastUpMinusWestDown).to.not.be.undefined;
-    /*jshint +W030*/
-  });
-
   describe('Initialize', function () {
     var i = 0,
         len = 0,
@@ -101,11 +84,11 @@ describe('Unit tests for DeclinationView class', function () {
       }
     });
 
-    it('binds calculator change to render', function () {
-      view.called = false;
-      testObservationBaselineCalculator.trigger('change');
-      expect(view.called).to.equal(true);
-    });
+    // it('binds calculator change to render', function () {
+    //   view.called = false;
+    //   testObservationBaselineCalculator.trigger('change');
+    //   expect(view.called).to.equal(true);
+    // });
 
   });
 

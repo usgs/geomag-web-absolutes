@@ -21,23 +21,4 @@ describe('ReadingGroupView test suite.', function () {
       /* jshint +W030 */
     });
   });
-
-  describe('_createTab()', function () {
-    it('has such a method', function () {
-      /* jshint -W030 */
-      expect((ReadingGroupView(viewOptions))._createTab)
-          .to.not.be.undefined;
-      /* jshint +W030 */
-    });
-
-    it('returns an object with proper keys', function () {
-      var r = ReadingGroupView(viewOptions),
-          t = r._createTab(null, Reading());
-
-      /* jshint -W030 */
-      expect(t.title).to.exist;
-      expect(t.content).to.exist;
-      /* jshint +W030 */
-    });
-  });
 });

@@ -48,9 +48,6 @@ describe('ObservatoryView Unit Tests', function () {
       /* jshint +W030 */
     });
 
-    it('Can be instantiated', function () {
-      expect(observatoryView).to.be.an.instanceOf(ObservatoryView);
-    });
   });
 
 
