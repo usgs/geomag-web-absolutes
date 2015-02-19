@@ -1,4 +1,4 @@
-/*global chai, describe, it*/
+/*global sinon, console, chai, describe, it*/
 'use strict';
 
 var DeclinationView = require('geomag/DeclinationView'),
@@ -26,23 +26,6 @@ var testObservationBaselineCalculator = Util.extend(Model(), {
   correctedF: function() { return 10; }
 });
 
-// dummy Declination View that tracks whether its
-// render method has been called
-var TestDeclinationView = function (options) {
-  this.called = false;
-  DeclinationView.call(this, options);
-};
-TestDeclinationView.prototype = Object.create(DeclinationView.prototype);
-TestDeclinationView.prototype.render = function() {
-  this.called = true;
-};
-
-var viewOptions = {
-  reading: Reading(),
-  observation: Observation(),
-  baselineCalculator: testObservationBaselineCalculator
-};
-
 describe('Unit tests for DeclinationView class', function () {
 
   it('can be "require"d', function () {
@@ -59,13 +42,15 @@ describe('Unit tests for DeclinationView class', function () {
         observation = Observation(),
         view;
 
-    view = new TestDeclinationView({
+    view = DeclinationView({
       reading: reading,
       observation: observation,
       baselineCalculator: testObservationBaselineCalculator
     });
 
     it('binds measurement change to render', function () {
+      var spy = sinon.spy(view, 'render');
+
       var testmeasurements = [
           measurements[Measurement.FIRST_MARK_UP][0],
           measurements[Measurement.FIRST_MARK_DOWN][0],
@@ -78,9 +63,8 @@ describe('Unit tests for DeclinationView class', function () {
       ];
 
       for (i = 0, len = testmeasurements.length; i < len; i++){
-        view.called = false;
         testmeasurements[i].trigger('change');
-        expect(view.called).to.equal(true);
+        expect(spy.callCount).to.equal(i+1);
       }
     });
 
