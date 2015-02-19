@@ -150,9 +150,9 @@ define([
 						Format.degreesAndDegreesMinutes(
 								calculator.magneticSouthMeridian()));
 				expect(view._meanMark.textContent).to.equal(
-						calculator.meanMark().toFixed(2) + '°');
+						calculator.meanMark().toFixed(3) + '°');
 				expect(view._magneticAzimuthOfMark.textContent).to.equal(
-						calculator.magneticAzimuthMark().toFixed(2) + '°');
+						calculator.magneticAzimuthMark().toFixed(3) + '°');
 				expect(view._trueAzimuthOfMark.textContent).to.equal('' +
 						calculator.trueAzimuthOfMark() + '°');
 				expect(view._magneticDeclination.innerHTML).to.equal(
@@ -160,9 +160,9 @@ define([
 								calculator.magneticDeclination()));
 
 				expect(view._westUpMinusEastDown.textContent).to.equal(
-						(calculator.westUpMinusEastDown()*60).toFixed(2) + '\'');
+						(calculator.westUpMinusEastDown()*60).toFixed(3) + '\'');
 				expect(view._eastUpMinusWestDown.textContent).to.equal(
-						(calculator.eastUpMinusWestDown()*60).toFixed(2) + '\'');
+						(calculator.eastUpMinusWestDown()*60).toFixed(3) + '\'');
 			});
 
 		});
