@@ -22,7 +22,8 @@ var UserFactory = function (options) {
 
       _options;
 
-    _options = Util.extend({}, _DEFAULTS, options);
+  _this = {};
+  _options = Util.extend({}, _DEFAULTS, options);
 
   _this.destroy = function(options) {
     options.success();
