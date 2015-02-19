@@ -29,7 +29,6 @@ var _DEFAULTS = {
  */
 var Observatory = function (options) {
   var _this,
-      _initialize,
 
       _options;
 

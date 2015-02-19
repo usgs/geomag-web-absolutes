@@ -26,7 +26,7 @@ var _DEFAULTS = {
 
 
 /**
- * Construct a new DeclinationView.
+ * Construct a new Observation.
  *
  * @param option {Object}
  *        view options.
@@ -35,19 +35,19 @@ var _DEFAULTS = {
  * @param option.reading {geomag.Reading}
  *        the reading to display.
  */
-var Observation = function (attributes) {
+var Observation = function (options) {
   var _this,
       _initialize,
 
-      _attributes;
+      _options;
 
-  _this = Model(attributes);
+  _this = Model(options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (attributes) {
-    _attributes = Util.extend({}, _DEFAULTS, attributes);
+  _initialize = function (options) {
+    _options = Util.extend({}, _DEFAULTS, options);
 
     if (_this.get('readings') === null) {
       _this.set({
@@ -94,8 +94,8 @@ var Observation = function (attributes) {
     }
   };
 
-  _initialize(attributes);
-  attributes = null
+  _initialize(options);
+  options = null
   return _this;
 };
 

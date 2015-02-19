@@ -71,7 +71,7 @@ var ObservationMetaView = function (options) {
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function () {
+  _initialize = function (options) {
     var el = _this.el,
         calculator = _options.calculator,
         observation = _options.observation,

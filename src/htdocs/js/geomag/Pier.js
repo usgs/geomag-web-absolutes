@@ -24,7 +24,6 @@ var _DEFAULTS = {
  */
 var Pier = function (options) {
   var _this,
-      _initialize,
 
       _options;
 

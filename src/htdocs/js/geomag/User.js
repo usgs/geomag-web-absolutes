@@ -22,15 +22,14 @@ var _DEFAULTS = {
 /**
  * Construct a new User object.
  */
-var User = function (attributes) {
+var User = function (options) {
   var _this,
-      _initialize,
 
-      _attributes;
+      _options;
 
-    _this = Model(attributes);
+    _this = Model(options);
 
-    _attributes = Util.extend({}, _DEFAULTS, attributes);
+    _options = Util.extend({}, _DEFAULTS, options);
 
   /**
    * Static access to current user object.
