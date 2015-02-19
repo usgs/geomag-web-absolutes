@@ -138,14 +138,14 @@ define([
 				expect(view._inclinationAngle.innerHTML).to.equal(
 						Format.degreesAndDegreesMinutes(calculator.inclination()));
 				expect(view._horizontalComponent.textContent).to.equal(
-						calculator.horizontalComponent().toFixed(2) + 'nT');
+						calculator.horizontalComponent().toFixed(3) + 'nT');
 				expect(view._verticalComponent.textContent).to.equal(
-						calculator.verticalComponent().toFixed(2) + 'nT');
+						calculator.verticalComponent().toFixed(3) + 'nT');
 
 				expect(view._southDownMinusNorthUp.textContent).to.equal(
-						(calculator.southDownMinusNorthUp()*60).toFixed(2) + '\'');
+						(calculator.southDownMinusNorthUp()*60).toFixed(3) + '\'');
 				expect(view._northDownMinusSouthUp.textContent).to.equal(
-						(calculator.northDownMinusSouthUp()*60).toFixed(2) + '\'');
+						(calculator.northDownMinusSouthUp()*60).toFixed(3) + '\'');
 			});
 
 		});
