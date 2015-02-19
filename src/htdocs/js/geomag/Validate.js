@@ -29,7 +29,7 @@ define([
 
 		validTime: function (value) {
 			// for 24-hour time, leading zeroes mandatory.
-			var pattern = /^(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$/;
+			var pattern = /^(2[0-3]|[01][0-9]):?[0-5][0-9]:?[0-5][0-9]$/;
 			if (value.match(pattern)) {
 				return true;
 			}
