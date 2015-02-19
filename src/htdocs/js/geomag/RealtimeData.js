@@ -23,11 +23,11 @@ var RealtimeData = function (options) {
   };
 
   _this.getStarttime = function () {
-    return _this._times[0];
+    return _times[0];
   };
 
   _this.getEndtime = function () {
-    return _this._times[_this._times.length - 1];
+    return _times[_times.length - 1];
   };
 
   /**
@@ -50,11 +50,11 @@ var RealtimeData = function (options) {
         r = null;
 
     time = Math.round(timeMs / 1000);
-    timeIndex = _this._times.indexOf(time);
+    timeIndex = _times.indexOf(time);
     if (timeIndex !== -1) {
       // find correct observatory
       if (observatory) {
-        obj = _this._data.get(observatory);
+        obj = _data.get(observatory);
         if (obj === null) {
           return null;
         } else {
@@ -62,7 +62,7 @@ var RealtimeData = function (options) {
         }
       } else {
         // default to first observatory
-        channels = _this._data.data()[0].values;
+        channels = _data.data()[0].values;
       }
       // extract values for time
       r = {};
