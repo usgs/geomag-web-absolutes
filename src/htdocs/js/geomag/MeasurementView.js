@@ -7,7 +7,7 @@ var Format = require('geomag/Formatter'),
     View = require('mvc/View');
 
 
-var DEFAULTS = {
+var _DEFAULTS = {
 };
 
 
@@ -57,7 +57,7 @@ var MeasurementView = function (options) {
         onTimeChange = null,
         onAngleChange = null;
 
-    _options = Util.extend({}, DEFAULTS, options);
+    _options = Util.extend({}, _DEFAULTS, options);
     _this._measurement = _options.measurement;
     _this._observation = _options.observation;
 

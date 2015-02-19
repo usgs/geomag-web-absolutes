@@ -4,7 +4,7 @@ var Util = require('util/Util'),
     View = require('mvc/View');
 
 
-var DEFAULTS = {
+var _DEFAULTS = {
   allowDeselect: false,
   emptyText: '',
   collection: null,
@@ -44,7 +44,7 @@ var CollectionSelectBox = function (options) {
    * Initialize the CollectionSelectBox.
    */
   _initialize = function () {
-    _options = Util.extend({}, DEFAULTS, options);
+    _options = Util.extend({}, _DEFAULTS, options);
 
     // add select box change listener
     _this.el.addEventListener('change', _onChange);

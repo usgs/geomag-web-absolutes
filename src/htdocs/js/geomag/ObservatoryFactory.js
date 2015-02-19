@@ -316,7 +316,7 @@ var ObservatoryFactory = function (options) {
    * @param attributes {Object}
    *        Observation detail attributes.
    */
-  var _ObservationDetail = Observation(attributes);
+  var _ObservationDetail = Observation();
   _ObservationDetail = function (factory, attributes) {
     _this._factory = factory;
     _this._observatories = null;
@@ -334,7 +334,7 @@ var ObservatoryFactory = function (options) {
    * @param attributes {Object}
    *        Observation summary attributes.
    */
-  var _ObservationSummary = Observation(attributes);
+  var _ObservationSummary = Observation();
   _ObservationSummary = function (factory, attributes) {
     _this._factory = factory;
     Observation.call(_this, attributes);
@@ -366,7 +366,7 @@ var ObservatoryFactory = function (options) {
    * @param attributes {Object}
    *        Observatory summary attributes.
    */
-  _ObservatorySummary = Observatory(attributes);
+  var _ObservatorySummary = Observatory();
   _ObservatorySummary = function (factory, attributes) {
     _this._factory = factory;
     Observatory.call(_this, attributes);

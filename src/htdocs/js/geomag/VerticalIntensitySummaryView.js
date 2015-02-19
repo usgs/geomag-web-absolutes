@@ -7,7 +7,7 @@ var Format = require('geomag/Formatter'),
     View = require('mvc/View');
 
 
-  var DEFAULTS = {
+  var _DEFAULTS = {
     factory: new ObservatoryFactory()
   };
 
@@ -27,7 +27,7 @@ var VerticalIntensitySummaryView = function (options) {
         i = null,
         len = null;
 
-    _options = Util.extend({}, DEFAULTS, options);
+    _options = Util.extend({}, _DEFAULTS, options);
 
     el.innerHTML = [
       '<th class="name" scope="row"></th>',

@@ -34,7 +34,7 @@ var Observatory = function (options) {
 
   _this = Model(options);
 
-  _options =  Util.extend({}, DEFAULTS, options);
+  _options =  Util.extend({}, _DEFAULTS, options);
 
   /**
    * Get the default pier for this observatory.
