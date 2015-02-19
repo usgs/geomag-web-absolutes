@@ -118,6 +118,7 @@ define([
 		// bind realtime data factory and measurements.
 		var getRealtimeData = this._getRealtimeData.bind(this);
 		this._realtimeDataFactory.on('change:observatory', getRealtimeData);
+		this._observation.on('change:begin', getRealtimeData);
 		observation.eachMeasurement(function (measurement) {
 			measurement.on('change:time', getRealtimeData);
 		});
