@@ -15,12 +15,6 @@ if ($id !== null) {
 $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] :
 		 'GET';
 
-if ($CURRENT_USER['admin'] !== 'Y') {
-	header('HTTP/1.1 403 Forbiden');
-	echo 'Only admin users may view or change user data.';
-	exit();
-}
-
 // process request
 try {
 	// 09/04/12 -- EMM: This exception is for testing client-side error handling.
@@ -50,7 +44,7 @@ try {
 			header('Content-Type: application/json');
 			echo $json;
 		}
-	} else if ($method === 'DELETE') {
+	} else if ($method === 'DELETE' && ($CURRENT_USER['admin'] === 'Y')) {
 		// php doesn't populate $_POST when method is DELETE.
 		$params = array();
 		parse_str(file_get_contents('php://input'), $params);
@@ -87,7 +81,7 @@ try {
 		$json = json_decode($json, true /* associative */);
 		$user = $json; //User::fromArray($json);
 
-		if ($method === 'POST') {
+		if ($method === 'POST' && ($CURRENT_USER['admin'] === 'Y')) {
 			// create
 			if ($user['id'] !== null) {
 				header('HTTP/1.1 400 Bad Request');
@@ -95,7 +89,7 @@ try {
 				exit();
 			}
 			$user = $USER_FACTORY->createUser($user);
-		} else if ($method === 'PUT') {
+		} else if ($method === 'PUT' && ($CURRENT_USER['admin'] === 'Y')) {
 			// update
 			if ($user['id'] === null) {
 				header('HTTP/1.1 400 Bad Request');
@@ -103,6 +97,10 @@ try {
 				exit();
 			}
 			$user = $USER_FACTORY->updateUser($user);
+		} else if (!($CURRENT_USER['admin'] === 'Y')) {
+				header('HTTP/1.1 403 Forbiden');
+				echo 'Only admin users may view or change user data.';
+				exit();
 		} else {
 				header('HTTP/1.1 405 Method not allowed');
 				echo 'unsupported HTTP method';
