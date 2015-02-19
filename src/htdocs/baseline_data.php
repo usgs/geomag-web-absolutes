@@ -50,7 +50,8 @@ try {
         'baseD' => array()
       );
 
-      $readings = $OBSERVATION_FACTORY->getObservation($observation->id)->readings;
+      $readings = $OBSERVATION_FACTORY->getObservation(
+          $observation->id)->readings;
 
       foreach ($readings as $reading) {
         if ($reading->horizontal_intensity_valid === 'Y') {
