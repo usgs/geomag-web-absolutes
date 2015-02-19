@@ -53,12 +53,11 @@ describe('Unit tests for InclinationView class', function () {
     });
 
     /*jshint -W030*/
-    expect(view._options).to.not.be.undefined;
-    expect(view._inclinationAngle).to.not.be.undefined;
-    expect(view._horizontalComponent).to.not.be.undefined;
-    expect(view._verticalComponent).to.not.be.undefined;
-    expect(view._southDownMinusNorthUp).to.not.be.undefined;
-    expect(view._northDownMinusSouthUp).to.not.be.undefined;
+    expect(view.inclinationAngle).to.not.be.undefined;
+    expect(view.horizontalComponent).to.not.be.undefined;
+    expect(view.verticalComponent).to.not.be.undefined;
+    expect(view.southDownMinusNorthUp).to.not.be.undefined;
+    expect(view.northDownMinusSouthUp).to.not.be.undefined;
     /*jshint +W030*/
   });
 

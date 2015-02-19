@@ -58,14 +58,13 @@ describe('Unit tests for DeclinationView class', function () {
     });
 
     /*jshint -W030*/
-    expect(view._options).to.not.be.undefined;
-    expect(view._magneticSouthMeridian).to.not.be.undefined;
-    expect(view._meanMark).to.not.be.undefined;
-    expect(view._magneticAzimuthOfMark).to.not.be.undefined;
-    expect(view._trueAzimuthOfMark).to.not.be.undefined;
-    expect(view._magneticDeclination).to.not.be.undefined;
-    expect(view._westUpMinusEastDown).to.not.be.undefined;
-    expect(view._eastUpMinusWestDown).to.not.be.undefined;
+    expect(view.magneticSouthMeridian).to.not.be.undefined;
+    expect(view.meanMark).to.not.be.undefined;
+    expect(view.magneticAzimuthOfMark).to.not.be.undefined;
+    expect(view.trueAzimuthOfMark).to.not.be.undefined;
+    expect(view.magneticDeclination).to.not.be.undefined;
+    expect(view.westUpMinusEastDown).to.not.be.undefined;
+    expect(view.eastUpMinusWestDown).to.not.be.undefined;
     /*jshint +W030*/
   });
 

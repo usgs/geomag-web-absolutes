@@ -20,11 +20,6 @@ describe('ReadingGroupView test suite.', function () {
       expect(ReadingGroupView).not.to.be.undefined;
       /* jshint +W030 */
     });
-
-    it('Can be instantiated', function () {
-      var c = ReadingGroupView(viewOptions);
-      expect(c).to.be.an.instanceOf(ReadingGroupView);
-    });
   });
 
   describe('_createTab()', function () {
@@ -40,7 +35,6 @@ describe('ReadingGroupView test suite.', function () {
           t = r._createTab(null, Reading());
 
       /* jshint -W030 */
-      expect(t).to.be.an.instanceOf(Object);
       expect(t.title).to.exist;
       expect(t.content).to.exist;
       /* jshint +W030 */

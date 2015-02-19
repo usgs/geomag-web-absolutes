@@ -98,16 +98,6 @@ var TESTDATA = {
 
 describe('Unit tests for the "RealtimeDataFactory" class', function () {
 
-  describe('constructor()', function () {
-
-    it('calls RealtimeDataFactory constructor', function () {
-      var realtimeDataFactory = RealtimeDataFactory();
-      expect(realtimeDataFactory).to.be.an.instanceOf(RealtimeDataFactory);
-      expect(realtimeDataFactory).to.be.an.instanceOf(Model);
-    });
-
-  });
-
   describe('getRealtimeData()',function () {
 
     // fake Xhr.jsonp
