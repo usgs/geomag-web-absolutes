@@ -40,7 +40,7 @@ var Measurement = function (options) {
   _this = Model(options);
 
   _initialize = function(options) {
-    _options = Util.extend({}, _DEFAULT_OPTIONS, options);
+    _options = Util.extend({}, _DEFAULTS, options);
   };
 
   /**
