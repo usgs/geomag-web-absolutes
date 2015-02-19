@@ -39,27 +39,27 @@ describe('Unit tests for BaselineCalculator', function () {
       expect(calc.mean(0.0, 0.5, '999.9', 1.0, 1.5, 2.0)).to.equal(1.0);
     });
 
-  }); // END :: _mean
+  }); // END :: mean
 
-  describe('_toRadians()', function () {
+  describe('toRadians()', function () {
 
     it('converts correctly', function () {
       // Positive degrees
-      expect(calc._toRadians(0.0)).to.equal(0.0);
-      expect(calc._toRadians(45.0)).to.equal(Math.PI/4);
-      expect(calc._toRadians(90.0)).to.equal(Math.PI/2);
-      expect(calc._toRadians(135.0)).to.equal(3*Math.PI/4);
-      expect(calc._toRadians(180.0)).to.equal(Math.PI);
+      expect(calc.toRadians(0.0)).to.equal(0.0);
+      expect(calc.toRadians(45.0)).to.equal(Math.PI/4);
+      expect(calc.toRadians(90.0)).to.equal(Math.PI/2);
+      expect(calc.toRadians(135.0)).to.equal(3*Math.PI/4);
+      expect(calc.toRadians(180.0)).to.equal(Math.PI);
 
       // Negative degrees
-      expect(calc._toRadians(-0.0)).to.equal(-0.0);
-      expect(calc._toRadians(-45.0)).to.equal(-1*Math.PI/4);
-      expect(calc._toRadians(-90.0)).to.equal(-1*Math.PI/2);
-      expect(calc._toRadians(-135.0)).to.equal(-3*Math.PI/4);
-      expect(calc._toRadians(-180.0)).to.equal(-1*Math.PI);
+      expect(calc.toRadians(-0.0)).to.equal(-0.0);
+      expect(calc.toRadians(-45.0)).to.equal(-1*Math.PI/4);
+      expect(calc.toRadians(-90.0)).to.equal(-1*Math.PI/2);
+      expect(calc.toRadians(-135.0)).to.equal(-3*Math.PI/4);
+      expect(calc.toRadians(-180.0)).to.equal(-1*Math.PI);
     });
 
-  }); // END :: _toRadians
+  }); // END :: toRadians
 
   // --------------------------------------------------------------
   // Tests for API methods

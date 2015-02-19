@@ -70,7 +70,7 @@ describe('Unit tests for InclinationView class', function () {
         observation = Observation(),
         view;
 
-    view = TestInclinationView({
+    view = new TestInclinationView({
       reading: reading,
       observation: observation,
       baselineCalculator: testObservationBaselineCalculator

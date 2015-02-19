@@ -8,58 +8,9 @@ var _SCALE_VALUE_COEFFICIENT = getScaleValueCoefficient();
 
 
 var BaselineCalculator = function () {
-  var _this,
-
-      _toRadians;
+  var _this;
 
   _this = {};
-
-  // --------------------------------------------------------------
-  // Helper Methods
-  // --------------------------------------------------------------
-
-  /**
-   * Helper method to compute the mean of up numeric values. If any given
-   * value is not numeric, it is excluded from the mean.
-   *
-   * @param <variable> {Numeric}
-   *      This method accepts a variable number of parameters. Each parameter
-   *      should be numeric. Non-numeric parameters are excluded from the
-   *      computed mean.
-   */
-  _this.mean = function () {
-    var sum = 0.0,
-        count = 0,
-        numArgs = arguments.length,
-        valid = false,
-        i = 0;
-
-    for (; i < numArgs; i++) {
-      if (typeof arguments[i] === 'number') {
-        valid = true;
-        sum += arguments[i];
-        count++;
-      }
-    }
-
-    if (valid) {
-      return (sum / count);
-    } else {
-      return '&ndash;';
-    }
-  };
-
-  /**
-   * Converts degrees to radians.
-   *
-   * @param degrees {Number} Decimal degrees
-   *
-   * @return {Number} Radians
-   */
-  _toRadians = function (degrees) {
-    return ((degrees * Math.PI) / 180);
-  };
-
 
   /**
    * D Baseline
@@ -155,7 +106,7 @@ var BaselineCalculator = function () {
    * @return {Number} nT
    */
   _this.horizontalComponent = function (correctedF, inclination) {
-    return (correctedF * Math.cos(_toRadians(inclination)));
+    return (correctedF * Math.cos(_this.toRadians(inclination)));
   };
 
   /**
@@ -223,6 +174,37 @@ var BaselineCalculator = function () {
   };
 
   /**
+   * Helper method to compute the mean of up numeric values. If any given
+   * value is not numeric, it is excluded from the mean.
+   *
+   * @param <variable> {Numeric}
+   *      This method accepts a variable number of parameters. Each parameter
+   *      should be numeric. Non-numeric parameters are excluded from the
+   *      computed mean.
+   */
+  _this.mean = function () {
+    var sum = 0.0,
+        count = 0,
+        numArgs = arguments.length,
+        valid = false,
+        i = 0;
+
+    for (; i < numArgs; i++) {
+      if (typeof arguments[i] === 'number') {
+        valid = true;
+        sum += arguments[i];
+        count++;
+      }
+    }
+
+    if (valid) {
+      return (sum / count);
+    } else {
+      return '&ndash;';
+    }
+  };
+
+  /**
    * North
    *
    * @param northDown {Number} Decimal degrees
@@ -262,6 +244,17 @@ var BaselineCalculator = function () {
   };
 
   /**
+   * Converts degrees to radians.
+   *
+   * @param degrees {Number} Decimal degrees
+   *
+   * @return {Number} Radians
+   */
+  _this.toRadians = function (degrees) {
+    return ((degrees * Math.PI) / 180);
+  };
+
+  /**
    * Vertical Component
    *
    * @param correctedF {Number} nT
@@ -270,7 +263,7 @@ var BaselineCalculator = function () {
    * @return {Number} nT
    */
   _this.verticalComponent = function (correctedF, inclination) {
-    return (correctedF * Math.sin(_toRadians(inclination)));
+    return (correctedF * Math.sin(_this.toRadians(inclination)));
   };
 
   /**

@@ -77,7 +77,7 @@ describe('Unit tests for DeclinationView class', function () {
         observation = Observation(),
         view;
 
-    view = TestDeclinationView({
+    view = new TestDeclinationView({
       reading: reading,
       observation: observation,
       baselineCalculator: testObservationBaselineCalculator

@@ -18,11 +18,6 @@ describe('Unit tests for the "Measurement" class', function () {
     'f': 52530.7
   };
   describe('constructor()', function () {
-    it('evaluates to instanceof "Measurement"', function () {
-      var measurement = Measurement();
-      expect(measurement).to.be.an.instanceOf(Measurement);
-    });
-
     it('works when passed a test object', function () {
       var measurement = Measurement(testObject);
       expect(measurement.get('id')).to.equal(testObject.id);
