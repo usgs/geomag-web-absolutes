@@ -48,6 +48,7 @@ var Observation = function (attributes) {
    */
   _initialize = function (attributes) {
     _attributes = Util.extend({}, _DEFAULTS, attributes);
+
     if (this.get('readings') === null) {
       this.set({
         readings: new Collection([
@@ -73,7 +74,7 @@ var Observation = function (attributes) {
    *        function to call with each measurement.
    */
   _this.eachMeasurement = function (callback) {
-    this.eachReading(function (reading) {
+    _this.eachReading(function (reading) {
       reading.eachMeasurement(callback);
     });
   };
