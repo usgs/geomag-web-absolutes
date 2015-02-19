@@ -28,12 +28,11 @@ var ObservationBaselineCalculator = function (options) {
 
       _options;
 
+    _this = Model(options);
     _options = Util.extend({}, _DEFAULTS, options);
     // keep calculator outside model
-    _this._calculator = options.calculator;
-    delete options.calculator;
-
-    _this - Model(options);
+    // _this._calculator = options.calculator;
+    // delete options.calculator;
 
   /**
    * D Baseline
@@ -158,6 +157,9 @@ var ObservationBaselineCalculator = function (options) {
       return 0;
     }
 
+    return total / count;
+  };
+
   _this.getStats = function (data) {
     var mean = _this._calculator._mean.apply(_this._calculator, data),
         min = Math.min.apply(Math, data),
@@ -187,9 +189,6 @@ var ObservationBaselineCalculator = function (options) {
       max: max,
       stdDev: Math.sqrt(variance)
     };
-  };
-
-    return total / count;
   };
 
   /**
