@@ -72,20 +72,20 @@ var InclinationView = function (options) {
         '.north-down-minus-south-up-value');
 
     // when reading changes render view
-    _options.reading.on('change', _this.render, _this);
+    _options.reading.on('change', 'render', _this);
 
     // also render when any related inputs change
     _this._measurements[Measurement.SOUTH_DOWN][0].on(
-        'change', _this.render, _this);
+        'change', 'render', _this);
     _this._measurements[Measurement.NORTH_UP][0].on(
-        'change', _this.render, _this);
+        'change', 'render', _this);
     _this._measurements[Measurement.SOUTH_UP][0].on(
-        'change', _this.render, _this);
+        'change', 'render', _this);
     _this._measurements[Measurement.NORTH_DOWN][0].on(
-        'change', _this.render, _this);
+        'change', 'render', _this);
 
     // watches for changes in pier/mark
-    _this._calculator.on('change', _this.render, _this);
+    _this._calculator.on('change', 'render', _this);
 
     // render current reading
     _this.render();

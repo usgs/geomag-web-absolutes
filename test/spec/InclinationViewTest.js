@@ -1,4 +1,4 @@
-/*global chai, describe, it*/
+/*global sinon, chai, describe, it*/
 'use strict';
 
 var Format = require('geomag/Formatter'),
@@ -21,22 +21,6 @@ var testObservationBaselineCalculator = Util.extend(Model(), {
   northDownMinusSouthUp: function () { return 5; }
 });
 
-// dummy Inclination View that tracks whether its
-// render method has been called
-var TestInclinationView = function (options) {
-  this.called = false;
-  InclinationView.call(this, options);
-};
-TestInclinationView.prototype = Object.create(InclinationView.prototype);
-TestInclinationView.prototype.render = function() {
-  this.called = true;
-};
-
-var viewOptions = {
-  reading: Reading(),
-  observation: Observation(),
-  baselineCalculator: testObservationBaselineCalculator
-};
 
 describe('Unit tests for InclinationView class', function () {
 
@@ -54,13 +38,15 @@ describe('Unit tests for InclinationView class', function () {
         observation = Observation(),
         view;
 
-    view = new TestInclinationView({
+    view = InclinationView({
       reading: reading,
       observation: observation,
       baselineCalculator: testObservationBaselineCalculator
     });
 
     it('binds measurement change to render', function () {
+      var spy = sinon.spy(view, 'render');
+
       var testmeasurements = [
           measurements[Measurement.SOUTH_DOWN][0],
           measurements[Measurement.NORTH_UP][0],
@@ -69,18 +55,10 @@ describe('Unit tests for InclinationView class', function () {
       ];
 
       for (i = 0, len = testmeasurements.length; i < len; i++){
-        view.called = false;
         testmeasurements[i].trigger('change');
-        expect(view.called).to.equal(true);
+        expect(spy.callCount).to.equal(i+1);
       }
     });
-
-    // it('binds calculator change to render', function () {
-    //   view.called = false;
-    //   testObservationBaselineCalculator.trigger('change');
-    //   expect(view.called).to.equal(true);
-    // });
-
   });
 
   describe('Render', function () {

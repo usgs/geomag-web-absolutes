@@ -1,4 +1,4 @@
-/*global sinon, console, chai, describe, it*/
+/*global sinon, chai, describe, it*/
 'use strict';
 
 var DeclinationView = require('geomag/DeclinationView'),
