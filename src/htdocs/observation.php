@@ -11,7 +11,7 @@ if (!isset($TEMPLATE)) {
 	$TITLE = 'Observation Input';
 
 	$NAVIGATION = true;
-	$HEAD = '<link rel="stylesheet" href="'.$MOUNT_PATH.'/css/observation.css"/>';
+	$HEAD = '<link rel="stylesheet" href="'.$MOUNT_PATH.'/css/observation.css"/><script src="requirejs/require.js"></script>';
 	$FOOT =
 		'<script>
 			var observationId = ' . $id . ';
