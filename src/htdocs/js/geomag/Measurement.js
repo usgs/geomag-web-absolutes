@@ -50,7 +50,7 @@ var Measurement = function (options) {
    *        as returned by RealtimeDataFactory.
    */
   _this.setRealtimeData = function (realtimeData) {
-    var values = realtimeData.getValues(this.get('time')),
+    var values = realtimeData.getValues(_this.get('time')),
         toset;
     toset = {
       h: null,
@@ -64,18 +64,18 @@ var Measurement = function (options) {
       toset.z = values.Z;
       toset.f = values.F;
     }
-    this.set(toset);
+    _this.set(toset);
   };
 
   _this.getErrors = function () {
     var errors = [];
 
-    if (this.get('time_error') !== null) {
-      errors.push(this.get('time_error'));
+    if (_this.get('time_error') !== null) {
+      errors.push(_this.get('time_error'));
     }
 
-    if (this.get('angle_error') !== null) {
-      errors.push(this.get('angle_error'));
+    if (_this.get('angle_error') !== null) {
+      errors.push(_this.get('angle_error'));
     }
 
     return errors;

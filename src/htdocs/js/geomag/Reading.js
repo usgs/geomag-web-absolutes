@@ -48,7 +48,7 @@ var Reading = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function () {
-    var measurements = this.get('measurements'),
+    var measurements = _this.get('measurements'),
         data = null,
         i = null,
         len = null,
@@ -72,7 +72,7 @@ var Reading = function (options) {
         new Measurement({type: Measurement.NORTH_DOWN})
       ]);
 
-      this.set({'measurements': measurements});
+      _this.set({'measurements': measurements});
     }
 
     data = measurements.data();
@@ -94,7 +94,7 @@ var Reading = function (options) {
    *        function to call with each measurement.
    */
   _this.eachMeasurement = function (callback) {
-    var measurements = this.get('measurements').data(),
+    var measurements = _this.get('measurements').data(),
         i,
         len;
     for (i = 0, len = measurements.length; i < len; i++) {
@@ -112,7 +112,7 @@ var Reading = function (options) {
    * everything later.
    */
   _this.getMeasurements = function () {
-    var measurements = this.get('measurements'),
+    var measurements = _this.get('measurements'),
         r = {},
         data,
         m,

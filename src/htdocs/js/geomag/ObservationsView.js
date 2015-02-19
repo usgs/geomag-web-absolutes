@@ -150,10 +150,10 @@ var ObservationsView = function (options) {
     _this.getAllObservations(observatory);
 
     // TODO, build pending observations list
-    //this.getPendingObservations(observations);
+    //_this.getPendingObservations(observations);
 
     // TODO, build completed observations list
-    //this.getCompletedObservations(observations);
+    //_this.getCompletedObservations(observations);
   };
 
 
@@ -174,7 +174,7 @@ var ObservationsView = function (options) {
   //   }
 
   //   el.innerHTML = '<h3>Pending</h3>';
-  //   el.appendChild(this._buildObservationList(pending));
+  //   el.appendChild(_buildObservationList(pending));
   // };
 
   // TODO, get all completed observations
@@ -193,7 +193,7 @@ var ObservationsView = function (options) {
   //   }
 
   //   el.innerHTML = '<h3>Completed</h3>';
-  //   el.appendChild(this._buildObservationList(completed));
+  //   el.appendChild(_buildObservationList(completed));
   // };
 
   _initialize(options);

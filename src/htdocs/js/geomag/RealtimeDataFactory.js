@@ -46,7 +46,7 @@ var RealtimeDataFactory = function (options) {
    *        options.???  Same as constructor.
    */
   _this.getRealtimeData = function (options) {
-    _options = Util.extend({}, this.get(), options);
+    _options = Util.extend({}, _this.get(), options);
 
     // TODO: this is a hack to deal with
     // https://github.com/usgs/hazdev-webutils/issues/8

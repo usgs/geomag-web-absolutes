@@ -49,8 +49,8 @@ var Observation = function (attributes) {
   _initialize = function (attributes) {
     _attributes = Util.extend({}, _DEFAULTS, attributes);
 
-    if (this.get('readings') === null) {
-      this.set({
+    if (_this.get('readings') === null) {
+      _this.set({
         readings: new Collection([
             new Reading({set_number: 1}),
             new Reading({set_number: 2}),
@@ -59,8 +59,8 @@ var Observation = function (attributes) {
             ])
       });
     }
-    if (this.get('begin') === null) {
-      this.set({
+    if (_this.get('begin') === null) {
+      _this.set({
         begin: new Date().getTime()
       });
     }
@@ -86,7 +86,7 @@ var Observation = function (attributes) {
    *        function to call with each reading.
    */
   _this.eachReading = function (callback) {
-    var readings = this.get('readings').data(),
+    var readings = _this.get('readings').data(),
         i,
         len;
     for (i = 0, len = readings.length; i < len; i++) {

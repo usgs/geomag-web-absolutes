@@ -43,8 +43,8 @@ var Observatory = function (options) {
    * @return {Pier} the default pier, or null if no default is specified.
    */
   _this.getDefaultPier = function () {
-    var piers = this.get('piers'),
-        default_pier_id = this.get('default_pier_id');
+    var piers = _this.get('piers'),
+        default_pier_id = _this.get('default_pier_id');
     if (piers !== null && default_pier_id !== null) {
       return piers.get(default_pier_id);
     } else {
@@ -59,7 +59,7 @@ var Observatory = function (options) {
    */
   _this.getElectronics = function () {
     var electronics = [],
-        instruments = this.get('instruments').data(),
+        instruments = _this.get('instruments').data(),
         instrument,
         i,
         len;
@@ -80,7 +80,7 @@ var Observatory = function (options) {
    * @return {Mark} the mark object, or null if not found.
    */
   _this.getMarkById = function (id) {
-    var piers = this.get('piers').data(),
+    var piers = _this.get('piers').data(),
         pier,
         marks,
         mark,
@@ -105,7 +105,7 @@ var Observatory = function (options) {
    * @return {Pier} the pier object, or null if not found.
    */
   _this.getPierByMarkId = function (id) {
-    var piers = this.get('piers').data(),
+    var piers = _this.get('piers').data(),
         pier,
         marks,
         mark,
@@ -129,7 +129,7 @@ var Observatory = function (options) {
    */
   _this.getTheodolites = function () {
     var theodolites = [],
-        instruments = this.get('instruments').data(),
+        instruments = _this.get('instruments').data(),
         instrument,
         i,
         len;

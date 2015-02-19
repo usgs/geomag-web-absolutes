@@ -159,7 +159,7 @@ var ObservatoryFactory = function (options) {
   _getObservatories = function (observatories) {
     var i, len, data = [];
     for (i = 0, len = observatories.length; i < len; i++) {
-      data[i] = new ObservatorySummary(this, observatories[i]);
+      data[i] = new ObservatorySummary(_this, observatories[i]);
     }
     return data;
   };
@@ -203,7 +203,7 @@ var ObservatoryFactory = function (options) {
    */
   _getObservatory = function (options) {
     _this._factory.getObservatory(Util.extend({}, options,
-        {id: this.get('observatory_id')}));
+        {id: _this.get('observatory_id')}));
   };
 
   /**
@@ -217,7 +217,7 @@ var ObservatoryFactory = function (options) {
     data.begin = _toMilliseconds(data.begin);
     data.end = _toMilliseconds(data.end);
     data.readings = _getReadings(observation.readings);
-    return new ObservationDetail(this, data);
+    return new ObservationDetail(_this, data);
   };
 
   /**
@@ -320,7 +320,7 @@ var ObservatoryFactory = function (options) {
   _ObservationDetail = function (factory, attributes) {
     _this._factory = factory;
     _this._observatories = null;
-    t_his._observatory = null;
+    _this._observatory = null;
     Observation.call(_this, attributes);
   };
 
