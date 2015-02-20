@@ -1,7 +1,6 @@
 'use strict';
 
 var Format = require('geomag/Formatter'),
-    Measurement = require('geomag/Measurement'),
     ObservatoryFactory = require('geomag/ObservatoryFactory'),
     Util = require('util/Util'),
     View = require('mvc/View');
@@ -88,14 +87,14 @@ var DeclinationSummaryView = function (options) {
     _this._valid.addEventListener('change', _onChange);
     _this._shift.addEventListener('change', _onChange);
 
-    _this._reading.on('change:declination_valid', _this.render, _this);
-    _this._reading.on('change:declination_shift', _this.render, _this);
+    _this._reading.on('change:declination_valid', 'render', _this);
+    _this._reading.on('change:declination_shift', 'render', _this);
 
     // watches for changes in pier/mark
-    _this._calculator.on('change', _this.render, _this);
+    _this._calculator.on('change', 'render', _this);
 
     for (i = 0, len = _this._measurements.length; i < len; i++) {
-      _this._measurements[i].on('change', _this.render, _this);
+      _this._measurements[i].on('change', 'render', _this);
     }
 
     _this.render();

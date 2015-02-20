@@ -35,7 +35,6 @@ describe('DeclinationSummaryViewTest', function () {
         factory;
 
     beforeEach(function () {
-      renderSpy = sinon.spy(DeclinationSummaryView.prototype, 'render');
       reading = Reading();
       calculator = ObservationBaselineCalculator();
       factory = ObservatoryFactory();
@@ -46,6 +45,8 @@ describe('DeclinationSummaryViewTest', function () {
         factory: factory
       });
       measurements = factory.getDeclinationMeasurements(reading);
+
+      renderSpy = sinon.spy(view, 'render');
     });
 
     afterEach(function () {
@@ -63,30 +64,28 @@ describe('DeclinationSummaryViewTest', function () {
 
       for (i = 0, len = measurements.length; i < len; i++) {
         measurements[i].trigger('change');
-        // +2 because view renders during instantiation and loop
-        // index starts at 0
-        expect(renderSpy.callCount).to.equal(i + 2);
+        expect(renderSpy.callCount).to.equal(i + 1);
       }
     });
 
     it('should render when reading declination_valid changes', function () {
       reading.trigger('change:declination_valid');
-      expect(renderSpy.callCount).to.equal(2);
+      expect(renderSpy.callCount).to.equal(1);
     });
 
     it('should render when reading shift changes', function () {
       reading.trigger('change:declination_shift');
-      expect(renderSpy.callCount).to.equal(2);
+      expect(renderSpy.callCount).to.equal(1);
     });
 
     it('should render when calculator changes', function () {
       calculator.trigger('change');
-      expect(renderSpy.callCount).to.equal(2);
+      expect(renderSpy.callCount).to.equal(1);
     });
 
     it('it should not render when reading changes', function () {
       reading.trigger('change');
-      expect(renderSpy.callCount).to.equal(1);
+      expect(renderSpy.callCount).to.equal(0);
     });
   });
 
@@ -105,7 +104,7 @@ describe('DeclinationSummaryViewTest', function () {
         calculator: calculator
       });
 
-      checkBox = view._el.querySelector('.valid > input');
+      checkBox = view.el.querySelector('.valid > input');
       checkBoxBefore = checkBox.checked;
       checkBoxAfter = checkBoxBefore;
 
