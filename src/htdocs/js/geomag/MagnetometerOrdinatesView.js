@@ -114,18 +114,18 @@ var MagnetometerOrdinatesView = function (options) {
 
     // hook up to measurements on change.
     // Only need time/angles not markup/markdown
-    measurements[Measurement.WEST_DOWN][0].on('change', _this.render, _this);
-    measurements[Measurement.EAST_DOWN][0].on('change', _this.render, _this);
-    measurements[Measurement.WEST_UP][0].on('change', _this.render, _this);
-    measurements[Measurement.EAST_UP][0].on('change', _this.render, _this);
-    measurements[Measurement.SOUTH_DOWN][0].on('change', _this.render, _this);
-    measurements[Measurement.NORTH_UP][0].on('change', _this.render, _this);
-    measurements[Measurement.SOUTH_UP][0].on('change', _this.render, _this);
-    measurements[Measurement.NORTH_DOWN][0].on('change', _this.render, _this);
+    measurements[Measurement.WEST_DOWN][0].on('change', 'render', _this);
+    measurements[Measurement.EAST_DOWN][0].on('change', 'render', _this);
+    measurements[Measurement.WEST_UP][0].on('change', 'render', _this);
+    measurements[Measurement.EAST_UP][0].on('change', 'render', _this);
+    measurements[Measurement.SOUTH_DOWN][0].on('change', 'render', _this);
+    measurements[Measurement.NORTH_UP][0].on('change', 'render', _this);
+    measurements[Measurement.SOUTH_UP][0].on('change', 'render', _this);
+    measurements[Measurement.NORTH_DOWN][0].on('change', 'render', _this);
 
     // hook up to calculator on change, for changes to pier and mark.
-    _this._calculator.on('change', _this.render, _this);
-    _this._reading.on('change', _this.render, _this);
+    _this._calculator.on('change', 'render', _this);
+    _this._reading.on('change', 'render', _this);
 
     _this.render();
   };

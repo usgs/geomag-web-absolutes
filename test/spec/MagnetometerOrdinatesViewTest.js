@@ -4,11 +4,9 @@
 var Format = require('geomag/Formatter'),
     MagnetometerOrdinatesView = require('geomag/MagnetometerOrdinatesView'),
     Measurement = require('geomag/Measurement'),
-    Model = require('mvc/Model'),
     Observation = require('geomag/Observation'),
     ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
-    Reading = require('geomag/Reading'),
-    Util = require('util/Util');
+    Reading = require('geomag/Reading');
 
 
 var expect = chai.expect;
@@ -25,7 +23,6 @@ describe('Unit tests for MagnetometerOrdinatesView', function () {
         measurements;
 
     beforeEach(function () {
-      renderSpy = sinon.spy(MagnetometerOrdinatesView.prototype, 'render');
       reading = Reading();
       observation = Observation();
       calculator = ObservationBaselineCalculator();
@@ -35,6 +32,8 @@ describe('Unit tests for MagnetometerOrdinatesView', function () {
         observation: observation,
         baselineCalculator: calculator
       });
+
+      renderSpy = sinon.spy(view, 'render');
 
       readingMeasurements = view._reading.getMeasurements();
       measurements = [
@@ -65,13 +64,13 @@ describe('Unit tests for MagnetometerOrdinatesView', function () {
         measurements[i].trigger('change');
         // +2 because view renders during instantiation and loop
         // index starts at 0
-        expect(renderSpy.callCount).to.equal(i+2);
+        expect(renderSpy.callCount).to.equal(i+1);
       }
     });
 
     it('should render when calculator changes', function () {
       calculator.trigger('change');
-      expect(renderSpy.callCount).to.equal(2);
+      expect(renderSpy.callCount).to.equal(1);
     });
   });
 
