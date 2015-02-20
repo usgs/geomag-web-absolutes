@@ -3,14 +3,33 @@
 var config = require('./config');
 
 var compass = {
-  src: {
+  options: {
+    environment: 'development',
+    cssDir: config.build + '/' + config.src + '/htdocs/css',
+    sassDir: config.src + '/htdocs/css'
+  },
+
+  index: {
     options: {
-      cssDir: config.build + '/' + config.src,
-      environment: 'development',
-      sassDir: config.src,
-      specify: [
-        config.src + '/geomag-baseline-calculator.scss'
-      ]
+      specify: [config.src + '/htdocs/css/index.scss']
+    }
+  },
+
+  login: {
+    options: {
+      specify: [config.src + '/htdocs/css/login.scss']
+    }
+  },
+
+  observation: {
+    options: {
+      specify: [config.src + '/htdocs/css/observation.scss']
+    }
+  },
+
+  useradmin: {
+    options: {
+      specify: [config.src + '/htdocs/css/useradmin.scss']
     }
   }
 };
