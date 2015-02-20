@@ -1,7 +1,6 @@
 'use strict';
 
 var Format = require('geomag/Formatter'),
-    Measurement = require('geomag/Measurement'),
     ObservatoryFactory = require('geomag/ObservatoryFactory'),
     Util = require('util/Util'),
     View = require('mvc/View');
@@ -20,14 +19,19 @@ var VerticalIntensitySummaryView = function (options) {
 
       _onChange;
 
-  _initialize = function () {
+  _this = View(options);
+
+  _initialize = function (options) {
     var el = _this.el,
-        factory = _this._options.factory,
-        reading = _this._options.reading,
+        factory,
+        reading,
         i = null,
         len = null;
 
     _options = Util.extend({}, _DEFAULTS, options);
+
+    factory = _options.factory;
+    reading = _options.reading;
 
     el.innerHTML = [
       '<th class="name" scope="row"></th>',
@@ -49,19 +53,19 @@ var VerticalIntensitySummaryView = function (options) {
     _this._baselineValue = el.querySelector('.baseline-values');
     _this._observer = el.querySelector('.observer');
 
-    _this._reading = _this._options.reading;
-    _this._calculator = _this._options.calculator;
+    _this._reading = _options.reading;
+    _this._calculator = _options.calculator;
 
     _this._measurements = factory.getVerticalIntensityMeasurements(reading);
 
     _this._valid.addEventListener('change', _onChange);
 
-    _this._reading.on('change:vertical_intensity_valid', _this.render, _this);
+    _this._reading.on('change:vertical_intensity_valid', 'render', _this);
 
-    _this._calculator.on('change', _this.render, _this);
+    _this._calculator.on('change', 'render', _this);
 
     for (i = 0, len = _this._measurements.length; i < len; i++) {
-      _this._measurements[i].on('change', _this.render, _this);
+      _this._measurements[i].on('change', 'render', _this);
     }
     _this.render();
   };
@@ -76,7 +80,7 @@ var VerticalIntensitySummaryView = function (options) {
   _this.render = function () {
     var reading = _this._reading,
         measurements = reading.get('measurements').data(),
-        factory = _this._options.factory,
+        factory = _options.factory,
         startTime = null,
         endTime = null,
         times;
