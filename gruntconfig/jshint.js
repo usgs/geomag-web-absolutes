@@ -6,13 +6,16 @@ var jshint = {
   options: {
     jshintrc: '.jshintrc'
   },
+
   gruntfile: [
     'Gruntfile.js',
     'gruntconfig/**/*.js'
   ],
-  scripts: [
+
+  dev: [
     config.src + '/**/*.js',
   ],
+
   test: [
     config.test + '/**/*.js'
   ]
