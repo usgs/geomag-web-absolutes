@@ -36,7 +36,7 @@ var connect = {
   dev: {
     options: {
       base: [
-        config.build + '/' + config.src
+        config.build + '/' + config.src + '/htdocs'
       ],
       livereload: true,
       open: 'http://localhost:8000/index.php',
@@ -57,7 +57,7 @@ var connect = {
   dist: {
     options: {
       base: [
-        config.dist
+        config.dist + '/htdocs'
       ],
       keepalive: true,
       livereload: true,

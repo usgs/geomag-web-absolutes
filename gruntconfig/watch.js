@@ -8,7 +8,7 @@ var watch = {
       config.src + '/htdocs/js/**/*.js',
       config.test + '/**/*.js'
     ],
-    tasks: ['jshint:scripts', 'browserify', 'mocha_phantomjs']
+    tasks: ['jshint:dev', 'browserify', 'mocha_phantomjs']
   },
   html: {
     files: [
