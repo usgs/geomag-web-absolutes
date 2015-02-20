@@ -67,7 +67,8 @@ var browserify = {
     dest: config.build + '/' + config.src + '/htdocs/js/useradmin.js'
   },
 
-  source: {
+
+  bundle: {
     src: [],
     dest: config.build + '/' + config.test + '/geomag-baseline-calculator.js',
     options: {
