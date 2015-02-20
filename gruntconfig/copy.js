@@ -3,41 +3,26 @@
 var config = require('./config');
 
 var copy = {
-  build: {
-    expand: true,
+  dev: {
+    cwd: config.src,
+    dest: config.build + '/' + config.src,
+    src: [
+      'conf/**/*',
+
+      'htdocs/**/*',
+      '!htdocs/**/*.scss', // Migrated using compass
+      '!htdocs/**/*.js',   // Migrated using browserify
+
+      'lib/**/*'
+    ]
+  },
+
+  test: {
     cwd: config.test,
+    dest: config.build + '/' + config.test,
     src: [
-      'test.html'
-    ],
-    dest: config.build + '/' + config.test
-  },
-  app: {
-    expand: true,
-    options: {mode: true},
-    cwd: config.src + '/htdocs',
-    dest: config.dist + '/htdocs',
-    src: [
-      'img/**/*.{png,gif,jpg,jpeg}',
-      '**/*.php'
-    ]
-  },
-  conf: {
-    expand: true,
-    options: {mode: true},
-    cwd: config.src + '/conf',
-    dest: config.dist + '/conf',
-    src: [
-      'config.inc.php',
-      'config.ini'
-    ]
-  },
-  lib: {
-    expand: true,
-    options: {mode: true},
-    cwd: config.src + '/lib',
-    dest: config.dist + '/lib',
-    src: [
-      '**/*'
+      'test.html',
+      'lib/**/*'
     ]
   }
 };
