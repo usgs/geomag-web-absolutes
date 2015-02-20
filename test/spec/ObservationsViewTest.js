@@ -3,7 +3,6 @@
 
 var ObservationsView = require('geomag/ObservationsView'),
     observatory1 = require('./observatory1'),
-    Util = require('util/Util'),
     Xhr = require('util/Xhr');
 
 
@@ -14,7 +13,7 @@ var DEFAULTS = {
 var stub;
 var observationsView;
 
-describe('Observations Unit Tests', function () {
+describe('ObservationsView Unit Tests', function () {
 
   before(function () {
     stub = sinon.stub(Xhr, 'ajax', function (options) {
