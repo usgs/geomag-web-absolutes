@@ -5,7 +5,7 @@ var config = require('./config');
 var watch = {
   scripts: {
     files: [
-      config.src + 'htdocs/js/**/*.js',
+      config.src + '/htdocs/js/**/*.js',
       config.test + '/**/*.js'
     ],
     tasks: ['jshint:scripts', 'browserify', 'mocha_phantomjs']
