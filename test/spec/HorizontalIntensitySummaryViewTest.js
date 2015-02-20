@@ -25,8 +25,6 @@ describe('HorizontalIntensitySummaryViewTest', function () {
         factory;
 
     beforeEach(function () {
-      renderSpy =
-          sinon.spy(HorizontalIntensitySummaryView.prototype, 'render');
       reading = Reading();
       calculator = ObservationBaselineCalculator();
       factory = ObservatoryFactory();
@@ -37,6 +35,8 @@ describe('HorizontalIntensitySummaryViewTest', function () {
         factory:factory
       });
       measurements = factory.getHorizontalIntensityMeasurements(reading);
+
+      renderSpy = sinon.spy(view, 'render');
     });
 
     afterEach(function () {
@@ -53,26 +53,24 @@ describe('HorizontalIntensitySummaryViewTest', function () {
 
       for (i = 0, len = measurements.length; i < len; i++) {
         measurements[i].trigger('change');
-        // +2 because view renders during instantiation and loop
-        // index starts at 0
-        expect(renderSpy.callCount).to.equal(i + 2);
+        expect(renderSpy.callCount).to.equal(i + 1);
       }
     });
 
     it('should render when reading horizontal_intensity_valid changes',
         function () {
       reading.trigger('change:horizontal_intensity_valid');
-      expect(renderSpy.callCount).to.equal(2);
+      expect(renderSpy.callCount).to.equal(1);
     });
 
     it('should render when calculator changes', function () {
       calculator.trigger('change');
-      expect(renderSpy.callCount).to.equal(2);
+      expect(renderSpy.callCount).to.equal(1);
     });
 
     it('should not render when reading changes', function () {
       reading.trigger('change');
-      expect(renderSpy.callCount).to.equal(1);
+      expect(renderSpy.callCount).to.equal(0);
     });
   });
 
@@ -91,7 +89,7 @@ describe('HorizontalIntensitySummaryViewTest', function () {
         calculator: calculator
       });
 
-      checkBox = view._el.querySelector('.valid > input');
+      checkBox = view.el.querySelector('.valid > input');
       checkBoxBefore = checkBox.checked;
       checkBoxAfter = checkBoxBefore;
 
