@@ -37,24 +37,20 @@ var _DEFAULTS = {
  */
 var Reading = function (options) {
   var _this,
-      _initialize,
+      _initialize;
 
-      _options;
-
-  _this = Model(options);
+  _this = Model(Util.extend({}, _DEFAULTS, options));
 
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (options) {
+  _initialize = function () {
     var measurements = _this.get('measurements'),
         data = null,
         i = null,
         len = null,
         onChangeHandler = null;
-
-    _options = Util.extend({}, _DEFAULTS, options);
 
     if (measurements === null) {
       measurements = Collection([
@@ -135,7 +131,7 @@ var Reading = function (options) {
     return r;
   };
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };
