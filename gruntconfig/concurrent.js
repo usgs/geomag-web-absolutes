@@ -6,7 +6,10 @@ var concurrent = {
     'browserify:observation',
     'browserify:useradmin',
 
-    'compass:dev',
+    'compass:index',
+    'compass:login',
+    'compass:observation',
+    'compass:useradmin',
 
     'copy:dev'
   ],
