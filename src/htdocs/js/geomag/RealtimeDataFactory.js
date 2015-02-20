@@ -33,13 +33,17 @@ var RealtimeDataFactory = function (options) {
 
       _options;
 
-    _this = Model(options);
 
+  _this = Model(options);
+
+  _initialize = function (options) {
     _options = Util.extend({}, _DEFAULTS, options);
 
     // TODO: this is a hack to deal with
     // https://github.com/usgs/hazdev-webutils/issues/8
     _this._lastcall = null;
+  };
+
 
   /**
    * @param options {Object} observatory attributes.
@@ -67,10 +71,14 @@ var RealtimeDataFactory = function (options) {
         'freq': options.freq
       },
       success: function (data) {
-        options.success(new RealtimeData(data));
+        options.success(RealtimeData(data));
       }
     });
   };
+
+
+  _initialize(options);
+  options = null;
 
   return _this;
 };

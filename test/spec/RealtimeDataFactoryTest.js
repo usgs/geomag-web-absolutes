@@ -120,7 +120,7 @@ describe('Unit tests for the "RealtimeDataFactory" class', function () {
         observatory: ['BOU'],
         channels: ['H','E','Z','F'],
         freq: 'seconds',
-        success: function (data) {
+        success: function (/*data*/) {
           // check returned data
           // expect(data).to.deep.equal(new RealtimeData(TESTDATA));
 
