@@ -58,7 +58,12 @@ var ObservationMetaView = function (options) {
   var _this,
       _initialize,
 
+      _electronicsSelectView,
+      _marksSelectView,
+      _observatorySelectView,
       _options,
+      _pierSelectView,
+      _theodoliteSelectView,
 
       _formatInstrument,
       _formatMark,
@@ -73,17 +78,12 @@ var ObservationMetaView = function (options) {
    */
   _initialize = function (options) {
     var el = _this.el,
-        calculator = _options.calculator,
-        observation = _options.observation,
-        observatories = _options.observatories,
-        observatorySelectView,
-        pierSelectView,
-        marksSelectView,
-        electronicsSelectView,
-        theodoliteSelectView,
+        calculator = options.calculator,
+        observation = options.observation,
+        observatories = options.observatories || Collection(),
         date,
         pierTemperature,
-        idPrefix = IDPREFIX + (++SEQUENCE);
+        idPrefix = _IDPREFIX + (++_SEQUENCE);
 
     _options = Util.extend({}, _DEFAULTS, options);
     _this._calculator = calculator;
@@ -126,31 +126,26 @@ var ObservationMetaView = function (options) {
     ].join('');
 
     // observatory information inputs
-    _this._observatorySelectView = observatorySelectView =
-        new CollectionSelectBox({
+    _observatorySelectView = CollectionSelectBox({
           el: el.querySelector('.observatory'),
           emptyText: 'Loading observatories...'
         });
-    _this._pierSelectView = pierSelectView =
-        new CollectionSelectBox({
+    _pierSelectView = CollectionSelectBox({
           el: el.querySelector('.pier'),
           emptyText: 'Select observatory...',
           formatOption: _formatPier
         });
-    _this._marksSelectView = marksSelectView =
-        new CollectionSelectBox({
+    _marksSelectView = CollectionSelectBox({
           el: el.querySelector('.mark'),
           emptyText: 'Select pier...',
           formatOption: _formatMark
         });
-    _this._electronicsSelectView = electronicsSelectView =
-        new CollectionSelectBox({
+    _electronicsSelectView = CollectionSelectBox({
           el: el.querySelector('.electronics'),
           emptyText: 'Select observatory...',
           formatOption: _formatInstrument
         });
-    _this._theodoliteSelectView = theodoliteSelectView =
-        new CollectionSelectBox({
+    _theodoliteSelectView = CollectionSelectBox({
           el: el.querySelector('.theodolite'),
           emptyText: 'Select observatory...',
           formatOption: _this._formatInstrument
@@ -166,15 +161,15 @@ var ObservationMetaView = function (options) {
     observation.on('change', _this.render, _this);
     pierTemperature.addEventListener('change', _onChange);
 
-    this._observatorySelectView.on('change', function (selected) {
+    _observatorySelectView.on('change', function (selected) {
       // currently selected observatory
       var observatory_id = observation.get('observatory_id');
 
       // disable dependent select boxes until observatory loads
-      pierSelectView.disable();
-      marksSelectView.disable();
-      electronicsSelectView.disable();
-      theodoliteSelectView.disable();
+      _pierSelectView.disable();
+      _marksSelectView.disable();
+      _electronicsSelectView.disable();
+      _theodoliteSelectView.disable();
 
       if (selected === null) {
         // no selection
@@ -204,7 +199,7 @@ var ObservationMetaView = function (options) {
 
     });
 
-    this._pierSelectView.on('change', function (pier) {
+    _pierSelectView.on('change', function (pier) {
       var marks = null,
           mark_id = null,
           mark = null,
@@ -224,11 +219,11 @@ var ObservationMetaView = function (options) {
         }
         // set defaults
         if (observation.get('electronics_id') === null) {
-          electronicsSelectView.selectById(
+          _electronicsSelectView.selectById(
               pier.get('default_electronics_id'));
         }
         if (observation.get('theodolite_id') === null) {
-          theodoliteSelectView.selectById(
+          _theodoliteSelectView.selectById(
               pier.get('default_theodolite_id'));
         }
       }
@@ -238,10 +233,10 @@ var ObservationMetaView = function (options) {
         pierCorrection: pierCorrection,
         trueAzimuthOfMark: trueAzimuthOfMark
       });
-      marksSelectView.setCollection(marks);
+      _marksSelectView.setCollection(marks);
     });
 
-    this._marksSelectView.on('change', function (mark) {
+    _marksSelectView.on('change', function (mark) {
       var mark_id = null,
           trueAzimuthOfMark = 0;
       if (mark !== null) {
@@ -252,21 +247,21 @@ var ObservationMetaView = function (options) {
       calculator.set({trueAzimuthOfMark: trueAzimuthOfMark});
     });
 
-    this._electronicsSelectView.on('change', function (selected) {
+    _electronicsSelectView.on('change', function (selected) {
       observation.set({
         electronics_id: (selected === null ? null : selected.id)
       });
     });
 
-    this._theodoliteSelectView.on('change', function (selected) {
+    _theodoliteSelectView.on('change', function (selected) {
       observation.set({
         theodolite_id: (selected === null ? null : selected.id)
       });
     });
 
     // load observatories collection
-    observatorySelectView.setCollection(observatories);
-    observatorySelectView.selectById(_options.observatoryId);
+    _observatorySelectView.setCollection(observatories);
+    _observatorySelectView.selectById(_options.observatoryId);
 
     // fill in observation inputs
     _this.render();
