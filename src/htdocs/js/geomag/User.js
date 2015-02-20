@@ -1,3 +1,4 @@
+/* global CurrentUser */
 'use strict';
 
 var Model = require('mvc/Model'),
@@ -23,13 +24,9 @@ var _DEFAULTS = {
  * Construct a new User object.
  */
 var User = function (options) {
-  var _this,
+  var _this;
 
-      _options;
-
-    _this = Model(options);
-
-    _options = Util.extend({}, _DEFAULTS, options);
+    _this = Model(Util.extend({}, _DEFAULTS, options));
 
   /**
    * Static access to current user object.

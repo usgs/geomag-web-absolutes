@@ -18,14 +18,11 @@ var _DEFAULTS = {
   * @param  options {Object} observatory attributes.
   */
 var Mark = function (options) {
-  var _this,
-      _intitialize,
+  var _this;
 
-      _options;
 
-  _this = Model(options);
+  _this = Model(Util.extend({}, _DEFAULTS, options));
 
-  _options = Util.extend({}, _DEFAULTS, options);
 
   return _this;
 };

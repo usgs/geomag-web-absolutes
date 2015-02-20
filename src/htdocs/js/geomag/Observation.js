@@ -95,7 +95,7 @@ var Observation = function (options) {
   };
 
   _initialize(options);
-  options = null
+  options = null;
   return _this;
 };
 

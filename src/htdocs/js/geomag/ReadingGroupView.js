@@ -3,7 +3,6 @@
 var ObservationBaselineCalculator =
         require('geomag/ObservationBaselineCalculator'),
     ObservationSummaryView = require('geomag/ObservationSummaryView'),
-    Reading = require('geomag/Reading'),
     ReadingView = require('geomag/ReadingView'),
     TabList = require('tablist/TabList'),
     Util = require('util/Util'),

@@ -1,3 +1,4 @@
+/* global MOUNT_PATH */
 'use strict';
 
 var Collection = require('mvc/Collection'),

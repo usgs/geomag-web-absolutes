@@ -119,8 +119,8 @@ var UserAdminView = function (options) {
                 classes: ['green'],
                 text: _this._user.get('id') ? 'Update' : 'Create',
                 callback: function () {
-                  __this._editview.updateModel();
-                  __this._onUserSave();
+                  _this._editview.updateModel();
+                  _this._onUserSave();
                 }
               },
               {

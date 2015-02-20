@@ -6,6 +6,7 @@ var copy = {
   dev: {
     cwd: config.src,
     dest: config.build + '/' + config.src,
+    expand: true,
     src: [
       'conf/**/*',
 
@@ -20,6 +21,7 @@ var copy = {
   test: {
     cwd: config.test,
     dest: config.build + '/' + config.test,
+    expand: true,
     src: [
       'test.html',
       'lib/**/*'

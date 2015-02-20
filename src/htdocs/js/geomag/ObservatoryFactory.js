@@ -24,7 +24,6 @@ var _DEFAULTS = {
   observationPublishUrl: mountPath + '/publish.php'
 };
 
-
 /**
  * Utility function to select a collection item based on item id.
  *
@@ -48,6 +47,151 @@ var _selectById = function (collection, id) {
       collection.deselect();
     }
   }
+};
+
+
+/**
+ * Inner class used for observatory summary objects by getObservatories().
+ *
+ * Adds getObservatory() method that uses factory to load observatory detail.
+ *
+ * @param factory {ObservatoryFactory}
+ *        the factory that can retrieve the observatory detail.
+ * @param attributes {Object}
+ *        Observatory summary attributes.
+ */
+var ObservatorySummary = function (factory, attributes) {
+  var _this,
+      _initialize,
+
+      _factory;
+
+  _this = Observatory(attributes);
+  _initialize = function (factory) {
+    _factory = factory;
+  };
+
+  /**
+   * Get the observatory detail.
+   *
+   * @param options {Object}
+   *        options for getObservatory method.
+   *        id is filled in automatically based on Observatory ID.
+   * @param options.success {Function(observatory)}
+   *        called with loaded observatory.
+   * @param options.error {Function()}
+   *        called when error loading observatory.
+   */
+  _this.getObservatory = function (options) {
+    options.id = _this.id;
+    _this._factory.getObservatory(options);
+  };
+
+  _initialize(factory);
+  factory = null;
+  attributes = null;
+  return _this;
+};
+
+
+/**
+ * Inner class used for observation summary objects by getObservatory().
+ *
+ * Adds getObservation() method that uses factory to load observation detail.
+ *
+ * @param factory {ObservatoryFactory}
+ *        the factory that can retrieve the observation detail.
+ * @param attributes {Object}
+ *        Observation summary attributes.
+ */
+var ObservationSummary = function (factory, attributes) {
+  var _this,
+      _initialize,
+
+      _factory;
+
+  _this = Observation(attributes);
+  _initialize = function (factory) {
+    _factory = factory;
+  };
+
+  /**
+   * Get the observation detail.
+   *
+   * @param options {Object}
+   *        options for getObservation method.
+   *        id is filled in automatically based on Observation ID.
+   * @param options.success {Function(observation)}
+   *        called with loaded observation.
+   * @param options.error {Function()}
+   *        called when error loading observation.
+   */
+  _this.getObservation = function (options) {
+    options.id = _this.id;
+    _this._factory.getObservation(options);
+  };
+
+  _initialize(factory);
+  factory = null;
+  attributes = null;
+  return _this;
+};
+
+
+/**
+ * Inner class used for observation detail objects by getObservation().
+ *
+ * Adds getObservatory() method that uses factory to load observatory detail.
+ *
+ * @param factory {ObservatoryFactory}
+ *        the factory that can retrieve the observation detail.
+ * @param attributes {Object}
+ *        Observation detail attributes.
+ */
+var ObservationDetail = function (factory, attributes) {
+  var _this,
+      _initialize,
+
+      _factory;
+
+  _this = Observation(attributes);
+  _initialize = function (factory) {
+    _factory = factory;
+    // _observatories = null;
+    // _observatory = null;
+  };
+
+  /**
+   * Get the observatory detail.
+   *
+   * @param options {Object}
+   *        options for getObservatory method.
+   *        id is filled in automatically based on Observatory ID.
+   * @param options.success {Function(observatory)}
+   *        called with loaded observatory.
+   * @param options.error {Function()}
+   *        called when error loading observatory.
+   */
+  _this.getObservatory = function (options) {
+    _this._factory.getObservatory(Util.extend({}, options,
+        {id: _this.get('observatory_id')}));
+  };
+
+  /**
+   * Get all observatories.
+   *
+   * @param options {Object}
+   *        options for the getObservatories method.
+   * @return {[type]}         [description]
+   */
+  _this.getObservatories = function (options) {
+    _this._factory.getObservatories(options);
+  };
+
+  _initialize(factory);
+  factory = null;
+  attributes = null;
+  return _this;
 };
 
 
@@ -672,151 +816,5 @@ var ObservatoryFactory = function (options) {
   return _this;
 };
 
-
-  /**
-   * Inner class used for observatory summary objects by getObservatories().
-   *
-   * Adds getObservatory() method that uses factory to load observatory detail.
-   *
-   * @param factory {ObservatoryFactory}
-   *        the factory that can retrieve the observatory detail.
-   * @param attributes {Object}
-   *        Observatory summary attributes.
-   */
-var ObservatorySummary = function (factory, attributes) {
-  var _this,
-      _initialize,
-
-      _factory;
-
-  _this = Observatory(attributes);
-  _initialize = function (factory) {
-    _factory = factory;
-  };
-
-  /**
-   * Get the observatory detail.
-   *
-   * @param options {Object}
-   *        options for getObservatory method.
-   *        id is filled in automatically based on Observatory ID.
-   * @param options.success {Function(observatory)}
-   *        called with loaded observatory.
-   * @param options.error {Function()}
-   *        called when error loading observatory.
-   */
-  _this.getObservatory = function (options) {
-    options.id = _this.id;
-    _this._factory.getObservatory(options);
-  };
-
-  _initialize(factory);
-  factory = null;
-  attributes = null;
-  return _this;
-};
-
-
-/**
-   * Inner class used for observation summary objects by getObservatory().
-   *
-   * Adds getObservation() method that uses factory to load observation detail.
-   *
-   * @param factory {ObservatoryFactory}
-   *        the factory that can retrieve the observation detail.
-   * @param attributes {Object}
-   *        Observation summary attributes.
-   */
-var ObservationSummary = function (factory, attributes) {
-  var _this,
-      _initialize,
-
-      _factory;
-
-  _this = Observation(attributes);
-  _initialize = function (factory) {
-    _factory = factory;
-  };
-
-  /**
-   * Get the observation detail.
-   *
-   * @param options {Object}
-   *        options for getObservation method.
-   *        id is filled in automatically based on Observation ID.
-   * @param options.success {Function(observation)}
-   *        called with loaded observation.
-   * @param options.error {Function()}
-   *        called when error loading observation.
-   */
-  _this.getObservation = function (options) {
-    options.id = _this.id;
-    _this._factory.getObservation(options);
-  };
-
-  _initialize(factory);
-  factory = null;
-  attributes = null;
-  return _this;
-};
-
-
-/**
- * Inner class used for observation detail objects by getObservation().
- *
- * Adds getObservatory() method that uses factory to load observatory detail.
- *
- * @param factory {ObservatoryFactory}
- *        the factory that can retrieve the observation detail.
- * @param attributes {Object}
- *        Observation detail attributes.
- */
-var ObservationDetail = function (factory, attributes) {
-  var _this,
-      _initialize,
-
-      _factory,
-      // _observatories,
-      // _observatory;
-
-  _this = Observation(attributes);
-  _initialize = function (factory) {
-    _factory = factory;
-    // _observatories = null;
-    // _observatory = null;
-  };
-
-  /**
-   * Get the observatory detail.
-   *
-   * @param options {Object}
-   *        options for getObservatory method.
-   *        id is filled in automatically based on Observatory ID.
-   * @param options.success {Function(observatory)}
-   *        called with loaded observatory.
-   * @param options.error {Function()}
-   *        called when error loading observatory.
-   */
-  _this.getObservatory = function (options) {
-    _this._factory.getObservatory(Util.extend({}, options,
-        {id: _this.get('observatory_id')}));
-  };
-
-  /**
-   * Get all observatories.
-   *
-   * @param options {Object}
-   *        options for the getObservatories method.
-   * @return {[type]}         [description]
-   */
-  _this.getObservatories = function (options) {
-    _this._factory.getObservatories(options);
-  };
-
-  _initialize(factory);
-  factory = null;
-  attributes = null;
-  return _this;
-};
 
 module.exports = ObservatoryFactory;

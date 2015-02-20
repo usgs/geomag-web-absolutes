@@ -1,7 +1,6 @@
 'use strict';
 
 var Format = require('geomag/Formatter'),
-    Measurement = require('geomag/Measurement'),
     ObservatoryFactory = require('geomag/ObservatoryFactory'),
     Util = require('util/Util'),
     View = require('mvc/View');

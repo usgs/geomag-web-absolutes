@@ -1,7 +1,6 @@
 'use strict';
 
 var Collection = require('mvc/Collection'),
-    Observation = require('geomag/Observation'),
     ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
     ObservationMetaView = require('geomag/ObservationMetaView'),
     ObservatoryFactory = require('geomag/ObservatoryFactory'),
@@ -10,8 +9,7 @@ var Collection = require('mvc/Collection'),
     RealtimeDataFactory = require('geomag/RealtimeDataFactory'),
     User = require('geomag/User'),
     Util = require('util/Util'),
-    View = require('mvc/View'),
-    Xhr = require('util/Xhr');
+    View = require('mvc/View');
 
 
 var _DEFAULTS = {
@@ -21,6 +19,44 @@ var _DEFAULTS = {
   realtimeDataFactory: RealtimeDataFactory()
 };
 
+
+/**
+ * Callback to show publish erros in modal dialog.
+ *
+ * @param status {Integer}
+ *        http error status code.
+ * @param xhr {XMLHttpRequest}
+ *        XHR object with error information.
+ */
+var __saveError = function (status, xhr) {
+  (ModalView(
+    '<h3>Error</h3><p>' + xhr.response + '</p>',
+    {
+      title: 'Save Failed',
+      classes: ['modal-error'],
+      closable: true
+    }
+  )).show();
+};
+
+/**
+ * Callback to show publish success in modal dialog.
+ *
+ * @param status {Integer}
+ *        http error status code.
+ * @param xhr {XMLHttpRequest}
+ *        XHR object with error information.
+ */
+var __saveSuccess = function () {
+  (ModalView(
+    '<h3>Success!</h3><p>Your observation has been saved.</p>',
+    {
+      title: 'Save Successful',
+      classes: ['modal-success'],
+      closable: true
+    }
+  )).show();
+};
 
 /**
  * Construct a new ObservationView.
@@ -62,8 +98,8 @@ var ObservationView = function (options) {
         realtimeDataFactory;
 
     _options = Util.extend({}, _DEFAULTS, options);
-    factory = _options.factory,
-    calculator = _options.baselineCalculator,
+    factory = _options.factory;
+    calculator = _options.baselineCalculator;
     realtimeDataFactory = _options.realtimeDataFactory;
 
     el.innerHTML = [
@@ -413,82 +449,6 @@ var ObservationView = function (options) {
       calculator: calculator,
       observatoryId: parseInt(window.location.hash.replace('#', ''), 10)
     });
-  };
-
-  /**
-   * Callback to show publish errors in modal dialog.
-   *
-   * @param status {Integer}
-   *        http error status code.
-   * @param xhr {XMLHttpRequest}
-   *        XHR object with error information.
-   */
-  __publishError = function (status, xhr) {
-    (ModalView(
-      '<h3>Error</h3><p>' + xhr.response + '</p>',
-      {
-        title: 'Publish Failed',
-        classes: ['modal-error'],
-        closable: true
-      }
-    )).show();
-  };
-
-  /**
-   * Callback to show publish success in modal dialog.
-   *
-   * @param status {Integer}
-   *        http error status code.
-   * @param xhr {XMLHttpRequest}
-   *        XHR object with error information.
-   */
-  __publishSuccess = function () {
-    (ModalView(
-      '<h3>Success!</h3><p>Your observation has been published.</p>',
-      {
-        title: 'Publish Successful',
-        classes: ['modal-success'],
-        closable: true
-      }
-    )).show();
-  };
-
-  /**
-   * Callback to show publish erros in modal dialog.
-   *
-   * @param status {Integer}
-   *        http error status code.
-   * @param xhr {XMLHttpRequest}
-   *        XHR object with error information.
-   */
-  __saveError = function (status, xhr) {
-    (ModalView(
-      '<h3>Error</h3><p>' + xhr.response + '</p>',
-      {
-        title: 'Save Failed',
-        classes: ['modal-error'],
-        closable: true
-      }
-    )).show();
-  };
-
-  /**
-   * Callback to show publish success in modal dialog.
-   *
-   * @param status {Integer}
-   *        http error status code.
-   * @param xhr {XMLHttpRequest}
-   *        XHR object with error information.
-   */
-  __saveSuccess = function () {
-    (ModalView(
-      '<h3>Success!</h3><p>Your observation has been saved.</p>',
-      {
-        title: 'Save Successful',
-        classes: ['modal-success'],
-        closable: true
-      }
-    )).show();
   };
 
   _updateErrorCount = function () {

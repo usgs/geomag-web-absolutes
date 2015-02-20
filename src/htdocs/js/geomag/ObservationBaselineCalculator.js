@@ -7,7 +7,6 @@ var BaselineCalculator = require('geomag/BaselineCalculator'),
 
 
 var _DEFAULTS = {
-  calculator: new BaselineCalculator(),
   // model options
   pierCorrection: 0,
   trueAzimuthOfMark: 0
@@ -26,14 +25,14 @@ var ObservationBaselineCalculator = function (options) {
   var _this,
       _initialize,
 
-      _calculator,
-      _options;
+      _calculator;
 
-    _this = Model(options);
-    _options = Util.extend({}, _DEFAULTS, options);
-    // keep calculator outside model
-    _calculator = _options.calculator;
-    // delete options.calculator;
+    _this = Model(Util.extend({}, _DEFAULTS, options));
+
+    _initialize = function (options) {
+      // keep calculator outside model
+      _calculator = options.calculator || BaselineCalculator();
+    };
 
   /**
    * D Baseline
@@ -467,6 +466,8 @@ var ObservationBaselineCalculator = function (options) {
     );
   };
 
+  _initialize(options);
+  options = null;
   return _this;
 };
 

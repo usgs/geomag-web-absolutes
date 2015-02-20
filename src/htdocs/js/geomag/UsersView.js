@@ -1,7 +1,7 @@
 'use strict';
 
 var CollectionTable = require('mvc/CollectionTable'),
-    Format = require('geomag/Formatter'),
+    Formatter = require('geomag/Formatter'),
     Util = require('util/Util');
 
 

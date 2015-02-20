@@ -18,7 +18,7 @@ if ($CURRENT_USER === null) {
 } else {
   // logged in, define user for js.
   $FOOT = '<script>' .
-      'define("CurrentUser", ' . json_encode($CURRENT_USER) . ');' .
+      'var CurrentUser = ' . json_encode($CURRENT_USER) . ';' .
       '</script>' .
       (isset($FOOT) ? $FOOT : '');
 }

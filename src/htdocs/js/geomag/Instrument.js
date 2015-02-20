@@ -15,14 +15,11 @@ var _DEFAULTS = {
 
 
 var Instrument = function (attributes) {
-  var _this,
-      _initialize,
+  var _this;
 
-      _attributes;
 
-  _this = Model(attributes);
+  _this = Model(Util.extend({}, _DEFAULTS, attributes));
 
-  _attributes = Util.extend({}, _DEFAULTS, attributes);
 
   return _this;
 };

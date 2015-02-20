@@ -22,8 +22,13 @@ var UserFactory = function (options) {
 
       _options;
 
+
   _this = {};
-  _options = Util.extend({}, _DEFAULTS, options);
+
+  _initialize = function (options) {
+    _options = Util.extend({}, _DEFAULTS, options);
+  };
+
 
   _this.destroy = function(options) {
     options.success();
@@ -57,8 +62,6 @@ var UserFactory = function (options) {
       },
       error: options.error || function () {}
     });
-
-    console.log('create');
   };
 
   _this.update = function(options) {
@@ -66,6 +69,8 @@ var UserFactory = function (options) {
     console.log('create');
   };
 
+  _initialize(options);
+  options = null;
   return _this;
 };
 

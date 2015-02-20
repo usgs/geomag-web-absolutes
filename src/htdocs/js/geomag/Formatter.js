@@ -13,26 +13,6 @@ var _units = function (units) {
 };
 
 /**
- * Degrees, as a temperature
- *
- * @param temperature {Number} Decimal degrees
- * @param digits {Integer} Numbers after decimal place
- *
- * @return formatted number with units
- *    {Float} Temperature degrees with (digits) decimal places
- */
-var celsius = function (temperature, digits) {
-  if (temperature === null) {
-    return '&ndash;';
-  }
-
-  if (typeof digits === 'undefined') {
-    digits = _DEFAULT_DIGITS;
-  }
-  return rawCelsius(temperature.toFixed(digits));
-};
-
-/**
  * Date to String
  *
  * @param time {Date|Integer}
@@ -70,270 +50,6 @@ var dateTime = function (time) {
   }
 
   return date(time) + ' ' + time(time);
-};
-
-/**
- * Decimal angle to degrees, minutes, seconds
- *
- * @param angle {Number} Decimal degrees
- *
- * @return {Array of Integers}
- *
- * @see MeasurementViewTest#degree_inversion_check
- */
-var decimalToDms = function (angle) {
-  var degrees = parseInt(angle, 10),
-      minutes = (angle - degrees) * 60,
-      seconds = Math.round((minutes - parseInt(minutes, 10)) * 60, 10);
-
-  minutes = parseInt(minutes, 10);
-
-  // Correct any errors due to floating point
-  if (seconds >= 60) {
-    minutes += parseInt(seconds / 60, 10);
-    seconds = seconds % 60;
-  }
-
-  return [degrees, minutes, seconds];
-};
-
-/**
- * Degrees, as an angle
- *
- * @param angle {Number} Decimal degrees
- * @param digits {Integer} Numbers after decimal place
- *
- * @return formatted number with units
- *    {Float} Angle degrees with (digits) decimal places
- */
-var degrees = function (angle, digits) {
-  if (typeof digits === 'undefined') {
-    digits = _DEFAULT_DIGITS;
-  }
-  if (isNaN(angle)){
-    return angle;
-  }
-
-  return rawDegrees(angle.toFixed(digits));
-};
-
-/**
- * Degrees and Degrees Minutes, as an angle
- *
- * @param angle {Number} Decimal degrees
- * @param digits {Integer} Numbers after decimal place
- *
- * @return 3 formatted numbers with units
- *    {Float} Decimal angle degrees with (digits) decimal places
- *    {Int} Angle degrees
- *    {Float} Decimal angle minutes with (digits) decimal places
- */
-var degreesAndDegreesMinutes = function (angle, digits) {
-  var buf = [];
-
-  if (typeof digits === 'undefined') {
-    digits = _DEFAULT_DIGITS;
-  }
-
-  buf.push(
-      degrees(angle, digits),
-      '<span class="degrees-minutes">',
-        degreesMinutes(angle, digits),
-      '</span>');
-
-  return buf.join('');
-};
-
-/**
- * Degrees Minutes, as an angle
- *
- * @param angle {Number} Decimal degrees
- * @param digits {Integer} Numbers after decimal place
- *
- * @return 2 formatted numbers with units separated by a space
- *    {Int} Angle degrees
- *    {Float} Decimal angle minutes with (digits) decimal places
- */
-var degreesMinutes = function (angle, digits) {
-  var buf = [],
-      degrees,
-      localMinutes;
-
-  if (typeof digits === 'undefined') {
-    digits = _DEFAULT_DIGITS;
-  }
-
-  degrees = parseInt(angle, 10);
-  localMinutes = (angle - degrees) * 60;
-
-  if (isNaN(degrees) || isNaN(localMinutes)) {
-    buf.push('&ndash;');
-  } else {
-    buf.push(
-        rawDegrees(degrees),
-        '&nbsp;',
-        minutes(localMinutes, digits));
-  }
-  return buf.join('');
-};
-
-/**
- * Degrees, minutes, seconds to decimal angle
- *
- * @param degs {Number}
- *        The degree portion of the angle value. If this is a decimal,
- *        then the fractional portion is converted to minutes.
- * @param mins {Number}
- *        The minutes portion of the angle value. If this is a decimal,
- *        then the fractional portion is converted to seconds.
- * @param secs {Integer}
- *        The seconds portion of the angle value.
- *
- * @return {Decimal}
- *        The decimal degrees for the given DMS value.
- *
- * @see MeasurementViewTest#degree_inversion_check
- */
-var dmsToDecimal = function (degs, mins, secs) {
-  return (parseInt(secs, 10) / 3600) + (parseFloat(mins) / 60) +
-      parseFloat(degs);
-};
-
-/**
- * Degrees, as a temperature
- *
- * @param temperature {Number} Decimal degrees
- * @param digits {Integer} Numbers after decimal place
- *
- * @return formatted number with units
- *    {Float} Temperature degrees with (digits) decimal places
- */
-var fahrenheit = function (temperature, digits) {
-  if (temperature === null) {
-    return '&ndash;';
-  }
-
-  if (typeof digits === 'undefined') {
-    digits = _DEFAULT_DIGITS;
-  }
-
-  return rawCelsius(temperature.toFixed(digits));
-};
-
-/**
- * Minutes, as an angle
- *
- * @param angle {Number} Decimal minutes
- * @param digits {Integer} Numbers after decimal place
- *
- * @return formatted number with units
- *    {Float} Angle minutes with (digits) decimal places
- */
-var minutes = function (angle, digits) {
-  if (typeof digits === 'undefined') {
-    digits = _DEFAULT_DIGITS;
-  }
-  if (isNaN(angle)){
-    return angle;
-  }
-
-  if (isNaN(angle)) {
-    return '&ndash;';
-  } else {
-    return rawMinutes(angle.toFixed(digits));
-  }
-};
-
-/**
- * nT (nano-teslas)
- *
- * @param {Number} nT
- * @param digits {Integer} Numbers after decimal place
- *
- * @return formatted number with units
- *    {Float} nT with (digits) decimal places
- */
-var nanoteslas = function (nT, digits) {
-  if (typeof digits === 'undefined') {
-    digits = _DEFAULT_DIGITS;
-  }
-
-  if (isNaN(nT)) {
-    return '&ndash;';
-  } else {
-    return rawNanoteslas(nT.toFixed(digits));
-  }
-};
-
-/**
- * Parse a date string into an epoch timestamp.
- *
- * @param date {String}
- *        UTC date in format 'YYYY-MM-DD'.
- * @return {Number} corresponding epoch timestamp (for 00:00:00), or null.
- */
-var parseDate = function (date) {
-  if (date !== '') {
-    var parts = date.split('-');
-    return Date.UTC(parseInt(parts[0], 10),
-        parseInt(parts[1], 10) - 1,
-        parseInt(parts[2], 10));
-  }
-  return null;
-};
-
-/**
- * Relative Time
- *
- * @param time {String}
- *      The formatted time string to parse. The date for the returned time
- *      is inherited from the observation "begin" attribute.
- * @param offset {Date|Number}
- *      Base time as Date object or millisecond epoch time stamp.
- *      Default is new date if not specified.
- *      Only uses UTC year month and day from this offset.
- *
- * @return {Integer}
- *      The millisecond timestamp since the epoch.
- */
-var parseRelativeTime = function (relativeTime, offset) {
-  var timeString = relativeTime.replace(/[^\d]/g, ''),
-      calculatedTime = 0,
-      hours = 0,
-      minutes = 0,
-      seconds = 0;
-
-  // Offset should default to 0 if it doesn't exist
-  if (typeof offset === 'undefined' || offset === null) {
-    offset = new Date();
-  } else if (!(offset instanceof Date)) {
-    offset = new Date(offset);
-  }
-
-  // Parse time string
-  if (timeString.length === 4) {
-    // HHMM
-    hours = parseInt(timeString.substr(0, 2), 10);
-    minutes = parseInt(timeString.substr(2, 2), 10);
-  } else if (timeString.length === 5) {
-    // HMMSS
-    hours = parseInt(timeString.substr(0, 1), 10);
-    minutes = parseInt(timeString.substr(1, 2), 10);
-    seconds = parseInt(timeString.substr(3, 2), 10);
-  } else if (timeString.length === 6) {
-    // HHMMSS
-    hours = parseInt(timeString.substr(0, 2), 10);
-    minutes = parseInt(timeString.substr(2, 2), 10);
-    seconds = parseInt(timeString.substr(4, 2), 10);
-  } else {
-    throw new Error('Unexpected time string');
-  }
-
-  calculatedTime = Date.UTC(offset.getUTCFullYear(),
-        offset.getUTCMonth(), offset.getUTCDate(),
-        hours, minutes, seconds, 0);
-
-  return calculatedTime;
 };
 
 /**
@@ -437,6 +153,290 @@ var rawNanoteslas = function (nT) {
       '</span>');
 
   return buf.join('');
+};
+
+/**
+ * Decimal angle to degrees, minutes, seconds
+ *
+ * @param angle {Number} Decimal degrees
+ *
+ * @return {Array of Integers}
+ *
+ * @see MeasurementViewTest#degree_inversion_check
+ */
+var decimalToDms = function (angle) {
+  var degrees = parseInt(angle, 10),
+      minutes = (angle - degrees) * 60,
+      seconds = Math.round((minutes - parseInt(minutes, 10)) * 60, 10);
+
+  minutes = parseInt(minutes, 10);
+
+  // Correct any errors due to floating point
+  if (seconds >= 60) {
+    minutes += parseInt(seconds / 60, 10);
+    seconds = seconds % 60;
+  }
+
+  return [degrees, minutes, seconds];
+};
+
+/**
+ * Degrees, as an angle
+ *
+ * @param angle {Number} Decimal degrees
+ * @param digits {Integer} Numbers after decimal place
+ *
+ * @return formatted number with units
+ *    {Float} Angle degrees with (digits) decimal places
+ */
+var degrees = function (angle, digits) {
+  if (typeof digits === 'undefined') {
+    digits = _DEFAULT_DIGITS;
+  }
+  if (isNaN(angle)){
+    return angle;
+  }
+
+  return rawDegrees(angle.toFixed(digits));
+};
+
+/**
+ * Minutes, as an angle
+ *
+ * @param angle {Number} Decimal minutes
+ * @param digits {Integer} Numbers after decimal place
+ *
+ * @return formatted number with units
+ *    {Float} Angle minutes with (digits) decimal places
+ */
+var minutes = function (angle, digits) {
+  if (typeof digits === 'undefined') {
+    digits = _DEFAULT_DIGITS;
+  }
+  if (isNaN(angle)){
+    return angle;
+  }
+
+  if (isNaN(angle)) {
+    return '&ndash;';
+  } else {
+    return rawMinutes(angle.toFixed(digits));
+  }
+};
+
+/**
+ * Degrees Minutes, as an angle
+ *
+ * @param angle {Number} Decimal degrees
+ * @param digits {Integer} Numbers after decimal place
+ *
+ * @return 2 formatted numbers with units separated by a space
+ *    {Int} Angle degrees
+ *    {Float} Decimal angle minutes with (digits) decimal places
+ */
+var degreesMinutes = function (angle, digits) {
+  var buf = [],
+      degrees,
+      localMinutes;
+
+  if (typeof digits === 'undefined') {
+    digits = _DEFAULT_DIGITS;
+  }
+
+  degrees = parseInt(angle, 10);
+  localMinutes = (angle - degrees) * 60;
+
+  if (isNaN(degrees) || isNaN(localMinutes)) {
+    buf.push('&ndash;');
+  } else {
+    buf.push(
+        rawDegrees(degrees),
+        '&nbsp;',
+        minutes(localMinutes, digits));
+  }
+  return buf.join('');
+};
+
+/**
+ * Degrees and Degrees Minutes, as an angle
+ *
+ * @param angle {Number} Decimal degrees
+ * @param digits {Integer} Numbers after decimal place
+ *
+ * @return 3 formatted numbers with units
+ *    {Float} Decimal angle degrees with (digits) decimal places
+ *    {Int} Angle degrees
+ *    {Float} Decimal angle minutes with (digits) decimal places
+ */
+var degreesAndDegreesMinutes = function (angle, digits) {
+  var buf = [];
+
+  if (typeof digits === 'undefined') {
+    digits = _DEFAULT_DIGITS;
+  }
+
+  buf.push(
+      degrees(angle, digits),
+      '<span class="degrees-minutes">',
+        degreesMinutes(angle, digits),
+      '</span>');
+
+  return buf.join('');
+};
+
+/**
+ * Degrees, minutes, seconds to decimal angle
+ *
+ * @param degs {Number}
+ *        The degree portion of the angle value. If this is a decimal,
+ *        then the fractional portion is converted to minutes.
+ * @param mins {Number}
+ *        The minutes portion of the angle value. If this is a decimal,
+ *        then the fractional portion is converted to seconds.
+ * @param secs {Integer}
+ *        The seconds portion of the angle value.
+ *
+ * @return {Decimal}
+ *        The decimal degrees for the given DMS value.
+ *
+ * @see MeasurementViewTest#degree_inversion_check
+ */
+var dmsToDecimal = function (degs, mins, secs) {
+  return (parseInt(secs, 10) / 3600) + (parseFloat(mins) / 60) +
+      parseFloat(degs);
+};
+
+/**
+ * Degrees, as a temperature
+ *
+ * @param temperature {Number} Decimal degrees
+ * @param digits {Integer} Numbers after decimal place
+ *
+ * @return formatted number with units
+ *    {Float} Temperature degrees with (digits) decimal places
+ */
+var celsius = function (temperature, digits) {
+  if (temperature === null) {
+    return '&ndash;';
+  }
+
+  if (typeof digits === 'undefined') {
+    digits = _DEFAULT_DIGITS;
+  }
+  return rawCelsius(temperature.toFixed(digits));
+};
+
+/**
+ * Degrees, as a temperature
+ *
+ * @param temperature {Number} Decimal degrees
+ * @param digits {Integer} Numbers after decimal place
+ *
+ * @return formatted number with units
+ *    {Float} Temperature degrees with (digits) decimal places
+ */
+var fahrenheit = function (temperature, digits) {
+  if (temperature === null) {
+    return '&ndash;';
+  }
+
+  if (typeof digits === 'undefined') {
+    digits = _DEFAULT_DIGITS;
+  }
+
+  return rawCelsius(temperature.toFixed(digits));
+};
+
+/**
+ * nT (nano-teslas)
+ *
+ * @param {Number} nT
+ * @param digits {Integer} Numbers after decimal place
+ *
+ * @return formatted number with units
+ *    {Float} nT with (digits) decimal places
+ */
+var nanoteslas = function (nT, digits) {
+  if (typeof digits === 'undefined') {
+    digits = _DEFAULT_DIGITS;
+  }
+
+  if (isNaN(nT)) {
+    return '&ndash;';
+  } else {
+    return rawNanoteslas(nT.toFixed(digits));
+  }
+};
+
+/**
+ * Parse a date string into an epoch timestamp.
+ *
+ * @param date {String}
+ *        UTC date in format 'YYYY-MM-DD'.
+ * @return {Number} corresponding epoch timestamp (for 00:00:00), or null.
+ */
+var parseDate = function (date) {
+  if (date !== '') {
+    var parts = date.split('-');
+    return Date.UTC(parseInt(parts[0], 10),
+        parseInt(parts[1], 10) - 1,
+        parseInt(parts[2], 10));
+  }
+  return null;
+};
+
+/**
+ * Relative Time
+ *
+ * @param time {String}
+ *      The formatted time string to parse. The date for the returned time
+ *      is inherited from the observation "begin" attribute.
+ * @param offset {Date|Number}
+ *      Base time as Date object or millisecond epoch time stamp.
+ *      Default is new date if not specified.
+ *      Only uses UTC year month and day from this offset.
+ *
+ * @return {Integer}
+ *      The millisecond timestamp since the epoch.
+ */
+var parseRelativeTime = function (relativeTime, offset) {
+  var timeString = relativeTime.replace(/[^\d]/g, ''),
+      calculatedTime = 0,
+      hours = 0,
+      minutes = 0,
+      seconds = 0;
+
+  // Offset should default to 0 if it doesn't exist
+  if (typeof offset === 'undefined' || offset === null) {
+    offset = new Date();
+  } else if (!(offset instanceof Date)) {
+    offset = new Date(offset);
+  }
+
+  // Parse time string
+  if (timeString.length === 4) {
+    // HHMM
+    hours = parseInt(timeString.substr(0, 2), 10);
+    minutes = parseInt(timeString.substr(2, 2), 10);
+  } else if (timeString.length === 5) {
+    // HMMSS
+    hours = parseInt(timeString.substr(0, 1), 10);
+    minutes = parseInt(timeString.substr(1, 2), 10);
+    seconds = parseInt(timeString.substr(3, 2), 10);
+  } else if (timeString.length === 6) {
+    // HHMMSS
+    hours = parseInt(timeString.substr(0, 2), 10);
+    minutes = parseInt(timeString.substr(2, 2), 10);
+    seconds = parseInt(timeString.substr(4, 2), 10);
+  } else {
+    throw new Error('Unexpected time string');
+  }
+
+  calculatedTime = Date.UTC(offset.getUTCFullYear(),
+        offset.getUTCMonth(), offset.getUTCDate(),
+        hours, minutes, seconds, 0);
+
+  return calculatedTime;
 };
 
 /**
