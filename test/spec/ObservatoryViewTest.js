@@ -7,10 +7,13 @@ var observatories = require('./observatories'),
 
 
 var expect = chai.expect;
-var stub, ignore;
+
+var stub;
+
 var DEFAULTS = {
   observatoryId: null
 };
+
 var observatoryView;
 
 var getChangeEvent = function () {
@@ -26,41 +29,25 @@ describe('ObservatoryView Unit Tests', function () {
       options.success(observatories);
     });
 
-    ignore = sinon.stub(ObservatoryView.prototype, '_getObservations',
-        function () {
-      // Do nothing.
-    });
-
     observatoryView = ObservatoryView(DEFAULTS);
   });
 
   after(function() {
     window.location.hash = '';
     stub.restore();
-    ignore.restore();
-  });
-
-  describe('Constructor', function () {
-
-    it('Can be defined', function () {
-      /* jshint -W030 */
-      expect(ObservatoryView).to.not.be.undefined;
-      /* jshint +W030 */
-    });
-
   });
 
 
   describe('Observatory details', function () {
 
     it('can get all observatories', function () {
-      var all = observatoryView._el.querySelector('.observatories');
+      var all = observatoryView.el.querySelector('.observatories');
           observatories = all.querySelectorAll('option');
       expect(observatories.length).to.equal(15);
     });
 
     it('can select an observatory by default', function () {
-      var all = observatoryView._el.querySelector('.observatories'),
+      var all = observatoryView.el.querySelector('.observatories'),
           selected = all.value;
       expect(selected).to.equal('observatory_2');
     });
@@ -71,14 +58,14 @@ describe('ObservatoryView Unit Tests', function () {
   describe('Event bindings', function () {
 
     it('can select a default observatory', function () {
-      var container = observatoryView._el,
+      var container = observatoryView.el,
           select = container.querySelector('.observatories'),
           option = container.querySelector('#observatory_2');
       expect(option.value).to.equal(select.value);
     });
 
     it('can generate a hash change onClick', function () {
-      var select = observatoryView._el.querySelector('.observatories'),
+      var select = observatoryView.el.querySelector('.observatories'),
           hashBefore = window.location.hash,
           hashAfter = hashBefore;
 

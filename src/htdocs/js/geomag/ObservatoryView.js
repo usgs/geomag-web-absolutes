@@ -45,7 +45,7 @@ var ObservatoryView = function (options) {
         hash;
 
     _options = Util.extend({}, _DEFAULTS, options);
-    id = _options.observatoryId,
+    id = _options.observatoryId;
     hash = _getHash();
 
     // Overview of a single observatory
@@ -147,7 +147,7 @@ var ObservatoryView = function (options) {
         var hash = _getHash();
 
         if (_this._observatorySelect) {
-          _this._buildObservatoryList(observatories);
+          _buildObservatoryList(observatories);
 
           if (!hash) {
             if (window.location.replace) {

@@ -452,7 +452,7 @@ var ObservatoryFactory = function (options) {
     Xhr.ajax({
       url: _options.observatorySummaryUrl,
       success: function (data) {
-        options.success(_this.getObservatories(data));
+        options.success(_getObservatories(data));
       },
       error: options.error || function () {}
     });

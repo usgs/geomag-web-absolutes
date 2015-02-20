@@ -42,15 +42,18 @@ var CollectionSelectBox = function (options) {
       _onChange,
       _onSelect;
 
-    _this = View(options);
+
+  _this = View(options);
+
   /**
    * Initialize the CollectionSelectBox.
    */
-  _initialize = function () {
+  _initialize = function (options) {
     _options = Util.extend({}, _DEFAULTS, options);
 
     // add select box change listener
     _this.el.addEventListener('change', _onChange);
+
     // initialize collection
     _this._collection = null;
     if (_options.collection !== null) {

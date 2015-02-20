@@ -49,19 +49,21 @@ describe('Unit tests for CollectionSelectBox', function () {
   describe('option values', function () {
 
     it('use formatOption method', function () {
-      var oldFormat = selectBox._options.formatOption;
-      selectBox._options.formatOption = function (obj) {
+      var formatOption = function (obj) {
         return 'blah' + obj.id;
       };
 
+      var selectBox = CollectionSelectBox({
+        el: SELECT_EL,
+        collection: COLLECTION,
+        formatOption: formatOption
+      });
+
       // re-render
       selectBox.render();
+
       // check
       expect(SELECT_EL.childNodes[1].textContent).to.equal('blah11');
-
-      // restore
-      selectBox._options.formatOption = oldFormat;
-      selectBox.render();
     });
 
   });
