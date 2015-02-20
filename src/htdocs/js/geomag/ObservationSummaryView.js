@@ -53,7 +53,7 @@ var ObservationSummaryView = function (options) {
 
     _this._observation = _options.observation;
     _this._calculator = _options.baselineCalculator;
-    _this._readings = _observation.get('readings');
+    _this._readings = _this._observation.get('readings');
     _this._userFactory = _options.UserFactory;
 
     el.innerHTML = [
@@ -201,12 +201,12 @@ var ObservationSummaryView = function (options) {
 
   _bindings = function () {
     _this._remarks.addEventListener('change', _onChange);
-    _this._calculator.on('change', _this.render, _this);
+    _this._calculator.on('change', 'render', _this);
 
     _this._observation.eachReading(function (reading) {
-      reading.on('change', _this.render, _this);
+      reading.on('change', 'render', _this);
       reading.eachMeasurement(function (measurement) {
-        measurement.on('change', _this.render, _this);
+        measurement.on('change', 'render', _this);
       });
     });
   };
@@ -284,7 +284,7 @@ var ObservationSummaryView = function (options) {
         });
       }
       // insert view
-      declinationSummaryView.appendChild(reading._declinationSummary._el);
+      declinationSummaryView.appendChild(reading._declinationSummary.el);
 
       // insert view
       if (reading.get('declination_valid') === 'Y') {
@@ -338,7 +338,7 @@ var ObservationSummaryView = function (options) {
       }
       // insert view
       horizontalIntensitySummaryView.appendChild(
-        reading._horizontalIntensitySummary._el);
+        reading._horizontalIntensitySummary.el);
 
       if (reading.get('horizontal_intensity_valid') === 'Y') {
         baselineH.push(calculator.hBaseline(reading));
@@ -356,8 +356,8 @@ var ObservationSummaryView = function (options) {
   };
 
   _renderInclination = function () {
-    _this._renderHorizontalIntensitySummaryView();
-    _this._renderVerticalIntensitySummaryView();
+    _renderHorizontalIntensitySummaryView();
+    _renderVerticalIntensitySummaryView();
   };
 
   _renderSummaryBottom = function () {
@@ -412,7 +412,7 @@ var ObservationSummaryView = function (options) {
       }
       // insert view
       verticalIntensitySummaryView.appendChild
-          (reading._verticalIntensitySummary._el);
+          (reading._verticalIntensitySummary.el);
 
       if (reading.get('vertical_intensity_valid') === 'Y') {
         baselineZ.push(calculator.zBaseline(reading));

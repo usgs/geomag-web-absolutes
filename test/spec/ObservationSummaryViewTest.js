@@ -15,13 +15,14 @@ describe('ObservationSummaryViewTest', function () {
       observation;
 
   beforeEach(function () {
-    renderSpy = sinon.spy(ObservationSummaryView.prototype, 'render');
     calculator = ObservationBaselineCalculator();
     observation = Observation();
     view = ObservationSummaryView({
       baselineCalculator: calculator,
       observation: observation
     });
+
+    renderSpy = sinon.spy(view, 'render');
   });
 
   afterEach(function () {
@@ -52,7 +53,7 @@ describe('ObservationSummaryViewTest', function () {
     });
 
     it('should render when measurement changes', function () {
-      var changeCount = 1;
+      var changeCount = 0;
 
       observation.eachMeasurement(function (measurement) {
         measurement.trigger('change');
@@ -62,7 +63,7 @@ describe('ObservationSummaryViewTest', function () {
 
     it('should render when calculator changes', function () {
       calculator.trigger('change');
-      expect(renderSpy.callCount).to.equal(2);
+      expect(renderSpy.callCount).to.equal(1);
     });
   });
 });
