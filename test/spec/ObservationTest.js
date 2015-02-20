@@ -1,8 +1,7 @@
 /* global chai, sinon, describe, it */
 'use strict';
 
-var Model = require('mvc/Model'),
-    Observation = require('geomag/Observation');
+var Observation = require('geomag/Observation');
 
 
 var expect = chai.expect;

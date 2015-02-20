@@ -230,6 +230,6 @@ var observatory1 = {
   'geomagnetic_longitude':320.59,
   'elevation':1682,
   'orientation':'HDZF'
-}
+};
 
 module.exports = observatory1;

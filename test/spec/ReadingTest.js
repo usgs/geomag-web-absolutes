@@ -3,7 +3,6 @@
 
 var Collection = require('mvc/Collection'),
     Measurement = require('geomag/Measurement'),
-    Model = require('mvc/Model'),
     Reading = require('geomag/Reading');
 
 var expect = chai.expect;
@@ -50,21 +49,6 @@ var TESTOBJECT = {
   absZ: 49034.335971417, baseZ: 1470.1409714166,
   startD: 1388772260000, endD: 1388772260000,
   absD: 169.78791666667, baseD: 169.82565118348
-};
-
-var TESTMEASUREMENTS = {
-  FirstMarkUp:[meas1],
-  FirstMarkDown:[meas2],
-  WestDown:[meas3],
-  EastDown:[meas4],
-  WestUp:[meas5],
-  EastUp:[meas6],
-  SecondMarkUp:[meas7],
-  SecondMarkDown:[meas8],
-  SouthDown:[meas9],
-  NorthUp:[measA],
-  SouthUp:[measB],
-  NorthDown:[measC]
 };
 
 

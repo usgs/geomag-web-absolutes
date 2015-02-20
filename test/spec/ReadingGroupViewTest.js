@@ -1,17 +1,10 @@
 /* global chai, describe, it */
 'use strict';
 
-var Observation = require('geomag/Observation'),
-    ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
-    Reading = require('geomag/Reading'),
-    ReadingGroupView = require('geomag/ReadingGroupView');
+var ReadingGroupView = require('geomag/ReadingGroupView');
 
 
 var expect = chai.expect;
-var viewOptions = {
-  observation: Observation(),
-  baselineCalculator: ObservationBaselineCalculator()
-};
 
 describe('ReadingGroupView test suite.', function () {
   describe('Constructor', function () {

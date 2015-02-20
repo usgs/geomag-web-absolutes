@@ -1,8 +1,7 @@
 /* global chai, describe, it */
 'use strict';
 
-var Mark = require('geomag/Mark'),
-    Model = require('mvc/Model');
+var Mark = require('geomag/Mark');
 
 
 var expect = chai.expect;

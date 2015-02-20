@@ -1,11 +1,11 @@
 /* global chai, describe, it */
 'use strict';
 
-var Format = require('geomag/Formatter'),
-    Model = require('mvc/Model');
+var Format = require('geomag/Formatter');
 
 
 var expect = chai.expect;
+
 
 describe('Formatter Unit Tests', function () {
 

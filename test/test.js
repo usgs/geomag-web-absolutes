@@ -7,6 +7,8 @@
 //         /en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
 if (!Function.prototype.bind) {
   Function.prototype.bind = function (oThis) {
+    'use strict';
+
     if (typeof this !== 'function') {
       // closest thing possible to the ECMAScript 5 internal IsCallable
       throw new TypeError('object to be bound is not callable');

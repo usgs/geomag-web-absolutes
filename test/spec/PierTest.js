@@ -2,7 +2,6 @@
 'use strict';
 
 var Collection = require('mvc/Collection'),
-    Model = require('mvc/Model'),
     Pier = require('geomag/Pier'),
     Util = require('util/Util');
 

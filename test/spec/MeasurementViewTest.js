@@ -1,10 +1,8 @@
 /* global chai, describe, it */
 'use strict';
 
-var Format = require('geomag/Formatter'),
-    Measurement = require('geomag/Measurement'),
+var Measurement = require('geomag/Measurement'),
     MeasurementView = require('geomag/MeasurementView'),
-    Model = require('mvc/Model'),
     Observation = require('geomag/Observation');
 
 
@@ -50,21 +48,21 @@ describe('MeasurementView Unit Tests', function () {
 
   describe('validation', function () {
 
-    var m = MeasurementView(viewOptions),
-        time = m.el.querySelector('.measurement-time').
-            querySelector('input'),
-        degrees = m.el.querySelector('.measurement-degrees').
-            querySelector('input'),
-        minutes = m.el.querySelector('.measurement-minutes').
-            querySelector('input'),
-        seconds = m.el.querySelector('.measurement-seconds').
-            querySelector('input');
+    // var m = MeasurementView(viewOptions),
+    //     time = m.el.querySelector('.measurement-time').
+    //         querySelector('input'),
+    //     degrees = m.el.querySelector('.measurement-degrees').
+    //         querySelector('input'),
+    //     minutes = m.el.querySelector('.measurement-minutes').
+    //         querySelector('input'),
+    //     seconds = m.el.querySelector('.measurement-seconds').
+    //         querySelector('input');
 
-    var getBlurEvent = function () {
-      var blurEvent = document.createEvent('HTMLEvents');
-      blurEvent.initEvent('blur', false, false);
-      return blurEvent;
-    };
+    // var getBlurEvent = function () {
+    //   var blurEvent = document.createEvent('HTMLEvents');
+    //   blurEvent.initEvent('blur', false, false);
+    //   return blurEvent;
+    // };
 
 
     // it('correctly validates all invalid measurement values', function () {

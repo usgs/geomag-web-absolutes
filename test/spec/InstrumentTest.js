@@ -1,11 +1,7 @@
-/* global chai, describe, it */
+/* global describe */
 'use strict';
 
-var Instrument = require('geomag/Instrument'),
-    Model = require('mvc/Model');
 
-
-var expect = chai.expect;
 
 describe('Instrument Unit Tests', function () {
 

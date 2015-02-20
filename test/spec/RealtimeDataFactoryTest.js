@@ -1,9 +1,7 @@
 /* global chai, sinon, describe, it, before, after */
 'use strict';
 
-var Model = require('mvc/Model'),
-    RealtimeData = require('geomag/RealtimeData'),
-    RealtimeDataFactory = require('geomag/RealtimeDataFactory'),
+var RealtimeDataFactory = require('geomag/RealtimeDataFactory'),
     Xhr = require('util/Xhr');
 
 

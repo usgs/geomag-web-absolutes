@@ -1,8 +1,7 @@
 /* global chai, describe, it */
 'use strict';
 
-var Model = require('mvc/Model'),
-    UserAdminView = require('geomag/UserAdminView');
+var UserAdminView = require('geomag/UserAdminView');
 
 
 var expect = chai.expect;

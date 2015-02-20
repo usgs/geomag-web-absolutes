@@ -4,7 +4,6 @@
 var BaselineCalculator = require('geomag/BaselineCalculator'),
     Collection = require('mvc/Collection'),
     Measurement = require('geomag/Measurement'),
-    Observation = require('geomag/Observation'),
     ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
     Reading = require('geomag/Reading');
 

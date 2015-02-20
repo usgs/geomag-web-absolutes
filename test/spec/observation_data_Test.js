@@ -1,4 +1,4 @@
-/* global chai, sinon, describe, it */
+/* global chai, describe, it */
 'use strict';
 
 var Measurement = require('geomag/Measurement'),
@@ -9,7 +9,7 @@ var Measurement = require('geomag/Measurement'),
 
 var expect = chai.expect;
 
-var URL = '/observation_data.php';
+var url = '/observation_data.php';
 var FACTORY = ObservatoryFactory();
 var anyErrors = false;
 
@@ -42,7 +42,7 @@ describe.skip('Unit tests for observation_data.php', function () {
   describe('create', function () {
     it('returns the created observation', function (done) {
       Xhr.ajax({
-        url: URL,
+        url: url,
         method: 'POST',
         rawdata: JSON.stringify(observation),
         success: function (data) {
@@ -69,7 +69,7 @@ describe.skip('Unit tests for observation_data.php', function () {
       }
 
       Xhr.ajax({
-        url: URL,
+        url: url,
         method: 'POST',
         rawdata: JSON.stringify(observation),
         success: function () {
@@ -90,7 +90,7 @@ describe.skip('Unit tests for observation_data.php', function () {
         return;
       }
       Xhr.ajax({
-        url: URL,
+        url: url,
         method: 'GET',
         data: {
           id: observation.id
@@ -113,7 +113,7 @@ describe.skip('Unit tests for observation_data.php', function () {
         return;
       }
       Xhr.ajax({
-        url: URL,
+        url: url,
         method: 'GET',
         data: {
           id: observation.id + 1 // in theory this is one past the just created test observation
@@ -136,7 +136,7 @@ describe.skip('Unit tests for observation_data.php', function () {
           getMeasurements()[Measurement.FIRST_MARK_UP][0].set({
               'angle': updatedMeasurementAngle});
       Xhr.ajax({
-        url: URL,
+        url: url,
         method: 'PUT',
         rawdata: JSON.stringify(observation),
         success: function (data) {
@@ -155,7 +155,7 @@ describe.skip('Unit tests for observation_data.php', function () {
 
     it('fails if the observation does not have an id', function (done) {
       Xhr.ajax({
-        url: URL,
+        url: url,
         method: 'PUT',
         rawdata: JSON.stringify(new Observation()),
         success: function () {
@@ -175,7 +175,7 @@ describe.skip('Unit tests for observation_data.php', function () {
         return;
       }
       Xhr.ajax({
-        url: URL,
+        url: url,
         method: 'DELETE',
         data: {
           id: observation.id
@@ -197,7 +197,7 @@ describe.skip('Unit tests for observation_data.php', function () {
       }
       // same call as previous test, should throw error second time
       Xhr.ajax({
-        url: URL,
+        url: url,
         method: 'DELETE',
         data: {
           id: observation.id

@@ -11,7 +11,7 @@
  * - comments next to dates are for information only,
  *   and would not appear in the feed.
  */
-"observatories": [
+module.exports = [
   {
     "id": "example_obs_001",
     "code": "BOU",
@@ -127,4 +127,4 @@
     ],
     "default_pier_id": "example_pier_002"
   }
-]
+];

@@ -1,11 +1,6 @@
-/* global chai, describe, it */
+/* global describe */
 'use strict';
 
-var Model = require('mvc/Model'),
-    User = require('geomag/User');
-
-
-var expect = chai.expect;
 
 describe('Unit tests for User.', function () {
 
