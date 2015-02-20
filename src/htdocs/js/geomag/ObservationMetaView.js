@@ -158,7 +158,7 @@ var ObservationMetaView = function (options) {
 
     date.addEventListener('change', _onChange);
     // This makes sure the Julian day updates, among other things
-    observation.on('change', _this.render, _this);
+    observation.on('change', 'render', _this);
     pierTemperature.addEventListener('change', _onChange);
 
     _observatorySelectView.on('change', function (selected) {

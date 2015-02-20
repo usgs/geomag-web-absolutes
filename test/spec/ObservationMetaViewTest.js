@@ -1,4 +1,4 @@
-/* global chai, describe, it */
+/* global chai, describe, it, sinon */
 'use strict';
 
 var ObservationBaselineCalculator =
@@ -11,9 +11,16 @@ var expect = chai.expect;
 
 
 describe('Unit tests for ObservationMetaView', function () {
-  var view = ObservationMetaView({
-    calculator: ObservationBaselineCalculator(),
-    observation: Observation(),
+  var calculator,
+      observation = Observation(),
+      view;
+
+  calculator = ObservationBaselineCalculator();
+  observation = Observation();
+
+  view = ObservationMetaView({
+    calculator: calculator,
+    observation: observation,
   });
 
   describe('getJulianDay', function () {
@@ -47,8 +54,32 @@ describe('Unit tests for ObservationMetaView', function () {
   });
 
   describe('render', function () {
-    it('TODO :: Implement render tests...', function () {
-      expect(false).to.equal(true);
+    it('can be called without blowing up', function () {
+      view.render();
+    });
+
+    it('is called when observation changes', function () {
+      var spy = sinon.spy(view, 'render');
+
+      observation.trigger('change');
+
+      expect(spy.callCount).to.equal(1);
+      spy.restore();
+    });
+
+    it('updates the date, julianDay, and pierTemp fields', function () {
+      var dateEl = view.el.querySelector('.observation-date'),
+          julianEl = view.el.querySelector('.julian-day-value'),
+          tempEl = view.el.querySelector('.pier-temperature');
+
+      observation.set({
+        begin: new Date('2015-01-01 12:30:30'),
+        pier_temperature: 35
+      });
+
+      expect(dateEl.value).to.equal('2015-01-01');
+      expect(julianEl.value).to.equal('1');
+      expect(tempEl.value).to.equal('35');
     });
   });
 
