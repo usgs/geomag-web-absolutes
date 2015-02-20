@@ -4,75 +4,52 @@ module.exports = function (grunt) {
 
   var gruntConfig = require('./gruntconfig');
 
+
   // Load grunt tasks
   gruntConfig.tasks.forEach(grunt.loadNpmTasks);
   grunt.initConfig(gruntConfig);
 
-  /**
-   * Checks whether or not a task has run yet in the current grunt runtime.
-   *
-   * @param task {String} The name of the task to check.
-   *
-   * @return True if the task has not yet run, false if the task has already
-   *         run in this grunt runtime.
-   */
-  var taskNotRun = function (task) {
-    try {
-      grunt.task.requires(task);
-      return false; // Task has already run
-    } catch (e) {
-      return true; // Task has not yet run
-    }
-  };
-
-  /**
-   * Creates a task function that executes a configurable list of tasks that
-   * have not yet run in the current grunt runtime.
-   *
-   * @param tasks {Array} An array of task names to potentially run.
-   */
-  var taskList = function (tasks) {
-    return function () {
-      var t = tasks.filter(taskNotRun);
-      grunt.task.run(t);
-    };
-  };
 
   // creates distributable version of library
-  grunt.registerTask('build', taskList([
+  grunt.registerTask('build', [
     'clean',
     'dev',
     'cssmin',
     'uglify'
-  ]));
+  ]);
 
   // default task useful during development
-  grunt.registerTask('default', taskList([
-    'dev',
+  grunt.registerTask('default', [
+    'jshint:dev',
+    'concurrent:dev',
     'connect:dev',
-    'test',
+
+    'jshint:test',
+    'concurrent:test',
+    'connect:test',
+    'mocha_phantomjs',
+    
     'watch'
-  ]));
+  ]);
 
   // builds development version of library
-  grunt.registerTask('dev', taskList([
-    'browserify',
-    'compass',
-    'copy'
-    // 'configureRewriteRules',
-    // 'configureProxies'
-  ]));
+  grunt.registerTask('dev', [
+    'jshint:dev',
+    'concurrent:dev',
+  ]);
 
   // starts distribution server and preview
-  grunt.registerTask('dist', taskList([
+  grunt.registerTask('dist', [
     'build',
     'connect:dist'
-  ]));
+  ]);
 
   // runs tests against development version of library
-  grunt.registerTask('test', taskList([
+  grunt.registerTask('test', [
     'dev',
+    'jshint:test',
+    'concurrent:test',
     'connect:test',
     'mocha_phantomjs'
-  ]));
+  ]);
 };
