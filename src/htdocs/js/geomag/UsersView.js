@@ -72,8 +72,8 @@ var UsersView = function (options) {
 
       _options;
 
-  _this = CollectionTable(options);
   _options = Util.extend({}, _DEFAULTS, options || {});
+  _this = CollectionTable(_options);
 
   return _this;
 };

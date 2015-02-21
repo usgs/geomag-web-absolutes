@@ -44,13 +44,13 @@ var UserAdminView = function (options) {
       _onUserCancel,
       _onUserSave;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
   _initialize = function (options) {
-    _options = Util.extend({}, _DEFAULTS, options);
     _this.el.innerHTML = [
         '<section class="user-admin-control">',
           '<button class="edituser" data-id="">Create User</button>',
@@ -120,12 +120,12 @@ var UserAdminView = function (options) {
                 text: _this._user.get('id') ? 'Update' : 'Create',
                 callback: function () {
                   _this._editview.updateModel();
-                  _this._onUserSave();
+                  _onUserSave();
                 }
               },
               {
                 text: 'Cancel',
-                callback: _this._onUserCancel
+                callback: _onUserCancel
               }
             ]
           }
@@ -149,7 +149,7 @@ var UserAdminView = function (options) {
     _options.factory.save({
       data: rawdata,
       success: function () {
-        _this._getUsers();
+        _getUsers();
       },
       error: function () {}
     });
@@ -157,10 +157,9 @@ var UserAdminView = function (options) {
   };
 
 
-  _this.render = function () {
-  };
+  _this.render = function () {};
 
-  _initialize(options);
+  _initialize(_options);
   options = null;
   return _this;
 };

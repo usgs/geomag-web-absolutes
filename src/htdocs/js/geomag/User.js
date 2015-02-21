@@ -26,7 +26,7 @@ var _DEFAULTS = {
 var User = function (options) {
   var _this;
 
-    _this = Model(Util.extend({}, _DEFAULTS, options));
+  _this = Model(Util.extend({}, _DEFAULTS, options));
 
   /**
    * Static access to current user object.

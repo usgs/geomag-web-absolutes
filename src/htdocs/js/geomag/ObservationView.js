@@ -121,7 +121,7 @@ var ObservationView = function (options) {
     // load observation
     factory.getObservation({
       id: _options.observationId || null,
-      success: _this._setObservation.bind(_this)
+      success: _setObservation.bind(_this)
     });
   };
 
@@ -320,10 +320,10 @@ var ObservationView = function (options) {
     var factory = _options.factory;
 
     // update observation reading model with calibrations before saving
-    this.updateCalibrations();
+    _this.updateCalibrations();
 
     factory.saveObservation({
-      observation: this._observation,
+      observation: _this._observation,
       success: function (observation) {
         _this._observation.set({id: observation.get('id')}, {silent: true});
         callback();
@@ -352,9 +352,9 @@ var ObservationView = function (options) {
 
     // Add save/publish buttons based on roles
     if (_this._observation.get('reviewed') === 'N') {
-      _this._createControls();
+      _createControls();
     } else {
-      _this._removeControls();
+      _removeControls();
     }
     // calculate calibrations for summary view
     _this.updateCalibrations();
@@ -367,27 +367,24 @@ var ObservationView = function (options) {
 
     // load observatories for meta view
     observation.getObservatories({
-      success: _this._setObservatories.bind(_this)
+      success: _setObservatories.bind(_this)
     });
 
 
     // bind realtime data factory and measurements.
-    var getRealtimeData = _this._getRealtimeData.bind(_this);
-    _this._realtimeDataFactory.on('change:observatory', getRealtimeData);
+    _this._realtimeDataFactory.on('change:observatory', _getRealtimeData);
     observation.eachMeasurement(function (measurement) {
-      measurement.on('change:time', getRealtimeData);
+      measurement.on('change:time', _getRealtimeData);
     });
 
     // bind to measurement change
-    var _updateErrorCount = _this._updateErrorCount.bind(_this);
     _this._observation.eachMeasurement(function (measurement) {
       measurement.on('change', _updateErrorCount);
     });
 
     // bind calibration update to measurement change
-    var updateCalibrations = _this.updateCalibrations.bind(_this);
     _this._observation.eachMeasurement(function (measurement) {
-      measurement.on('change', updateCalibrations);
+      measurement.on('change', _this.updateCalibrations);
     });
   };
 
@@ -442,7 +439,7 @@ var ObservationView = function (options) {
     }
 
     // create observation meta view
-    this._observationMetaView = ObservationMetaView({
+    _this._observationMetaView = ObservationMetaView({
       el: el.querySelector('.observation-meta-wrapper'),
       observation: observation,
       observatories: observatories,
@@ -465,7 +462,7 @@ var ObservationView = function (options) {
 
       reading.eachMeasurement(function (measurement) {
         // get all errors for the measurement
-        measurementErrors = _this._formatMeasurementErrors(measurement);
+        measurementErrors = _formatMeasurementErrors(measurement);
 
         // check for number of measurement errors
         if (measurementErrors !== null) {
@@ -519,6 +516,7 @@ var ObservationView = function (options) {
         }
     }
   };
+
 
   /**
    * Summarize component D,H,Z and store the calibrated values on
