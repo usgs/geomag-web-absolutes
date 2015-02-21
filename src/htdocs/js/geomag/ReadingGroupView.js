@@ -28,7 +28,7 @@ var ReadingGroupView = function (options) {
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function () {
+  _initialize = function (options) {
     _options = Util.extend({}, _DEFAULTS, options);
     _this._observation = _options.observation;
     _this._calculator = _options.baselineCalculator;

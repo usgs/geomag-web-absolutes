@@ -39,7 +39,7 @@ var ObservatoryView = function (options) {
     * Initialize view, and call render.
     * @param options {Object} same as constructor.
     */
-  _initialize = function () {
+  _initialize = function (options) {
     var el = _this.el,
         id,
         hash;
@@ -70,7 +70,7 @@ var ObservatoryView = function (options) {
 
       _this._observatorySelect = el.querySelector('.observatories');
       _this._observatorySelect.addEventListener('change', function () {
-        var value = this.value.replace('observatory_', '');
+        var value = _this.value.replace('observatory_', '');
         window.location.hash = '#' + value;
       });
 

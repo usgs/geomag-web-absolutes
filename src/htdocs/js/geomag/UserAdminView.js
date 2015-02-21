@@ -50,7 +50,7 @@ var UserAdminView = function (options) {
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (options) {
+  _initialize = function () {
     _this.el.innerHTML = [
         '<section class="user-admin-control">',
           '<button class="edituser" data-id="">Create User</button>',
@@ -159,7 +159,7 @@ var UserAdminView = function (options) {
 
   _this.render = function () {};
 
-  _initialize(_options);
+  _initialize();
   options = null;
   return _this;
 };

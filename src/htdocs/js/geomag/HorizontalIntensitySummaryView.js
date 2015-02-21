@@ -36,7 +36,7 @@ var HorizontalIntensitySummaryView = function (options) {
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function () {
+  _initialize = function (options) {
     var calculator,
         el = _this.el,
         factory,

@@ -46,7 +46,7 @@ var ObservationSummaryView = function (options) {
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function () {
+  _initialize = function (options) {
     var el = _this.el;
 
     _options = Util.extend({}, _DEFAULTS, options);
