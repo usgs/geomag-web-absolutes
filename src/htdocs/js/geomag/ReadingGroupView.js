@@ -1,8 +1,8 @@
 'use strict';
 
-var ObservationBaselineCalculator =
-        require('geomag/ObservationBaselineCalculator'),
+var Calculator = require('geomag/ObservationBaselineCalculator'),
     ObservationSummaryView = require('geomag/ObservationSummaryView'),
+    Reading = require('geomag/Reading'),
     ReadingView = require('geomag/ReadingView'),
     TabList = require('tablist/TabList'),
     Util = require('util/Util'),
@@ -10,7 +10,7 @@ var ObservationBaselineCalculator =
 
 
 var _DEFAULTS = {
-  baselineCalculator: ObservationBaselineCalculator()
+  baselineCalculator: Calculator()
 };
 
 
@@ -85,9 +85,9 @@ var ReadingGroupView = function (options) {
         len;
 
     for (i = 0, len = readings.length; i < len; i++) {
-      _this._tablist.addTab(_this._createTab(observation, readings[i]));
+      _this._tablist.addTab(_createTab(observation, readings[i]));
     }
-    _this._tablist.addTab(_this._createSummaryTab(observation));
+    _this._tablist.addTab(_createSummaryTab(observation));
   };
 
   _initialize();

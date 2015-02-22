@@ -67,6 +67,7 @@ var ObservatorySummary = function (factory, attributes) {
       _factory;
 
   _this = Observatory(attributes);
+
   _initialize = function (factory) {
     _factory = factory;
   };
@@ -111,6 +112,7 @@ var ObservationSummary = function (factory, attributes) {
       _factory;
 
   _this = Observation(attributes);
+
   _initialize = function (factory) {
     _factory = factory;
   };
@@ -155,6 +157,7 @@ var ObservationDetail = function (factory, attributes) {
       _factory;
 
   _this = Observation(attributes);
+
   _initialize = function (factory) {
     _factory = factory;
     // _observatories = null;
@@ -230,8 +233,8 @@ var ObservatoryFactory = function (options) {
       _toMilliseconds,
       _toSeconds;
 
-  _this = Collection(options);
   _options = Util.extend({}, _DEFAULTS, options);
+  _this = Collection(_options);
 
   /**
    * Parse an array of instruments.
@@ -245,12 +248,14 @@ var ObservatoryFactory = function (options) {
         len,
         data = [],
         instrument;
+
     for (i = 0, len = instruments.length; i < len; i++) {
       instrument = Util.extend({}, instruments[i]);
       instrument.begin = _toMilliseconds(instrument.begin);
       instrument.end = _toMilliseconds(instrument.end);
       data[i] = Instrument(instrument);
     }
+
     return Collection(data);
   };
 
@@ -266,12 +271,14 @@ var ObservatoryFactory = function (options) {
         len,
         data = [],
         mark;
+
     for (i = 0, len = marks.length; i < len; i++) {
       mark = Util.extend({}, marks[i]);
       mark.begin = _toMilliseconds(mark.begin);
       mark.end = _toMilliseconds(mark.end);
       data[i] = Mark(marks[i]);
     }
+
     return Collection(data);
   };
 
@@ -287,11 +294,13 @@ var ObservatoryFactory = function (options) {
         len,
         data = [],
         measurement;
+
     for (i = 0, len = measurements.length; i < len; i++) {
       measurement = Util.extend({}, measurements[i]);
       measurement.time = _toMilliseconds(measurement.time);
       data[i] = Measurement(measurement);
     }
+
     return Collection(data);
   };
 
@@ -302,10 +311,14 @@ var ObservatoryFactory = function (options) {
    * @return {Collection<Observatory>}.
    */
   _getObservatories = function (observatories) {
-    var i, len, data = [];
+    var i,
+        len,
+        data = [];
+
     for (i = 0, len = observatories.length; i < len; i++) {
       data[i] = ObservatorySummary(_this, observatories[i]);
     }
+
     return data;
   };
 
@@ -318,10 +331,12 @@ var ObservatoryFactory = function (options) {
    */
   _getObservatory = function (observatory) {
     var data = Util.extend({}, observatory);
+
     data.instruments = _getInstruments(observatory.instruments);
     data.piers = _getPiers(observatory.piers);
     data.observations = _getObservations(observatory.observations);
     _selectById(data.piers, data.default_pier_id);
+
     return Observatory(data);
   };
 
@@ -333,9 +348,11 @@ var ObservatoryFactory = function (options) {
    */
   _getObservation = function (observation) {
     var data = Util.extend({}, observation);
+
     data.begin = _toMilliseconds(data.begin);
     data.end = _toMilliseconds(data.end);
     data.readings = _getReadings(observation.readings);
+
     return ObservationDetail(_this, data);
   };
 
@@ -351,12 +368,14 @@ var ObservatoryFactory = function (options) {
         len,
         data = [],
         observation;
+
     for (i = 0, len = observations.length; i < len; i++) {
       observation = Util.extend({}, observations[i]);
       observation.begin = _toMilliseconds(observation.begin);
       observation.end = _toMilliseconds(observation.end);
       data[i] = ObservationSummary(_this, observation);
     }
+
     return Collection(data);
   };
 
@@ -372,6 +391,7 @@ var ObservatoryFactory = function (options) {
         i,
         len,
         data = [];
+
     for (i = 0, len = piers.length; i < len; i++) {
       pier = Util.extend({}, piers[i]);
       pier.begin = _toMilliseconds(pier.begin);
@@ -380,6 +400,7 @@ var ObservatoryFactory = function (options) {
       _selectById(pier.marks, pier.default_mark_id);
       data[i] = Pier(pier);
     }
+
     return Collection(data);
   };
 
@@ -395,6 +416,7 @@ var ObservatoryFactory = function (options) {
         i,
         len,
         data = [];
+
     for (i = 0, len = readings.length; i < len; i++) {
       reading = Util.extend({}, readings[i]);
       reading.startD = _toMilliseconds(reading.startD);
@@ -406,6 +428,7 @@ var ObservatoryFactory = function (options) {
       reading.measurements = _getMeasurements(reading.measurements);
       data[i] = Reading(reading);
     }
+
     return Collection(data);
   };
 
@@ -452,6 +475,7 @@ var ObservatoryFactory = function (options) {
     }
     // convert JSON to string
     data = JSON.stringify(json);
+
     return data;
   };
 
@@ -466,6 +490,7 @@ var ObservatoryFactory = function (options) {
     if (seconds === null) {
       return null;
     }
+
     return seconds * 1000;
   };
 
@@ -480,6 +505,7 @@ var ObservatoryFactory = function (options) {
     if (milliseconds === null) {
       return null;
     }
+
     return Math.round(milliseconds / 1000);
   };
 
@@ -548,6 +574,7 @@ var ObservatoryFactory = function (options) {
         values.push(measurements[i].get(name));
       }
     }
+
     return values;
   };
 
@@ -576,7 +603,7 @@ var ObservatoryFactory = function (options) {
         id: options.id
       },
       success: function (data) {
-        options.success(_this.getObservation(data));
+        options.success(_getObservation(data));
       },
       error: options.error || function () {}
     });
