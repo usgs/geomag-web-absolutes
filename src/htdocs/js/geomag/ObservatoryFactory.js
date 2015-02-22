@@ -164,6 +164,7 @@ var ObservationDetail = function (factory, attributes) {
     // _observatory = null;
   };
 
+
   /**
    * Get the observatory detail.
    *

@@ -92,7 +92,7 @@ var MeasurementView = function (options) {
           error = null;
 
       // validate time change
-      error = _this._validateTime(time);
+      error = _validateTime(time);
 
       if (error === null) {
         // no errors on measurement, set measurement values
@@ -114,7 +114,7 @@ var MeasurementView = function (options) {
           error = null;
 
       // validate angle change
-      error = _this._validateAngle(degrees, minutes, seconds);
+      error = _validateAngle(degrees, minutes, seconds);
 
       if (error === null) {
         // no errors on measurement, set measurement values
@@ -161,21 +161,21 @@ var MeasurementView = function (options) {
       validDegrees = false;
       helpText = 'Invalid Degrees. Must be between, 0-360.';
     }
-    _this._updateErrorState(_this._degreesInput, validDegrees, helpText);
+    _updateErrorState(_this._degreesInput, validDegrees, helpText);
 
     // MINUTES
     if (!Validate.validMinutes(minutes)) {
       validMinutes = false;
       helpText = 'Invalid Minutes. Must be between, 0-60.';
     }
-    _this._updateErrorState(_this._minutesInput, validMinutes, helpText);
+    _updateErrorState(_this._minutesInput, validMinutes, helpText);
 
     // SECONDS
     if (!Validate.validSeconds(seconds)) {
       validSeconds = false;
       helpText = 'Invalid Seconds. Must be between, 0-60.';
     }
-    _this._updateErrorState(_this._secondsInput, validSeconds, helpText);
+    _updateErrorState(_this._secondsInput, validSeconds, helpText);
 
     return helpText;
   };
@@ -188,7 +188,7 @@ var MeasurementView = function (options) {
       validTime = false;
       helpText = 'Invalid Time. HH24:MI:SS';
     }
-    _this._updateErrorState(_this._timeInput, validTime, helpText);
+    _updateErrorState(_this._timeInput, validTime, helpText);
 
     return helpText;
   };
