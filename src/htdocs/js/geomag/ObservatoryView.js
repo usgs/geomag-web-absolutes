@@ -70,7 +70,7 @@ var ObservatoryView = function (options) {
 
       _this._observatorySelect = el.querySelector('.observatories');
       _this._observatorySelect.addEventListener('change', function () {
-        var value = _this.value.replace('observatory_', '');
+        var value = this.value.replace('observatory_', '');
         window.location.hash = '#' + value;
       });
 
