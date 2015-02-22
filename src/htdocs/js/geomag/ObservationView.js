@@ -1,7 +1,8 @@
 'use strict';
 
 var Collection = require('mvc/Collection'),
-    ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
+    ObservationBaselineCalculator =
+        require('geomag/ObservationBaselineCalculator'),
     ObservationMetaView = require('geomag/ObservationMetaView'),
     ObservatoryFactory = require('geomag/ObservatoryFactory'),
     ModalView = require('mvc/ModalView'),
@@ -116,9 +117,7 @@ var ObservationView = function (options) {
     _this._observatories = null;
     _this._observationMetaView = null;
     _this._readingGroupView = null;
-    // _this._user = User.getCurrentUser();
-    _this._user = User;
-    _this._user = _this._user.getCurrentUser();
+    _this._user = User().getCurrentUser();
 
     // load observation
     factory.getObservation({
@@ -229,6 +228,7 @@ var ObservationView = function (options) {
   _onObservatorySelect = function () {
     var code = null,
         observatory;
+
     observatory = _this._observatories.getSelected();
     if (observatory !== null) {
       code = observatory.get('code');
@@ -456,7 +456,10 @@ var ObservationView = function (options) {
         errorDiv,
         measurementErrors,
         saveButton = el.querySelector('#saveButton'),
-        readingErrors, setNumber, list, header;
+        readingErrors,
+        setNumber,
+        list,
+        header;
 
     _this._observation.eachReading(function (reading) {
       setNumber = reading.get('set_number');
@@ -527,7 +530,9 @@ var ObservationView = function (options) {
   _this.updateCalibrations = function () {
     var factory = _options.factory,
         readings = _this._observation.get('readings').data(),
-        i, len, reading;
+        i,
+        len,
+        reading;
 
     for (i = 0, len = readings.length; i < len; i++) {
       reading = readings[i];
