@@ -86,18 +86,18 @@ var ObservationView = function (options) {
       _setObservatories,
       _updateErrorCount;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
   /**
    * Initialize the observation view.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (options) {
+  _initialize = function () {
     var el = _this.el,
         factory,
         calculator,
         realtimeDataFactory;
 
-    _options = Util.extend({}, _DEFAULTS, options);
     factory = _options.factory;
     calculator = _options.baselineCalculator;
     realtimeDataFactory = _options.realtimeDataFactory;
@@ -116,7 +116,9 @@ var ObservationView = function (options) {
     _this._observatories = null;
     _this._observationMetaView = null;
     _this._readingGroupView = null;
-    _this._user = User.getCurrentUser();
+    // _this._user = User.getCurrentUser();
+    _this._user = User;
+    _this._user = _this._user.getCurrentUser();
 
     // load observation
     factory.getObservation({
@@ -540,7 +542,7 @@ var ObservationView = function (options) {
     // nothing to render, sub views handle everything
   };
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };

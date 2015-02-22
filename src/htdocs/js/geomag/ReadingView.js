@@ -30,14 +30,13 @@ var ReadingView = function (options) {
 
       _options;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
     /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (options) {
-    _options = Util.extend({}, _DEFAULTS, options);
-
+  _initialize = function () {
     _this._observation = _options.observation;
     _this._reading = _options.reading;
     _this._calculator = _options.baselineCalculator;
@@ -229,7 +228,7 @@ var ReadingView = function (options) {
     // TODO :: Render current model
   };
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };

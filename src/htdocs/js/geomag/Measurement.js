@@ -33,15 +33,11 @@ var _DEFAULTS = {
  **/
 var Measurement = function (options) {
   var _this,
-      _initialize,
 
       _options;
 
-  _this = Model(options);
-
-  _initialize = function(options) {
-    _options = Util.extend({}, _DEFAULTS, options);
-  };
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = Model(_options);
 
   /**
    * Set realtime data values corresponding to measurement time.
@@ -95,7 +91,6 @@ var Measurement = function (options) {
   Measurement.SOUTH_UP = 'SouthUp';
   Measurement.NORTH_DOWN = 'NorthDown';
 
-  _initialize(options);
   options = null;
   return _this;
 };

@@ -41,13 +41,13 @@ var Observation = function (options) {
 
       _options;
 
-  _this = Model(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = Model(_options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (options) {
-    _options = Util.extend({}, _DEFAULTS, options);
+  _initialize = function () {
 
     if (_this.get('readings') === null) {
       _this.set({
@@ -94,7 +94,7 @@ var Observation = function (options) {
     }
   };
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };

@@ -32,9 +32,9 @@ var Observatory = function (options) {
 
       _options;
 
-  _this = Model(options);
-
   _options =  Util.extend({}, _DEFAULTS, options);
+  _this = Model(_options);
+
 
   /**
    * Get the default pier for this observatory.
@@ -141,6 +141,7 @@ var Observatory = function (options) {
     return new Collection(theodolites);
   };
 
+  options = null;
   return _this;
 };
 

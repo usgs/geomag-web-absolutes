@@ -71,21 +71,21 @@ var ObservationMetaView = function (options) {
       _onChange,
       _setObservatory;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (options) {
+  _initialize = function () {
     var el = _this.el,
-        calculator = options.calculator,
-        observation = options.observation,
-        observatories = options.observatories || Collection(),
+        calculator = _options.calculator,
+        observation = _options.observation,
+        observatories = _options.observatories || Collection(),
         date,
         pierTemperature,
         idPrefix = _IDPREFIX + (++_SEQUENCE);
 
-    _options = Util.extend({}, _DEFAULTS, options);
     _this._calculator = calculator;
     _this._observation = observation;
 

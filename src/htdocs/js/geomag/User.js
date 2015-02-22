@@ -24,10 +24,12 @@ var _DEFAULTS = {
  * Construct a new User object.
  */
 var User = function (options) {
-  var _this;
+  var _this,
+      _initialize;
 
   _this = Model(Util.extend({}, _DEFAULTS, options));
 
+  _initialize = function () {};
   /**
    * Static access to current user object.
    *
@@ -40,6 +42,8 @@ var User = function (options) {
     return _CURRENT_USER;
   };
 
+  _initialize();
+  options = null;
   return _this;
 };
 

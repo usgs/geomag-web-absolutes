@@ -27,9 +27,8 @@ var Pier = function (options) {
 
       _options;
 
-  _this = Model(options);
-
   _options = Util.extend({}, _DEFAULTS, options);
+  _this = Model(_options);
 
   /**
    * Get the default mark for the pier.
@@ -47,6 +46,7 @@ var Pier = function (options) {
     }
   };
 
+  options = null;
   return _this;
 };
 

@@ -28,15 +28,14 @@ var DeclinationView = function (options) {
 
       _options;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULT_OPTIONS, options);
+  _this = View(_options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (options) {
+  _initialize = function () {
     var el = _this.el;
-
-    _options = Util.extend({}, _DEFAULT_OPTIONS, options);
 
     _this._reading = _options.reading;
     _this._calculator = _options.baselineCalculator;
@@ -128,7 +127,7 @@ var DeclinationView = function (options) {
         Format.minutes(calculator.eastUpMinusWestDown(reading)*60);
   };
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };

@@ -34,17 +34,17 @@ var ObservatoryView = function (options) {
       _getObservatories,
       _setObservatoryTitle;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
   /**
     * Initialize view, and call render.
     * @param options {Object} same as constructor.
     */
-  _initialize = function (options) {
+  _initialize = function () {
     var el = _this.el,
         id,
         hash;
 
-    _options = Util.extend({}, _DEFAULTS, options);
     id = _options.observatoryId;
     hash = _getHash();
 
@@ -193,7 +193,7 @@ var ObservatoryView = function (options) {
   };
 
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };

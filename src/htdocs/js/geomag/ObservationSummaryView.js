@@ -41,15 +41,14 @@ var ObservationSummaryView = function (options) {
       _renderSummaryBottom,
       _renderVerticalIntensitySummaryView;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (options) {
+  _initialize = function () {
     var el = _this.el;
-
-    _options = Util.extend({}, _DEFAULTS, options);
 
     _this._observation = _options.observation;
     _this._calculator = _options.baselineCalculator;
@@ -436,7 +435,7 @@ var ObservationSummaryView = function (options) {
     _renderSummaryBottom();
   };
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };

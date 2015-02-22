@@ -19,16 +19,16 @@ var VerticalIntensitySummaryView = function (options) {
 
       _onChange;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
 
-  _initialize = function (options) {
+  _initialize = function () {
     var el = _this.el,
         factory,
         reading,
         i = null,
         len = null;
 
-    _options = Util.extend({}, _DEFAULTS, options);
 
     factory = _options.factory;
     reading = _options.reading;
@@ -105,7 +105,7 @@ var VerticalIntensitySummaryView = function (options) {
     _this._observer.innerHTML = _this._reading.get('observer') || '';
   };
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };

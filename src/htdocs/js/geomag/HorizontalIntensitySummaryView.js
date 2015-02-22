@@ -31,12 +31,13 @@ var HorizontalIntensitySummaryView = function (options) {
 
       _onChange;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (options) {
+  _initialize = function () {
     var calculator,
         el = _this.el,
         factory,
@@ -44,7 +45,6 @@ var HorizontalIntensitySummaryView = function (options) {
         i = null,
         len = null;
 
-    _options = Util.extend({}, _DEFAULTS, options);
     calculator = _options.calculator;
     factory = _options.factory;
     reading = _options.reading;
@@ -125,7 +125,7 @@ var HorizontalIntensitySummaryView = function (options) {
     _this._observer.innerHTML = _this._reading.get('observer') || '';
   };
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };

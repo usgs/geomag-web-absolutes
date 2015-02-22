@@ -23,10 +23,10 @@ var UserEditView = function (options) {
 
       _options;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
 
-  _initialize = function (options) {
-    _options = Util.extend({}, _DEFAULTS, options);
+  _initialize = function () {
 
     _this.el.innerHTML = [
       '<ul>',
@@ -131,7 +131,7 @@ var UserEditView = function (options) {
     }
   };
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };

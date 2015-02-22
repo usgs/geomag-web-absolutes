@@ -47,17 +47,17 @@ var MeasurementView = function (options) {
       _validateAngle,
       _validateTime;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (options) {
+  _initialize = function () {
     var el = _this.el,
         onTimeChange = null,
         onAngleChange = null;
 
-    _options = Util.extend({}, _DEFAULTS, options);
     _this._measurement = _options.measurement;
     _this._observation = _options.observation;
 
@@ -232,7 +232,7 @@ var MeasurementView = function (options) {
     _this._fValue.innerHTML = (f === null ? '&ndash;' : Format.nanoteslas(f));
   };
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };

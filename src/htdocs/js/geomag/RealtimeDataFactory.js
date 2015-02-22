@@ -34,10 +34,10 @@ var RealtimeDataFactory = function (options) {
       _options;
 
 
-  _this = Model(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = Model(_options);
 
-  _initialize = function (options) {
-    _options = Util.extend({}, _DEFAULTS, options);
+  _initialize = function () {
 
     // TODO: this is a hack to deal with
     // https://github.com/usgs/hazdev-webutils/issues/8
@@ -77,9 +77,8 @@ var RealtimeDataFactory = function (options) {
   };
 
 
-  _initialize(options);
+  _initialize();
   options = null;
-
   return _this;
 };
 

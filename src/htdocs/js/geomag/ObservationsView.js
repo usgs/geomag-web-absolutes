@@ -27,13 +27,13 @@ var ObservationsView = function (options) {
       _buildObservationList,
       _formatDate;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function (options) {
-    _options = Util.extend({}, _DEFAULTS, options);
+  _initialize = function () {
 
     _this.el.innerHTML = [
         '<h2>Observations</h2>',
@@ -196,7 +196,7 @@ var ObservationsView = function (options) {
   //   el.appendChild(_buildObservationList(completed));
   // };
 
-  _initialize(options);
+  _initialize();
   options = null;
   return _this;
 };
