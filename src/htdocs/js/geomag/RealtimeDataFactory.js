@@ -31,17 +31,16 @@ var RealtimeDataFactory = function (options) {
   var _this,
       _initialize,
 
-      _options;
+      _lastcall;
 
 
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = Model(_options);
+  _this = Model(Util.extend({}, _DEFAULTS, options));
 
   _initialize = function () {
 
     // TODO: this is a hack to deal with
     // https://github.com/usgs/hazdev-webutils/issues/8
-    _this._lastcall = null;
+    _lastcall = null;
   };
 
 
@@ -50,28 +49,28 @@ var RealtimeDataFactory = function (options) {
    *        options.???  Same as constructor.
    */
   _this.getRealtimeData = function (options) {
-    _options = Util.extend({}, _this.get(), options);
+    var _options = Util.extend({}, _this.get(), options);
 
     // TODO: this is a hack to deal with
     // https://github.com/usgs/hazdev-webutils/issues/8
-    if (_this._lastcall !== null) {
-      while (_this._lastcall === new Date().getTime()) {
+    if (_lastcall !== null) {
+      while (_lastcall === new Date().getTime()) {
         // wait until its not
       }
     }
-    _this._lastcall = new Date().getTime();
+    _lastcall = new Date().getTime();
 
     Xhr.jsonp({
-      url: options.url,
+      url: _options.url,
       data: {
-        'starttime': options.starttime,
-        'endtime': options.endtime,
-        'obs[]': options.observatory,
-        'chan[]': options.channels,
-        'freq': options.freq
+        'starttime': _options.starttime,
+        'endtime': _options.endtime,
+        'obs[]': _options.observatory,
+        'chan[]': _options.channels,
+        'freq': _options.freq
       },
       success: function (data) {
-        options.success(RealtimeData(data));
+        _options.success(RealtimeData(data));
       }
     });
   };
@@ -83,4 +82,3 @@ var RealtimeDataFactory = function (options) {
 };
 
 module.exports = RealtimeDataFactory;
-
