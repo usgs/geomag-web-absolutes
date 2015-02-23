@@ -21,36 +21,29 @@ var _DEFAULTS = {
 };
 
 
-/**
- * Construct a new DeclinationView.
- *
- * @param options {Object}
- *        view options.
- * @param options.baselineCalculator {geomag.ObservationBaselineCalculator}
- *        the calculator to use.
- * @param options.factory
- * @parem options.observatories
- * @param options.reading {geomag.Reading}
- *        the reading to display.
- */
 var UserAdminView = function (options) {
   var _this,
       _initialize,
 
-      _options,
+      _editview,
+      _factory,
+      _modalview,
+      _observatories,
+      _user,
+      _users,
+      _usersView,
 
       _getUsers,
       _onEditClick,
       _onUserCancel,
       _onUserSave;
 
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = View(_options);
-  /**
-   * Initialize view, and call render.
-   * @param options {Object} same as constructor.
-   */
-  _initialize = function () {
+  _this = View(Util.extend({}, _DEFAULTS, options));
+
+  _initialize = function (options) {
+    _factory = options.factory;
+    _observatories = options.observatories;
+
     _this.el.innerHTML = [
         '<section class="user-admin-control">',
           '<button class="edituser" data-id="">Create User</button>',
@@ -58,12 +51,12 @@ var UserAdminView = function (options) {
         '<section class="users-view-wrapper"></section>'
     ].join('');
 
-    _this._users = Collection([]);
-    _this._user = null;
+    _users = new Collection([]);
+    _user = null;
 
-    _this._usersView = UsersView({
+    _usersView = UsersView({
       el: _this.el.querySelector('.users-view-wrapper'),
-      collection: _this._users
+      collection: _users
     });
 
     _this.el.addEventListener('click', _onEditClick);
@@ -72,13 +65,35 @@ var UserAdminView = function (options) {
   };
 
   _getUsers = function () {
-    _options.factory.get({
+    _factory.get({
       success: function (data) {
         data = data.map(function (info) {return User(info);});
-        _this._users.reset(data);
+        _users.reset(data);
       },
       error: function () {/* TODO :: Show modal dialog error message */}
     });
+  };
+
+  _onUserSave = function () {
+    var rawdata = _user.toJSON();
+
+    _factory.save({
+      data: rawdata,
+      success: function () {
+        _getUsers();
+      },
+      error: function () {}
+    });
+    _onUserCancel();
+  };
+
+  _onUserCancel = function () {
+    _modalview.hide();
+    _user.off('canceledit', _onUserCancel, _this);
+    _user.off('save', _onUserSave, _this);
+    _modalview.destroy();
+    _editview.destroy();
+    _user = null;
   };
 
   _onEditClick = function (e) {
@@ -91,75 +106,55 @@ var UserAdminView = function (options) {
     }
 
     id = target.getAttribute('data-id');
-    user = _this._users.get(id);
+    user = _users.get(id);
 
     if (user === null) {
       user = User();
     }
 
-    _this._user = user;
+    _user = user;
 
-    _this._user.on('canceledit', _onUserCancel, _this);
-    _this._user.on('save', _onUserSave, _this);
+    _user.on('canceledit', _onUserCancel, _this);
+    _user.on('save', _onUserSave, _this);
 
-    _this._editview = UserEditView({
+    _editview = UserEditView({
       user: user,
-      observatories: _options.observatories
+      observatories: _observatories
     });
 
-    _this._editview.render();
+    _editview.render();
 
-    _this._modalview = ModalView(
-          _this._editview._el,
+    _modalview = ModalView(
+      _editview.el,
+      {
+        title: _user.get('id') ? 'Edit User' : 'Create User',
+        closable: false,
+        buttons: [
           {
-            title: _this._user.get('id') ? 'Edit User' : 'Create User',
-            closable: false,
-            buttons: [
-              {
-                classes: ['green'],
-                text: _this._user.get('id') ? 'Update' : 'Create',
-                callback: function () {
-                  _this._editview.updateModel();
-                  _onUserSave();
-                }
-              },
-              {
-                text: 'Cancel',
-                callback: _onUserCancel
-              }
-            ]
+            classes: ['green'],
+            text: _user.get('id') ? 'Update' : 'Create',
+            callback: function () {
+              _editview.updateModel();
+              _onUserSave();
+            }
+          },
+          {
+            text: 'Cancel',
+            callback: _onUserCancel
           }
-      );
+        ]
+      }
+    );
 
-    _this._modalview.show();
-  };
-
-  _onUserCancel = function () {
-    _this._modalview.hide();
-    _this._user.off('canceledit', _onUserCancel, _this);
-    _this._user.off('save', _onUserSave, _this);
-    _this._modalview.destroy();
-    _this._editview.destroy();
-    _this._user = null;
-  };
-
-  _onUserSave = function () {
-    var rawdata = _this._user.toJSON();
-
-    _options.factory.save({
-      data: rawdata,
-      success: function () {
-        _getUsers();
-      },
-      error: function () {}
-    });
-    _onUserCancel();
+    _modalview.show();
   };
 
 
-  _this.render = function () {};
+  _this.render = function () {
+  };
 
-  _initialize();
+
+  _initialize(options);
   options = null;
   return _this;
 };
