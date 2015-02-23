@@ -1,18 +1,18 @@
 .tabular {
-	float:left;
+  float:left;
 
-	& > dt {
-		float:left;
-		clear:left;
-	}
+  & > dt {
+    float:left;
+    clear:left;
+  }
 
-	& > dd {
-		float:left;
-	}
+  & > dd {
+    float:left;
+  }
 
-	&:after {
-		display:block;
-		content:' ';
-		clear:left;
-	}
+  &:after {
+    display:block;
+    content:' ';
+    clear:left;
+  }
 }

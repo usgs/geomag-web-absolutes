@@ -1,184 +1,201 @@
-/* global define, unescape */
-define([
-	'mvc/View',
-	'util/Events',
-	'util/Util',
-	'geomag/ObservatoryFactory',
-	'geomag/ObservationsView'
-], function (
-	View,
-	Events,
-	Util,
-	ObservatoryFactory,
-	ObservationsView
-) {
-	'use strict';
+/* global unescape */
+'use strict';
 
-	var DEFAULTS = {
-		observatoryId: null,
-		factory: new ObservatoryFactory()
-	};
+var Events = require('util/Events'),
+    ObservationsView = require('geomag/ObservationsView'),
+    ObservatoryFactory = require('geomag/ObservatoryFactory'),
+    Util = require('util/Util'),
+    View = require('mvc/View');
 
-	var ObservatoryView = function (options) {
-		this._options = Util.extend({}, DEFAULTS, options);
-		View.call(this, this._options);
-	};
-	ObservatoryView.prototype = Object.create(View.prototype);
 
-	ObservatoryView.prototype.render = function (id) {
-		if (typeof id === 'undefined' || id === null) {
-			id = this._options.observatoryId;
-		}
+var _DEFAULTS = {
+  observatoryId: null,
+  factory: ObservatoryFactory()
+};
 
-		if (this._observatorySelect && id) {
-			this._observatorySelect.value = 'observatory_' + id;
-		}
 
-		this._getObservations(id);
-	};
+/**
+ * Construct a new DeclinationSummaryView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.observatoryId
+ * @param options.factory
+ */
+var ObservatoryView = function (options) {
+  var _this,
+      _initialize,
 
-	ObservatoryView.prototype._initialize = function () {
-		var _this = this,
-		    el = this._el,
-		    id = this._options.observatoryId,
-		    hash;
+      _options,
 
-		hash = this._getHash();
+      _buildObservatoryList,
+      _getHash,
+      _getObservations,
+      _getObservatories,
+      _setObservatoryTitle;
 
-		// Overview of a single observatory
-		if (id) {
-			el.innerHTML = [
-				'<h2 class="observatory-title">Observatory #', id, '</h2>',
-				'<section class="observations-view"></section>',
-			].join('');
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
+  /**
+    * Initialize view, and call render.
+    * @param options {Object} same as constructor.
+    */
+  _initialize = function () {
+    var el = _this.el,
+        id,
+        hash;
 
-			this._observatoryTitle = el.querySelector('.observatory-title');
-			this._getObservatories(); // Just to update the title
-			this._getObservations(id);
+    id = _options.observatoryId;
+    hash = _getHash();
 
-		// Overview of all observatories/ observations
-		} else {
-			el.innerHTML = [
-				'<label for="observatories-select">Select Observatory</label>',
-				'<select name="observatories" class="observatories" ',
-						'id="observatories-select"></select>',
-				'<section class="observations-view"></section>'
-			].join('');
+    // Overview of a single observatory
+    if (id) {
+      el.innerHTML = [
+        '<h2 class="observatory-title">Observatory #', id, '</h2>',
+        '<section class="observations-view"></section>',
+      ].join('');
 
-			this._observatorySelect = el.querySelector('.observatories');
-			this._observatorySelect.addEventListener('change', function () {
-				var value = this.value.replace('observatory_', '');
-				window.location.hash = '#' + value;
-			});
+      _this._observatoryTitle = el.querySelector('.observatory-title');
+      _getObservatories(); // Just to update the title
+      _getObservations(id);
 
-			// Gets observatories and then renders observations for either...
-			// ... (1) The observatory whose Id is in the current window.location.hash
-			// ... or ...
-			// ... (2) The first observatory in the list
-			// This could all be done better with promises...just saying.
-			this._getObservatories();
+    // Overview of all observatories/ observations
+    } else {
+      el.innerHTML = [
+        '<label for="observatories-select">Select Observatory</label>',
+        '<select name="observatories" class="observatories" ',
+            'id="observatories-select"></select>',
+        '<section class="observations-view"></section>'
+      ].join('');
 
-			// on a URL change, update the observatory
-			Events.on('hashchange', function() {
-				_this.render(_this._getHash());
-			});
-		}
+      _this._observatorySelect = el.querySelector('.observatories');
+      _this._observatorySelect.addEventListener('change', function () {
+        var value = this.value.replace('observatory_', '');
+        window.location.hash = '#' + value;
+      });
 
-	};
+      // Gets observatories and then renders observations for either...
+      // ... (1) The observatory whose Id is in the current window.location.hash
+      // ... or ...
+      // ... (2) The first observatory in the list
+      // This could all be done better with promises...just saying.
+      _getObservatories();
 
-	ObservatoryView.prototype._getObservatories = function () {
-		var _this = this,
-		    factory = this._options.factory;
+      // on a URL change, update the observatory
+      Events.on('hashchange', function() {
+        _this.render(_getHash());
+      });
+    }
+  };
 
-		// load observatories
-		factory.getObservatories({
-			success: function (observatories) {
-				var hash = _this._getHash();
+  _buildObservatoryList = function (data) {
+    var observatoryList = _this._observatorySelect,
+        markup = [], observatory, observatoryId;
 
-				if (_this._observatorySelect) {
-					_this._buildObservatoryList(observatories);
+    for (var i = 0; i < data.length; i++) {
+      observatory = data[i];
+      observatoryId = 'observatory_' + observatory.get('id');
 
-					if (!hash) {
-						if (window.location.replace) {
-							window.location.replace('#' + observatories[0].get('id'));
-						} else {
-							window.location.hash = '#' + observatories[0].get('id');
-						}
-					} else {
-						_this.render(hash);
-					}
-				} else {
-					_this._setObservatoryTitle(observatories);
-				}
-			}
-		});
-	};
+      markup.push([
+        '<option value="', observatoryId, '" id="', observatoryId, '">',
+          observatory.get('name') ,
+        '</option>'
+      ].join(''));
+    }
 
-	ObservatoryView.prototype._setObservatoryTitle = function (data) {
-		var i,
-		    len = data.length,
-		    observatory;
+    observatoryList.innerHTML = markup.join('');
+  };
 
-		for (i = 0; i < len; i++) {
-			observatory = data[i];
-			if (observatory.get('id') === this._options.observatoryId) {
-				this._observatoryTitle.innerHTML = observatory.get('code');
-				break;
-			}
-		}
-	};
+  _getHash = function(url){
+    var hash;
 
-	ObservatoryView.prototype._buildObservatoryList = function (data) {
+    if (typeof url === 'undefined' || url === null){
+      url = window.location.hash;
+    }
 
-		var observatoryList = this._observatorySelect,
-		    markup = [], observatory, observatoryId;
+    if (url === '#' || url.indexOf('#') === -1) {
+      return null;
+    }
 
-		for (var i = 0; i < data.length; i++) {
-			observatory = data[i];
-			observatoryId = 'observatory_' + observatory.get('id');
+    // strip # from hash
+    hash = url.substr(url.indexOf('#') + 1, url.length - url.indexOf('#'));
+    // Fix URL encoding of settings hash
+    hash = unescape(hash);
 
-			markup.push([
-				'<option value="', observatoryId, '" id="', observatoryId, '">',
-					observatory.get('name') ,
-				'</option>'
-			].join(''));
-		}
+    return hash;
+  };
 
-		observatoryList.innerHTML = markup.join('');
-	};
+  _getObservations = function (id) {
+    var el = _this.el;
 
-	ObservatoryView.prototype._getObservations = function (id) {
-		var _this = this,
-		    el = this._el;
+    _this._observationsView = null;
 
-		this._observationsView = null;
+    if (typeof id !== 'undefined' && id !== null) {
+      _this._observationsView = ObservationsView({
+          el: el.querySelector('.observations-view'),
+          observatoryId: id
+      });
+    }
+  };
 
-		if (typeof id !== 'undefined' && id !== null) {
-			_this._observationsView = new ObservationsView({
-					el: el.querySelector('.observations-view'),
-					observatoryId: id
-			});
-		}
-	};
+  _getObservatories = function () {
+    var factory = _options.factory;
 
-	ObservatoryView.prototype._getHash = function(url){
-		var hash;
+    // load observatories
+    factory.getObservatories({
+      success: function (observatories) {
+        var hash = _getHash();
 
-		if (typeof url === 'undefined' || url === null){
-			url = window.location.hash;
-		}
+        if (_this._observatorySelect) {
+          _buildObservatoryList(observatories);
 
-		if (url === '#' || url.indexOf('#') === -1) {
-			return null;
-		}
+          if (!hash) {
+            if (window.location.replace) {
+              window.location.replace('#' + observatories[0].get('id'));
+            } else {
+              window.location.hash = '#' + observatories[0].get('id');
+            }
+          } else {
+            _this.render(hash);
+          }
+        } else {
+          _setObservatoryTitle(observatories);
+        }
+      }
+    });
+  };
 
-		// strip # from hash
-		hash = url.substr(url.indexOf('#') + 1, url.length - url.indexOf('#'));
-		// Fix URL encoding of settings hash
-		hash = unescape(hash);
+  _setObservatoryTitle = function (data) {
+    var i,
+        len = data.length,
+        observatory;
 
-		return hash;
-	};
+    for (i = 0; i < len; i++) {
+      observatory = data[i];
+      if (observatory.get('id') === _options.observatoryId) {
+        _this._observatoryTitle.innerHTML = observatory.get('code');
+        break;
+      }
+    }
+  };
 
-	return ObservatoryView;
-});
+
+  _this.render = function (id) {
+    if (typeof id === 'undefined' || id === null) {
+      id = _options.observatoryId;
+    }
+
+    if (_this._observatorySelect && id) {
+      _this._observatorySelect.value = 'observatory_' + id;
+    }
+
+    _getObservations(id);
+  };
+
+
+  _initialize();
+  options = null;
+  return _this;
+};
+
+module.exports = ObservatoryView;

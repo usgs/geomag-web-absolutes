@@ -1,29 +1,14 @@
-/* global observationId, MOUNT_PATH, REALTIME_DATA_URL */
+/* global observationId, REALTIME_DATA_URL */
+'use strict';
 
-require.config({
-	baseUrl: MOUNT_PATH + '/js',
-	paths: {
-		'mvc': '/hazdev-webutils/src/mvc',
-		'util': '/hazdev-webutils/src/util',
-		'tablist': '/hazdev-tablist/src/tablist'
-	}
-});
+var ObservationView = require('geomag/ObservationView'),
+    RealtimeDataFactory = require('geomag/RealtimeDataFactory');
 
-require([
-	'geomag/ObservationView',
-	'geomag/RealtimeDataFactory'
-], function (
-	ObservationView,
-	RealtimeDataFactory
-) {
-	'use strict';
 
-	new ObservationView({
-		el: document.querySelector('.observation-view-wrapper'),
-		observationId: observationId,
-		realtimeDataFactory: new RealtimeDataFactory({
-			url: REALTIME_DATA_URL
-		})
-	});
-
+new ObservationView({
+  el: document.querySelector('.observation-view-wrapper'),
+  observationId: observationId,
+  realtimeDataFactory: new RealtimeDataFactory({
+    url: REALTIME_DATA_URL
+  })
 });

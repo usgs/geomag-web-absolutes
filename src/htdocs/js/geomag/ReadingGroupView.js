@@ -1,98 +1,97 @@
-/* global define */
-define([
-	'mvc/View',
-	'util/Util',
-	'tablist/TabList',
+'use strict';
 
-	'geomag/Reading',
-	'geomag/ReadingView',
-	'geomag/ObservationSummaryView',
-	'geomag/ObservationBaselineCalculator'
-], function (
-	View,
-	Util,
-	TabList,
-
-	Reading,
-	ReadingView,
-	ObservationSummaryView,
-	ObservationBaselineCalculator
-) {
-	'use strict';
+var Calculator = require('geomag/ObservationBaselineCalculator'),
+    ObservationSummaryView = require('geomag/ObservationSummaryView'),
+    ReadingView = require('geomag/ReadingView'),
+    TabList = require('tablist/TabList'),
+    Util = require('util/Util'),
+    View = require('mvc/View');
 
 
-	var DEFAULTS = {
-		baselineCalculator: new ObservationBaselineCalculator()
-	};
+var _DEFAULTS = {
+  baselineCalculator: Calculator()
+};
 
 
-	var ReadingGroupView = function (options) {
-		this._options = Util.extend({}, DEFAULTS, options);
-		View.call(this, this._options);
-	};
-	ReadingGroupView.prototype = Object.create(View.prototype);
+var ReadingGroupView = function (options) {
+  var _this,
+      _initialize,
+
+      _options,
+
+      _createTab,
+      _createSummaryTab;
+
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
+  /**
+   * Initialize view, and call render.
+   * @param options {Object} same as constructor.
+   */
+  _initialize = function () {
+    _this._observation = _options.observation;
+    _this._calculator = _options.baselineCalculator;
+
+    _this._tablist = TabList({tabPosition: 'top'});
+    _this._tablist.el.classList.add('reading-group-view');
+    _this.el.appendChild(_this._tablist.el);
+
+    // TODO :: Bind to observation, when readings are added/removed,
+    //         you will have to re-render
+    _this.render();
+  };
+
+  _createTab = function (observation, reading) {
+    var el = document.createElement('div'),
+        readingView = null;
+
+    el.classList.add('reading-wrapper');
+    readingView = ReadingView({
+      el: el,
+      observation: observation,
+      reading: reading,
+      baselineCalculator: _this._calculator
+    });
+
+    return {
+      title: 'Set ' + reading.get('set_number'),
+      content: el
+    };
+  };
+
+  _createSummaryTab = function (observation) {
+    var el = document.createElement('div'),
+        summaryView = null;
+
+    el.classList.add('summary-wrapper');
+    summaryView = ObservationSummaryView({
+      el: el,
+      observation: observation,
+      baselineCalculator: _this._calculator
+    });
+
+    return {
+      title: 'Summary',
+      content: el
+    };
+  };
 
 
-	ReadingGroupView.prototype.render = function () {
-		var observation = this._observation,
-		    readings = observation.get('readings').data(),
-		    i,
-		    len;
+  _this.render = function () {
+    var observation = _this._observation,
+        readings = observation.get('readings').data(),
+        i,
+        len;
 
-		for (i = 0, len = readings.length; i < len; i++) {
-			this._tablist.addTab(this._createTab(observation, readings[i]));
-		}
-		this._tablist.addTab(this._createSummaryTab(observation));
-	};
+    for (i = 0, len = readings.length; i < len; i++) {
+      _this._tablist.addTab(_createTab(observation, readings[i]));
+    }
+    _this._tablist.addTab(_createSummaryTab(observation));
+  };
 
-	ReadingGroupView.prototype._initialize = function () {
-		this._observation = this._options.observation;
-		this._calculator = this._options.baselineCalculator;
+  _initialize();
+  options = null;
+  return _this;
+};
 
-		this._tablist = new TabList({tabPosition: 'top'});
-		this._tablist.el.classList.add('reading-group-view');
-		this._el.appendChild(this._tablist.el);
-
-		// TODO :: Bind to observation, when readings are added/removed,
-		//         you will have to re-render
-		this.render();
-	};
-
-	ReadingGroupView.prototype._createTab = function (observation, reading) {
-		var el = document.createElement('div'),
-		    readingView = null;
-
-		el.classList.add('reading-wrapper');
-		readingView = new ReadingView({
-			el: el,
-			observation: observation,
-			reading: reading,
-			baselineCalculator: this._calculator
-		});
-
-		return {
-			title: 'Set ' + reading.get('set_number'),
-			content: el
-		};
-	};
-
-	ReadingGroupView.prototype._createSummaryTab = function (observation) {
-		var el = document.createElement('div'),
-		    summaryView = null;
-
-		el.classList.add('summary-wrapper');
-		summaryView = new ObservationSummaryView({
-			el: el,
-			observation: observation,
-			baselineCalculator: this._calculator
-		});
-
-		return {
-			title: 'Summary',
-			content: el
-		};
-	};
-
-
-	return ReadingGroupView;
-});
+module.exports = ReadingGroupView;
