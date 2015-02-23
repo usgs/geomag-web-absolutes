@@ -85,7 +85,7 @@ var ObservatorySummary = function (factory, attributes) {
    */
   _this.getObservatory = function (options) {
     options.id = _this.id;
-    _this._factory.getObservatory(options);
+    _factory.getObservatory(options);
   };
 
   _initialize(factory);
@@ -130,7 +130,7 @@ var ObservationSummary = function (factory, attributes) {
    */
   _this.getObservation = function (options) {
     options.id = _this.id;
-    _this._factory.getObservation(options);
+    _factory.getObservation(options);
   };
 
   _initialize(factory);
@@ -177,7 +177,7 @@ var ObservationDetail = function (factory, attributes) {
    *        called when error loading observatory.
    */
   _this.getObservatory = function (options) {
-    _this._factory.getObservatory(Util.extend({}, options,
+    _factory.getObservatory(Util.extend({}, options,
         {id: _this.get('observatory_id')}));
   };
 
@@ -189,7 +189,7 @@ var ObservationDetail = function (factory, attributes) {
    * @return {[type]}         [description]
    */
   _this.getObservatories = function (options) {
-    _this._factory.getObservatories(options);
+    _factory.getObservatories(options);
   };
 
   _initialize(factory);
