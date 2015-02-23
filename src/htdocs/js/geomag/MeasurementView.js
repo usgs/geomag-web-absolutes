@@ -141,7 +141,7 @@ var MeasurementView = function (options) {
   _updateErrorState = function (el, valid, helpText) {
     if (valid){
       // passes validation
-      Util.removeClass(el, 'error');
+      el.classList.remove('error');
       el.removeAttribute('title');
     } else {
       // does not pass validation

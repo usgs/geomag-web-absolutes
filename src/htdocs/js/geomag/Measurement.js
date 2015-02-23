@@ -77,22 +77,24 @@ var Measurement = function (options) {
     return errors;
   };
 
-  // These are in the same order as appear on the paper form.
-  Measurement.FIRST_MARK_UP = 'FirstMarkUp';
-  Measurement.FIRST_MARK_DOWN = 'FirstMarkDown';
-  Measurement.WEST_DOWN = 'WestDown';
-  Measurement.EAST_DOWN = 'EastDown';
-  Measurement.WEST_UP = 'WestUp';
-  Measurement.EAST_UP = 'EastUp';
-  Measurement.SECOND_MARK_UP = 'SecondMarkUp';
-  Measurement.SECOND_MARK_DOWN = 'SecondMarkDown';
-  Measurement.SOUTH_DOWN = 'SouthDown';
-  Measurement.NORTH_UP = 'NorthUp';
-  Measurement.SOUTH_UP = 'SouthUp';
-  Measurement.NORTH_DOWN = 'NorthDown';
+
 
   options = null;
   return _this;
 };
+
+// These are in the same order as appear on the paper form.
+Measurement.FIRST_MARK_UP = 'FirstMarkUp';
+Measurement.FIRST_MARK_DOWN = 'FirstMarkDown';
+Measurement.WEST_DOWN = 'WestDown';
+Measurement.EAST_DOWN = 'EastDown';
+Measurement.WEST_UP = 'WestUp';
+Measurement.EAST_UP = 'EastUp';
+Measurement.SECOND_MARK_UP = 'SecondMarkUp';
+Measurement.SECOND_MARK_DOWN = 'SecondMarkDown';
+Measurement.SOUTH_DOWN = 'SouthDown';
+Measurement.NORTH_UP = 'NorthUp';
+Measurement.SOUTH_UP = 'SouthUp';
+Measurement.NORTH_DOWN = 'NorthDown';
 
 module.exports = Measurement;
