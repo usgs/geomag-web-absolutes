@@ -11,7 +11,8 @@ You will need to have the following tools installed in order to run this project
 ---
 1. Install PHP
 
-    `npm install php`
+    `brew install php` (Mac)
+    `npm install php` (Windows)
 
 1. Install Sass and Compass with Ruby
 
