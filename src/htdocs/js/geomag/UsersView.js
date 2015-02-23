@@ -1,7 +1,7 @@
 'use strict';
 
 var CollectionTable = require('mvc/CollectionTable'),
-    Formatter = require('geomag/Formatter'),
+    Format = require('geomag/Formatter'),
     Util = require('util/Util');
 
 
@@ -51,7 +51,7 @@ var _DEFAULTS = {
         if (user.get('last_login') === null) {
           return '&ndash;';
         }
-        return Formatter.date(parseInt(user.get('last_login'), 10)*1000);
+        return Format.date(parseInt(user.get('last_login'), 10)*1000);
       }
     },
     {
@@ -83,4 +83,4 @@ var UsersView = function (options) {
   return _this;
 };
 
-module.export = UsersView;
+module.exports = UsersView;
