@@ -1,99 +1,99 @@
 .observations-view {
 
-	ul {
-		padding:0;
-		list-style:none;
+  ul {
+    padding:0;
+    list-style:none;
 
-		> li {
-			padding: 0;
-			position:relative;
-			border-top:1px solid rgb(207,207,207);
+    > li {
+      padding: 0;
+      position:relative;
+      border-top:1px solid rgb(207,207,207);
 
-			&.review-status-y:after,
-			&.review-status-n:after {
-				position:absolute;
-				right:0;
-				top:6px;
-				padding:0;
-				margin:0;
-				width:2em;
-				height:2em;
-				line-height:2;
-				text-align:center;
-				border-radius:2em;
-				background:rgba(0,0,0,0.05);
-			}
+      &.review-status-y:after,
+      &.review-status-n:after {
+        position:absolute;
+        right:0;
+        top:6px;
+        padding:0;
+        margin:0;
+        width:2em;
+        height:2em;
+        line-height:2;
+        text-align:center;
+        border-radius:2em;
+        background:rgba(0,0,0,0.05);
+      }
 
-			&.review-status-y:after {
-				content: '\2713';
-				color:#090;
-			}
+      &.review-status-y:after {
+        content: '\2713';
+        color:#090;
+      }
 
-			&.review-status-n:after {
-				content: '?'
-			}
+      &.review-status-n:after {
+        content: '?'
+      }
 
-			> a {
-				padding:10px 15px 10px 0;
-				display:block;
-			}
+      > a {
+        padding:10px 15px 10px 0;
+        display:block;
+      }
 
-			> a:hover {
-				cursor:pointer;
-				text-decoration:underline;
-			}
+      > a:hover {
+        cursor:pointer;
+        text-decoration:underline;
+      }
 
-			> a.delete {
-				background: #FFE0E0;
-				position: absolute;
-				top: 0;
-				right: 0;
-				border-left: 1px solid #ccc;
-			}
+      > a.delete {
+        background: #FFE0E0;
+        position: absolute;
+        top: 0;
+        right: 0;
+        border-left: 1px solid #ccc;
+      }
 
-			> a.delete:hover {
-				background: #fee;
-			}
-		}
+      > a.delete:hover {
+        background: #fee;
+      }
+    }
 
-		> li.empty {
-			padding:10px 15px;
-			background:#fff;
-			color:#888;
-			font-style:oblique;
-			cursor:default;
-		}
+    > li.empty {
+      padding:10px 15px;
+      background:#fff;
+      color:#888;
+      font-style:oblique;
+      cursor:default;
+    }
 
-		> li:first-child {
-			border-top:none;
-		}
-	}
+    > li:first-child {
+      border-top:none;
+    }
+  }
 
-	.button {
-		display:block;
-		width:100%;
-		color:#000;
-		background: #a2c07b;
-		border-radius: 3px;
-		padding: 10px 15px;
-		text-align: center;
-		text-decoration: none;
-		text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
-	}
+  .button {
+    display:block;
+    width:100%;
+    color:#000;
+    background: #a2c07b;
+    border-radius: 3px;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+  }
 
-	.button:hover {
-		cursor:pointer;
-		background-image: linear-gradient(to top, rgba(0,0,0,0.1) 0% ,rgba(0,0,0,0) 100%);
-	}
+  .button:hover {
+    cursor:pointer;
+    background-image: linear-gradient(to top, rgba(0,0,0,0.1) 0% ,rgba(0,0,0,0) 100%);
+  }
 }
 
 
 @media screen and (min-width:768px) {
 
-	.observations-view {
-		.button {
-			display:inline-block;
-		}
-	}
+  .observations-view {
+    .button {
+      display:inline-block;
+    }
+  }
 
 }

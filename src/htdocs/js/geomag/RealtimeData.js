@@ -1,76 +1,82 @@
-/* global define */
-define([
-	'mvc/Collection'
-], function (
-	Collection
-) {
-	'use strict';
+'use strict';
+
+var Collection = require('mvc/Collection');
 
 
-	/**
-	 * A wrapper around realtime data.
-	 *
-	 * @param data {Object} realtime data object.
-	 */
-	var RealtimeData = function (data) {
-		this._times = data.times;
-		this._data = new Collection(data.data);
-	};
+/**
+ * A wrapper around realtime data.
+ *
+ * @param data {Object} realtime data object.
+ */
+var RealtimeData = function (options) {
+  var _this,
+      _initialize,
 
+      _data,
+      _times;
 
-	RealtimeData.prototype.getStarttime = function () {
-		return this._times[0];
-	};
+  _this = {};
 
-	RealtimeData.prototype.getEndtime = function () {
-		return this._times[this._times.length - 1];
-	};
+  _initialize = function (options) {
+    _times = options.times;
+    _data = Collection(options.data);
+  };
 
-	/**
-	 * Get realtime data values.
-	 *
-	 * @param timeMs {Number}
-	 *        millisecond epoch timestamp (as in Date.getTime()).
-	 * @param observatory {String}
-	 *        observatory code.
-	 *        optional, default is first observatory in list.
-	 * @return {Object} keys are channels, values are channel values at
-	 *         the second nearest to timeMs.  If time not in range, returns null.
-	 */
-	RealtimeData.prototype.getValues = function (timeMs, observatory) {
-		var time,
-		    timeIndex,
-		    obj,
-		    channels,
-		    channel,
-		    r = null;
+  _this.getStarttime = function () {
+    return _times[0];
+  };
 
-		time = Math.round(timeMs / 1000);
-		timeIndex = this._times.indexOf(time);
-		if (timeIndex !== -1) {
-			// find correct observatory
-			if (observatory) {
-				obj = this._data.get(observatory);
-				if (obj === null) {
-					return null;
-				} else {
-					channels = obj.values;
-				}
-			} else {
-				// default to first observatory
-				channels = this._data.data()[0].values;
-			}
-			// extract values for time
-			r = {};
-			for (channel in channels) {
-				r[channel] = channels[channel][timeIndex];
-			}
-		}
+  _this.getEndtime = function () {
+    return _times[_times.length - 1];
+  };
 
-		return r;
-	};
+  /**
+   * Get realtime data values.
+   *
+   * @param timeMs {Number}
+   *        millisecond epoch timestamp (as in Date.getTime()).
+   * @param observatory {String}
+   *        observatory code.
+   *        optional, default is first observatory in list.
+   * @return {Object} keys are channels, values are channel values at
+   *         the second nearest to timeMs.  If time not in range, returns null.
+   */
+  _this.getValues = function (timeMs, observatory) {
+    var time,
+        timeIndex,
+        obj,
+        channels,
+        channel,
+        r = null;
 
+    time = Math.round(timeMs / 1000);
+    timeIndex = _times.indexOf(time);
+    if (timeIndex !== -1) {
+      // find correct observatory
+      if (observatory) {
+        obj = _data.get(observatory);
+        if (obj === null) {
+          return null;
+        } else {
+          channels = obj.values;
+        }
+      } else {
+        // default to first observatory
+        channels = _data.data()[0].values;
+      }
+      // extract values for time
+      r = {};
+      for (channel in channels) {
+        r[channel] = channels[channel][timeIndex];
+      }
+    }
 
-	// return constructor
-	return RealtimeData;
-});
+    return r;
+  };
+
+  _initialize(options);
+  options = null;
+  return _this;
+};
+
+module.exports = RealtimeData;

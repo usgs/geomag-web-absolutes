@@ -1,61 +1,53 @@
-/*global define*/
+'use strict';
 
-define([
-	'mvc/Model',
-	'util/Util'
-], function (
-	Model,
-	Util
-) {
-	'use strict';
+var Model = require('mvc/Model'),
+    Util = require('util/Util');
 
 
-	/** Define default attributes */
-	var DEFAULTS = {
-		'id': null,
-		'name': null,
-		'begin': null,
-		'end': null,
-		'correction': null,
-		'default_mark_id': null,
-		'default_electronics_id': null,
-		'default_theodolite_id': null,
-		'marks': null
-	};
+var _DEFAULTS = {
+  'id': null,
+  'name': null,
+  'begin': null,
+  'end': null,
+  'correction': null,
+  'default_mark_id': null,
+  'default_electronics_id': null,
+  'default_theodolite_id': null,
+  'marks': null
+};
 
 
-	/**
-	 * Constructor.
-	 *
-	 * @param  options {Object} pier attributes.
-	 */
-	var Pier = function (options) {
-		// Call parent constructor
-		Model.call(this, Util.extend({}, DEFAULTS, options));
-	};
+/**
+ * Constructor.
+ *
+ * @param  options {Object} pier attributes.
+ */
+var Pier = function (options) {
+  var _this,
 
-	// Pier extends Model
-	Pier.prototype = Object.create(Model.prototype);
+      _options;
 
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = Model(_options);
 
-	/**
-	 * Get the default mark for the pier.
-	 *
-	 * @return {Mark} the default mark, or null if no default is specified.
-	 */
-	Pier.prototype.getDefaultMark = function () {
-		var marks = this.get('marks'),
-		    default_mark_id = this.get('default_mark_id');
+  /**
+   * Get the default mark for the pier.
+   *
+   * @return {Mark} the default mark, or null if no default is specified.
+   */
+  _this.getDefaultMark = function () {
+    var marks = _this.get('marks'),
+        default_mark_id = _this.get('default_mark_id');
 
-		if (marks !== null && default_mark_id !== null) {
-			return marks.get(default_mark_id);
-		} else {
-			return null;
-		}
+    if (marks !== null && default_mark_id !== null) {
+      return marks.get(default_mark_id);
+    } else {
+      return null;
+    }
+  };
 
-	};
+  options = null;
+  return _this;
+};
 
-
-	// return constructor from closure
-	return Pier;
-});
+module.exports = Pier;
