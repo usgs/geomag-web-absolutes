@@ -1,30 +1,21 @@
-/* global define, describe, it */
-define([
-	'chai',
-	'mvc/Model',
+/* global chai, describe, it */
+'use strict';
 
-	'geomag/UserAdminView'
-], function (
-	chai,
-	Model,
+var UserAdminView = require('geomag/UserAdminView');
 
-	UserAdminView
-) {
-	'use strict';
-	var expect = chai.expect;
 
-	describe('Unit tests for User Admin View.', function () {
+var expect = chai.expect;
 
-		describe('Constructor', function () {
+describe('Unit tests for User Admin View.', function () {
 
-			it ('Exists', function () {
-				/* jshint -W030 */
-				expect(UserAdminView).to.not.be.undefined;
-				/* jshint +W030 */
-			});
+  describe('Constructor', function () {
 
-		}); // END :: Constructor
+    it ('Exists', function () {
+      /* jshint -W030 */
+      expect(UserAdminView).to.not.be.undefined;
+      /* jshint +W030 */
+    });
 
-	}); // END :: Unit tests for UserAdminView
+  }); // END :: Constructor
 
-});
+}); // END :: Unit tests for UserAdminView

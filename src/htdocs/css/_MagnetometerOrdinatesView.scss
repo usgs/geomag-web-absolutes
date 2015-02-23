@@ -1,38 +1,38 @@
 .magnetometer-ordinates-output {
 
-	.channel,
-	.mean,
-	.absolute,
-	.baseline {
-		padding-right:16px;
-	}
+  .channel,
+  .mean,
+  .absolute,
+  .baseline {
+    padding-right:16px;
+  }
 
-	table {
-		padding: 1em;
-		border:1px solid #d8d8d8;
-		background: #f8f8f8;
-	}
+  table {
+    padding: 1em;
+    border:1px solid #d8d8d8;
+    background: #f8f8f8;
+  }
 
-	td.mean,
-	td.absolute,
-	td.baseline {
-		text-align:right;
-	}
+  td.mean,
+  td.absolute,
+  td.baseline {
+    text-align:right;
+  }
 
-	.dMean,
-	.scaleValue {
-		font-style:italic;
-	}
+  .dMean,
+  .scaleValue {
+    font-style:italic;
+  }
 
-	.pier-correction-value {
-		padding-left: 7px;
-	}
-	.pier-correction {
-		font-size:smaller;
+  .pier-correction-value {
+    padding-left: 7px;
+  }
+  .pier-correction {
+    font-size:smaller;
 
-		td {
-			padding-top: 1em;
-		}
-	}
+    td {
+      padding-top: 1em;
+    }
+  }
 
 }

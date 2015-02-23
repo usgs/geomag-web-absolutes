@@ -2,33 +2,33 @@ $line-vertical-separation:4px;
 
 .inclination-view {
 
-	> dl {
-		margin: 0;
+  > dl {
+    margin: 0;
 
-		> dt {
-			float:left;
-			clear:left;
-			width:12em;
-			font-weight:bold;
-			margin-top:$line-vertical-separation;
-		}
+    > dt {
+      float:left;
+      clear:left;
+      width:12em;
+      font-weight:bold;
+      margin-top:$line-vertical-separation;
+    }
 
-		> dd {
-			float:left;
-			width:6em;
-			text-align:right;
-			margin-top:$line-vertical-separation;
-			margin-left:1em;
+    > dd {
+      float:left;
+      width:6em;
+      text-align:right;
+      margin-top:$line-vertical-separation;
+      margin-left:1em;
 
-			.degrees-minutes {
-				display:block;
-			}
-		}
+      .degrees-minutes {
+        display:block;
+      }
+    }
 
-	}
+  }
 
-	.south-down-minus-north-up,
-	.south-down-minus-north-up-value {
-		padding-top:10px;
-	}
+  .south-down-minus-north-up,
+  .south-down-minus-north-up-value {
+    padding-top:10px;
+  }
 }

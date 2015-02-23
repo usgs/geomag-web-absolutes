@@ -1,27 +1,7 @@
-/* global define, describe, it */
-define([
-	'chai',
-	'mvc/Model',
-	'geomag/User'
-], function (
-	chai,
-	Model,
-	User
-) {
-	'use strict';
-	var expect = chai.expect;
+/* global describe */
+'use strict';
 
-	describe('Unit tests for User.', function () {
 
-		describe('Constructor', function () {
-			var obj = new User();
+describe('Unit tests for User.', function () {
 
-			it('is an instance of the User', function () {
-				expect(obj).to.be.an.instanceOf(User);
-			});
-
-		}); // END :: Constructor
-
-	}); // END :: Unit tests for User
-
-});
+}); // END :: Unit tests for User

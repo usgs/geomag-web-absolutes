@@ -1,37 +1,30 @@
+'use strict';
 
-/*global define*/
-
-define([
-	'mvc/Model',
-	'util/Util'
-], function(
-	Model,
-	Util
-) {
-	'use strict';
+var Model = require('mvc/Model'),
+    Util = require('util/Util');
 
 
-	/** Define default attributes. */
-	var DEFAULTS = {
-		'name': null,
-		'begin': null,
-		'end': null,
-		'azimuth': null
-	};
+var _DEFAULTS = {
+  'name': null,
+  'begin': null,
+  'end': null,
+  'azimuth': null
+};
 
-	/**
-		* Constructor.
-		*
-		* @param  options {Object} observatory attributes.
-		*/
-	var Mark = function (options) {
-		// Call parent constructor
-		Model.call(this, Util.extend({}, DEFAULTS, options));
-	};
 
-	// Mark extends Model
-	Mark.prototype = Object.create(Model.prototype);
+/**
+  * Constructor.
+  *
+  * @param  options {Object} observatory attributes.
+  */
+var Mark = function (options) {
+  var _this;
 
-	// return constructor from closure
-	return Mark;
-});
+
+  _this = Model(Util.extend({}, _DEFAULTS, options));
+
+
+  return _this;
+};
+
+module.exports = Mark;

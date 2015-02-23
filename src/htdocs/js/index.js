@@ -1,33 +1,18 @@
-/* global observatoryId, MOUNT_PATH */
+/* global observatoryId */
+'use strict';
 
-require.config({
-	baseUrl: MOUNT_PATH + '/js',
-	paths: {
-		'mvc': '/hazdev-webutils/src/mvc',
-		'util': '/hazdev-webutils/src/util'
-	},
-	shim: {
-	}
-});
+var ObservatoryView = require('geomag/ObservatoryView'),
+    User = require('geomag/User');
 
-require([
-	'geomag/ObservatoryView',
-	'geomag/User'
-], function (
-	ObservatoryView,
-	User
-) {
-	'use strict';
+var id = observatoryId,
+    // user = User.getCurrentUser();
+    user = User();
 
-	var id = observatoryId,
-	    user = User.getCurrentUser();
+if (user.get('admin') !== 'Y') {
+  id = parseInt(user.get('default_observatory_id'), 10);
+}
 
-	if (user.get('admin') !== 'Y') {
-		id = parseInt(user.get('default_observatory_id'), 10);
-	}
-
-	new ObservatoryView({
-		el: document.querySelector('.observatory-view'),
-		observatoryId: id
-	});
+ObservatoryView({
+  el: document.querySelector('.observatory-view'),
+  observatoryId: id
 });
