@@ -47,7 +47,8 @@ var browserify = {
       paths: [
         process.cwd() + '/' + config.src + '/htdocs/js',
         process.cwd() + '/node_modules/hazdev-tablist/src',
-        process.cwd() + '/node_modules/hazdev-webutils/src'
+        process.cwd() + '/node_modules/hazdev-webutils/src',
+        process.cwd() + '/node_modules/d3'
       ]
     }
   },
