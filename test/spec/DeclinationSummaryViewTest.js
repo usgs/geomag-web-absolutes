@@ -116,20 +116,24 @@ describe('DeclinationSummaryViewTest', function () {
     });
 
     it('Should set shift +/- 180', function () {
-      var view,
-          reading = Reading(),
-          calculator = ObservationBaselineCalculator();
+      var calculator = ObservationBaselineCalculator(),
+          dropDown,
+          el = document.createElement('tr'),
+          view,
+          reading = Reading();
 
       view = DeclinationSummaryView({
-        el: document.createElement('tr'),
+        el: el,
         reading: reading,
         calculator: calculator
       });
 
+      dropDown = view.el.querySelector('.shift > select');
+
       expect(reading.get('declination_shift')).to.equal(0);
-      changeSelectValue(view._shift, '-180');
+      changeSelectValue(dropDown, '-180');
       expect(reading.get('declination_shift')).to.equal(-180);
-      changeSelectValue(view._shift, '180');
+      changeSelectValue(dropDown, '180');
       expect(reading.get('declination_shift')).to.equal(180);
     });
   });
