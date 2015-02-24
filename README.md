@@ -2,42 +2,42 @@ geomag-baseline-calculator
 ==========================
 
 Enter Geomagnetic absolute measurements to calculate *baselines* to be applied
-to raw magnetometer data.
+to raw magnetometer data. Publish the calibration points for use in magnetic
+data processing software.
 
 Getting Started
 ---------------
 
-### Dependencies:
+1. [Use git to clone geomag-baseline-calculator from git repository](readme_git_install.md)
 
-1. Node, NPM
-1. Sass, Compass
-1. PHP-CGI 5.4+
-1. Grunt
+1. [Install needed dependencies and run them](readme_dependency_install.md)
 
-### Getting Started:
-Make sure you are in your `geomag-baseline-calculator` project directory.
+1. Set up your environment and database
 
-1. Install PHP
+    `./src/lib/pre-install` (Unix) `php src/lib/pre-install.php` (Windows)
 
-    `npm install php`
+    If you're not sure what to do, pick
 
-1. Install NPM dependencies
+      `[3] Re-configure using default configuration as defaults.`
 
-    `npm install`
+    Leave all options at their defaults except for
 
-1. Install Sass and Compass with Ruby
+      `Would you like to set up the absolutes database at this time [N]`,
 
-    `gem install sass`
-
-    `gem install compass`
+    to which you should answer `Y`.
 
 1. Preview in a browser
 
     `grunt`
 
-    On windows, `gateway` has trouble resolving default documents and you need
-    to change the opened url to `http://localhost:8080/index.php`.
-    To view the application go to 'http://localhost:8080/observation.php'
+    On windows, `gateway` has trouble resolving default documents so you may
+    need to change the opened url to
+
+      `http://localhost:8080/index.php`
+
+    To view the application go to
+
+      `http://localhost:8080/observation.php`
 
 ### Having trouble getting started?
 
@@ -46,4 +46,4 @@ command line interface globally
 
     `npm install -g grunt-cli`
 
-[Dependency install details for Windows and Mac](readme_dependency_install.md)
+[Dependency install details](readme_dependency_install.md)
