@@ -55,11 +55,9 @@
     }
   }
 
-
   .declination-summary-view,
   .horizontal-intensity-summary-view,
   .vertical-intensity-summary-view {
-
     .valid,
     .start-time,
     .end-time,
@@ -79,7 +77,70 @@
     .baseline-values {
       text-align: right;
     }
-
   }
+}
+
+@media print {
+  .observation-summary-view {
+    font-size: 11px;
+    h2 {
+      font-size: 12px;
+      margin: 0px;
+    }
+
+    .declination-summary,
+    .horizontal-summary,
+    .vertical-summary {
+      > tfoot {
+        > tr {
+          &:first-child {
+            > th,
+            > td {
+              padding-top: 0;
+            }
+          }
+        }
+      }
+     }
+
+    .reviewer {
+      > label {
+          font-weight:normal;
+          font-size: 10px;
+      }
+      > div {
+          font-weight:normal;
+          font-size: 10px;
+      }
+      > textarea {
+          height:4em;
+      }
+    }
+  }
+
+  .page-header,
+  .tab-position-indicator,
+  .tablist-container,
+  .tablist >
+  .tablist-forward-button,
+  .tablist >
+  .tablist-backward-button {
+    display:none;
+  }
+
+  .declination-summary-view,
+  .horizontal-intensity-summary-view,
+  .vertical-intensity-summary-view {
+    .shift {
+      display: none;
+    }
+  }
+
+  .declination-summary
+    > thead
+      > tr
+        > th.shift{
+          display: none;
+        }
 
 }

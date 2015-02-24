@@ -21,3 +21,8 @@
   }
 }
 
+@media print {
+  .observation-view-wrapper .observation-view > .observation-view-controls{
+    display: none;
+  }
+}

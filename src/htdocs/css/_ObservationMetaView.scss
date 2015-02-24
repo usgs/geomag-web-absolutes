@@ -72,3 +72,35 @@
     }
   }
 }
+
+@media print {
+  .observation-meta-view {
+    font-size: 12px;
+    > label {
+      font-size: 12px;
+    }
+    .left-aligned,
+    .right-aligned {
+      >label {
+        clear: left;
+        float: left;
+      }
+      > input,
+      > select,
+      > textarea,
+      > text,
+      > .value {
+        float: left;
+        margin-bottom: 0px;
+      }
+    }
+  }
+
+  .observation-meta-view .left-aligned > label.print-hidden,
+  .pier-temperature,
+  .mark,
+  .electronics,
+  .theodolite {
+    display: none;
+  }
+}
