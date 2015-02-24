@@ -76,14 +76,18 @@ describe('Unit tests for InclinationView class', function () {
       expect(view._inclinationAngle.innerHTML).to.equal(
           Format.degreesAndDegreesMinutes(calculator.inclination()));
       expect(view._horizontalComponent.textContent).to.equal(
-          calculator.horizontalComponent().toFixed(3) + 'nT');
+          Format.roundHalfToEven(
+              calculator.horizontalComponent(),3) + 'nT');
       expect(view._verticalComponent.textContent).to.equal(
-          calculator.verticalComponent().toFixed(3) + 'nT');
+          Format.roundHalfToEven(
+            calculator.verticalComponent(),3) + 'nT');
 
       expect(view._southDownMinusNorthUp.textContent).to.equal(
-          (calculator.southDownMinusNorthUp()*60).toFixed(3) + '\'');
+          Format.roundHalfToEven(
+              (calculator.southDownMinusNorthUp()*60),3) + '\'');
       expect(view._northDownMinusSouthUp.textContent).to.equal(
-          (calculator.northDownMinusSouthUp()*60).toFixed(3) + '\'');
+          Format.roundHalfToEven(
+              (calculator.northDownMinusSouthUp()*60),3) + '\'');
     });
 
   });

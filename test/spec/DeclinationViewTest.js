@@ -92,19 +92,21 @@ describe('Unit tests for DeclinationView class', function () {
           Format.degreesAndDegreesMinutes(
               calculator.magneticSouthMeridian()));
       expect(view._meanMark.textContent).to.equal(
-          calculator.meanMark().toFixed(3) + '°');
+          Format.roundHalfToEven(calculator.meanMark(),3) + '°');
       expect(view._magneticAzimuthOfMark.textContent).to.equal(
-          calculator.magneticAzimuthMark().toFixed(3) + '°');
+          Format.roundHalfToEven(
+              calculator.magneticAzimuthMark(),3) + '°');
       expect(view._trueAzimuthOfMark.textContent).to.equal('' +
           calculator.trueAzimuthOfMark() + '°');
       expect(view._magneticDeclination.innerHTML).to.equal(
           Format.degreesAndDegreesMinutes(
               calculator.magneticDeclination()));
-
       expect(view._westUpMinusEastDown.textContent).to.equal(
-          (calculator.westUpMinusEastDown()*60).toFixed(3) + '\'');
+          Format.roundHalfToEven(
+            (calculator.westUpMinusEastDown()*60),3) + '\'');
       expect(view._eastUpMinusWestDown.textContent).to.equal(
-          (calculator.eastUpMinusWestDown()*60).toFixed(3) + '\'');
+          Format.roundHalfToEven(
+          (calculator.eastUpMinusWestDown()*60),3) + '\'');
     });
 
   });
