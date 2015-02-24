@@ -1,53 +1,48 @@
-/* global define */
-define([
-	'mvc/Model',
-	'util/Util',
+/* global CurrentUser */
+'use strict';
 
-	'CurrentUser'
-], function (
-	Model,
-	Util,
-
-	CurrentUser
-) {
-	'use strict';
-
-	var DEFAULTS = {
-		'id': null,
-		'name': null,
-		'username': null,
-		'default_observatory_id': null,
-		'email': null,
-		'last_login': null,
-		'admin': null,
-		'enabled': null
-	};
-
-	// static reference to currently logged in user
-	var CURRENT_USER = null;
+var Model = require('mvc/Model'),
+    Util = require('util/Util');
 
 
-	/**
-	 * Construct a new User object.
-	 */
-	var User = function (attributes) {
-		Model.call(this, Util.extend({}, DEFAULTS, attributes));
-	};
-	// User extends Model
-	User.prototype = Object.create(Model.prototype);
+// static reference to currently logged in user
+var _CURRENT_USER = null;
+
+var _DEFAULTS = {
+  'id': null,
+  'name': null,
+  'username': null,
+  'default_observatory_id': null,
+  'email': null,
+  'last_login': null,
+  'admin': null,
+  'enabled': null
+};
 
 
-	/**
-	 * Static access to current user object.
-	 *
-	 * @return currently logged in user.
-	 */
-	User.getCurrentUser = function () {
-		if (CURRENT_USER === null) {
-			CURRENT_USER = new User(CurrentUser);
-		}
-		return CURRENT_USER;
-	};
+/**
+ * Construct a new User object.
+ */
+var User = function (options) {
+  var _this;
 
-	return User;
-});
+  _this = Model(Util.extend({}, _DEFAULTS, options));
+
+  options = null;
+  return _this;
+};
+
+/**
+ * Static access to current user object.
+ *
+ * @return currently logged in user.
+ */
+User.getCurrentUser = function () {
+  if (_CURRENT_USER === null) {
+    _CURRENT_USER = User(CurrentUser);
+  }
+
+  return _CURRENT_USER;
+};
+
+module.exports = User;

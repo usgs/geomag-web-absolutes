@@ -1,79 +1,57 @@
-/* global define, describe, it, before, after */
+/* global chai, sinon, describe, it, before, after */
+'use strict';
 
-define([
-	'chai',
-	'sinon',
+var ObservationsView = require('geomag/ObservationsView'),
+    observatory1 = require('./observatory1'),
+    Xhr = require('util/Xhr');
 
-	'util/Util',
-	'util/Xhr',
 
-	'geomag/ObservationsView',
-	'./observatory1'
-], function (
-	chai,
-	sinon,
+var expect = chai.expect;
+var DEFAULTS = {
+  observatoryId: 1
+};
+var stub;
+var observationsView;
 
-	Util,
-	Xhr,
+describe('ObservationsView Unit Tests', function () {
 
-	ObservationsView,
-	observatory1
-) {
+  before(function () {
+    stub = sinon.stub(Xhr, 'ajax', function (options) {
+      options.success(observatory1);
+    });
 
-	'use strict';
+    observationsView = ObservationsView(DEFAULTS);
+  });
 
-	var expect = chai.expect;
-	var DEFAULTS = {
-		observatoryId: 1
-	};
-	var stub;
-	var observationsView;
+  after(function() {
+    stub.restore();
+  });
 
-	describe('Observations Unit Tests', function () {
+  describe('Constructor', function () {
 
-		before(function () {
-			stub = sinon.stub(Xhr, 'ajax', function (options) {
-				options.success(observatory1);
-			});
+    it('Can be defined', function () {
+      /* jshint -W030 */
+      expect(observationsView).to.not.be.undefined;
+      /* jshint +W030 */
+    });
 
-			observationsView = new ObservationsView(DEFAULTS);
-		});
+  });
 
-		after(function() {
-			stub.restore();
-		});
+  describe('Observations', function () {
 
-		describe('Constructor', function () {
+    it('can add a new observation button', function () {
+      var el = observationsView.el.querySelector('.observations-new'),
+          button = el.querySelector('.button');
+      /* jshint -W030 */
+      expect(button).to.not.be.undefined;
+      /* jshint +W030 */
+    });
 
-			it('Can be defined', function () {
-				/* jshint -W030 */
-				expect(observationsView).to.not.be.undefined;
-				/* jshint +W030 */
-			});
+    it('can get all existing observations', function () {
+      var el = observationsView.el.querySelector('.observations-all'),
+          observations = el.querySelectorAll('li');
+      expect(observations.length).to.equal(11);
+    });
 
-			it('Can be instantiated', function () {
-				expect(observationsView).to.be.an.instanceOf(ObservationsView);
-			});
-
-		});
-
-		describe('Observations', function () {
-
-			it('can add a new observation button', function () {
-				var el = observationsView._el.querySelector('.observations-new'),
-				    button = el.querySelector('.button');
-				/* jshint -W030 */
-				expect(button).to.not.be.undefined;
-				/* jshint +W030 */
-			});
-
-			it('can get all existing observations', function () {
-				var el = observationsView._el.querySelector('.observations-all'),
-				    observations = el.querySelectorAll('li');
-				expect(observations.length).to.equal(11);
-			});
-
-		});
-	});
-
+  });
 });

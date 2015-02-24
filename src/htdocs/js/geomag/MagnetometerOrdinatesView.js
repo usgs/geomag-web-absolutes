@@ -1,173 +1,181 @@
-/* global define */
-define([
-	'mvc/View',
-	'util/Util',
+'use strict';
 
-	'geomag/Formatter',
-	'geomag/Measurement'
-], function (
-	View,
-	Util,
-
-	Format,
-	Measurement
-) {
-	'use strict';
+var Format = require('geomag/Formatter'),
+    Measurement = require('geomag/Measurement'),
+    Util = require('util/Util'),
+    View = require('mvc/View');
 
 
-	var DEFAULTS = {
-		'observation': null,
-		'baselineCalculator': null,
-		'readings': null
-	};
+var _DEFAULTS = {
+  'observation': null,
+  'baselineCalculator': null,
+  'readings': null
+};
 
 
-	var MagnetometerOrdinatesView = function (options) {
-		this._options = Util.extend({}, DEFAULTS, options);
-		View.call(this, this._options);
-	};
+  /**
+   * Construct a new MagnetometerOrdinatesView.
+   *
+   * @param option {Object}
+   *        view options.
+   */
+var MagnetometerOrdinatesView = function (options) {
+  var _this,
+      _initialize,
 
-	MagnetometerOrdinatesView.prototype = Object.create(View.prototype);
+      _options;
 
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
+  /**
+   * Initialize view, and call render.
+   * @param options {Object} same as constructor.
+   */
+  _initialize = function () {
+    var el = _this.el,
+        measurements;
 
-	MagnetometerOrdinatesView.prototype._initialize = function () {
-		var measurements = this._options.reading.getMeasurements();
+    measurements = _options.reading.getMeasurements();
+    _this._reading = _options.reading;
+    _this._calculator = _options.baselineCalculator;
 
-		this._reading = this._options.reading;
-		this._calculator = this._options.baselineCalculator;
+    el.innerHTML = [
+      '<table>',
+        '<thead>',
+          '<tr>',
+            '<th scope="col" class="channel">Channel</th>',
+            '<th scope="col" class="mean">Ordinate Mean</th>',
+            '<th scope="col" class="absolute">Absolute</th>',
+            '<th scope="col" class="baseline">Baseline</th>',
+          '</tr>',
+        '</thead>',
+        '<tbody>',
+          '<tr>',
+            '<th class="channel h">H</th>',
+            '<td class="mean hMean"></td>',
+            '<td class="absolute hAbsolute"></td>',
+            '<td class="baseline hBaseline"></td>',
+          '</tr>',
+          '<tr>',
+            '<th class="channel e">E</th>',
+            '<td class="mean eMean"></td>',
+            '<td class="absolute eAbsolute"></td>',
+            '<td class="baseline eBaseline"></td>',
+          '</tr>',
+          '<tr>',
+            '<th class="channel d">D</th>',
+            '<td class="mean dMean"></td>',
+            '<td class="absolute dAbsolute"></td>',
+            '<td class="baseline dBaseline"></td>',
+          '</tr>',
+          '<tr>',
+            '<th class="channel z">Z</th>',
+            '<td class="mean zMean"></td>',
+            '<td class="absolute zAbsolute"></td>',
+            '<td class="baseline zBaseline"></td>',
+          '</tr>',
+          '<tr>',
+            '<th class="channel f">F</th>',
+            '<td class="mean fMean"></td>',
+            '<td class="absolute fAbsolute"></td>',
+            '<td class="baseline fBaseline"></td>',
+          '</tr>',
+        '</tbody>',
+        '<tfoot class="pier-correction">',
+          '<tr>',
+            '<td colspan="4">Pier Correction',
+            '<span class="pier-correction-value"></span></td>',
+          '</tr>',
+        '</tfoot>',
+      '</p>',
+      '</table>',
+      '<p class="scaleValue"></p>'
+    ].join('');
 
-		this._el.innerHTML = [
-			'<table>',
-				'<thead>',
-					'<tr>',
-						'<th scope="col" class="channel">Channel</th>',
-						'<th scope="col" class="mean">Ordinate Mean</th>',
-						'<th scope="col" class="absolute">Absolute</th>',
-						'<th scope="col" class="baseline">Baseline</th>',
-					'</tr>',
-				'</thead>',
-				'<tbody>',
-					'<tr>',
-						'<th class="channel h">H</th>',
-						'<td class="mean hMean"></td>',
-						'<td class="absolute hAbsolute"></td>',
-						'<td class="baseline hBaseline"></td>',
-					'</tr>',
-					'<tr>',
-						'<th class="channel e">E</th>',
-						'<td class="mean eMean"></td>',
-						'<td class="absolute eAbsolute"></td>',
-						'<td class="baseline eBaseline"></td>',
-					'</tr>',
-					'<tr>',
-						'<th class="channel d">D</th>',
-						'<td class="mean dMean"></td>',
-						'<td class="absolute dAbsolute"></td>',
-						'<td class="baseline dBaseline"></td>',
-					'</tr>',
-					'<tr>',
-						'<th class="channel z">Z</th>',
-						'<td class="mean zMean"></td>',
-						'<td class="absolute zAbsolute"></td>',
-						'<td class="baseline zBaseline"></td>',
-					'</tr>',
-					'<tr>',
-						'<th class="channel f">F</th>',
-						'<td class="mean fMean"></td>',
-						'<td class="absolute fAbsolute"></td>',
-						'<td class="baseline fBaseline"></td>',
-					'</tr>',
-				'</tbody>',
-				'<tfoot class="pier-correction">',
-					'<tr>',
-						'<td colspan="4">Pier Correction',
-						'<span class="pier-correction-value"></span></td>',
-					'</tr>',
-				'</tfoot>',
-			'</p>',
-			'</table>',
-			'<p class="scaleValue"></p>'
-		].join('');
+    // save references to elements that will be updated during render
+    _this._hMean = el.querySelector('.hMean');
+    _this._eMean = el.querySelector('.eMean');
+    _this._dMean = el.querySelector('.dMean');
+    _this._zMean = el.querySelector('.zMean');
+    _this._fMean = el.querySelector('.fMean');
 
-		this._hMean = this._el.querySelector('.hMean');
-		this._eMean = this._el.querySelector('.eMean');
-		this._dMean = this._el.querySelector('.dMean');
-		this._zMean = this._el.querySelector('.zMean');
-		this._fMean = this._el.querySelector('.fMean');
+    _this._absoluteH = el.querySelector('.hAbsolute');
+    _this._absoluteD = el.querySelector('.dAbsolute');
+    _this._absoluteZ = el.querySelector('.zAbsolute');
+    _this._absoluteF = el.querySelector('.fAbsolute');
 
-		this._absoluteH = this._el.querySelector('.hAbsolute');
-		this._absoluteD = this._el.querySelector('.dAbsolute');
-		this._absoluteZ = this._el.querySelector('.zAbsolute');
-		this._absoluteF = this._el.querySelector('.fAbsolute');
+    _this._hBaseline = el.querySelector('.hBaseline');
+    _this._eBaseline = el.querySelector('.eBaseline');
+    _this._dBaseline = el.querySelector('.dBaseline');
+    _this._zBaseline = el.querySelector('.zBaseline');
 
-		this._hBaseline = this._el.querySelector('.hBaseline');
-		this._eBaseline = this._el.querySelector('.eBaseline');
-		this._dBaseline = this._el.querySelector('.dBaseline');
-		this._zBaseline = this._el.querySelector('.zBaseline');
+    _this._pierCorrection = el.querySelector('.pier-correction-value');
+    _this._scaleValue = el.querySelector('.scaleValue');
 
-		this._pierCorrection = this._el.querySelector('.pier-correction-value');
-		this._scaleValue = this._el.querySelector('.scaleValue');
+    // hook up to measurements on change.
+    // Only need time/angles not markup/markdown
+    measurements[Measurement.WEST_DOWN][0].on('change', 'render', _this);
+    measurements[Measurement.EAST_DOWN][0].on('change', 'render', _this);
+    measurements[Measurement.WEST_UP][0].on('change', 'render', _this);
+    measurements[Measurement.EAST_UP][0].on('change', 'render', _this);
+    measurements[Measurement.SOUTH_DOWN][0].on('change', 'render', _this);
+    measurements[Measurement.NORTH_UP][0].on('change', 'render', _this);
+    measurements[Measurement.SOUTH_UP][0].on('change', 'render', _this);
+    measurements[Measurement.NORTH_DOWN][0].on('change', 'render', _this);
 
-		// hook up to measurements on change.
-		// Only need time/angles not markup/markdown
-		measurements[Measurement.WEST_DOWN][0].on('change', this.render, this);
-		measurements[Measurement.EAST_DOWN][0].on('change', this.render, this);
-		measurements[Measurement.WEST_UP][0].on('change', this.render, this);
-		measurements[Measurement.EAST_UP][0].on('change', this.render, this);
-		measurements[Measurement.SOUTH_DOWN][0].on('change', this.render, this);
-		measurements[Measurement.NORTH_UP][0].on('change', this.render, this);
-		measurements[Measurement.SOUTH_UP][0].on('change', this.render, this);
-		measurements[Measurement.NORTH_DOWN][0].on('change', this.render, this);
-		// hook up to calculator on change.
-		// for changes to pier and mark.
-		this._calculator.on('change', this.render, this);
-		this._reading.on('change', this.render, this);
+    // hook up to calculator on change, for changes to pier and mark.
+    _this._calculator.on('change', 'render', _this);
+    _this._reading.on('change', 'render', _this);
 
-		this.render();
-	};
+    _this.render();
+  };
 
-	MagnetometerOrdinatesView.prototype.render = function () {
-		var calculator = this._calculator,
-				reading = this._reading;
+  _this.render = function () {
+    var calculator = _this._calculator,
+        reading = _this._reading;
 
-		this._hMean.innerHTML =
-				Format.nanoteslas(calculator.meanH(reading));
-		this._eMean.innerHTML =
-				Format.nanoteslas(calculator.meanE(reading));
-		this._dMean.innerHTML =
-				Format.minutes(calculator.dComputed(reading)*60);
-		this._zMean.innerHTML =
-				Format.nanoteslas(calculator.meanZ(reading));
-		this._fMean.innerHTML =
-				Format.nanoteslas(calculator.meanF(reading));
+    _this._hMean.innerHTML =
+        Format.nanoteslas(calculator.meanH(reading));
+    _this._eMean.innerHTML =
+        Format.nanoteslas(calculator.meanE(reading));
+    _this._dMean.innerHTML =
+        Format.minutes(calculator.dComputed(reading)*60);
+    _this._zMean.innerHTML =
+        Format.nanoteslas(calculator.meanZ(reading));
+    _this._fMean.innerHTML =
+        Format.nanoteslas(calculator.meanF(reading));
 
-		this._absoluteH.innerHTML =
-				Format.nanoteslas(calculator.horizontalComponent(reading));
-		this._absoluteD.innerHTML =
-				Format.minutes((calculator.magneticDeclination(reading) * 60));
-		this._absoluteZ.innerHTML =
-				Format.nanoteslas(calculator.verticalComponent(reading));
-		this._absoluteF.innerHTML =
-			Format.nanoteslas(calculator.fCorrected(reading));
+    _this._absoluteH.innerHTML =
+        Format.nanoteslas(calculator.horizontalComponent(reading));
+    _this._absoluteD.innerHTML =
+        Format.minutes((calculator.magneticDeclination(reading) * 60));
+    _this._absoluteZ.innerHTML =
+        Format.nanoteslas(calculator.verticalComponent(reading));
+    _this._absoluteF.innerHTML =
+      Format.nanoteslas(calculator.fCorrected(reading));
 
-		this._hBaseline.innerHTML =
-			Format.nanoteslas(calculator.hBaseline(reading));
-		this._eBaseline.innerHTML =
-			Format.nanoteslas(calculator.eBaseline(reading));
-		this._dBaseline.innerHTML =
-			Format.minutes(calculator.dBaseline(reading) * 60);
-		this._zBaseline.innerHTML =
-			Format.nanoteslas(calculator.zBaseline(reading));
+    _this._hBaseline.innerHTML =
+      Format.nanoteslas(calculator.hBaseline(reading));
+    _this._eBaseline.innerHTML =
+      Format.nanoteslas(calculator.eBaseline(reading));
+    _this._dBaseline.innerHTML =
+      Format.minutes(calculator.dBaseline(reading) * 60);
+    _this._zBaseline.innerHTML =
+      Format.nanoteslas(calculator.zBaseline(reading));
 
-		this._pierCorrection.innerHTML =
-				Format.rawNanoteslas(calculator.pierCorrection());
-		this._scaleValue.innerHTML = [
-				'Ordinate Mean D is calculated using ',
-				'<code>(Corrected F * scaleValue / 60)</code>',
-				', where <code>',
-						'scaleValue = ', calculator.scaleValue(reading).toFixed(4),
-				'</code>'].join('');
-	};
+    _this._pierCorrection.innerHTML =
+        Format.rawNanoteslas(calculator.pierCorrection());
+    _this._scaleValue.innerHTML = [
+        'Ordinate Mean D is calculated using ',
+        '<code>(Corrected F * scaleValue / 60)</code>',
+        ', where <code>',
+            'scaleValue = ', calculator.scaleValue(reading).toFixed(4),
+        '</code>'].join('');
+  };
 
-	return MagnetometerOrdinatesView;
-});
+  _initialize();
+  options = null;
+  return _this;
+};
+
+module.exports = MagnetometerOrdinatesView;

@@ -3,72 +3,72 @@
 
 // all become top aligned on small screens
 .observation-meta-view {
-	.top-aligned,
-	.left-aligned,
-	.right-aligned {
-		> label,
-		> .label {
-			padding: 0;
-			margin: 0;
-			display: block;
-			font-weight: bold;
-			padding-right: 5px;
-			line-height: 1.9;
-		}
+  .top-aligned,
+  .left-aligned,
+  .right-aligned {
+    > label,
+    > .label {
+      padding: 0;
+      margin: 0;
+      display: block;
+      font-weight: bold;
+      padding-right: 5px;
+      line-height: 1.9;
+    }
 
-		> input,
-		> select,
-		> textarea,
-		> .value {
-			margin-bottom: 1em;
-		}
+    > input,
+    > select,
+    > textarea,
+    > .value {
+      margin-bottom: 1em;
+    }
 
-		> textarea {
-			width: 100%;
-		}
-	}
+    > textarea {
+      width: 100%;
+    }
+  }
 
-	.julian-day-value {
-		padding: 0.5em;
-		font-size: 0.75em;
-		background: #f8f8f8;
-		width: 3em;
-		margin-left: 2px;
-		text-align: center;
-	}
+  .julian-day-value {
+    padding: 0.5em;
+    font-size: 0.75em;
+    background: #f8f8f8;
+    width: 3em;
+    margin-left: 2px;
+    text-align: center;
+  }
 
-	// left and right stack, and change label text alignment
-	@media screen and (min-width:768px) {
-		.left-aligned,
-		.right-aligned {
-			> label,
-			> .label {
-				float: left;
-				clear: left;
-				width: 7em;
-				padding-right: 8px;
-			}
+  // left and right stack, and change label text alignment
+  @media screen and (min-width:768px) {
+    .left-aligned,
+    .right-aligned {
+      > label,
+      > .label {
+        float: left;
+        clear: left;
+        width: 7em;
+        padding-right: 8px;
+      }
 
-			> input,
-			> select,
-			> textarea,
-			> .value {
-				float: left;
-				margin-bottom: 5px;
-			}
+      > input,
+      > select,
+      > textarea,
+      > .value {
+        float: left;
+        margin-bottom: 5px;
+      }
 
-			&:after {
-				display: block;
-				content: ' ';
-				clear: both;
-			}
-		}
+      &:after {
+        display: block;
+        content: ' ';
+        clear: both;
+      }
+    }
 
-		.right-aligned {
-			> label,
-			> .label {
-				text-align: right;
-			}
-		}
-	}
+    .right-aligned {
+      > label,
+      > .label {
+        text-align: right;
+      }
+    }
+  }
 }

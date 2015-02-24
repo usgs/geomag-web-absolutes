@@ -12,15 +12,15 @@ $CURRENT_USER = $USER_FACTORY->getCurrentUser();
 session_write_close();
 
 if ($CURRENT_USER === null) {
-	// not logged in, send to login page
-	header('Location: ' . $MOUNT_PATH . '/login.php');
-	exit();
+  // not logged in, send to login page
+  header('Location: ' . $MOUNT_PATH . '/login.php');
+  exit();
 } else {
-	// logged in, define user for js.
-	$FOOT = '<script>' .
-			'define("CurrentUser", ' . json_encode($CURRENT_USER) . ');' .
-			'</script>' .
-			(isset($FOOT) ? $FOOT : '');
+  // logged in, define user for js.
+  $FOOT = '<script>' .
+      'var CurrentUser = ' . json_encode($CURRENT_USER) . ';' .
+      '</script>' .
+      (isset($FOOT) ? $FOOT : '');
 }
 
 ?>
