@@ -62,6 +62,11 @@ var browserify = {
     dest: config.build + '/' + config.src + '/htdocs/js/observation.js'
   },
 
+  plot: {
+    src: [config.src + '/htdocs/js/plot.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/plot.js'
+  },
+
   useradmin: {
     src: [config.src + '/htdocs/js/useradmin.js'],
     dest: config.build + '/' + config.src + '/htdocs/js/useradmin.js'
