@@ -17,7 +17,7 @@ if (!isset($TEMPLATE)) {
 
   $FOOT = '
     <script>
-      var observationId = ' . $id . ';
+      var observatoryId = ' . $id . ';
       var MOUNT_PATH = \'' . $MOUNT_PATH . '\';
     </script>
     <script src="' . $MOUNT_PATH . '/js/plot.js"></script>
@@ -35,4 +35,11 @@ if (!isset($TEMPLATE)) {
 }
 ?>
 
-<div class="observation-baseline-plot-wrapper"></div>
+<div class="observation-baseline-plot-wrapper">
+  <section class="observatory-select-view">
+    <h2>Observatory</h2>
+    <select class="observatory-select-box"></select>
+  </section>
+
+  <section class="observation-baseline-plot-view"></section>
+</div>
