@@ -53,6 +53,59 @@ var dateTime = function (time) {
 };
 
 /**
+ * Round a value to the closest even Number
+ *
+ * @param value {Number}
+ *      The value to be rounded.
+ *
+ * @return {Number}
+ *      The rounded number.
+ */
+var roundToEven = function (value) {
+  return Math.round(value / 2) * 2;
+};
+
+/**
+ * Truncate a number, because javascript developers forgot that
+ * floor only works for positive numbers.
+ *
+ * @param value {Number}
+ *      The value to be truncated.
+ *
+ * @return {Number}
+ *      The truncated number.
+ */
+var truncate = function (value) {
+  return value > 0 ? Math.floor(value) : Math.ceil(value);
+};
+
+/**
+ * Round a value at x digits past the decimal to the closest
+ * even number, if the value is exactly a half.
+ *
+ * @param value {Number}
+ *      The value to be rounded.
+ *
+ * @return {Number}
+ *      If the number is a half, return closest even number.
+ */
+var roundHalfToEven = function (value, digits) {
+  if (typeof digits === 'undefined') {
+    digits = 0;
+  }
+
+  var EPSILON = 0.001,
+      n = Math.pow(10, digits),
+      powValue = value * n,
+      diff = powValue - truncate(powValue);
+
+  if (Math.abs(diff - 0.5) < EPSILON) {
+    return roundToEven(powValue) / n;
+  }
+  return value;
+};
+
+/**
  * Degrees, as a temperature, no rounding
  *
  * @param temperature {Number|String}
@@ -197,7 +250,7 @@ var degrees = function (angle, digits) {
     return angle;
   }
 
-  return rawDegrees(angle.toFixed(digits));
+  return rawDegrees(roundHalfToEven(angle,digits).toFixed(digits));
 };
 
 /**
@@ -220,7 +273,7 @@ var minutes = function (angle, digits) {
   if (isNaN(angle)) {
     return '&ndash;';
   } else {
-    return rawMinutes(angle.toFixed(digits));
+    return rawMinutes(roundHalfToEven(angle,digits).toFixed(digits));
   }
 };
 
@@ -323,7 +376,7 @@ var celsius = function (temperature, digits) {
   if (typeof digits === 'undefined') {
     digits = _DEFAULT_DIGITS;
   }
-  return rawCelsius(temperature.toFixed(digits));
+  return rawCelsius(roundHalfToEven(temperature,digits).toFixed(digits));
 };
 
 /**
@@ -344,7 +397,7 @@ var fahrenheit = function (temperature, digits) {
     digits = _DEFAULT_DIGITS;
   }
 
-  return rawCelsius(temperature.toFixed(digits));
+  return rawCelsius(roundHalfToEven(temperature,digits).toFixed(digits));
 };
 
 /**
@@ -364,7 +417,7 @@ var nanoteslas = function (nT, digits) {
   if (isNaN(nT)) {
     return '&ndash;';
   } else {
-    return rawNanoteslas(nT.toFixed(digits));
+    return rawNanoteslas(roundHalfToEven(nT, digits).toFixed(digits));
   }
 };
 
@@ -462,7 +515,6 @@ var time = function (time) {
   return [(h<10?'0':''), h, (m<10?':0':':'), m, (s<10?':0':':'), s].join('');
 };
 
-
 var Formatter = {
   _units: _units,
   celsius: celsius,
@@ -483,7 +535,10 @@ var Formatter = {
   rawFahrenheit: rawFahrenheit,
   rawMinutes: rawMinutes,
   rawNanoteslas: rawNanoteslas,
-  time: time
+  roundHalfToEven: roundHalfToEven,
+  roundToEven: roundToEven,
+  time: time,
+  truncate: truncate
 };
 
 module.exports = Formatter;
