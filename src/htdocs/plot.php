@@ -24,6 +24,13 @@ if (!isset($TEMPLATE)) {
   ';
 
   include '../lib/login.inc.php';
+
+  if ($CURRENT_USER['admin'] !== 'Y') {
+    header('HTTP/1.1 403 Forbiden');
+    echo 'Only admin users may view baseline data.';
+    exit();
+  }
+
   include 'template.inc.php';
 }
 ?>
