@@ -1,7 +1,7 @@
 'use strict';
 
 var _CELSIUS = '°C',
-    _DEFAULT_DIGITS = 2,
+    _DEFAULT_DIGITS = 3,
     _DEGREES = '°',
     _FAHRENHEIT = '°F',
     _MINUTES = '\'',
