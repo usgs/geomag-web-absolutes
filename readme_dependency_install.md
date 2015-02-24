@@ -12,7 +12,7 @@ You will need to have the following tools installed in order to run this project
 1. Install PHP
 
     `brew install php` (Mac)
-    `npm install php` (Windows)
+    `npm install -g php` (Windows)
 
 1. Install Sass and Compass with Ruby
 
