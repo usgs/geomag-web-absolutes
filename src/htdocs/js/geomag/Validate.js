@@ -3,21 +3,21 @@
 var Validate = {
 
   validDegrees: function (value) {
-    if(value === null || value === '') {
+    if (value === null || value === '') {
       return false;
     }
     return this.inRange(value, 0, 360);
   },
 
   validSeconds: function (value) {
-    if(value === null || value === '') {
+    if (value === null || value === '') {
       return false;
     }
     return this.inRange(value, 0, 60);
   },
 
   validMinutes: function (value) {
-    if(value === null || value === '') {
+    if (value === null || value === '') {
       return false;
     }
     return this.inRange(value, 0, 60);
@@ -25,7 +25,7 @@ var Validate = {
 
   validTime: function (value) {
     // for 24-hour time, leading zeroes mandatory.
-    var pattern = /^(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$/;
+    var pattern = /^(2[0-3]|[01][0-9]):?[0-5][0-9]:?[0-5][0-9]$/;
     if (value.match(pattern)) {
       return true;
     }
