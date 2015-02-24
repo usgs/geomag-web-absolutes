@@ -4,11 +4,13 @@ var concurrent = {
   dev: [
     'browserify:index',
     'browserify:observation',
+    'browserify:plot',
     'browserify:useradmin',
 
     'compass:index',
     'compass:login',
     'compass:observation',
+    'compass:plot',
     'compass:useradmin',
 
     'copy:dev'

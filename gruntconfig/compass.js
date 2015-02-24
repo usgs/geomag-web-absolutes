@@ -27,6 +27,12 @@ var compass = {
     }
   },
 
+  plot: {
+    options: {
+      specify: [config.src + '/htdocs/css/plot.scss']
+    }
+  },
+
   useradmin: {
     options: {
       specify: [config.src + '/htdocs/css/useradmin.scss']

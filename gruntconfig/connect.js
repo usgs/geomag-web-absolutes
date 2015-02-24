@@ -5,8 +5,8 @@ var config = require('./config');
 var gateway = require('gateway');
 var rewriteModule = require('http-rewrite-middleware');
 
-var iniConfig = require('ini').parse(require('fs')
-    .readFileSync('./src/conf/config.ini', 'utf-8'));
+// var iniConfig = require('ini').parse(require('fs')
+//     .readFileSync('./src/conf/config.ini', 'utf-8'));
 
 var rewrites = [
   // Template
@@ -49,9 +49,6 @@ var mountPHP = function (dir, options) {
 
   return gateway(require('path').resolve(dir), options);
 };
-
-var iniConfig = require('ini').parse(require('fs')
-        .readFileSync('./src/conf/config.ini', 'utf-8'));
 
 var connect = {
   proxies: [{
