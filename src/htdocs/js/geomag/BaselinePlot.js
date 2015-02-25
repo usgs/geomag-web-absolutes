@@ -251,7 +251,7 @@ var BaselinePlot = function (params) {
     el.innerHTML = [
       '<h3>Baseline H</h3>',
       '<section class="baseline-plot-h-wrapper"></section>',
-      '<h3>Baseline E</h3>',
+      '<h3>Baseline D</h3>',
       '<section class="baseline-plot-e-wrapper"></section>',
       '<h3>Baseline Z</h3>',
       '<section class="baseline-plot-z-wrapper"></section>'
