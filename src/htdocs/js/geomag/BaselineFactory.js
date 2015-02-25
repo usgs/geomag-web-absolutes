@@ -43,7 +43,7 @@ var BaselineFactory = function (params) {
         .replace('{startTime}', params.startTime)
         .replace('{endTime}', params.endTime);
 
-    Xhr.jsonp({
+    Xhr.ajax({
       url: url,
       success: function (data) {
         // Execute the callback
