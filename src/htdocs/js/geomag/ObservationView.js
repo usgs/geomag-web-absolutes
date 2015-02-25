@@ -252,10 +252,6 @@ var ObservationView = function (options) {
     });
 
     // request realtime temperature data
-    if (_observation.get('outside_temperature') === null &&
-          _observation.get('proton_temperature') === null &&
-          _observation.get('elect_temperature') === null &&
-          _observation.get('flux_temperature') === null ) {
       _realtimeDataFactory.getRealtimeTemperatureData({
         starttime: starttime,
         endtime: endtime,
@@ -283,7 +279,6 @@ var ObservationView = function (options) {
           }
         }
       });
-    }
 
   };
 
