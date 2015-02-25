@@ -7,8 +7,9 @@ var Format = require('geomag/Formatter'),
 
 
 var _DEFAULTS = {
-  factory: new ObservatoryFactory()
+  factory: ObservatoryFactory()
 };
+
 
   /**
    * Construct a new DeclinationSummaryView.
@@ -26,29 +27,40 @@ var DeclinationSummaryView = function (options) {
   var _this,
       _initialize,
 
+      _absolute,
+      _baselineMin,
+      _calculator,
+      _eBaseline,
+      _endTime,
+      _factory,
+      _measurements,
+      _name,
+      _observer,
       _options,
+      _ordMin,
+      _reading,
+      _shift,
+      _startTime,
+      _valid,
 
       _onChange;
 
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = View(_options);
+  _this = View(options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function () {
-    var calculator,
-        el = _this.el,
-        factory,
+  _initialize = function (options) {
+    var el = _this.el,
         i = null,
-        len = null,
-        reading;
+        len = null;
 
-    calculator = _options.calculator;
-    factory = _options.factory;
-    reading = _options.reading;
+    _options = Util.extend({}, _DEFAULTS, options);
+    _calculator = _options.calculator;
+    _factory = _options.factory;
+    _reading = _options.reading;
 
-    _this.el.innerHTML = [
+    el.innerHTML = [
       '<th class="name" scope="row"></th>',
       '<td class="valid"><input type="checkbox" /></td>',
       '<td class="start-time"></td>',
@@ -68,80 +80,73 @@ var DeclinationSummaryView = function (options) {
     ].join('');
 
     // save references to elements that will be updated during render
-    _this._name = el.querySelector('.name');
-    _this._valid = el.querySelector('.valid > input');
-    _this._startTime = el.querySelector('.start-time');
-    _this._endTime = el.querySelector('.end-time');
-    _this._absolute = el.querySelector('.absolute-declination');
-    _this._ordMin = el.querySelector('.ord-min');
-    _this._baselineMin = el.querySelector('.baseline-min');
-    _this._eBaseline = el.querySelector('.baseline-nt');
-    _this._observer = el.querySelector('.observer');
-    _this._shift = el.querySelector('.shift > select');
+    _name = el.querySelector('.name');
+    _valid = el.querySelector('.valid > input');
+    _startTime = el.querySelector('.start-time');
+    _endTime = el.querySelector('.end-time');
+    _absolute = el.querySelector('.absolute-declination');
+    _ordMin = el.querySelector('.ord-min');
+    _baselineMin = el.querySelector('.baseline-min');
+    _eBaseline = el.querySelector('.baseline-nt');
+    _observer = el.querySelector('.observer');
+    _shift = el.querySelector('.shift > select');
 
-    _this._reading = reading;
-    _this._calculator = calculator;
+    _measurements = _factory.getDeclinationMeasurements(_reading);
 
-    _this._measurements = factory.getDeclinationMeasurements(reading);
+    _valid.addEventListener('change', _onChange);
+    _shift.addEventListener('change', _onChange);
 
-    _this._valid.addEventListener('change', _onChange);
-    _this._shift.addEventListener('change', _onChange);
-
-    _this._reading.on('change:declination_valid', 'render', _this);
-    _this._reading.on('change:declination_shift', 'render', _this);
+    _reading.on('change:declination_valid', 'render', _this);
+    _reading.on('change:declination_shift', 'render', _this);
 
     // watches for changes in pier/mark
-    _this._calculator.on('change', 'render', _this);
+    _calculator.on('change', 'render', _this);
 
-    for (i = 0, len = _this._measurements.length; i < len; i++) {
-      _this._measurements[i].on('change', 'render', _this);
+    for (i = 0, len = _measurements.length; i < len; i++) {
+      _measurements[i].on('change', 'render', _this);
     }
 
     _this.render();
   };
 
   _onChange = function () {
-    _this._reading.set({
-      declination_valid: (_this._valid.checked ? 'Y' : 'N'),
-      declination_shift: parseInt(_this._shift.value, 10)
+    _reading.set({
+      declination_valid: (_valid.checked ? 'Y' : 'N'),
+      declination_shift: parseInt(_shift.value, 10)
     });
   };
 
+
   _this.render = function () {
-    var reading = _this._reading,
-        measurements = reading.get('measurements').data(),
-        factory = _options.factory,
+    var measurements = _reading.get('measurements').data(),
         startTime = null,
         endTime = null,
         times;
 
-    _this._name.innerHTML = reading.get('set_number');
+    _name.innerHTML = _reading.get('set_number');
 
-    _this._valid.checked = (reading.get('declination_valid') === 'Y');
+    _valid.checked = (_reading.get('declination_valid') === 'Y');
 
-    times = factory.getMeasurementValues(measurements, 'time');
+    times = _factory.getMeasurementValues(measurements, 'time');
     if (times.length > 0) {
       startTime = Math.min.apply(null, times);
       endTime = Math.max.apply(null, times);
     }
-    _this._startTime.innerHTML = Format.time(startTime);
-    _this._endTime.innerHTML = Format.time(endTime);
+    _startTime.innerHTML = Format.time(startTime);
+    _endTime.innerHTML = Format.time(endTime);
 
-    _this._shift.value = reading.get('declination_shift');
+    _shift.value = _reading.get('declination_shift');
 
-    _this._absolute.innerHTML = Format.degreesMinutes(
-        _this._calculator.magneticDeclination(reading));
+    _absolute.innerHTML =
+        Format.degreesMinutes(_calculator.magneticDeclination(_reading));
 
-    _this._ordMin.innerHTML =
-        Format.minutes(_this._calculator.dComputed(reading)*60);
-    _this._baselineMin.innerHTML =
-        Format.minutes(_this._calculator.dBaseline(reading)*60);
-    _this._eBaseline.innerHTML =
-        Format.nanoteslas(_this._calculator.eBaseline(reading));
-    _this._observer.innerHTML = _this._reading.get('observer') || '';
+    _ordMin.innerHTML = Format.minutes(_calculator.dComputed(_reading)*60);
+    _baselineMin.innerHTML = Format.minutes(_calculator.dBaseline(_reading)*60);
+    _eBaseline.innerHTML = Format.nanoteslas(_calculator.eBaseline(_reading));
+    _observer.innerHTML = _reading.get('observer') || '';
   };
 
-  _initialize();
+  _initialize(options);
   options = null;
   return _this;
 };

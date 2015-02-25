@@ -7,7 +7,7 @@ var Format = require('geomag/Formatter'),
 
 
 var _DEFAULTS = {
-  factory: new ObservatoryFactory()
+  factory: ObservatoryFactory()
 };
 
 
@@ -27,27 +27,36 @@ var HorizontalIntensitySummaryView = function (options) {
   var _this,
       _initialize,
 
+      _absValue,
+      _baselineValues,
+      _calculator,
+      _endTime,
+      _factory,
+      _measurements,
+      _name,
+      _observer,
       _options,
+      _ord,
+      _reading,
+      _startTime,
+      _valid,
 
       _onChange;
 
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = View(_options);
+  _this = View(options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function () {
-    var calculator,
-        el = _this.el,
-        factory,
-        reading,
+  _initialize = function (options) {
+    var el = _this.el,
         i = null,
         len = null;
 
-    calculator = _options.calculator;
-    factory = _options.factory;
-    reading = _options.reading;
+    _options = Util.extend({}, _DEFAULTS, options);
+    _calculator = _options.calculator;
+    _factory = _options.factory;
+    _reading = _options.reading;
 
     el.innerHTML = [
       '<th class="name" scope="row"></th>',
@@ -61,71 +70,66 @@ var HorizontalIntensitySummaryView = function (options) {
     ].join('');
 
     // save references to elements that will be updated during render
-    _this._name = el.querySelector('.name');
-    _this._valid = el.querySelector('.valid > input');
-    _this._startTime = el.querySelector('.start-time');
-    _this._endTime = el.querySelector('.end-time');
-    _this._absValue = el.querySelector('.abs-value');
-    _this._ord = el.querySelector('.ord');
-    _this._baselineValues = el.querySelector('.baseline-values');
-    _this._observer = el.querySelector('.observer');
+    _name = el.querySelector('.name');
+    _valid = el.querySelector('.valid > input');
+    _startTime = el.querySelector('.start-time');
+    _endTime = el.querySelector('.end-time');
+    _absValue = el.querySelector('.abs-value');
+    _ord = el.querySelector('.ord');
+    _baselineValues = el.querySelector('.baseline-values');
+    _observer = el.querySelector('.observer');
 
-    _this._reading = reading;
-    _this._calculator = calculator;
+    _measurements = _factory.getHorizontalIntensityMeasurements(_reading);
 
-    _this._measurements = factory.getHorizontalIntensityMeasurements(reading);
+    _valid.addEventListener('change', _onChange);
 
-    _this._valid.addEventListener('change', _onChange);
-
-    _this._reading.on('change:horizontal_intensity_valid', 'render', _this);
+    _reading.on('change:horizontal_intensity_valid', 'render', _this);
 
     // watches for changes in pier/mark
-    _this._calculator.on('change', 'render', _this);
+    _calculator.on('change', 'render', _this);
 
-    for (i = 0, len = _this._measurements.length; i < len; i ++){
-      _this._measurements[i].on('change', 'render', _this);
+    for (i = 0, len = _measurements.length; i < len; i ++){
+      _measurements[i].on('change', 'render', _this);
     }
 
     _this.render();
   };
 
   _onChange = function () {
-    _this._reading.set({
-      horizontal_intensity_valid: (_this._valid.checked ? 'Y' : 'N')
+    _reading.set({
+      horizontal_intensity_valid: (_valid.checked ? 'Y' : 'N')
     });
   };
 
+
   _this.render = function () {
-    var calculator = _this._calculator,
-        reading = _this._reading,
-        measurements = reading.get('measurements').data(),
-        factory = _options.factory,
+    var measurements = _reading.get('measurements').data(),
         startTime = null,
         endTime = null,
         times;
 
-    _this._name.innerHTML = reading.get('set_number');
+    _name.innerHTML = _reading.get('set_number');
 
-    _this._valid.checked = (reading.get('horizontal_intensity_valid') === 'Y');
+    _valid.checked = (_reading.get('horizontal_intensity_valid') === 'Y');
 
-    times = factory.getMeasurementValues(measurements, 'time');
+    times = _factory.getMeasurementValues(measurements, 'time');
     if (times.length > 0) {
       startTime = Math.min.apply(null, times);
       endTime = Math.max.apply(null, times);
     }
-    _this._startTime.innerHTML = Format.time(startTime);
-    _this._endTime.innerHTML = Format.time(endTime);
+    _startTime.innerHTML = Format.time(startTime);
+    _endTime.innerHTML = Format.time(endTime);
 
-    _this._absValue.innerHTML =
-        Format.nanoteslas(calculator.horizontalComponent(reading));
-    _this._ord.innerHTML =
-        Format.nanoteslas(calculator.meanH(reading));
-    _this._baselineValues.innerHTML =
-        Format.nanoteslas(calculator.hBaseline(reading));
-    _this._observer.innerHTML = _this._reading.get('observer') || '';
+    _absValue.innerHTML =
+        Format.nanoteslas(_calculator.horizontalComponent(_reading));
+    _ord.innerHTML =
+        Format.nanoteslas(_calculator.meanH(_reading));
+    _baselineValues.innerHTML =
+        Format.nanoteslas(_calculator.hBaseline(_reading));
+    _observer.innerHTML = _reading.get('observer') || '';
   };
 
-  _initialize();
+  _initialize(options);
   options = null;
   return _this;
 };

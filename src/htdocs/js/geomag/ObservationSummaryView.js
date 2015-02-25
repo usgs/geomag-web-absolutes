@@ -17,20 +17,37 @@ var _DEFAULTS = {
 };
 
 
-/**
- * Construct a new ObservationSummaryView.
- *
- * @param options {Object}
- *        view options.
- * @param options.baselineCalculator
- * @param options.observation
- * @param options.UserFactory
- */
 var ObservationSummaryView = function (options) {
   var _this,
       _initialize,
 
+      _baselineMinMean,
+      _baselineMinRange,
+      _baselineMinStdDev,
+      _baselineNtMean,
+      _baselineNtRange,
+      _baselineNtStdDev,
+      _baselineValuesMean,
+      _baselineValuesRange,
+      _baselineValuesStdDev,
+      _calculator,
+      _checkedBy,
+      _declinationSummaryView,
+      _electronicsTemperature,
+      _fluxgateTemperature,
+      _horizontalIntensitySummaryView,
+      _observation,
       _options,
+      _outsideTemperature,
+      _pierTemperature,
+      _protonTemperature,
+      _readings,
+      _remarks,
+      _userFactory,
+      _verticalBaselineValuesMean,
+      _verticalBaselineValuesRange,
+      _verticalBaselineValuesStdDev,
+      _verticalIntensitySummaryView,
 
       _bindings,
       _onChange,
@@ -41,19 +58,16 @@ var ObservationSummaryView = function (options) {
       _renderSummaryBottom,
       _renderVerticalIntensitySummaryView;
 
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = View(_options);
-  /**
-   * Initialize view, and call render.
-   * @param options {Object} same as constructor.
-   */
+  _this = View(options);
+
   _initialize = function () {
     var el = _this.el;
 
-    _this._observation = _options.observation;
-    _this._calculator = _options.baselineCalculator;
-    _this._readings = _this._observation.get('readings');
-    _this._userFactory = _options.UserFactory;
+    _options = Util.extend({}, _DEFAULTS, options);
+    _calculator = _options.baselineCalculator;
+    _observation = _options.observation;
+    _readings = _observation.get('readings');
+    _userFactory = _options.UserFactory;
 
     el.innerHTML = [
       '<section class="observation-summary-view">',
@@ -199,10 +213,10 @@ var ObservationSummaryView = function (options) {
   };
 
   _bindings = function () {
-    _this._remarks.addEventListener('change', _onChange);
-    _this._calculator.on('change', 'render', _this);
+    _remarks.addEventListener('change', _onChange);
+    _calculator.on('change', 'render', _this);
 
-    _this._observation.eachReading(function (reading) {
+    _observation.eachReading(function (reading) {
       reading.on('change', 'render', _this);
       reading.eachMeasurement(function (measurement) {
         measurement.on('change', 'render', _this);
@@ -211,8 +225,8 @@ var ObservationSummaryView = function (options) {
   };
 
   _onChange = function () {
-    _this._observation.set({
-      annotation: this._remarks.value
+    _observation.set({
+      annotation: _remarks.value
     });
   };
 
@@ -220,47 +234,44 @@ var ObservationSummaryView = function (options) {
     var el = _this.el;
 
     // Declination summary view
-    _this._declinationSummaryView =
-      el.querySelector('.declination-summary-view');
-    _this._baselineMinMean = el.querySelector('.baseline-min-mean');
-    _this._baselineNtMean = el.querySelector('.baseline-nt-mean');
-    _this._baselineMinRange = el.querySelector('.baseline-min-range');
-    _this._baselineNtRange = el.querySelector('.baseline-nt-range');
-    _this._baselineMinStdDev = el.querySelector('.baseline-min-std-dev');
-    _this._baselineNtStdDev = el.querySelector('.baseline-nt-std-dev');
+    _declinationSummaryView = el.querySelector('.declination-summary-view');
+    _baselineMinMean = el.querySelector('.baseline-min-mean');
+    _baselineNtMean = el.querySelector('.baseline-nt-mean');
+    _baselineMinRange = el.querySelector('.baseline-min-range');
+    _baselineNtRange = el.querySelector('.baseline-nt-range');
+    _baselineMinStdDev = el.querySelector('.baseline-min-std-dev');
+    _baselineNtStdDev = el.querySelector('.baseline-nt-std-dev');
 
     // Horizontal Intensity Summary view
-    _this._horizontalIntensitySummaryView =
+    _horizontalIntensitySummaryView =
       el.querySelector('.horizontal-intensity-summary-view');
-    _this._baselineValuesMean = el.querySelector('.baseline-values-mean');
-    _this._baselineValuesRange = el.querySelector('.baseline-values-range');
-    _this._baselineValuesStdDev = el.querySelector('.baseline-values-std-dev');
+    _baselineValuesMean = el.querySelector('.baseline-values-mean');
+    _baselineValuesRange = el.querySelector('.baseline-values-range');
+    _baselineValuesStdDev = el.querySelector('.baseline-values-std-dev');
 
     // Vertical Intensity Summary View
-    _this._verticalIntensitySummaryView =
+    _verticalIntensitySummaryView =
       el.querySelector('.vertical-intensity-summary-view');
-    _this._verticalBaselineValuesMean =
+    _verticalBaselineValuesMean =
       el.querySelector('.vertical-baseline-values-mean');
-    _this._verticalBaselineValuesRange =
+    _verticalBaselineValuesRange =
       el.querySelector('.vertical-baseline-values-range');
-    _this._verticalBaselineValuesStdDev =
+    _verticalBaselineValuesStdDev =
       el.querySelector('.vertical-baseline-values-std-dev');
 
     // Bottom Summary View
-    _this._observation.on('change', _this.render, _this);
-    _this._pierTemperature = el.querySelector('.pier-temp-value');
-    _this._electronicsTemperature = el.querySelector('.electronics-temp-value');
-    _this._fluxgateTemperature = el.querySelector('.fluxgate-temp-value');
-    _this._protonTemperature = el.querySelector('.proton-temp-value');
-    _this._outsideTemperature = el.querySelector('.outside-temp-value');
-    _this._checkedBy = el.querySelector('.checked-by-value');
-    _this._remarks = el.querySelector('.reviewer > textarea');
+    _observation.on('change', 'render', _this);
+    _pierTemperature = el.querySelector('.pier-temp-value');
+    _electronicsTemperature = el.querySelector('.electronics-temp-value');
+    _fluxgateTemperature = el.querySelector('.fluxgate-temp-value');
+    _protonTemperature = el.querySelector('.proton-temp-value');
+    _outsideTemperature = el.querySelector('.outside-temp-value');
+    _checkedBy = el.querySelector('.checked-by-value');
+    _remarks = el.querySelector('.reviewer > textarea');
   };
 
   _renderDeclination = function () {
-    var readings = _this._readings.data(),
-        declinationSummaryView = _this._declinationSummaryView,
-        calculator = _this._calculator,
+    var readings = _readings.data(),
         i = null,
         len = null,
         reading,
@@ -270,51 +281,47 @@ var ObservationSummaryView = function (options) {
         baselineDStats,
         eBaselineStats;
 
-    Util.empty(declinationSummaryView);
+    Util.empty(_declinationSummaryView);
 
     for (i = 0, len = readings.length; i < len; i++) {
       reading = readings[i];
+
       // create view if it does not exist
       if (!reading.hasOwnProperty('_declinationSummary')) {
         reading._declinationSummary = DeclinationSummaryView({
           el: document.createElement('tr'),
           reading: reading,
-          calculator: calculator
+          calculator: _calculator
         });
       }
       // insert view
-      declinationSummaryView.appendChild(reading._declinationSummary.el);
+      _declinationSummaryView.appendChild(reading._declinationSummary.el);
 
       // insert view
       if (reading.get('declination_valid') === 'Y') {
-        baselineD.push(calculator.dBaseline(reading));
-        eBaseline.push(calculator.eBaseline(reading));
+        baselineD.push(_calculator.dBaseline(reading));
+        eBaseline.push(_calculator.eBaseline(reading));
       }
     }
 
-    baselineDStats = calculator.getStats(baselineD);
-    eBaselineStats = calculator.getStats(eBaseline);
+    baselineDStats = _calculator.getStats(baselineD);
+    eBaselineStats = _calculator.getStats(eBaseline);
 
-    _this._baselineMinMean.innerHTML = Format.minutes(baselineDStats.mean);
-    _this._baselineNtMean.innerHTML =
-        Format.nanoteslas(eBaselineStats.mean);
+    _baselineMinMean.innerHTML = Format.minutes(baselineDStats.mean);
+    _baselineNtMean.innerHTML = Format.nanoteslas(eBaselineStats.mean);
 
     range = baselineDStats.max - baselineDStats.min;
-    _this._baselineMinRange.innerHTML = Format.minutes(range);
+    _baselineMinRange.innerHTML = Format.minutes(range);
 
     range = eBaselineStats.max - eBaselineStats.min;
-    _this._baselineNtRange.innerHTML = Format.nanoteslas(range);
+    _baselineNtRange.innerHTML = Format.nanoteslas(range);
 
-    _this._baselineMinStdDev.innerHTML =
-        Format.minutes(baselineDStats.stdDev);
-    _this._baselineNtStdDev.innerHTML =
-        Format.nanoteslas(eBaselineStats.stdDev);
+    _baselineMinStdDev.innerHTML = Format.minutes(baselineDStats.stdDev);
+    _baselineNtStdDev.innerHTML = Format.nanoteslas(eBaselineStats.stdDev);
   };
 
   _renderHorizontalIntensitySummaryView = function () {
-    var readings = _this._readings.data(),
-        horizontalIntensitySummaryView = _this._horizontalIntensitySummaryView,
-        calculator = _this._calculator,
+    var readings = _readings.data(),
         i = null,
         len = null,
         reading,
@@ -322,36 +329,38 @@ var ObservationSummaryView = function (options) {
         baselineH = [],
         baselineHStats;
 
-    Util.empty(horizontalIntensitySummaryView);
+    Util.empty(_horizontalIntensitySummaryView);
 
     for (i = 0, len = readings.length; i < len; i++) {
       reading = readings[i];
 
+      // create view if it does not exist
       if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
         reading._horizontalIntensitySummary =
             HorizontalIntensitySummaryView({
           el:document.createElement('tr'),
           reading:reading,
-          calculator:calculator
+          calculator:_calculator
         });
       }
       // insert view
-      horizontalIntensitySummaryView.appendChild(
+      _horizontalIntensitySummaryView.appendChild(
         reading._horizontalIntensitySummary.el);
 
+      // insert view
       if (reading.get('horizontal_intensity_valid') === 'Y') {
-        baselineH.push(calculator.hBaseline(reading));
+        baselineH.push(_calculator.hBaseline(reading));
       }
     }
-    baselineHStats = calculator.getStats(baselineH);
-    _this._baselineValuesMean.innerHTML =
-        Format.nanoteslas(baselineHStats.mean);
+
+    baselineHStats = _calculator.getStats(baselineH);
+
+    _baselineValuesMean.innerHTML = Format.nanoteslas(baselineHStats.mean);
 
     range = baselineHStats.max - baselineHStats.min;
-    _this._baselineValuesRange.innerHTML = Format.nanoteslas(range);
+    _baselineValuesRange.innerHTML = Format.nanoteslas(range);
 
-    _this._baselineValuesStdDev.innerHTML =
-        Format.nanoteslas(baselineHStats.stdDev);
+    _baselineValuesStdDev.innerHTML = Format.nanoteslas(baselineHStats.stdDev);
   };
 
   _renderInclination = function () {
@@ -360,36 +369,33 @@ var ObservationSummaryView = function (options) {
   };
 
   _renderSummaryBottom = function () {
-    var observation = _this._observation,
-        reviewed = observation.get('reviewed'),
-        reviewer = observation.get('reviewer_user_id');
+    var reviewed = _observation.get('reviewed'),
+        reviewer = _observation.get('reviewer_user_id');
 
-    _this._pierTemperature.innerHTML =
-        Format.celsius(observation.get('pier_temperature'),1);
-    _this._electronicsTemperature.innerHTML = 'elec temp';
-    _this._fluxgateTemperature.innerHTML = 'flux temp';
-    _this._protonTemperature.innerHTML = 'prot temp';
-    _this._outsideTemperature.innerHTML = 'outs temp';
-    _this._remarks.innerHTML = observation.get('annotation');
+    _pierTemperature.innerHTML =
+        Format.celsius(_observation.get('pier_temperature'),1);
+    _electronicsTemperature.innerHTML = 'elec temp';
+    _fluxgateTemperature.innerHTML = 'flux temp';
+    _protonTemperature.innerHTML = 'prot temp';
+    _outsideTemperature.innerHTML = 'outs temp';
+    _remarks.innerHTML = _observation.get('annotation');
 
     if (reviewed === 'Y' && reviewer) {
       // set reviewer to reviwer_user_id while fetching the user name.
-      _this._checkedBy.innerHTML = reviewer;
+      _checkedBy.innerHTML = reviewer;
 
-      _this._userFactory.get({
+      _userFactory.get({
         data: {'id': reviewer},
         success: function (data) {
           // replace reviwer_user_id with user name once it is returned.
-          _this._checkedBy.innerHTML = data.name;
+          _checkedBy.innerHTML = data.name;
         }
       });
     }
   };
 
   _renderVerticalIntensitySummaryView = function () {
-    var readings = _this._readings.data(),
-        verticalIntensitySummaryView = _this._verticalIntensitySummaryView,
-        calculator = _this._calculator,
+    var readings = _readings.data(),
         i = null,
         len = null,
         reading,
@@ -397,7 +403,8 @@ var ObservationSummaryView = function (options) {
         baselineZ = [],
         baselineZStats;
 
-    Util.empty(verticalIntensitySummaryView);
+    Util.empty(_verticalIntensitySummaryView);
+
     for (i = 0, len = readings.length; i < len; i++) {
       reading = readings[i];
 
@@ -406,28 +413,30 @@ var ObservationSummaryView = function (options) {
         reading._verticalIntensitySummary = VerticalIntensitySummaryView({
           el: document.createElement('tr'),
           reading: reading,
-          calculator: calculator
+          calculator: _calculator
         });
       }
       // insert view
-      verticalIntensitySummaryView.appendChild
+      _verticalIntensitySummaryView.appendChild
           (reading._verticalIntensitySummary.el);
 
       if (reading.get('vertical_intensity_valid') === 'Y') {
-        baselineZ.push(calculator.zBaseline(reading));
+        baselineZ.push(_calculator.zBaseline(reading));
       }
     }
-    baselineZStats = calculator.getStats(baselineZ);
 
-    _this._verticalBaselineValuesMean.innerHTML =
+    baselineZStats = _calculator.getStats(baselineZ);
+
+    _verticalBaselineValuesMean.innerHTML =
         Format.nanoteslas(baselineZStats.mean);
 
     range = baselineZStats.max - baselineZStats.min;
-    _this._verticalBaselineValuesRange.innerHTML = Format.nanoteslas(range);
+    _verticalBaselineValuesRange.innerHTML = Format.nanoteslas(range);
 
-    _this._verticalBaselineValuesStdDev.innerHTML =
+    _verticalBaselineValuesStdDev.innerHTML =
         Format.nanoteslas(baselineZStats.stdDev);
   };
+
 
   _this.render = function () {
     _renderDeclination();
@@ -435,7 +444,7 @@ var ObservationSummaryView = function (options) {
     _renderSummaryBottom();
   };
 
-  _initialize();
+  _initialize(options);
   options = null;
   return _this;
 };
