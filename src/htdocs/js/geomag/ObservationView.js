@@ -250,6 +250,41 @@ var ObservationView = function (options) {
         });
       }
     });
+
+    // request realtime temperature data
+    if (_observation.get('outside_temperature') === null &&
+          _observation.get('proton_temperature') === null &&
+          _observation.get('elect_temperature') === null &&
+          _observation.get('flux_temperature') === null ) {
+      _realtimeDataFactory.getRealtimeTemperatureData({
+        starttime: starttime,
+        endtime: endtime,
+        success: function (realtimeData) {
+          var averageTime,
+              minuteTime,
+              values;
+          // just get the average time
+          averageTime = Math.floor((starttime + endtime) / 2.0);
+          // temperature data is minute data.
+          minuteTime = averageTime - averageTime % 60;
+          // realtimeData values are in milliseconds, convert seconds to ms.
+          values = realtimeData.getValues(minuteTime*1000);
+          if (values.TO !== undefined) {
+            _observation.set({'outside_temperature':values.TO});
+          }
+          if (values.TP !== undefined) {
+            _observation.set({'proton_temperature':values.TP});
+          }
+          if (values.TE !== undefined) {
+            _observation.set({'elect_temperature':values.TE});
+          }
+          if (values.TF !== undefined) {
+            _observation.set({'flux_temperature':values.TF});
+          }
+        }
+      });
+    }
+
   };
 
   _onChange = function () {
