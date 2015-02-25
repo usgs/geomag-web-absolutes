@@ -37,26 +37,22 @@ var _DEFAULTS = {
  */
 var Observation = function (options) {
   var _this,
-      _initialize,
+      _initialize;
 
-      _options;
-
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = Model(_options);
+  _this = Model(Util.extend({}, _DEFAULTS, options));
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
   _initialize = function () {
-
     if (_this.get('readings') === null) {
       _this.set({
-        readings: new Collection([
-            new Reading({set_number: 1}),
-            new Reading({set_number: 2}),
-            new Reading({set_number: 3}),
-            new Reading({set_number: 4})
-            ])
+        readings: Collection([
+          Reading({set_number: 1}),
+          Reading({set_number: 2}),
+          Reading({set_number: 3}),
+          Reading({set_number: 4})
+        ])
       });
     }
     if (_this.get('begin') === null) {
@@ -89,6 +85,7 @@ var Observation = function (options) {
     var readings = _this.get('readings').data(),
         i,
         len;
+
     for (i = 0, len = readings.length; i < len; i++) {
       callback(readings[i]);
     }
