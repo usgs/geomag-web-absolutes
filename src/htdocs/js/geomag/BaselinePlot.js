@@ -4,6 +4,7 @@ var BaselineFactory = require('geomag/BaselineFactory'),
     d3 = require('d3'),
     Events = require('util/Events'),
     Formatter = require('geomag/Formatter'),
+    ModalView = require('mvc/ModalView'),
     Util = require('util/Util'),
     View = require('mvc/View');
 
@@ -15,7 +16,8 @@ var _PLOT_DEFAULTS = {
   data: [],
   height: 160,
   margin: {top: 30, right: 20, bottom: 30, left: 50},
-  width: 640
+  width: 640,
+  yUnits: 'nT'
 };
 
 /**
@@ -43,6 +45,7 @@ var Plot = function (params) {
       _xScale,
       _yAxis,
       _yScale,
+      _yUnits,
 
       _computeRange,
       _createDataPoint,
@@ -63,6 +66,7 @@ var Plot = function (params) {
     _height = params.height;
     _width = params.width;
     _margin = params.margin;
+    _yUnits = params.yUnits;
 
     _updatePlotHelpers();
     _this.setData(params.data);
@@ -115,6 +119,22 @@ var Plot = function (params) {
     _svg.append('g')
         .attr('class', 'y axis')
         .call(_yAxis);
+
+    _svg.selectAll('.x.axis > .tick > text')
+        .style('display', function (/*date*/) {
+          var display = this.innerHTML;
+          if (isNaN(display) && display !== 'April' && display !== 'July' &&
+              display !== 'October') {
+            this.parentNode.removeChild(this);
+          }
+        });
+
+    _svg.append('text')
+        .attr('class', 'y label')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', 6)
+        .attr('dy', '1em')
+        .text(_yUnits);
   };
 
   _updateMean = function () {
@@ -129,7 +149,7 @@ var Plot = function (params) {
     _xScale = d3.time.scale().range([0, _width]);
     _yScale = d3.scale.linear().range([_height, 0]);
 
-    _xAxis = d3.svg.axis().scale(_xScale).orient('bottom').ticks(5);
+    _xAxis = d3.svg.axis().scale(_xScale).orient('bottom').ticks(13);
     _yAxis = d3.svg.axis().scale(_yScale).orient('left').ticks(5);
   };
 
@@ -276,6 +296,7 @@ var BaselinePlot = function (params) {
       el: el.querySelector('.baseline-plot-e-wrapper'),
       key: 'baseD',
       validKey: 'declination_valid',
+      yUnits: 'minutes',
       computeRange: function (data) {
         var dcount,
             dmean,
@@ -313,7 +334,7 @@ var BaselinePlot = function (params) {
         // Compute the mean E value
         emean = hmean * Math.tan(dmeanRad);
 
-        dspan = Math.abs((dmean / emean) * 20); // +/- 20nT so full range is 40nT
+        dspan = Math.abs((dmean / emean) * 20); // +/- 20nT -> range is 40nT
 
         return [dmean - dspan, dmean + dspan];
       }
@@ -350,7 +371,24 @@ var BaselinePlot = function (params) {
     _factory.fetch({
       observatoryId: observatoryId,
       startTime: startTime,
-      endTime: endTime
+      endTime: endTime,
+      error: function (status, xhr) {
+        ModalView(
+        xhr.responseText + '<br/><br/>' +
+        'Please select a different observatory or try again later.',
+        {
+          title: xhr.status + ' ' + xhr.statusText,
+          classes: ['modal-error'],
+          buttons: [{
+            text: 'Okay',
+            callback: function (evt, modal) {
+              modal.hide();
+            }
+          }]
+        }).show();
+        _data = [];
+        _this.render();
+      }
     });
   };
 
