@@ -248,19 +248,19 @@ var ReadingView = function (options) {
     });
   };
 
-  // within the scope of this method "this" is a measurment.
+  // within the scope of this method "this" is a measurement.
   _onTimeChange = function () {
     var i,
-        isEarlierMeasurment,
+        isEarlierMeasurement,
         len,
-        measurment,
-        measurments,
+        measurement,
+        measurements,
         thatTime,
         thisTime;
 
-    isEarlierMeasurment = true;
+    isEarlierMeasurement = true;
 
-    measurments = [
+    measurements = [
       _this._westDownMeasurement,
       _this._eastDownMeasurement,
       _this._westUpMeasurement,
@@ -273,31 +273,31 @@ var ReadingView = function (options) {
 
     thisTime = this.get('time');
 
-    for (i = 0, len = measurments.length; i < len; i++) {
-      measurment = measurments[i];
-      thatTime = measurment.get('time');
+    for (i = 0, len = measurements.length; i < len; i++) {
+      measurement = measurements[i];
+      thatTime = measurement.get('time');
 
       if (thatTime === null) {
         continue;
       }
-      if (this === measurment) {
-        isEarlierMeasurment = false;
+      if (this === measurement) {
+        isEarlierMeasurement = false;
         continue;
       }
-      if ((isEarlierMeasurment && thisTime < thatTime) ||
-          (!isEarlierMeasurment && thisTime > thatTime)) {
-        _showWarning(this, measurment);
+      if ((isEarlierMeasurement && thisTime < thatTime) ||
+          (!isEarlierMeasurement && thisTime > thatTime)) {
+        _showWarning(this, measurement);
         return;
       }
     }
   };
 
-  _showWarning = function (currentMeasurment, conflictMeasurment) {
+  _showWarning = function (currentMeasurement, conflictMeasurement) {
     var conflictType,
         currentType;
 
-    conflictType = _formatType(conflictMeasurment.get('type'));
-    currentType = _formatType(currentMeasurment.get('type'));
+    conflictType = _formatType(conflictMeasurement.get('type'));
+    currentType = _formatType(currentMeasurement.get('type'));
 
     ModalView(
       currentType + ' and ' + conflictType + ' appear to be out of order.' +
