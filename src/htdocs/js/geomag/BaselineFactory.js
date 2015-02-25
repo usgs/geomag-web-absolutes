@@ -9,7 +9,7 @@ var __no_op = function () {};
 
 
 var _DEFAULTS = {
-  dataUrl: 'baseline_data.php?id={observatoryId}&starttime={startTime}&endtime={endTime}',
+  dataUrl: 'baseline_data.php?observatoryId={observatoryId}&startTime={startTime}&endTime={endTime}',
 };
 
 
