@@ -408,8 +408,14 @@ define([
 	 * @return {String} content for option element.
 	 */
 	ObservationMetaView.prototype._formatInstrument = function (instrument) {
-		return instrument.get('name') +
-				' (' + instrument.get('serial_number') + ')';
+		var name = instrument.get('name'),
+		    serial = instrument.get('serial_number');
+
+		if (name) {
+			return name + ' (' + serial + ')';
+		} else {
+			return serial;
+		}
 	};
 
 
