@@ -11,13 +11,25 @@ path {
 .axis path,
 .axis line {
   fill: none;
-  storke: grey;
+  stroke: grey;
   stroke-width: 1;
   shape-rendering: crispEdges;
 }
 
 .dot {
   stroke: #000;
+}
+
+.label {
+  font-size: .75em;
+
+  &.y {
+    text-anchor: end;
+  }
+}
+
+text {
+  font-size: 12px;
 }
 
 @media print {
