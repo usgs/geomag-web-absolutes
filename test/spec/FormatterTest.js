@@ -164,13 +164,13 @@ describe('Formatter Unit Tests', function () {
 
     it('are formatted properly', function () {
       expect(Format.degrees(0.0)).to.equal(
-          '<span class="deg">0.00<span class="units">°</span></span>');
+          '<span class="deg">0.000<span class="units">°</span></span>');
       // Rounds down properly
       expect(Format.degrees(30.0123456789)).to.equal(
-          '<span class="deg">30.01<span class="units">°</span></span>');
+          '<span class="deg">30.012<span class="units">°</span></span>');
       // Rounds up properly
       expect(Format.degrees(30.5555555555)).to.equal(
-          '<span class="deg">30.56<span class="units">°</span></span>');
+          '<span class="deg">30.556<span class="units">°</span></span>');
     });
 
     it('round correctly when specified', function () {
@@ -207,13 +207,13 @@ describe('Formatter Unit Tests', function () {
 
     it('are formatted properly', function () {
       expect(Format.minutes(0.0)).to.equal(
-          '<span class="minutes">0.00<span class="units">\'</span></span>');
+          '<span class="minutes">0.000<span class="units">\'</span></span>');
       // Rounds down properly
       expect(Format.minutes(30.0123456789)).to.equal(
-          '<span class="minutes">30.01<span class="units">\'</span></span>');
+          '<span class="minutes">30.012<span class="units">\'</span></span>');
       // Rounds up properly
       expect(Format.minutes(30.5555555555)).to.equal(
-          '<span class="minutes">30.56<span class="units">\'</span></span>');
+          '<span class="minutes">30.556<span class="units">\'</span></span>');
     });
 
     it('round correctly when specified', function () {
@@ -255,7 +255,7 @@ describe('Formatter Unit Tests', function () {
           '</span>' +
           '&nbsp;' +
           '<span class="minutes">' +
-            '0.00<span class="units">\'</span>' +
+            '0.000<span class="units">\'</span>' +
           '</span>');
       expect(Format.degreesMinutes(179.95)).to.equal(
           '<span class="deg">' +
@@ -263,7 +263,7 @@ describe('Formatter Unit Tests', function () {
           '</span>' +
           '&nbsp;' +
           '<span class="minutes">' +
-            '57.00<span class="units">\'</span>' +
+            '57.000<span class="units">\'</span>' +
           '</span>');
       // Still works when rounding is required
       expect(Format.degreesMinutes(179.94583)).to.equal(
@@ -272,7 +272,7 @@ describe('Formatter Unit Tests', function () {
           '</span>' +
           '&nbsp;' +
           '<span class="minutes">' +
-            '56.75<span class="units">\'</span>' +
+            '56.750<span class="units">\'</span>' +
           '</span>');
     });
 
@@ -283,7 +283,7 @@ describe('Formatter Unit Tests', function () {
     it('are formatted properly', function () {
       expect(Format.degreesAndDegreesMinutes(0)).to.equal(
           '<span class="deg">' +
-            '0.00<span class="units">°</span>' +
+            '0.000<span class="units">°</span>' +
           '</span>' +
           '<span class="degrees-minutes">' +
             '<span class="deg">' +
@@ -291,12 +291,12 @@ describe('Formatter Unit Tests', function () {
             '</span>' +
             '&nbsp;' +
             '<span class="minutes">' +
-              '0.00<span class="units">\'</span>' +
+              '0.000<span class="units">\'</span>' +
             '</span>' +
           '</span>');
       expect(Format.degreesAndDegreesMinutes(179.95)).to.equal(
           '<span class="deg">' +
-            '179.95<span class="units">°</span>' +
+            '179.950<span class="units">°</span>' +
           '</span>' +
           '<span class="degrees-minutes">' +
             '<span class="deg">' +
@@ -304,13 +304,13 @@ describe('Formatter Unit Tests', function () {
             '</span>' +
             '&nbsp;' +
             '<span class="minutes">' +
-              '57.00<span class="units">\'</span>' +
+              '57.000<span class="units">\'</span>' +
             '</span>' +
           '</span>');
       // Still works when rounding is required
       expect(Format.degreesAndDegreesMinutes(179.94583)).to.equal(
           '<span class="deg">' +
-            '179.95<span class="units">°</span>' +
+            '179.946<span class="units">°</span>' +
           '</span>' +
           '<span class="degrees-minutes">' +
             '<span class="deg">' +
@@ -318,7 +318,7 @@ describe('Formatter Unit Tests', function () {
             '</span>' +
             '&nbsp;' +
             '<span class="minutes">' +
-              '56.75<span class="units">\'</span>' +
+              '56.750<span class="units">\'</span>' +
             '</span>' +
           '</span>');
     });
@@ -330,22 +330,22 @@ describe('Formatter Unit Tests', function () {
     it('are formatted properly', function () {
       expect(Format.nanoteslas(0.0)).to.equal(
           '<span class="nano-teslas">' +
-            '0.00<span class="units">nT</span>' +
+            '0.000<span class="units">nT</span>' +
           '</span>');
       // Rounds down properly
       expect(Format.nanoteslas(30.0123456789)).to.equal(
           '<span class="nano-teslas">' +
-            '30.01<span class="units">nT</span>' +
+            '30.012<span class="units">nT</span>' +
             '</span>');
       // Rounds up properly
       expect(Format.nanoteslas(30.5555555555)).to.equal(
           '<span class="nano-teslas">' +
-            '30.56<span class="units">nT</span>' +
+            '30.556<span class="units">nT</span>' +
           '</span>');
       // A number closer to an actual F value
       expect(Format.nanoteslas(54599.6237843)).to.equal(
           '<span class="nano-teslas">' +
-            '54599.62<span class="units">nT</span>' +
+            '54599.624<span class="units">nT</span>' +
           '</span>');
     });
 
