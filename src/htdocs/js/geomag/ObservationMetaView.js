@@ -148,26 +148,26 @@ var ObservationMetaView = function (options) {
     ].join('');
 
     // observatory information inputs
-    _observatorySelectView = new CollectionSelectBox({
+    _observatorySelectView = CollectionSelectBox({
       el: el.querySelector('.observatory'),
       emptyText: 'Loading observatories...'
     });
-    _pierSelectView = new CollectionSelectBox({
+    _pierSelectView = CollectionSelectBox({
       el: el.querySelector('.pier'),
       emptyText: 'Select observatory...',
       formatOption: _formatPier
     });
-    _marksSelectView = new CollectionSelectBox({
+    _marksSelectView = CollectionSelectBox({
       el: el.querySelector('.mark'),
       emptyText: 'Select pier...',
       formatOption: _formatMark
     });
-    _electronicsSelectView = new CollectionSelectBox({
+    _electronicsSelectView = CollectionSelectBox({
       el: el.querySelector('.electronics'),
       emptyText: 'Select observatory...',
       formatOption: _formatInstrument
     });
-    _theodoliteSelectView = new CollectionSelectBox({
+    _theodoliteSelectView = CollectionSelectBox({
       el: el.querySelector('.theodolite'),
       emptyText: 'Select observatory...',
       formatOption: _formatInstrument

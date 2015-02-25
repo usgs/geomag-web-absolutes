@@ -5,10 +5,10 @@ var ObservationView = require('geomag/ObservationView'),
     RealtimeDataFactory = require('geomag/RealtimeDataFactory');
 
 
-new ObservationView({
+ObservationView({
   el: document.querySelector('.observation-view-wrapper'),
   observationId: observationId,
-  realtimeDataFactory: new RealtimeDataFactory({
+  realtimeDataFactory: RealtimeDataFactory({
     url: REALTIME_DATA_URL
   })
 });
