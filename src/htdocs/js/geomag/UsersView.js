@@ -68,17 +68,10 @@ var _DEFAULTS = {
 
 
 var UsersView = function (options) {
-  var _this,
-      _initialize,
+  var _this;
 
-      _options;
+  _this = CollectionTable(Util.extend({}, _DEFAULTS, options || {}));
 
-  _options = Util.extend({}, _DEFAULTS, options || {});
-  _this = CollectionTable(_options);
-
-  _initialize = function () {};
-
-  _initialize();
   options = null;
   return _this;
 };
