@@ -77,7 +77,7 @@ var ObservatorySummary = function (factory, attributes) {
   _initialize = function (factory) {
     _factory = factory;
   };
-  
+
   /**
    * Get the observatory detail.
    *
@@ -171,7 +171,7 @@ var ObservationDetail = function (factory, attributes) {
     _observatories = null;
     _observatory = null;
   };
-  
+
   /**
    * Get the observatory detail.
    *
@@ -246,10 +246,10 @@ var ObservatoryFactory = function (options) {
       _toSeconds;
 
   _this = {};
-  
+
   _initialize = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
-  
+
     _observationDetailUrl = options.observationDetailUrl;
     _observationPublishUrl = options.observationPublishUrl;
     _observatoryDetailUrl = options.observatoryDetailUrl;
@@ -358,16 +358,16 @@ var ObservatoryFactory = function (options) {
    * @return {String} serialized observation.
    */
   _serializeObservation = function (observation) {
-    var json,
-        readings,
-        reading,
-        r,
-        rlen,
-        measurements,
-        measurement,
+    var data,
+        json,
         m,
+        measurement,
+        measurements,
         mlen,
-        data;
+        r,
+        reading,
+        readings,
+        rlen;
 
     // serialize the observation to JSON
     json = observation.toJSON();
@@ -504,7 +504,7 @@ var ObservatoryFactory = function (options) {
         starttime,
         time,
         valid;
-     
+
     measurements = _this.getHorizontalIntensityMeasurements(reading);
     calculator = Calculator();
 
@@ -530,7 +530,7 @@ var ObservatoryFactory = function (options) {
    * @param reading {object}
    */
   _this.setCalibrationZ = function (reading) {
-        var absolute,
+    var absolute,
         baseline,
         calculator,
         endtime,
@@ -636,8 +636,8 @@ var ObservatoryFactory = function (options) {
   _this.getMeasurementValues = function (measurements, name) {
     var i = null,
         len = null,
-        values = [],
-        value;
+        value,
+        values = [];
 
     for (i = 0, len = measurements.length; i < len; i++) {
       value = measurements[i].get(name);
@@ -655,9 +655,9 @@ var ObservatoryFactory = function (options) {
    * @return {Collection<Observatory>}.
    */
   _getObservatories = function (observatories) {
-    var i,
-        len,
-        data = [];
+    var data = [],
+        i,
+        len;
 
     for (i = 0, len = observatories.length; i < len; i++) {
       data[i] = ObservatorySummary(_this, observatories[i]);
@@ -678,7 +678,7 @@ var ObservatoryFactory = function (options) {
     data.piers = _getPiers(observatory.piers);
     data.observations = _getObservations(observatory.observations);
     _selectById(data.piers, data.default_pier_id);
-    
+
     return Observatory(data);
   };
 
@@ -694,7 +694,7 @@ var ObservatoryFactory = function (options) {
     data.begin = _toMilliseconds(data.begin);
     data.end = _toMilliseconds(data.end);
     data.readings = _getReadings(observation.readings);
-    
+
     return ObservationDetail(_this, data);
   };
 
@@ -706,10 +706,10 @@ var ObservatoryFactory = function (options) {
    * @return {Collection<Instrument>} collection of instrument objects.
    */
   _getInstruments = function (instruments) {
-    var i,
-        len,
-        data = [],
-        instrument;
+    var data = [],
+        i,
+        instrument,
+        len;
 
     for (i = 0, len = instruments.length; i < len; i++) {
       instrument = Util.extend({}, instruments[i]);
@@ -729,11 +729,11 @@ var ObservatoryFactory = function (options) {
    * @return {Collection<Pier>} collection of pier objects.
    */
   _getPiers = function (piers) {
-    var pier,
+    var data = [],
         i,
         len,
-        data = [];
-  
+        pier;
+
     for (i = 0, len = piers.length; i < len; i++) {
       pier = Util.extend({}, piers[i]);
       pier.begin = _toMilliseconds(pier.begin);
@@ -742,7 +742,7 @@ var ObservatoryFactory = function (options) {
       _selectById(pier.marks, pier.default_mark_id);
       data[i] = Pier(pier);
     }
-  
+
     return Collection(data);
   };
 
@@ -754,11 +754,11 @@ var ObservatoryFactory = function (options) {
    * @return {Collection<Mark>} collection of mark objects.
    */
   _getMarks = function (marks) {
-    var i,
+    var data = [],
+        i,
         len,
-        data = [],
         mark;
-  
+
     for (i = 0, len = marks.length; i < len; i++) {
       mark = Util.extend({}, marks[i]);
       mark.begin = _toMilliseconds(mark.begin);
@@ -777,11 +777,11 @@ var ObservatoryFactory = function (options) {
    * @return {Collection<ObservationSummary>} collection of observation objects.
    */
   _getObservations = function (observations) {
-    var i,
+    var data = [],
+        i,
         len,
-        data = [],
         observation;
-  
+
     for (i = 0, len = observations.length; i < len; i++) {
       observation = Util.extend({}, observations[i]);
       observation.begin = _toMilliseconds(observation.begin);
@@ -799,11 +799,11 @@ var ObservatoryFactory = function (options) {
    * @return {Collection<Reading>} collection of reading objects.
    */
   _getReadings = function (readings) {
-    var reading,
+    var data = [],
         i,
         len,
-        data = [];
-  
+        reading;
+
     for (i = 0, len = readings.length; i < len; i++) {
       reading = Util.extend({}, readings[i]);
       reading.startD = _toMilliseconds(reading.startD);
@@ -827,11 +827,11 @@ var ObservatoryFactory = function (options) {
    * @return {Collection<Measurement>} collection of measurement objects.
    */
   _getMeasurements = function (measurements) {
-    var i,
+    var data = [],
+        i,
         len,
-        data = [],
         measurement;
-  
+
     for (i = 0, len = measurements.length; i < len; i++) {
       measurement = Util.extend({}, measurements[i]);
       measurement.time = _toMilliseconds(measurement.time);
