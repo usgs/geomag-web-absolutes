@@ -1,0 +1,29 @@
+svg {
+  max-width: 100%;
+}
+
+path {
+  stroke: lightgrey;
+  stroke-width: 1;
+  fill: none;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  storke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}
+
+@media print {
+  h1,
+  .alert,
+  h2 {
+    display:none;
+  }
+}
