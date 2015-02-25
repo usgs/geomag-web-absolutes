@@ -3,6 +3,7 @@
 var BaselineFactory = require('geomag/BaselineFactory'),
     d3 = require('d3'),
     Events = require('util/Events'),
+    Formatter = require('geomag/Formatter'),
     Util = require('util/Util'),
     View = require('mvc/View');
 
@@ -30,19 +31,21 @@ var Plot = function (params) {
 
       _allData,
       _height,
-      _key,
       _margin,
       _meanData,
       _meanLine,
+      _rawData,
       _svg,
+      _validKey,
+      _valueKey,
       _width,
       _xAxis,
       _xScale,
       _yAxis,
       _yScale,
 
+      _computeRange,
       _createDataPoint,
-      _getCurrentWidth,
       _onSizeChange,
       _updateAxes,
       _updateMean,
@@ -55,7 +58,8 @@ var Plot = function (params) {
   _initialize = function (params) {
     params = Util.extend({}, _PLOT_DEFAULTS, params);
 
-    _key = params.key;
+    _valueKey = params.key;
+    _validKey = params.validKey;
     _height = params.height;
     _width = params.width;
     _margin = params.margin;
@@ -65,19 +69,24 @@ var Plot = function (params) {
   };
 
 
-  _createDataPoint = function (dateTime, value) {
-    return {
-      dateTime: dateTime,
-      baseline: value
-    };
+  _computeRange = params.computeRange || function (/*data*/) {
+    var mean,
+        sum = 0;
+
+    _meanData.forEach(function (item) {
+      sum += item.baseline;
+    });
+
+    mean = sum / _meanData.length;
+
+    return [mean - 20, mean + 20];
   };
 
-  _getCurrentWidth = function () {
-    if (_width === 'auto') {
-      return _this.el.clientWidth - (_margin.left + _margin.right);
-    } else {
-      return _width;
-    }
+  _createDataPoint = function (dateTime, value) {
+    return {
+      dateTime: parseInt(dateTime, 10),
+      baseline: parseFloat(value)
+    };
   };
 
   _meanLine = d3.svg.line()
@@ -90,22 +99,13 @@ var Plot = function (params) {
 
   _updateAxes = function () {
     var endTime,
-        startTime,
-        ydif,
-        ymax,
-        ymin;
+        startTime;
 
-    // Times in seconds since the epoch
-    endTime = parseInt((new Date()).getTime()/1000,10);
-    startTime = endTime - 33696000;
-
-
-    ymin = d3.min(_meanData, function (d) { return d.baseline; });
-    ymax = d3.max(_meanData, function (d) { return d.baseline; });
-    ydif = Math.abs(ymax - ymin) || 10;
+    endTime = (new Date()).getTime();
+    startTime = endTime - 33696000000;
 
     _xScale.domain([startTime, endTime]).nice();
-    _yScale.domain([ymin - (ydif / 2), ymax + (ydif / 2)]).nice();
+    _yScale.domain(_computeRange(_rawData)).nice();
 
     _svg.append('g')
         .attr('class', 'x axis')
@@ -126,9 +126,7 @@ var Plot = function (params) {
   };
 
   _updatePlotHelpers = function () {
-    var width = _getCurrentWidth();
-
-    _xScale = d3.time.scale().range([0, width]);
+    _xScale = d3.time.scale().range([0, _width]);
     _yScale = d3.scale.linear().range([_height, 0]);
 
     _xAxis = d3.svg.axis().scale(_xScale).orient('bottom').ticks(5);
@@ -148,36 +146,46 @@ var Plot = function (params) {
 
 
   _this.setData = function (data) {
+    var buffer,
+        meanBuffer = {};
+
+    _rawData = data;
     _allData = [];
     _meanData = [];
 
-    data.forEach(function (baseline) {
-      var count = 0,
-          dateTime,
-          i,
-          len,
-          sum = 0,
-          value,
-          values;
+    _rawData.forEach(function (baseline) {
+      var dateTime,
+          valid,
+          value;
 
-      dateTime = baseline.dateTime * 1000;
-      values = baseline[_key];
+      value = baseline[_valueKey];
+      valid = baseline[_validKey];
+      dateTime = baseline.begin * 1000;
 
-      for (i = 0, len = values.length; i < len; i++) {
-        value = values[i];
-
-        if (value !== null) {
-          _allData.push(_createDataPoint(dateTime, value));
-
-          sum += value;
-          count += 1;
-        }
+      if (!meanBuffer.hasOwnProperty(dateTime)) {
+        meanBuffer[dateTime] = {
+          count: 0,
+          sum: 0
+        };
       }
 
-      if (count > 0) {
-        _meanData.push(_createDataPoint(dateTime, sum / count));
+      if (value !== null && valid === 'Y') {
+        meanBuffer[dateTime].count += 1;
+        meanBuffer[dateTime].sum += value;
+
+        _allData.push(_createDataPoint(dateTime, value));
       }
     });
+
+    for (var key in meanBuffer) {
+      if (meanBuffer.hasOwnProperty(key)) {
+        buffer = meanBuffer[key];
+
+        if (buffer.count > 0) {
+          _meanData.push(_createDataPoint(key, buffer.sum / buffer.count));
+        }
+      }
+    }
 
     _this.render();
   };
@@ -185,7 +193,7 @@ var Plot = function (params) {
 
   _this.destroy = Util.compose(_this.destroy, function () {
     _allData = null;
-    _key = null;
+    _valueKey = null;
     _meanData = null;
 
     _this = null;
@@ -197,13 +205,14 @@ var Plot = function (params) {
     _this.el.innerHTML = '';
 
     if (_allData.length > 0) {
-      var width = _getCurrentWidth();
-
       _svg = d3.select(_this.el)
         .append('svg')
-          .attr('viewBox', '0 0 ' + (width + _margin.left + _margin.right) + ' ' + (_height + _margin.top + _margin.bottom))
-          // .attr('width', width + _margin.left + _margin.right)
-          // .attr('height', _height + _margin.top + _margin.bottom)
+          .attr('viewBox',
+              '0 0 ' +
+              (_width + _margin.left + _margin.right) +
+              ' ' +
+              (_height + _margin.top + _margin.bottom)
+          )
         .append('g')
           .attr('transform',
               'translate(' + _margin.left + ',' + _margin.top + ')');
@@ -260,15 +269,59 @@ var BaselinePlot = function (params) {
 
     _hPlot = Plot({
       el: el.querySelector('.baseline-plot-h-wrapper'),
-      key: 'baseH'
+      key: 'baseH',
+      validKey: 'horizontal_intensity_valid'
     });
     _dPlot = Plot({
       el: el.querySelector('.baseline-plot-e-wrapper'),
-      key: 'baseD'
+      key: 'baseD',
+      validKey: 'declination_valid',
+      computeRange: function (data) {
+        var dcount,
+            dmean,
+            dmeanRad,
+            dspan,
+            dsum,
+            hcount,
+            hmean,
+            hsum,
+            emean;
+
+        // Compute the mean D and H values
+        dcount = 0;
+        dsum = 0;
+        hcount = 0;
+        hsum = 0;
+
+        data.forEach(function (obs) {
+          if (obs.absD !== null && obs.declination_valid === 'Y') {
+            dsum += obs.absD;
+            dcount += 1;
+          }
+          if (obs.absH !== null && obs.horizontal_intensity_valid === 'Y') {
+            hsum += obs.absH;
+            hcount += 1;
+          }
+        });
+
+        dmean = dsum / dcount;
+        hmean = hsum / hcount;
+
+        // Convert dmean from minutes to radians
+        dmeanRad = (Math.PI / 180) * Formatter.dmsToDecimal(0, dmean, 0);
+
+        // Compute the mean E value
+        emean = hmean * Math.tan(dmeanRad);
+
+        dspan = Math.abs((dmean / emean) * 20); // +/- 20nT so full range is 40nT
+
+        return [dmean - dspan, dmean + dspan];
+      }
     });
     _zPlot = Plot({
       el: el.querySelector('.baseline-plot-z-wrapper'),
-      key: 'baseZ'
+      key: 'baseZ',
+      validKey: 'vertical_intensity_valid'
     });
 
     Events.on('hashchange', _onHashChange);
