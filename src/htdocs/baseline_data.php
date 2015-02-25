@@ -17,55 +17,46 @@ try {
     echo 'Only admin users can view baseline data.';
     exit();
   } else if ($method === 'GET') {
-    if (!isset($_GET['id'])) {
+    if (!isset($_GET['observatoryId'])) {
       header('HTTP/1.1 400 Bad Request');
-      echo 'id is a required parameter';
+      echo 'observatoryId is a required parameter';
+      exit();
+    }
+    if (!isset($_GET['startTime'])) {
+      header('HTTP/1.1 400 Bad Request');
+      echo 'startTime is a required paramter';
+      exit();
+    }
+    if (!isset($_GET['endTime'])) {
+      header('HTTP/1.1 400 Bad Request');
+      echo 'endTime is a required parameter';
       exit();
     }
 
-    $id = intval($_GET['id']);
+    $observatoryId = intval($_GET['observatoryId']);
 
-    if ($id <= 0) {
+    // Note: Expect start/end times in seconds since epoch
+    $startTime = intval($_GET['startTime']);
+    $endTime = intval($_GET['endTime']);
+
+    if ($observatoryId <= 0) {
       header('HTTP/1.1 400 Bad Request');
-      echo 'id must be a positive integer';
+      echo 'observatoryId must be a positive integer';
       exit();
     }
 
-    $observations = $OBSERVATORY_FACTORY->getObservatory($id)->observations;
+    if ($endTime <= $startTime) {
+      header('HTTP/1.1 400 Bad Request');
+      echo 'endTime must be later than startTime';
+    }
 
-    if (count($observations) < 1) {
+    $baselines = $OBSERVATORY_FACTORY->getBaselines($observatoryId, $startTime,
+        $endTime);
+
+    if (count($baselines) < 1) {
       header('HTTP/1.1 404 Not Found');
       echo 'No matching observations found.';
       exit();
-    }
-
-    $baselines = array();
-
-    foreach ($observations as $observation) {
-      $baseline = array(
-        'observation' => $observation->id,
-        'dateTime' => $observation->begin,
-        'baseH' => array(),
-        'baseZ' => array(),
-        'baseD' => array()
-      );
-
-      $readings = $OBSERVATION_FACTORY->getObservation(
-          $observation->id)->readings;
-
-      foreach ($readings as $reading) {
-        if ($reading->horizontal_intensity_valid === 'Y') {
-          $baseline['baseH'][] = safefloatval($reading->baseH);
-        }
-        if ($reading->vertical_intensity_valid === 'Y') {
-          $baseline['baseZ'][] = safefloatval($reading->baseZ);
-        }
-        if ($reading->declination_valid === 'Y') {
-          $baseline['baseD'][] = safefloatval($reading->baseD);
-        }
-      }
-
-      $baselines[] = $baseline;
     }
 
     $json = str_replace('\"', '"', json_encode($baselines));
