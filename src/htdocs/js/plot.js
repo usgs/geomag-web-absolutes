@@ -4,6 +4,7 @@
 var BaselinePlot = require('geomag/BaselinePlot'),
     Collection = require('mvc/Collection'),
     CollectionSelectBox = require('mvc/CollectionSelectBox'),
+    Events = require('util/Events'),
     ObservatoryFactory = require('geomag/ObservatoryFactory'),
     User = require('geomag/User');
 
@@ -18,14 +19,17 @@ observatories.on('select', function () {
 
 factory.getObservatories({
   success: function (data) {
-    var defaultId;
+    var defaultId,
+        triggerHashChange;
 
+    triggerHashChange = false;
     observatories.reset(data);
 
     if (observatoryId !== null) {
       defaultId = observatoryId;
     } else if (window.location.hash) {
       defaultId = parseInt(window.location.hash.substring(1), 10);
+      triggerHashChange = true;
     } else if (currentUser && currentUser.get('default_observatory_id')) {
       defaultId = currentUser.get('default_observatory_id');
     } else {
@@ -33,6 +37,10 @@ factory.getObservatories({
     }
 
     observatories.selectById(defaultId);
+
+    if (triggerHashChange) {
+      Events.trigger('hashchange');
+    }
   },
   error: function () {
     console.log('Failed to get observatories...');
@@ -48,5 +56,5 @@ CollectionSelectBox({
 });
 
 BaselinePlot({
-  el: document.querySelector('.observation-baseline-plot')
+  el: document.querySelector('.observation-baseline-plot-view')
 });

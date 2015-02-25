@@ -35,6 +35,13 @@ if (!isset($TEMPLATE)) {
 }
 ?>
 
+<p class="alert warning">
+  Showing the past 13 months of baseline observations for the currently
+  selected observatory. Updating plots can take a small amount of time,
+  please be patient and do not rapidly switch between observatories since
+  this may result in seeing unexpected data.
+</p>
+
 <div class="observation-baseline-plot-wrapper">
   <section class="observatory-select-view">
     <h2>Observatory</h2>
