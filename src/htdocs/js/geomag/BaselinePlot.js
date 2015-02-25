@@ -95,8 +95,9 @@ var Plot = function (params) {
         ymax,
         ymin;
 
-    endTime = (new Date()).getTime();
-    startTime = endTime - 33696000000;
+    // Times in seconds since the epoch
+    endTime = parseInt((new Date()).getTime()/1000,10);
+    startTime = endTime - 33696000;
 
 
     ymin = d3.min(_meanData, function (d) { return d.baseline; });
@@ -286,8 +287,8 @@ var BaselinePlot = function (params) {
         startTime;
 
     observatoryId = parseInt(window.location.hash.substring(1), 10);
-    endTime = (new Date()).getTime();
-    startTime = endTime - 33696000000; // 13 months-ish
+    endTime = parseInt((new Date()).getTime()/1000,10);
+    startTime = endTime - 33696000; // 13 months-ish
 
     if (isNaN(observatoryId)) {
       return;
