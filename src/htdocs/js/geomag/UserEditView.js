@@ -21,12 +21,24 @@ var UserEditView = function (options) {
   var _this,
       _initialize,
 
-      _options;
+      _admin,
+      _confirmpassword,
+      _email,
+      _enabled,
+      _name,
+      _observatories,
+      _options,
+      _password,
+      _user,
+      _username;
 
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = View(_options);
+  _this = View(options);
 
-  _initialize = function () {
+  _initialize = function (options) {
+    var el = _this.el;
+
+    _options = Util.extend({}, _DEFAULTS, options);
+    _user = _options.user;
 
     _this.el.innerHTML = [
       '<ul>',
@@ -74,64 +86,60 @@ var UserEditView = function (options) {
       '</ul>'
     ].join('');
 
-    _this._name = _this.el.querySelector('#useredit-name');
-    _this._username = _this.el.querySelector('#useredit-username');
-    _this._observatories = CollectionSelectBox({
-        el: _this.el.querySelector('#default-observatory-id'),
+    _name = el.querySelector('#useredit-name');
+    _username = el.querySelector('#useredit-username');
+    _observatories = CollectionSelectBox({
+        el: el.querySelector('#default-observatory-id'),
         allowDeselect: true,
         collection: _options.observatories
       });
-    _this._email = _this.el.querySelector('#email');
-    _this._password = _this.el.querySelector('#password');
-    _this._confirmpassword = _this.el.querySelector('#confirm-password');
-    _this._admin = _this.el.querySelector('#admin');
-    _this._enabled = _this.el.querySelector('#enabled');
+    _email = el.querySelector('#email');
+    _password = el.querySelector('#password');
+    _confirmpassword = el.querySelector('#confirm-password');
+    _admin = el.querySelector('#admin');
+    _enabled = el.querySelector('#enabled');
+  };
+
+  _this.render = function () {
+    _name.value = _user.get('name');
+    _username.value = _user.get('username');
+    _observatories.selectById(_user.get('default_observatory_id'));
+    _email.value = _user.get('email');
+    _password.value = '';
+    _confirmpassword.value = '';
+    if (_user.get('admin') === 'Y') {
+      _admin.checked = 'checked';
+    } else {
+      _admin.removeAttribute('checked');
+    }
+
+    if (_user.get('enabled') === 'Y') {
+      _enabled.checked = 'checked';
+    } else {
+      _enabled.removeAttribute('checked');
+    }
   };
 
   _this.updateModel = function () {
     var values = {},
         observatory;
 
-    values.name = _this._name.value;
-    values.username = _this._username.value;
+    values.name = _name.value;
+    values.username = _username.value;
     observatory = _options.observatories.getSelected();
     values.default_observatory_id = observatory === null ?
         null : observatory.id;
-    values.email = _this._email.value;
-    values.admin = _this._admin.checked ? 'Y' : 'N';
-    values.enabled = _this._enabled.checked ? 'Y' : 'N';
-    if (_this._password.value === _this._confirmpassword.value &&
-        _this._password.value !== '') {
-      values.password = _this._password.value;
+    values.email = _email.value;
+    values.admin = _admin.checked ? 'Y' : 'N';
+    values.enabled = _enabled.checked ? 'Y' : 'N';
+    if (_password.value === _confirmpassword.value && _password.value !== '') {
+      values.password = _password.value;
     }
 
     _options.user.set(values);
   };
 
-
-  _this.render = function () {
-    var user = _options.user;
-
-    _this._name.value = user.get('name');
-    _this._username.value = user.get('username');
-    _this._observatories.selectById(user.get('default_observatory_id'));
-    _this._email.value = user.get('email');
-    _this._password.value = '';
-    _this._confirmpassword.value = '';
-    if (user.get('admin') === 'Y') {
-      _this._admin.checked = 'checked';
-    } else {
-      _this._admin.removeAttribute('checked');
-    }
-
-    if (user.get('enabled') === 'Y') {
-      _this._enabled.checked = 'checked';
-    } else {
-      _this._enabled.removeAttribute('checked');
-    }
-  };
-
-  _initialize();
+  _initialize(options);
   options = null;
   return _this;
 };
