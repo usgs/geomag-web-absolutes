@@ -5,7 +5,9 @@ var DeclinationView = require('geomag/DeclinationView'),
     MagnetometerOrdinatesView = require('geomag/MagnetometerOrdinatesView'),
     Measurement = require('geomag/Measurement'),
     MeasurementView = require('geomag/MeasurementView'),
-    ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
+    ModalView = require('mvc/ModalView'),
+    ObservationBaselineCalculator =
+        require('geomag/ObservationBaselineCalculator'),
     Util = require('util/Util'),
     View = require('mvc/View');
 
@@ -28,7 +30,11 @@ var ReadingView = function (options) {
   var _this,
       _initialize,
 
-      _options;
+      _options,
+
+      _formatType,
+      _onTimeChange,
+      _showWarning;
 
   _options = Util.extend({}, _DEFAULTS, options);
   _this = View(_options);
@@ -55,10 +61,29 @@ var ReadingView = function (options) {
     _this._secondMarkDownMeasurement =
         _this._measurements[Measurement.SECOND_MARK_DOWN][0];
 
-    _this._southDownMeasurement = _this._measurements[Measurement.SOUTH_DOWN][0];
+    _this._southDownMeasurement =
+        _this._measurements[Measurement.SOUTH_DOWN][0];
     _this._northUpMeasurement = _this._measurements[Measurement.NORTH_UP][0];
     _this._southUpMeasurement = _this._measurements[Measurement.SOUTH_UP][0];
-    _this._northDownMeasurement = _this._measurements[Measurement.NORTH_DOWN][0];
+    _this._northDownMeasurement =
+        _this._measurements[Measurement.NORTH_DOWN][0];
+
+    _this._westDownMeasurement.on('change:time', _onTimeChange,
+          _this._westDownMeasurement);
+    _this._eastDownMeasurement.on('change:time', _onTimeChange,
+          _this._eastDownMeasurement);
+    _this._westUpMeasurement.on('change:time', _onTimeChange,
+          _this._westUpMeasurement);
+    _this._eastUpMeasurement.on('change:time', _onTimeChange,
+          _this._eastUpMeasurement);
+    _this._southDownMeasurement.on('change:time', _onTimeChange,
+          _this._southDownMeasurement);
+    _this._northDownMeasurement.on('change:time', _onTimeChange,
+          _this._northDownMeasurement);
+    _this._southUpMeasurement.on('change:time', _onTimeChange,
+          _this._southUpMeasurement);
+    _this._northUpMeasurement.on('change:time', _onTimeChange,
+          _this._northUpMeasurement);
 
     _this.el.innerHTML = [
       '<section class="reading-view">',
@@ -221,6 +246,79 @@ var ReadingView = function (options) {
       observation: _this._observation,
       baselineCalculator: _this._calculator
     });
+  };
+
+  // within the scope of this method "this" is a measurment.
+  _onTimeChange = function () {
+    var i,
+        isEarlierMeasurment,
+        len,
+        measurment,
+        measurments,
+        thatTime,
+        thisTime;
+
+    isEarlierMeasurment = true;
+
+    measurments = [
+      _this._westDownMeasurement,
+      _this._eastDownMeasurement,
+      _this._westUpMeasurement,
+      _this._eastUpMeasurement,
+      _this._southDownMeasurement,
+      _this._northUpMeasurement,
+      _this._southUpMeasurement,
+      _this._northDownMeasurement
+    ];
+
+    thisTime = this.get('time');
+
+    for (i = 0, len = measurments.length; i < len; i++) {
+      measurment = measurments[i];
+      thatTime = measurment.get('time');
+
+      if (thatTime === null) {
+        continue;
+      }
+      if (this === measurment) {
+        isEarlierMeasurment = false;
+        continue;
+      }
+      if ((isEarlierMeasurment && thisTime < thatTime) ||
+          (!isEarlierMeasurment && thisTime > thatTime)) {
+        _showWarning(this, measurment);
+        return;
+      }
+    }
+  };
+
+  _showWarning = function (currentMeasurment, conflictMeasurment) {
+    var conflictType,
+        currentType;
+
+    conflictType = _formatType(conflictMeasurment.get('type'));
+    currentType = _formatType(currentMeasurment.get('type'));
+
+    ModalView(
+      currentType + ' and ' + conflictType + ' appear to be out of order.' +
+          '<br/><br/>Times are typically in ascending order are you sure ' +
+          'this is correct?',
+    {
+      title: 'Time Warning',
+      classes: ['modal-warning'],
+      buttons: [{
+        text: 'Okay',
+        callback: function (evt, modal) {
+          modal.hide();
+        }
+      }]
+    }).show();
+
+  };
+
+  _formatType = function (type) {
+    return '&ldquo;' + type.replace('Up', ' Up').replace('Down', ' Down') +
+        '&rdquo;';
   };
 
 
