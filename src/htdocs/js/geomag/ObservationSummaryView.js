@@ -352,34 +352,36 @@ var ObservationSummaryView = function (options) {
         reviewer = _observation.get('reviewer_user_id'),
         electTemp = _observation.get('elect_temperature'),
         fluxgateTemp = _observation.get('flux_temperature'),
+        pierTemp = _observation.get('pier_temperature'),
         protonTemp = _observation.get('proton_temperature'),
         outsideTemp = _observation.get('outside_temperature');
 
-    _this._pierTemperature.innerHTML =
-        Format.celsius(_observation.get('pier_temperature'),1);
+    if (pierTemp !== null) {
+      _pierTemperature.innerHTML = Format.celsius(pierTemp,1);
+    }
     if (electTemp !== null) {
-      _this._electronicsTemperature.innerHTML = Format.celsius(electTemp,1);
+      _electronicsTemperature.innerHTML = Format.celsius(electTemp,1);
     } else {
-      _this._electronicsTemperature.innerHTML = 'elec temp';
+      _electronicsTemperature.innerHTML = 'elec temp';
     }
     if (fluxgateTemp !== null) {
-      _this._fluxgateTemperature.innerHTML = Format.celsius(fluxgateTemp,1);
+      _fluxgateTemperature.innerHTML = Format.celsius(fluxgateTemp,1);
     } else {
-      _this._fluxgateTemperature.innerHTML = 'flux temp';
+      _fluxgateTemperature.innerHTML = 'flux temp';
     }
     if (protonTemp !== null) {
-      _this._protonTemperature.innerHTML = Format.celsius(protonTemp,1);
+      _protonTemperature.innerHTML = Format.celsius(protonTemp,1);
     }
     else {
-      _this._protonTemperature.innerHTML = 'prot temp';
+      _protonTemperature.innerHTML = 'prot temp';
     }
     if (outsideTemp !== null) {
-      _this._outsideTemperature.innerHTML = Format.celsius(outsideTemp,1);
+      _outsideTemperature.innerHTML = Format.celsius(outsideTemp,1);
     }
     else {
-      _this._outsideTemperature.innerHTML = 'outs temp';
+      _outsideTemperature.innerHTML = 'outs temp';
     }
-    _this._remarks.innerHTML = _observation.get('annotation');
+    _remarks.innerHTML = _observation.get('annotation');
 
     if (reviewed === 'Y' && reviewer) {
       // set reviewer to reviwer_user_id while fetching the user name.
