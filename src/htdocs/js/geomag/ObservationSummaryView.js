@@ -42,7 +42,6 @@ var ObservationSummaryView = function (options) {
       _pierTemperature,
       _protonTemperature,
       _readings,
-      _remarks,
       _userFactory,
       _verticalBaselineValuesMean,
       _verticalBaselineValuesRange,
@@ -50,7 +49,6 @@ var ObservationSummaryView = function (options) {
       _verticalIntensitySummaryView,
 
       _bindings,
-      _onChange,
       _querySelectors,
       _renderDeclination,
       _renderHorizontalIntensitySummaryView,
@@ -194,11 +192,6 @@ var ObservationSummaryView = function (options) {
             '</tr>',
           '</tbody>',
         '</table>',
-        '<hr/>',
-        '<section class="reviewer">',
-          '<label for="observation-remarks">Reviewer comments</label>',
-          '<textarea id="observation-remarks"></textarea>',
-        '</section>',
       '</section>'
     ].join('');
 
@@ -208,7 +201,6 @@ var ObservationSummaryView = function (options) {
   };
 
   _bindings = function () {
-    _remarks.addEventListener('change', _onChange);
     _calculator.on('change', 'render', _this);
 
     _observation.eachReading(function (reading) {
@@ -216,12 +208,6 @@ var ObservationSummaryView = function (options) {
       reading.eachMeasurement(function (measurement) {
         measurement.on('change', 'render', _this);
       });
-    });
-  };
-
-  _onChange = function () {
-    _observation.set({
-      annotation: _remarks.value
     });
   };
 
@@ -262,7 +248,6 @@ var ObservationSummaryView = function (options) {
     _protonTemperature = el.querySelector('.proton-temp-value');
     _outsideTemperature = el.querySelector('.outside-temp-value');
     _checkedBy = el.querySelector('.checked-by-value');
-    _remarks = el.querySelector('.reviewer > textarea');
   };
 
   _renderDeclination = function () {
@@ -373,7 +358,6 @@ var ObservationSummaryView = function (options) {
         Format.celsius(_observation.get('proton_temperature'),1);
     _outsideTemperature.innerHTML =
         Format.celsius(_observation.get('outside_temperature'),1);
-    _remarks.innerHTML = _observation.get('annotation');
   };
 
   _renderVerticalIntensitySummaryView = function () {
