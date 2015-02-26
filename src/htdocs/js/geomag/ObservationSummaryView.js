@@ -196,8 +196,6 @@ var ObservationSummaryView = function (options) {
         '</table>',
         '<hr/>',
         '<section class="reviewer">',
-          '<h2>Reviewer</h2>',
-          '<div>Reviewed by <span class="checked-by-value"></span></div>',
           '<label for="observation-remarks">Reviewer comments</label>',
           '<textarea id="observation-remarks"></textarea>',
         '</section>',
@@ -365,9 +363,6 @@ var ObservationSummaryView = function (options) {
   };
 
   _renderSummaryBottom = function () {
-    var reviewed = _observation.get('reviewed'),
-        reviewer = _observation.get('reviewer_user_id');
-
     _pierTemperature.innerHTML =
         Format.celsius(_observation.get('pier_temperature'),1);
     _electronicsTemperature.innerHTML =
@@ -379,19 +374,6 @@ var ObservationSummaryView = function (options) {
     _outsideTemperature.innerHTML =
         Format.celsius(_observation.get('outside_temperature'),1);
     _remarks.innerHTML = _observation.get('annotation');
-
-    if (reviewed === 'Y' && reviewer) {
-      // set reviewer to reviwer_user_id while fetching the user name.
-      _checkedBy.innerHTML = reviewer;
-
-      _userFactory.get({
-        data: {'id': reviewer},
-        success: function (data) {
-          // replace reviwer_user_id with user name once it is returned.
-          _checkedBy.innerHTML = data.name;
-        }
-      });
-    }
   };
 
   _renderVerticalIntensitySummaryView = function () {
