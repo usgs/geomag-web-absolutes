@@ -383,7 +383,7 @@ var dmsToDecimal = function (degs, mins, secs) {
  *    {Float} Temperature degrees with (digits) decimal places
  */
 var celsius = function (temperature, digits) {
-  if (isNaN(temperature)) {
+  if (isNaN(temperature) || (temperature === null)) {
     return '&ndash;';
   }
 
@@ -403,7 +403,7 @@ var celsius = function (temperature, digits) {
  *    {Float} Temperature degrees with (digits) decimal places
  */
 var fahrenheit = function (temperature, digits) {
-  if (isNaN(temperature)) {
+  if (isNaN(temperature) || (temperature === null)) {
     return '&ndash;';
   }
 
