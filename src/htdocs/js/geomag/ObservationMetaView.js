@@ -68,6 +68,7 @@ var ObservationMetaView = function (options) {
       _options,
       _pierSelectView,
       _pierTemperature,
+      _reviewerName,
       _theodoliteSelectView,
       _user,
       _userFactory,
@@ -127,6 +128,11 @@ var ObservationMetaView = function (options) {
             '</label>',
             '<input id="',  idPrefix, '-observer" type="text"',
                 ' class="observer-name" disabled />',
+            '<label for="', idPrefix, '-reviewer" class="print-hidden">',
+              'Reviewer',
+            '</label>',
+            '<input id="',  idPrefix, '-reviewer" type="text"',
+                ' class="reviewer-name" disabled />',
           '</div>',
           '<div class="column one-of-two left-aligned">',
             '<label for="', idPrefix, '-observatory" class="print-hidden">Observatory</label>',
@@ -180,6 +186,7 @@ var ObservationMetaView = function (options) {
     _julianDay = el.querySelector('.julian-day-value');
     _pierTemperature = el.querySelector('.pier-temperature');
     _observerName = el.querySelector('.observer-name');
+    _reviewerName = el.querySelector('.reviewer-name');
 
     _date.addEventListener('change', _onChange);
     // This makes sure the Julian day updates, among other things
@@ -411,13 +418,15 @@ var ObservationMetaView = function (options) {
         y = begin.getUTCFullYear(),
         m = begin.getUTCMonth() + 1,
         d = begin.getUTCDate(),
-        observer = _observation.get('observer_user_id');
+        observer = _observation.get('observer_user_id'),
+        reviewer = _observation.get('reviewer_user_id');
 
     _date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
     _julianDay.value = _this.getJulianDay(begin);
     _pierTemperature.value = _observation.get('pier_temperature');
 
     _observerName.value = observer;
+    _reviewerName.value = reviewer;
     if (observer) {
       _userFactory.get({
         data: {'id': observer},
@@ -428,6 +437,15 @@ var ObservationMetaView = function (options) {
       });
       } else {
       _observerName.value = _user.get('username');
+    }
+    if (reviewer) {
+      _userFactory.get({
+        data: {'id': reviewer},
+        success: function (data) {
+          // replace reviewer_user_id with username once it is returned.
+          _reviewerName.value = data.username;
+        }
+      });
     }
   };
 

@@ -97,6 +97,7 @@ var ObservationView = function (options) {
   var _this,
       _initialize,
 
+      _annotation,
       _calculator,
       _factory,
       _observation,
@@ -109,6 +110,7 @@ var ObservationView = function (options) {
       _createControls,
       _formatMeasurementErrors,
       _getRealtimeData,
+      _onChange,
       _onObservatorySelect,
       _onPublishClick,
       _onSaveClick,
@@ -140,6 +142,10 @@ var ObservationView = function (options) {
       '<section class="observation-view">',
         '<section class="observation-meta-wrapper"></section>',
         '<section class="reading-group-view-wrapper"></section>',
+        '<section class="annotation">',
+          '<h4>Comments</h4>',
+          '<textarea id="observation-remarks"></textarea>',
+        '</section>',
         '<section class="observation-view-controls"></section>',
       '</section>'
     ].join('');
@@ -152,6 +158,199 @@ var ObservationView = function (options) {
     });
   };
 
+  /**
+   * Create a panel at the bottom of the Observation view to create, update,
+   * or delete the observation.
+   *
+   */
+  _createControls = function () {
+    var controls = _this.el.querySelector('.observation-view-controls'),
+        saveButton = document.createElement('button'),
+        publishButton;
+
+    saveButton.id = 'saveButton';
+    saveButton.innerHTML = 'Save Observation';
+
+    saveButton.addEventListener('click', _onSaveClick);
+
+    controls.appendChild(saveButton);
+
+    // Add publish button for admin users
+    if (_user.get('admin') === 'Y') {
+      publishButton = document.createElement('button');
+      publishButton.innerHTML = 'Publish';
+      controls.appendChild(publishButton);
+
+      publishButton.addEventListener('click', _onPublishClick);
+    }
+  };
+
+  _formatMeasurementErrors = function (measurement) {
+    var time_error = measurement.get('time_error'),
+        angle_error = measurement.get('angle_error'),
+        markup = [];
+
+    if (time_error !== null) {
+      markup.push(measurement.get('type') + ' - ' + time_error);
+    }
+
+    if (angle_error !== null) {
+      markup.push(measurement.get('type') + ' - ' + angle_error);
+    }
+
+    if (markup.length === 0) {
+      return null;
+    }
+
+    return '<li>' + markup.join('</li><li>') + '</li>';
+  };
+
+  /**
+   * Get realtime data for all measurements.
+   */
+  _getRealtimeData = function () {
+    var observatory = _realtimeDataFactory.get('observatory'),
+        starttime = null,
+        endtime = null;
+
+    if (observatory === null) {
+      // need more information
+      return;
+    }
+
+    // find times to request
+    _observation.eachMeasurement(function (measurement) {
+      var time = measurement.get('time');
+      if (time === null) {
+        return;
+      }
+      if (starttime === null || time < starttime) {
+        starttime = time;
+      }
+      if (endtime === null || time > endtime) {
+        endtime = time;
+      }
+    });
+    if (starttime === null || endtime === null) {
+      // need more information
+      return;
+    }
+
+    // request realtime data
+    starttime = Math.round(starttime / 1000);
+    endtime = Math.round(endtime / 1000);
+
+    _realtimeDataFactory.getRealtimeData({
+      starttime: starttime,
+      endtime: endtime,
+      success: function (realtimeData) {
+        // update measurement data
+        _observation.eachMeasurement(function (measurement) {
+          measurement.setRealtimeData(realtimeData);
+        });
+      }
+    });
+  };
+
+  _onChange = function () {
+    _observation.set({
+      annotation: _annotation.value
+    });
+  };
+
+  /**
+   * Called when an observatory is selected.
+   */
+  _onObservatorySelect = function () {
+    var code = null,
+        observatory;
+    observatory = _observatories.getSelected();
+    if (observatory !== null) {
+      code = observatory.get('code');
+    }
+    _realtimeDataFactory.set({observatory: code});
+  };
+
+  /**
+   * Publish button click handler.
+   */
+  _onPublishClick = function () {
+    try {
+      _saveObservation(function () {
+          _publishObservation(function () {
+            __publishSuccess();
+          }
+        );
+      });
+    } catch (e) {
+      __publishError('Publish Failed', e.message);
+    }
+  };
+
+  /**
+   * Save button click handler.
+   */
+  _onSaveClick = function () {
+    _saveObservation(__saveSuccess, __saveError);
+  };
+
+  /**
+   * Save the observation, on success publish that data to the magproc2 server.
+   *
+   * @param callback {Function}
+   *        called after publish succeeds.
+   * @param errback {Function}
+   *        called after publish fails.
+   */
+  _publishObservation = function (callback, errback) {
+    _factory.publishObservation({
+      observation: _observation,
+      user: _user,
+      success: function (observation) {
+        _observation.set({
+          reviewed: observation.get('reviewed'),
+          reviewer_user_id: observation.get('reviewer_user_id')
+        });
+        _removeControls();
+        callback();
+      },
+      error: function (status, xhr) {
+        if (typeof errback === 'function') {
+          errback(status, xhr);
+        } else {
+          throw new Error(xhr.response);
+        }
+      }
+    });
+  };
+
+  /**
+   * Save the current observation.
+   *
+   * @param callback {Function}
+   *        called after save succeeds.
+   * @param errback {Function}
+   *        called after save fails.
+   */
+  _saveObservation = function (callback, errback) {
+    // update observation reading model with calibrations before saving
+    _this.updateCalibrations();
+
+    _factory.saveObservation({
+      observation: _observation,
+      success: function (observation) {
+        _observation.set({id: observation.get('id')}, {silent: true});
+        callback();
+      },
+      error: function (status, xhr) {
+        if (typeof errback === 'function') {
+          errback(status, xhr);
+        } else {
+          throw new Error(xhr.response);
+        }
+      }
+    });
+  };
 
   /**
    * Called when observation has been loaded.
@@ -202,8 +401,11 @@ var ObservationView = function (options) {
     _observation.eachMeasurement(function (measurement) {
       measurement.on('change', _this.updateCalibrations);
     });
-  };
 
+    _annotation = el.querySelector('.annotation > textarea');
+    _annotation.innerHTML = _observation.get('annotation');
+    _annotation.addEventListener('change', _onChange);
+  };
 
   /**
    * Called when observatories have been loaded.
@@ -266,95 +468,6 @@ var ObservationView = function (options) {
   };
 
   /**
-   * Called when an observatory is selected.
-   */
-  _onObservatorySelect = function () {
-    var code = null,
-        observatory;
-    observatory = _observatories.getSelected();
-    if (observatory !== null) {
-      code = observatory.get('code');
-    }
-    _realtimeDataFactory.set({observatory: code});
-  };
-
-  /**
-   * Get realtime data for all measurements.
-   */
-  _getRealtimeData = function () {
-    var observatory = _realtimeDataFactory.get('observatory'),
-        starttime = null,
-        endtime = null;
-
-    if (observatory === null) {
-      // need more information
-      return;
-    }
-
-    // find times to request
-    _observation.eachMeasurement(function (measurement) {
-      var time = measurement.get('time');
-      if (time === null) {
-        return;
-      }
-      if (starttime === null || time < starttime) {
-        starttime = time;
-      }
-      if (endtime === null || time > endtime) {
-        endtime = time;
-      }
-    });
-    if (starttime === null || endtime === null) {
-      // need more information
-      return;
-    }
-
-    // request realtime data
-    starttime = Math.round(starttime / 1000);
-    endtime = Math.round(endtime / 1000);
-
-    _realtimeDataFactory.getRealtimeData({
-      starttime: starttime,
-      endtime: endtime,
-      success: function (realtimeData) {
-        // update measurement data
-        _observation.eachMeasurement(function (measurement) {
-          measurement.setRealtimeData(realtimeData);
-        });
-      }
-    });
-
-  };
-
-
-  /**
-   * Create a panel at the bottom of the Observation view to create, update,
-   * or delete the observation.
-   *
-   */
-  _createControls = function () {
-    var controls = _this.el.querySelector('.observation-view-controls'),
-        saveButton = document.createElement('button'),
-        publishButton;
-
-    saveButton.id = 'saveButton';
-    saveButton.innerHTML = 'Save Observation';
-
-    saveButton.addEventListener('click', _onSaveClick);
-
-    controls.appendChild(saveButton);
-
-    // Add publish button for admin users
-    if (_user.get('admin') === 'Y') {
-      publishButton = document.createElement('button');
-      publishButton.innerHTML = 'Publish';
-      controls.appendChild(publishButton);
-
-      publishButton.addEventListener('click', _onPublishClick);
-    }
-  };
-
-  /**
    * Removes the save and publish buttons after an observation
    * is successfully published.
    */
@@ -364,105 +477,6 @@ var ObservationView = function (options) {
     controls.innerHTML =
         '<div class="alert success">Observation has been published.</div>';
   };
-
-  /**
-   * Save button click handler.
-   */
-  _onSaveClick = function () {
-    _saveObservation(__saveSuccess, __saveError);
-  };
-
-  /**
-   * Save the current observation.
-   *
-   * @param callback {Function}
-   *        called after save succeeds.
-   * @param errback {Function}
-   *        called after save fails.
-   */
-  _saveObservation = function (callback, errback) {
-    // update observation reading model with calibrations before saving
-    _this.updateCalibrations();
-
-    _factory.saveObservation({
-      observation: _observation,
-      success: function (observation) {
-        _observation.set({id: observation.get('id')}, {silent: true});
-        callback();
-      },
-      error: function (status, xhr) {
-        if (typeof errback === 'function') {
-          errback(status, xhr);
-        } else {
-          throw new Error(xhr.response);
-        }
-      }
-    });
-  };
-
-  /**
-   * Publish button click handler.
-   */
-  _onPublishClick = function () {
-    try {
-      _saveObservation(function () {
-          _publishObservation(function () {
-            __publishSuccess();
-          }
-        );
-      });
-    } catch (e) {
-      __publishError('Publish Failed', e.message);
-    }
-  };
-
-  /**
-   * Save the observation, on success publish that data to the magproc2 server.
-   *
-   * @param callback {Function}
-   *        called after publish succeeds.
-   * @param errback {Function}
-   *        called after publish fails.
-   */
-  _publishObservation = function (callback, errback) {
-    _factory.publishObservation({
-      observation: _observation,
-      user: _user,
-      success: function (observation) {
-        _observation.set({
-          reviewed: observation.get('reviewed'),
-          reviewer_user_id: observation.get('reviewer_user_id')
-        });
-        _removeControls();
-        callback();
-      },
-      error: function (status, xhr) {
-        if (typeof errback === 'function') {
-          errback(status, xhr);
-        } else {
-          throw new Error(xhr.response);
-        }
-      }
-    });
-  };
-
-  /**
-   * Summarize component D,H,Z and store the calibrated values on
-   * the reading model object
-   */
-  _this.updateCalibrations = function () {
-    var readings = _observation.get('readings').data(),
-        i, len, reading;
-
-    for (i = 0, len = readings.length; i < len; i++) {
-      reading = readings[i];
-
-      _factory.setCalibrationD(reading);
-      _factory.setCalibrationH(reading);
-      _factory.setCalibrationZ(reading);
-    }
-  };
-
 
   _updateErrorCount = function () {
     var errors = [],
@@ -542,25 +556,21 @@ var ObservationView = function (options) {
     }
   };
 
+  /**
+   * Summarize component D,H,Z and store the calibrated values on
+   * the reading model object
+   */
+  _this.updateCalibrations = function () {
+    var readings = _observation.get('readings').data(),
+        i, len, reading;
 
-  _formatMeasurementErrors = function (measurement) {
-    var time_error = measurement.get('time_error'),
-        angle_error = measurement.get('angle_error'),
-        markup = [];
+    for (i = 0, len = readings.length; i < len; i++) {
+      reading = readings[i];
 
-    if (time_error !== null) {
-      markup.push(measurement.get('type') + ' - ' + time_error);
+      _factory.setCalibrationD(reading);
+      _factory.setCalibrationH(reading);
+      _factory.setCalibrationZ(reading);
     }
-
-    if (angle_error !== null) {
-      markup.push(measurement.get('type') + ' - ' + angle_error);
-    }
-
-    if (markup.length === 0) {
-      return null;
-    }
-
-    return '<li>' + markup.join('</li><li>') + '</li>';
   };
 
   _initialize(options);

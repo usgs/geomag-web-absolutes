@@ -42,7 +42,6 @@ var ObservationSummaryView = function (options) {
       _pierTemperature,
       _protonTemperature,
       _readings,
-      _remarks,
       _userFactory,
       _verticalBaselineValuesMean,
       _verticalBaselineValuesRange,
@@ -50,7 +49,6 @@ var ObservationSummaryView = function (options) {
       _verticalIntensitySummaryView,
 
       _bindings,
-      _onChange,
       _querySelectors,
       _renderDeclination,
       _renderHorizontalIntensitySummaryView,
@@ -58,12 +56,12 @@ var ObservationSummaryView = function (options) {
       _renderSummaryBottom,
       _renderVerticalIntensitySummaryView;
 
-  _this = View(options);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
 
   _initialize = function () {
     var el = _this.el;
 
-    _options = Util.extend({}, _DEFAULTS, options);
     _calculator = _options.baselineCalculator;
     _observation = _options.observation;
     _readings = _observation.get('readings');
@@ -194,13 +192,6 @@ var ObservationSummaryView = function (options) {
             '</tr>',
           '</tbody>',
         '</table>',
-        '<hr/>',
-        '<section class="reviewer">',
-          '<h2>Reviewer</h2>',
-          '<div>Reviewed by <span class="checked-by-value"></span></div>',
-          '<label for="observation-remarks">Reviewer comments</label>',
-          '<textarea id="observation-remarks"></textarea>',
-        '</section>',
       '</section>'
     ].join('');
 
@@ -210,7 +201,6 @@ var ObservationSummaryView = function (options) {
   };
 
   _bindings = function () {
-    _remarks.addEventListener('change', _onChange);
     _calculator.on('change', 'render', _this);
 
     _observation.eachReading(function (reading) {
@@ -218,12 +208,6 @@ var ObservationSummaryView = function (options) {
       reading.eachMeasurement(function (measurement) {
         measurement.on('change', 'render', _this);
       });
-    });
-  };
-
-  _onChange = function () {
-    _observation.set({
-      annotation: _remarks.value
     });
   };
 
@@ -264,7 +248,6 @@ var ObservationSummaryView = function (options) {
     _protonTemperature = el.querySelector('.proton-temp-value');
     _outsideTemperature = el.querySelector('.outside-temp-value');
     _checkedBy = el.querySelector('.checked-by-value');
-    _remarks = el.querySelector('.reviewer > textarea');
   };
 
   _renderDeclination = function () {
@@ -365,9 +348,6 @@ var ObservationSummaryView = function (options) {
   };
 
   _renderSummaryBottom = function () {
-    var reviewed = _observation.get('reviewed'),
-        reviewer = _observation.get('reviewer_user_id');
-
     _pierTemperature.innerHTML =
         Format.celsius(_observation.get('pier_temperature'),1);
     _electronicsTemperature.innerHTML =
@@ -378,20 +358,6 @@ var ObservationSummaryView = function (options) {
         Format.celsius(_observation.get('proton_temperature'),1);
     _outsideTemperature.innerHTML =
         Format.celsius(_observation.get('outside_temperature'),1);
-    _remarks.innerHTML = _observation.get('annotation');
-
-    if (reviewed === 'Y' && reviewer) {
-      // set reviewer to reviwer_user_id while fetching the user name.
-      _checkedBy.innerHTML = reviewer;
-
-      _userFactory.get({
-        data: {'id': reviewer},
-        success: function (data) {
-          // replace reviwer_user_id with user name once it is returned.
-          _checkedBy.innerHTML = data.name;
-        }
-      });
-    }
   };
 
   _renderVerticalIntensitySummaryView = function () {

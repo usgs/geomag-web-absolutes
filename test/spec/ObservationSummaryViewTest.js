@@ -44,14 +44,6 @@ describe('ObservationSummaryViewTest', function () {
           '</span>');
     });
 
-    it('should render when annotation changes', function () {
-      observation.set({'annotation':'This is an annotation test'});
-      var annotation =
-          view.el.querySelector('.reviewer > textarea').innerHTML;
-
-      expect(annotation).to.equal('This is an annotation test');
-    });
-
     it('should render when measurement changes', function () {
       var changeCount = 0;
 
