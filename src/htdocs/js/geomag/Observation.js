@@ -61,7 +61,27 @@ var Observation = function (options) {
         begin: new Date().getTime()
       });
     }
+
+    _this.on('change:begin', _updateMeasurementTimes);
   };
+
+
+  _updateMeasurementTimes = function () {
+    _this.eachMeasurement(function (measurement) {
+      var mtime = measurement.get('time'),
+          bdate = _this.get('begin');
+
+      if (mtime === null || bdate === null) {
+        return;
+      }
+
+      bdate -= bdate % 86400000; // Trim off the time
+      mtime = mtime % 86400000; // Trim off the date
+
+      measurement.set({time: bdate + mtime});
+    });
+  };
+
 
   /**
    * Utility method to call a function on each measurement on each reading
