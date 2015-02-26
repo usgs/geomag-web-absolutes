@@ -14,14 +14,17 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean',
     'dev',
-    'cssmin',
-    'uglify'
+    'copy:dist',
+    'concurrent:cssmin',
+    'concurrent:uglify'
   ]);
 
   // default task useful during development
   grunt.registerTask('default', [
     'jshint:dev',
-    'concurrent:dev',
+    'concurrent:browserify',
+    'concurrent:compass',
+    'concurrent:copy',
     'configureProxies:dev',
     'connect:dev',
 
@@ -36,7 +39,9 @@ module.exports = function (grunt) {
   // builds development version of library
   grunt.registerTask('dev', [
     'jshint:dev',
-    'concurrent:dev',
+    'concurrent:browserify',
+    'concurrent:compass',
+    'concurrent:copy'
   ]);
 
   // starts distribution server and preview
@@ -51,6 +56,7 @@ module.exports = function (grunt) {
     'dev',
     'jshint:test',
     'concurrent:test',
+    'concurrent:copytest',
     'connect:test',
     'mocha_phantomjs'
   ]);

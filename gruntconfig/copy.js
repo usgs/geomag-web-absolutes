@@ -26,6 +26,21 @@ var copy = {
       'test.html',
       'lib/**/*'
     ]
+  },
+
+  dist: {
+    cwd: config.build + '/' + config.src,
+    dest: config.dist,
+    expand: true,
+    src: [
+      'conf/**/*',
+
+      'htdocs/**/*',
+      '!htdocs/**/*.scss', // Migrated using compass
+      '!htdocs/**/*.js',   // Migrated using browserify
+
+      'lib/**/*'
+    ]
   }
 };
 
