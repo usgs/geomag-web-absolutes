@@ -326,13 +326,14 @@ var dmsToDecimal = function (degs, mins, secs) {
  *    {Float} Temperature degrees with (digits) decimal places
  */
 var celsius = function (temperature, digits) {
-  if (isNaN(temperature)) {
+  if (isNaN(temperature) || (temperature === null)) {
     return '&ndash;';
   }
 
   if (typeof digits === 'undefined') {
     digits = _DEFAULT_DIGITS;
   }
+
   return rawCelsius(temperature.toFixed(digits));
 };
 
@@ -346,7 +347,7 @@ var celsius = function (temperature, digits) {
  *    {Float} Temperature degrees with (digits) decimal places
  */
 var fahrenheit = function (temperature, digits) {
-  if (isNaN(temperature)) {
+  if (isNaN(temperature) || (temperature === null)) {
     return '&ndash;';
   }
 
@@ -354,7 +355,7 @@ var fahrenheit = function (temperature, digits) {
     digits = _DEFAULT_DIGITS;
   }
 
-  return rawCelsius(temperature.toFixed(digits));
+  return rawFahrenheit(temperature.toFixed(digits));
 };
 
 /**
