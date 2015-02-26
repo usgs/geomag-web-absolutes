@@ -1,4 +1,7 @@
 .observation-view {
+  textarea#observation-remarks {
+    width: 100%;
+  }
 
   .tablist {
     border-color: #aaa;
@@ -18,6 +21,7 @@
     .row {
       margin: 0;
     }
+
   }
 }
 

@@ -142,10 +142,11 @@ var ObservationView = function (options) {
       '<section class="observation-view">',
         '<section class="observation-meta-wrapper"></section>',
         '<section class="reading-group-view-wrapper"></section>',
-        '<section class="observation-view-controls"></section>',
         '<section class="annotation">',
+          '<h4>Comments</h4>',
           '<textarea id="observation-remarks"></textarea>',
         '</section>',
+        '<section class="observation-view-controls"></section>',
       '</section>'
     ].join('');
 
