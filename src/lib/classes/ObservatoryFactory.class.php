@@ -21,6 +21,68 @@ class ObservatoryFactory {
     $this->db = $db;
   }
 
+
+  public function getBaselines ($observatoryId, $startTime, $endTime) {
+    $baselines = array();
+    $statement = $this->db->prepare('
+      SELECT
+        observation.begin,
+        reading.horizontal_intensity_valid,
+        reading.absH,
+        reading.baseH,
+        reading.declination_valid,
+        reading.absD,
+        reading.baseD,
+        reading.vertical_intensity_valid,
+        reading.absZ,
+        reading.baseZ
+      FROM
+        reading,
+        observation
+      WHERE
+        reading.observation_id = observation.ID
+        AND observation.observatory_id = :observatoryId
+        AND observation.begin >= :startTime
+        AND observation.begin <= :endTime
+        AND NOT (
+          reading.absH IS NULL AND reading.baseH IS NULL AND
+          reading.absD IS NULL AND reading.baseD IS NULL AND
+          reading.absZ is NULL AND reading.baseZ IS NULL
+        )
+      ORDER BY
+        observation.begin ASC,
+        reading.set_number ASC
+    ');
+
+    try {
+      $statement->bindValue(':observatoryId', $observatoryId, PDO::PARAM_INT);
+      $statement->bindValue(':startTime', $startTime, PDO::PARAM_INT);
+      $statement->bindValue(':endTime', $endTime, PDO::PARAM_INT);
+
+      $statement->execute();
+
+      while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        $baselines[] = array(
+          'begin' => safeintval($row['begin']),
+          'horizontal_intensity_valid' => $row['horizontal_intensity_valid'],
+          'absH' => safefloatval($row['absH']),
+          'baseH' => safefloatval($row['baseH']),
+          'declination_valid' => $row['declination_valid'],
+          'absD' => safefloatval($row['absD']),
+          'baseD' => safefloatval($row['baseD']),
+          'vertical_intensity_valid' => $row['vertical_intensity_valid'],
+          'absZ' => safefloatval($row['absZ']),
+          'baseZ' => safefloatval($row['baseZ'])
+        );
+      }
+    } catch (Exception $ex) {
+      $this->triggerError($statement);
+    }
+
+    $statement->closeCursor();
+    return $baselines;
+  }
+
   /**
    * Reads all the observatories from the database into an array of
    * standard observatory objects.
