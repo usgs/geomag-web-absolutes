@@ -148,6 +148,7 @@ class ObservationFile {
       'elect_temperature' => $this->metaInfo['elect_temperature'],
       'flux_temperature' => $this->metaInfo['flux_temperature'],
       'proton_temperature' => $this->metaInfo['proton_temperature'],
+      'outside_temperature' => $this->metaInfo['outside_temperature'],
       'reviewed' => 'N',
       'annotation' => $this->metaInfo['annotation'],
       'readings' => $readings
@@ -369,6 +370,9 @@ class ObservationFile {
         $this->metaInfo['flux_temperature'] = $value;
       } else if ($field === 'Proton Temperature') {
         $this->metaInfo['proton_temperature'] = $value;
+      } else if ($field === 'Outside Temperature') {
+        $this->metaInfo['outside_temperature'] = $value;
+      }
       } else if ($field === 'Remarks') {
         $this->metaInfo['annotation'] = $value;
       }

@@ -200,6 +200,7 @@ class ObservatoryFactory {
             safefloatval($row['elect_temperature']),
             safefloatval($row['flux_temperature']),
             safefloatval($row['proton_temperature']),
+            safefloatval($row['outside_temperature']),
             $row['reviewed'],
             $row['annotation']);
         $observations[] = $observation;
