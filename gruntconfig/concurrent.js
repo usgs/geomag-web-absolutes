@@ -28,6 +28,13 @@ var concurrent = {
   ],
   copytest: [
     'copy:test'          // Static test content (HTML, etc...)
+  ],
+
+  uglify: [
+    'uglify:index',
+    'uglify:observation',
+    'uglify:plot',
+    'uglify:useradmin'
   ]
 };
 

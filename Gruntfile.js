@@ -15,7 +15,7 @@ module.exports = function (grunt) {
     'clean',
     'dev',
     'cssmin',
-    'uglify'
+    'concurrent:uglify'
   ]);
 
   // default task useful during development
