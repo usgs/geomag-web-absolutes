@@ -7,14 +7,14 @@ var Collection = require('mvc/Collection'),
     UserFactory = require('geomag/UserFactory');
 
 
-new ObservatoryFactory().getObservatories({
+ObservatoryFactory().getObservatories({
   success: function (observatories) {
-    new UserAdminView({
+    UserAdminView({
       el: document.querySelector('.user-admin-view-wrapper'),
-      factory: new UserFactory({
+      factory: UserFactory({
         url: MOUNT_PATH + '/user_data.php'
       }),
-      observatories: new Collection(observatories)
+      observatories: Collection(observatories)
     });
   }
 });

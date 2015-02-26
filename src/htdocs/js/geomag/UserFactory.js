@@ -22,7 +22,6 @@ var UserFactory = function (options) {
 
       _options;
 
-
   _this = {};
 
   _initialize = function (options) {
@@ -62,11 +61,12 @@ var UserFactory = function (options) {
       },
       error: options.error || function () {}
     });
+    console.log('create');
   };
 
   _this.update = function(options) {
     options.success();
-    console.log('create');
+    console.log('update');
   };
 
   _initialize(options);

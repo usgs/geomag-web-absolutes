@@ -35,7 +35,6 @@ var DeclinationSummaryView = function (options) {
       _factory,
       _measurements,
       _name,
-      _observer,
       _options,
       _ordMin,
       _reading,
@@ -69,7 +68,6 @@ var DeclinationSummaryView = function (options) {
       '<td class="ord-min"></td>',
       '<td class="baseline-min"></td>',
       '<td class="baseline-nt"></td>',
-      '<td class="observer"></td>',
       '<td class="shift">',
         '<select>',
           '<option value="-180">-180</option>',
@@ -88,7 +86,6 @@ var DeclinationSummaryView = function (options) {
     _ordMin = el.querySelector('.ord-min');
     _baselineMin = el.querySelector('.baseline-min');
     _eBaseline = el.querySelector('.baseline-nt');
-    _observer = el.querySelector('.observer');
     _shift = el.querySelector('.shift > select');
 
     _measurements = _factory.getDeclinationMeasurements(_reading);
@@ -143,7 +140,6 @@ var DeclinationSummaryView = function (options) {
     _ordMin.innerHTML = Format.minutes(_calculator.dComputed(_reading)*60);
     _baselineMin.innerHTML = Format.minutes(_calculator.dBaseline(_reading)*60);
     _eBaseline.innerHTML = Format.nanoteslas(_calculator.eBaseline(_reading));
-    _observer.innerHTML = _reading.get('observer') || '';
   };
 
   _initialize(options);

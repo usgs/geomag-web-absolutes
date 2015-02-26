@@ -34,7 +34,6 @@ var VerticalIntensitySummaryView = function (options) {
       _factory,
       _measurements,
       _name,
-      _observer,
       _options,
       _ord,
       _reading,
@@ -65,8 +64,7 @@ var VerticalIntensitySummaryView = function (options) {
       '<td class="end-time"></td>',
       '<td class="abs-value"></td>',
       '<td class="ord"></td>',
-      '<td class="baseline-values"></td>',
-      '<td class="observer"></td>'
+      '<td class="baseline-values"></td>'
     ].join('');
 
     // save references to elements that will be updated during render
@@ -77,7 +75,6 @@ var VerticalIntensitySummaryView = function (options) {
     _absValue = el.querySelector('.abs-value');
     _ord = el.querySelector('.ord');
     _baselineValue = el.querySelector('.baseline-values');
-    _observer = el.querySelector('.observer');
 
     _measurements = _factory.getVerticalIntensityMeasurements(_reading);
 
@@ -125,7 +122,6 @@ var VerticalIntensitySummaryView = function (options) {
     _ord.innerHTML = Format.nanoteslas(_calculator.meanZ(_reading));
     _baselineValue.innerHTML =
         Format.nanoteslas(_calculator.zBaseline(_reading));
-    _observer.innerHTML = _reading.get('observer') || '';
   };
 
   _initialize(options);

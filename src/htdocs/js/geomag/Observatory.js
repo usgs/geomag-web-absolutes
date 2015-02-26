@@ -68,7 +68,7 @@ var Observatory = function (options) {
         electronics.push(instrument);
       }
     }
-    return new Collection(electronics);
+    return Collection(electronics);
   };
 
   /**
@@ -138,7 +138,7 @@ var Observatory = function (options) {
         theodolites.push(instrument);
       }
     }
-    return new Collection(theodolites);
+    return Collection(theodolites);
   };
 
   options = null;

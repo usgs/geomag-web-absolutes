@@ -3,10 +3,10 @@
 
 var DeclinationSummaryView = require('geomag/DeclinationSummaryView'),
     Format = require('geomag/Formatter'),
-    HorizontalIntensitySummaryView = require('geomag/HorizontalIntensitySummaryView'),
+    HorizontalSummaryView = require('geomag/HorizontalIntensitySummaryView'),
     UserFactory = require('geomag/UserFactory'),
     Util = require('util/Util'),
-    VerticalIntensitySummaryView = require('geomag/VerticalIntensitySummaryView'),
+    VerticalSummaryView = require('geomag/VerticalIntensitySummaryView'),
     View = require('mvc/View');
 
 
@@ -83,7 +83,6 @@ var ObservationSummaryView = function (options) {
               '<th scope="col" class="ord-min">Ordinate</th>',
               '<th scope="col" class="baseline-values">Baseline</th>',
               '<th scope="col" class="baseline-values">Baseline</th>',
-              '<th scope="col" class="observer">Observer</th>',
               '<th scope="col" class="shift">180&#176; Shift</th>',
             '</tr>',
           '</thead>',
@@ -121,7 +120,6 @@ var ObservationSummaryView = function (options) {
               '<th scope="col" class="abs-value">Absolute</th>',
               '<th scope="col" class="ord">Ordinate</th>',
               '<th scope="col" class="baseline-values">Baseline</th>',
-              '<th scope="col" class="observer">Observer</th>',
             '</tr>',
           '</thead>',
           '<tbody class="horizontal-intensity-summary-view">',
@@ -154,7 +152,6 @@ var ObservationSummaryView = function (options) {
               '<th scope="col" class="abs-value">Absolute</th>',
               '<th scope="col" class="ord">Ordinate</th>',
               '<th scope="col" class="baseline-values">Baseline</th>',
-              '<th scope="col" class="observer">Observer</th>',
             '</tr>',
           '</thead>',
           '<tbody class="vertical-intensity-summary-view">',
@@ -336,11 +333,10 @@ var ObservationSummaryView = function (options) {
 
       // create view if it does not exist
       if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
-        reading._horizontalIntensitySummary =
-            HorizontalIntensitySummaryView({
-          el:document.createElement('tr'),
-          reading:reading,
-          calculator:_calculator
+        reading._horizontalIntensitySummary = HorizontalSummaryView({
+          el: document.createElement('tr'),
+          reading: reading,
+          calculator: _calculator
         });
       }
       // insert view
@@ -410,7 +406,7 @@ var ObservationSummaryView = function (options) {
 
       // Create view if it does not exits
       if (!reading.hasOwnProperty('_verticalIntensitySummary')) {
-        reading._verticalIntensitySummary = VerticalIntensitySummaryView({
+        reading._verticalIntensitySummary = VerticalSummaryView({
           el: document.createElement('tr'),
           reading: reading,
           calculator: _calculator

@@ -22,7 +22,9 @@ var ObservationsView = function (options) {
   var _this,
       _initialize,
 
+      _factory,
       _options,
+      _observatoryId,
 
       _buildObservationList,
       _formatDate;
@@ -34,6 +36,8 @@ var ObservationsView = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function () {
+    _factory = _options.factory;
+    _observatoryId = _options.observatoryId;
 
     _this.el.innerHTML = [
         '<h2>Observations</h2>',
@@ -44,12 +48,15 @@ var ObservationsView = function (options) {
     ].join('');
 
     // load all observations from an observatory
-    _this.getObservations(_options.observatoryId);
+    _this.getObservations(_observatoryId);
   };
 
   _buildObservationList = function (observations) {
-    var list = document.createElement('ul'),
-        observation, markup = [], classname, tooltip;
+    var classname,
+        list = document.createElement('ul'),
+        markup = [],
+        observation,
+        tooltip;
 
     if (observations === null || observations.length === 0) {
       list.innerHTML = '<li class="empty">There are no observations.</li>';
@@ -101,6 +108,7 @@ var ObservationsView = function (options) {
     return y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
   };
 
+
   // create, "add new observation" button
   _this.getAddObservationButton = function (observatoryId) {
     var el = _this.el.querySelector('.observations-new'),
@@ -126,10 +134,7 @@ var ObservationsView = function (options) {
 
   // get observations from observatoryId
   _this.getObservations = function (observatoryId) {
-
-    var factory = _options.factory;
-
-    factory.getObservatory({
+    _factory.getObservatory({
       id: observatoryId,
       success: function (observatory) {
         _this.render(observatory);
