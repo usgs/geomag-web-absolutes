@@ -52,6 +52,7 @@ var observatory1 = {
       'elect_temperature':23.1,
       'flux_temperature':21.5,
       'proton_temperature':10.4,
+      'outside_temperature':72.0,
       'annotation':'loaded from BOU20130102003.bns on 2014-02-12 10:13'
     },
     {
@@ -66,6 +67,7 @@ var observatory1 = {
       'elect_temperature':23.1,
       'flux_temperature':21.5,
       'proton_temperature':13.3,
+      'outside_temperature':71.0,
       'annotation':'loaded from BOU20130072114.bns on 2014-02-12 10:13'
     },
     {
@@ -80,6 +82,7 @@ var observatory1 = {
       'elect_temperature':23.1,
       'flux_temperature':21.4,
       'proton_temperature':6.2,
+      'outside_temperature':71.5,
       'annotation':'loaded from BOU20130031908.bns on 2014-02-12 10:13'
     },
     {
@@ -108,6 +111,7 @@ var observatory1 = {
       'elect_temperature':23.2,
       'flux_temperature':21.5,
       'proton_temperature':5.3,
+      'outside_temperature':71.6,
       'annotation':'loaded from BOU20123622049.bns on 2014-02-12 10:13'
     },
     {
@@ -122,6 +126,7 @@ var observatory1 = {
       'elect_temperature':23.2,
       'flux_temperature':21.6,
       'proton_temperature':10.4,
+      'outside_temperature':71.7,
       'annotation':'loaded from BOU20123552118.bns on 2014-02-12 10:13'
     },
     {
@@ -136,6 +141,7 @@ var observatory1 = {
       'elect_temperature':23.4,
       'flux_temperature':21.9,
       'proton_temperature':18.9,
+      'outside_temperature':71.8,
       'annotation':'loaded from BOU20113642200.bns on 2014-02-12 10:13'
     },
     {
@@ -150,6 +156,7 @@ var observatory1 = {
       'elect_temperature':23.6,
       'flux_temperature':22.4,
       'proton_temperature':25.9,
+      'outside_temperature':71.9,
       'annotation':'loaded from BOU20112802003.bns on 2014-02-12 10:13'
     },
     {
@@ -165,6 +172,7 @@ var observatory1 = {
       'elect_temperature':21.7,
       'flux_temperature':17.3,
       'proton_temperature':-3.5,
+      'outside_temperature':72.1,
       'annotation':'loaded from BOU20110181739.bns on 2014-02-12 10:13'
     },
     {
@@ -180,6 +188,7 @@ var observatory1 = {
       'elect_temperature':20.6,
       'flux_temperature':9,
       'proton_temperature':-6.5,
+      'outside_temperature':72.6,
       'annotation':'loaded from BOU20103512111.bns on 2014-02-12 10:13'
     },
     {
@@ -195,6 +204,7 @@ var observatory1 = {
       'elect_temperature':22.4,
       'flux_temperature':11.2,
       'proton_temperature':8.7,
+      'outside_temperature':72.5,
       'annotation':'loaded from BOU20102882038.bns on 2014-02-12 10:13'
     }
   ],

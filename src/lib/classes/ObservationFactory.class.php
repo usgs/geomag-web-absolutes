@@ -37,11 +37,11 @@ class ObservationFactory {
         'observatory_id, begin, end, reviewer_user_id, observer_user_id, ' .
         'mark_id, electronics_id, theodolite_id, pier_temperature, '.
         'elect_temperature, flux_temperature, proton_temperature, '.
-        'reviewed, annotation) VALUES ( ' .
+        'outside_temperature, reviewed, annotation) VALUES ( ' .
         ':observatory_id, :begin, :end, :reviewer_user_id, :observer_user_id,' .
         ':mark_id, :electronics_id, :theodolite_id, :pier_temperature, ' .
         ':elect_temperature, :flux_temperature, :proton_temperature, ' .
-        ':reviewed, :annotation)');
+        ':outside_temperature, :reviewed, :annotation)');
 
     $statement->bindParam(':observatory_id',
         $object->observatory_id, PDO::PARAM_INT);
@@ -64,6 +64,8 @@ class ObservationFactory {
         $object->flux_temperature, PDO::PARAM_STR);
     $statement->bindParam(':proton_temperature',
         $object->proton_temperature, PDO::PARAM_STR);
+    $statement->bindParam(':outside_temperature',
+        $object->outside_temperature, PDO::PARAM_STR);
     $statement->bindParam(':reviewed',
         $object->reviewed, PDO::PARAM_STR);
     $statement->bindParam(':annotation',
@@ -146,6 +148,7 @@ class ObservationFactory {
             safefloatval($row['elect_temperature']),
             safefloatval($row['flux_temperature']),
             safefloatval($row['proton_temperature']),
+            safefloatval($row['outside_temperature']),
             $row['reviewed'], $row['annotation'], $readings);
       }
     } catch (Exception $ex) {
@@ -180,6 +183,7 @@ class ObservationFactory {
         'elect_temperature=:elect_temperature, '.
         'flux_temperature=:flux_temperature, '.
         'proton_temperature=:proton_temperature, '.
+        'outside_temperature=:outside_temperature, '.
         'reviewed=:reviewed, '.
         'annotation=:annotation WHERE id=:id');
 
@@ -204,6 +208,8 @@ class ObservationFactory {
         $object->flux_temperature, PDO::PARAM_STR);
     $statement->bindParam(':proton_temperature',
         $object->proton_temperature, PDO::PARAM_STR);
+    $statement->bindParam(':outside_temperature',
+        $object->outside_temperature, PDO::PARAM_STR);
     $statement->bindParam(':reviewed',
         $object->reviewed, PDO::PARAM_STR);
     $statement->bindParam(':annotation',
