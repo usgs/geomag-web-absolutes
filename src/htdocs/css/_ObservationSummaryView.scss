@@ -96,20 +96,10 @@
         }
       }
      }
+  }
 
-    .reviewer {
-      > label {
-          font-weight:normal;
-          font-size: 10px;
-      }
-      > div {
-          font-weight:normal;
-          font-size: 10px;
-      }
-      > textarea {
-          height:4em;
-      }
-    }
+  input.reviewer-name {
+      display:none;
   }
 
   .page-header,
