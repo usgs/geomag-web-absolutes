@@ -370,10 +370,14 @@ var ObservationSummaryView = function (options) {
 
     _pierTemperature.innerHTML =
         Format.celsius(_observation.get('pier_temperature'),1);
-    _electronicsTemperature.innerHTML = 'elec temp';
-    _fluxgateTemperature.innerHTML = 'flux temp';
-    _protonTemperature.innerHTML = 'prot temp';
-    _outsideTemperature.innerHTML = 'outs temp';
+    _electronicsTemperature.innerHTML =
+        Format.celsius(_observation.get('elect_temperature'),1);
+    _fluxgateTemperature.innerHTML =
+        Format.celsius(_observation.get('flux_temperature'),1);
+    _protonTemperature.innerHTML =
+        Format.celsius(_observation.get('proton_temperature'),1);
+    _outsideTemperature.innerHTML =
+        Format.celsius(_observation.get('outside_temperature'),1);
     _remarks.innerHTML = _observation.get('annotation');
 
     if (reviewed === 'Y' && reviewer) {
