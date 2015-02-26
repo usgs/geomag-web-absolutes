@@ -160,6 +160,22 @@ describe('Formatter Unit Tests', function () {
 
   });
 
+  describe('roundHalfToEven()', function () {
+    it('rounds correctly', function() {
+      expect(Format.roundHalfToEven(0.0)).to.equal('0');
+      // Defaults to 0 digits
+      expect(Format.roundHalfToEven(1.5)).to.equal('2');
+      // Rounding to 2 digits doesn't round half to Even.
+      expect(Format.roundHalfToEven(1.5,2)).to.equal('1.50');
+      // Only rounds if .xx5
+      expect(Format.roundHalfToEven(1.1234,2)).to.equal('1.12');
+      // Rounds if .xx5
+      expect(Format.roundHalfToEven(1.1250001,2)).to.equal('1.12');
+      // Rounds to nearest even
+      expect(Format.roundHalfToEven(1.1350001,2)).to.equal('1.14');
+    });
+  });
+
   describe('degrees()', function () {
 
     it('are formatted properly', function () {
@@ -176,7 +192,7 @@ describe('Formatter Unit Tests', function () {
     it('round correctly when specified', function () {
       expect(Format.degrees(0.0, 3)).to.equal(
           '<span class="deg">0.000<span class="units">°</span></span>');
-      // Rounds down properly
+      // Rounds to the nearest even number when value is X.5
       expect(Format.degrees(30.0123456789, 5)).to.equal(
           '<span class="deg">30.01235<span class="units">°</span></span>');
       // Rounds up properly
