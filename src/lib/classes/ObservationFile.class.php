@@ -372,7 +372,6 @@ class ObservationFile {
         $this->metaInfo['proton_temperature'] = $value;
       } else if ($field === 'Outside Temperature') {
         $this->metaInfo['outside_temperature'] = $value;
-      }
       } else if ($field === 'Remarks') {
         $this->metaInfo['annotation'] = $value;
       }
