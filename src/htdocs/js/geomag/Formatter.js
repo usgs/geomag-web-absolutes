@@ -63,7 +63,7 @@ var dateTime = function (time) {
 var rawCelsius = function (temperature) {
   var buf = [];
 
-  if (temperature === null) {
+  if (isNaN(temperature)) {
     return '&ndash;';
   }
 
@@ -86,6 +86,10 @@ var rawCelsius = function (temperature) {
 var rawDegrees = function (angle) {
   var buf = [];
 
+  if (isNaN(angle)) {
+    return '&ndash;';
+  }
+
   buf.push(
       '<span class="deg">',
         angle, _units(_DEGREES),
@@ -105,7 +109,7 @@ var rawDegrees = function (angle) {
 var rawFahrenheit = function (temperature) {
   var buf = [];
 
-  if (temperature === null) {
+  if (isNaN(temperature)) {
     return '&ndash;';
   }
 
@@ -128,6 +132,10 @@ var rawFahrenheit = function (temperature) {
 var rawMinutes = function (angle) {
   var buf = [];
 
+  if (angle === null) {
+    return '&ndash;';
+  }
+
   buf.push(
       '<span class="minutes">',
         angle, _units(_MINUTES),
@@ -146,6 +154,10 @@ var rawMinutes = function (angle) {
  */
 var rawNanoteslas = function (nT) {
   var buf = [];
+
+  if (nT === null) {
+    return '&ndash;';
+  }
 
   buf.push(
       '<span class="nano-teslas">',
@@ -190,11 +202,12 @@ var decimalToDms = function (angle) {
  *    {Float} Angle degrees with (digits) decimal places
  */
 var degrees = function (angle, digits) {
+  if (isNaN(angle)) {
+    return '&ndash;';
+  }
+
   if (typeof digits === 'undefined') {
     digits = _DEFAULT_DIGITS;
-  }
-  if (isNaN(angle)){
-    return angle;
   }
 
   return rawDegrees(angle.toFixed(digits));
@@ -210,18 +223,15 @@ var degrees = function (angle, digits) {
  *    {Float} Angle minutes with (digits) decimal places
  */
 var minutes = function (angle, digits) {
+  if (isNaN(angle)) {
+    return '&ndash;';
+  }
+
   if (typeof digits === 'undefined') {
     digits = _DEFAULT_DIGITS;
   }
-  if (isNaN(angle)){
-    return angle;
-  }
 
-  if (isNaN(angle)) {
-    return '&ndash;';
-  } else {
-    return rawMinutes(angle.toFixed(digits));
-  }
+  return rawMinutes(angle.toFixed(digits));
 };
 
 /**
@@ -316,7 +326,7 @@ var dmsToDecimal = function (degs, mins, secs) {
  *    {Float} Temperature degrees with (digits) decimal places
  */
 var celsius = function (temperature, digits) {
-  if (temperature === null) {
+  if (isNaN(temperature)) {
     return '&ndash;';
   }
 
@@ -336,7 +346,7 @@ var celsius = function (temperature, digits) {
  *    {Float} Temperature degrees with (digits) decimal places
  */
 var fahrenheit = function (temperature, digits) {
-  if (temperature === null) {
+  if (isNaN(temperature)) {
     return '&ndash;';
   }
 
@@ -357,15 +367,15 @@ var fahrenheit = function (temperature, digits) {
  *    {Float} nT with (digits) decimal places
  */
 var nanoteslas = function (nT, digits) {
+  if (isNaN(nT)) {
+    return '&ndash;';
+  }
+
   if (typeof digits === 'undefined') {
     digits = _DEFAULT_DIGITS;
   }
 
-  if (isNaN(nT)) {
-    return '&ndash;';
-  } else {
-    return rawNanoteslas(nT.toFixed(digits));
-  }
+  return rawNanoteslas(nT.toFixed(digits));
 };
 
 /**
