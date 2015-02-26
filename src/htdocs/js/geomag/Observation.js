@@ -38,7 +38,9 @@ var _DEFAULTS = {
  */
 var Observation = function (options) {
   var _this,
-      _initialize;
+      _initialize,
+
+      _updateMeasurementTimes;
 
   _this = Model(Util.extend({}, _DEFAULTS, options));
   /**
