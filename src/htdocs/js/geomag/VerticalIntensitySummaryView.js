@@ -1,112 +1,132 @@
-/* global define */
-define([
-	'mvc/View',
-	'util/Util',
+'use strict';
 
-	'geomag/Formatter',
-	'geomag/Measurement',
-	'geomag/ObservatoryFactory'
-], function (
-	View,
-	Util,
-
-	Format,
-	Measurement,
-	ObservatoryFactory
-) {
-	'use strict';
+var Format = require('geomag/Formatter'),
+    ObservatoryFactory = require('geomag/ObservatoryFactory'),
+    Util = require('util/Util'),
+    View = require('mvc/View');
 
 
-	var DEFAULTS = {
-		factory: new ObservatoryFactory()
-	};
+var _DEFAULTS = {
+  factory: ObservatoryFactory()
+};
 
 
-	var VerticalIntensitySummaryView = function (options) {
-		this._options = Util.extend({}, DEFAULTS, options);
-		View.call(this, this._options);
-	};
-	VerticalIntensitySummaryView.prototype = Object.create(View.prototype);
+  /**
+   * Construct a new VerticalIntensitySummaryView.
+   *
+   * @param options {Object}
+   *        view options.
+   * @param options.calculator {geomag.ObservationBaselineCalculator}
+   *        the calculator to use.
+   * @param options.factory {geomag.ObservatoryFactory}
+   *        the factory to use.
+   * @parem options.reading {geomag.Reading}
+   *        the reading to display.
+   */
+var VerticalIntensitySummaryView = function (options) {
+  var _this,
+      _initialize,
+
+      _absValue,
+      _baselineValue,
+      _calculator,
+      _endTime,
+      _factory,
+      _measurements,
+      _name,
+      _options,
+      _ord,
+      _reading,
+      _startTime,
+      _valid,
+
+      _onChange;
+
+  _this = View(options);
+  /**
+   * Initialize view, and call render.
+   * @param options {Object} same as constructor.
+   */
+  _initialize = function (options) {
+    var el = _this.el,
+        i = null,
+        len = null;
+
+    _options = Util.extend({}, _DEFAULTS, options);
+    _calculator = _options.calculator;
+    _factory = _options.factory;
+    _reading = _options.reading;
+
+    el.innerHTML = [
+      '<th class="name" scope="row"></th>',
+      '<td class="valid"><input type="checkbox" /></td>',
+      '<td class="start-time"></td>',
+      '<td class="end-time"></td>',
+      '<td class="abs-value"></td>',
+      '<td class="ord"></td>',
+      '<td class="baseline-values"></td>'
+    ].join('');
+
+    // save references to elements that will be updated during render
+    _name = el.querySelector('.name');
+    _valid = el.querySelector('.valid > input');
+    _startTime = el.querySelector('.start-time');
+    _endTime = el.querySelector('.end-time');
+    _absValue = el.querySelector('.abs-value');
+    _ord = el.querySelector('.ord');
+    _baselineValue = el.querySelector('.baseline-values');
+
+    _measurements = _factory.getVerticalIntensityMeasurements(_reading);
+
+    _valid.addEventListener('change', _onChange);
+
+    _reading.on('change:vertical_intensity_valid', 'render', _this);
+
+    // watches for changes in pier/mark
+    _calculator.on('change', 'render', _this);
+
+    for (i = 0, len = _measurements.length; i < len; i++) {
+      _measurements[i].on('change', 'render', _this);
+    }
+
+    _this.render();
+  };
+
+  _onChange = function () {
+    _reading.set({
+      vertical_intensity_valid: (_valid.checked ? 'Y' : 'N')
+    });
+  };
 
 
-	VerticalIntensitySummaryView.prototype.render = function () {
-		var reading = this._reading,
-		    measurements = reading.get('measurements').data(),
-		    factory = this._options.factory,
-		    startTime = null,
-		    endTime = null,
-		    times;
+  _this.render = function () {
+    var measurements = _reading.get('measurements').data(),
+        startTime = null,
+        endTime = null,
+        times;
 
-		this._name.innerHTML = reading.get('set_number');
+    _name.innerHTML = _reading.get('set_number');
 
-		this._valid.checked = (reading.get('vertical_intensity_valid') === 'Y');
+    _valid.checked = (_reading.get('vertical_intensity_valid') === 'Y');
 
-		times = factory.getMeasurementValues(measurements, 'time');
-		if (times.length > 0) {
-			startTime = Math.min.apply(null, times);
-			endTime = Math.max.apply(null, times);
-		}
-		this._startTime.innerHTML = Format.time(startTime);
-		this._endTime.innerHTML = Format.time(endTime);
+    times = _factory.getMeasurementValues(measurements, 'time');
+    if (times.length > 0) {
+      startTime = Math.min.apply(null, times);
+      endTime = Math.max.apply(null, times);
+    }
+    _startTime.innerHTML = Format.time(startTime);
+    _endTime.innerHTML = Format.time(endTime);
 
-		this._absValue.innerHTML =
-				Format.nanoteslas(this._calculator.verticalComponent(reading));
-		this._ord.innerHTML = Format.nanoteslas(this._calculator.meanZ(reading));
-		this._baselineValue.innerHTML =
-				Format.nanoteslas(this._calculator.zBaseline(reading));
-		this._observer.innerHTML = this._reading.get('observer') || '';
-	};
+    _absValue.innerHTML =
+        Format.nanoteslas(_calculator.verticalComponent(_reading));
+    _ord.innerHTML = Format.nanoteslas(_calculator.meanZ(_reading));
+    _baselineValue.innerHTML =
+        Format.nanoteslas(_calculator.zBaseline(_reading));
+  };
 
-	VerticalIntensitySummaryView.prototype._initialize = function () {
-		var el = this._el,
-		    factory = this._options.factory,
-		    reading = this._options.reading,
-		    i = null,
-		    len = null;
+  _initialize(options);
+  options = null;
+  return _this;
+};
 
-		el.innerHTML = [
-			'<th class="name" scope="row"></th>',
-			'<td class="valid"><input type="checkbox" /></td>',
-			'<td class="start-time"></td>',
-			'<td class="end-time"></td>',
-			'<td class="abs-value"></td>',
-			'<td class="ord"></td>',
-			'<td class="baseline-values"></td>',
-			'<td class="observer"></td>'
-		].join('');
-
-		this._name = el.querySelector('.name');
-		this._valid = el.querySelector('.valid > input');
-		this._startTime = el.querySelector('.start-time');
-		this._endTime = el.querySelector('.end-time');
-		this._absValue = el.querySelector('.abs-value');
-		this._ord = el.querySelector('.ord');
-		this._baselineValue = el.querySelector('.baseline-values');
-		this._observer = el.querySelector('.observer');
-
-		this._reading = this._options.reading;
-		this._calculator = this._options.calculator;
-
-		this._measurements = factory.getVerticalIntensityMeasurements(reading);
-
-		this._onChange = this._onChange.bind(this);
-		this._valid.addEventListener('change', this._onChange);
-
-		this._reading.on('change:vertical_intensity_valid', this.render, this);
-
-		this._calculator.on('change', this.render, this);
-
-		for (i = 0, len = this._measurements.length; i < len; i++) {
-			this._measurements[i].on('change', this.render, this);
-		}
-		this.render();
-	};
-
-	VerticalIntensitySummaryView.prototype._onChange = function () {
-		this._reading.set({
-			vertical_intensity_valid: (this._valid.checked ? 'Y' : 'N')
-		});
-	};
-
-	return VerticalIntensitySummaryView;
-});
+module.exports = VerticalIntensitySummaryView;

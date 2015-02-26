@@ -1,16 +1,48 @@
 {
   "name": "geomag-baseline-calculator",
   "version": "0.0.0",
-  "description": "Web application for computing geomagnetic baseline values",
+  "homepage": "http://geomag.usgs.gov/",
   "repository": {
     "type": "git",
     "url": "https://github.com/usgs/geomag-baseline-calculator.git"
   },
+  "description": "Web application for computing geomagnetic baseline values",
+  "contributors": [
+    {
+      "name": "Jonathan Brown",
+      "email": "jdbrown@usgs.gov"
+    },
+    {
+      "name": "Jeremy Fee",
+      "email": "jmfee@usgs.gov"
+    },
+    {
+      "name": "Eddie Hunter",
+      "email": "ehunter@usgs.gov"
+    },
+    {
+      "name": "Eric Martinez",
+      "email": "emartinez@usgs.gov"
+    },
+    {
+      "name": "Eddie McWhirter",
+      "email": "emcwhirter@usgs.gov"
+    },
+    {
+      "name": "Hal Simpson",
+      "email": "hasimpson@usgs.gov"
+    }
+  ],
   "keywords": [
+    "baseline",
+    "baseline-calculator",
     "usgs",
     "geomag",
     "geomagnetism"
   ],
+  "scripts": {
+    "test": "grunt test"
+  },
   "license:": [
     {
       "type": "Public Domain",
@@ -19,33 +51,29 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.6.0",
-    "matchdep": "~0.1.2",
-    "grunt-contrib-watch": "~0.4.4",
-    "grunt-contrib-compass": "~0.2.0",
-    "grunt-contrib-clean": "~0.4.1",
-    "mocha": "~1.9.0",
-    "grunt-mocha-phantomjs": "~0.2.8",
-    "grunt-contrib-connect": "~0.3.0",
-    "grunt-open": "~0.2.0",
-    "chai": "~1.7.0",
-    "connect-livereload": "~0.2.0",
-    "grunt-concurrent": "~0.3.0",
-    "gateway": "~0.1.1",
-    "grunt-contrib-requirejs": "~0.4.1",
-    "grunt-contrib-cssmin": "~0.6.1",
-    "grunt-contrib-htmlmin": "~0.1.3",
-    "grunt-contrib-copy": "~0.5.0",
-    "grunt-text-replace": "~0.3.6",
-    "grunt-contrib-uglify": "~0.2.2",
+    "chai": "^2.0.0",
+    "gateway": "^1.0.0",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^3.3.0",
+    "grunt-cli": "^0.1.13",
+    "grunt-concurrent": "^1.0.0",
+    "grunt-connect-proxy": "0.1.10",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-compass": "^1.0.1",
+    "grunt-contrib-connect": "^0.9.0",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-cssmin": "^0.12.1",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-uglify": "^0.7.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-phantomjs": "^0.6.0",
+    "hazdev-tablist": "usgs/hazdev-tablist",
     "hazdev-template": "git+https://github.com/usgs/hazdev-template.git",
-    "grunt-connect-rewrite": "~0.2.1",
-    "hazdev-tablist": "0.0.6",
-    "grunt-connect-proxy": "~0.1.8",
-    "sinon": "~1.8.2",
-    "hazdev-webutils": "0.0.15",
-    "requirejs": "~2.1.15"
+    "hazdev-webutils": "usgs/hazdev-webutils",
+    "http-rewrite-middleware": "^0.1.6",
+    "ini": "^1.3.3",
+    "mocha": "^2.1.0",
+    "sinon": "^1.12.2"
   },
   "engines": {
     "node": ">=0.8.0"

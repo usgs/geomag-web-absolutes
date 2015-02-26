@@ -1,129 +1,147 @@
-/* global define */
-define ([
-	'mvc/View',
-	'util/Util',
-	'mvcutil/CollectionSelectBox'
-], function (
-	View,
-	Util,
-	CollectionSelectBox
-) {
-	'use strict';
+'use strict';
 
-	var DEFAULTS = {
-	};
-
-	var UserEditView = function (options) {
-		this._options = Util.extend({}, DEFAULTS, options);
-		View.call(this, this._options);
-	};
-
-	UserEditView.prototype = Object.create(View.prototype);
-
-	UserEditView.prototype.render = function () {
-		var user = this._options.user;
-
-		this._name.value = user.get('name');
-		this._username.value = user.get('username');
-		this._observatories.selectById(user.get('default_observatory_id'));
-		this._email.value = user.get('email');
-		this._password.value = '';
-		this._confirmpassword.value = '';
-		if (user.get('admin') === 'Y') {
-			this._admin.checked = 'checked';
-		} else {
-			this._admin.removeAttribute('checked');
-		}
-
-		if (user.get('enabled') === 'Y') {
-			this._enabled.checked = 'checked';
-		} else {
-			this._enabled.removeAttribute('checked');
-		}
-
-	};
-
-	UserEditView.prototype._initialize = function () {
-		this._el.innerHTML = [
-			'<ul>',
-				'<li>',
-					'<label class="name" for="useredit-name">Name</label>',
-					'<input type="text" id="useredit-name" placeholder="John Doe"/>',
-				'</li>',
-				'<li>',
-					'<label class="username" for="useredit-username">',
-								'User Name</label>',
-					'<input type="text" id="useredit-username" placeholder="jdoe"/>',
-				'</li>',
-				'<li>',
-					'<label class="default-observatory-id" for="default-observatory-id">',
-								'Default Observatory</label>',
-					'<select id="default-observatory-id"></select>',
-				'</li>',
-				'<li>',
-					'<label class="email" for="email">',
-								'Email</label>',
-					'<input type="text" id="email" placeholder="jdoe@usgs.gov"/>',
-				'</li>',
-				'<li>',
-					'<label class="password" for="password">',
-								'Password</label>',
-					'<input type="password" id="password"/>',
-				'</li>',
-				'<li>',
-					'<label class="confirm-password" for="confirm-password">',
-								'Confirm Password</label>',
-					'<input type="password" id="confirm-password"/>',
-				'</li>',
-				'<li>',
-					'<label class="admin">',
-						'<input type="checkbox" id="admin"/>',
-						'Admin',
-					'</label>',
-				'</li>',
-				'<li>',
-					'<label class="enabled">',
-						'<input type="checkbox" id="enabled"/>',
-						'Enabled',
-					'</label>',
-				'</li>',
-			'</ul>'
-		].join('');
-
-		this._name = this._el.querySelector('#useredit-name');
-		this._username = this._el.querySelector('#useredit-username');
-		this._observatories = new CollectionSelectBox({
-				el: this._el.querySelector('#default-observatory-id'),
-				allowDeselect: true,
-				collection: this._options.observatories
-			});
-		this._email = this._el.querySelector('#email');
-		this._password = this._el.querySelector('#password');
-		this._confirmpassword = this._el.querySelector('#confirm-password');
-		this._admin = this._el.querySelector('#admin');
-		this._enabled = this._el.querySelector('#enabled');
-	};
-
-	UserEditView.prototype.updateModel = function () {
-		var values = {},
-		    observatory;
-
-		values.name = this._name.value;
-		values.username = this._username.value;
-		observatory = this._options.observatories.getSelected();
-		values.default_observatory_id = observatory === null ?
-				null : observatory.id;
-		values.email = this._email.value;
-		values.admin = this._admin.checked ? 'Y' : 'N';
-		values.enabled = this._enabled.checked ? 'Y' : 'N';
-		if (this._password.value === this._confirmpassword.value &&
-				this._password.value !== '') {
-			values.password = this._password.value;
-		}
-
-		this._options.user.set(values);
-	};
+var CollectionSelectBox = require('mvcutil/CollectionSelectBox'),
+    Util = require('util/Util'),
+    View = require('mvc/View');
 
 
-	return UserEditView;
-});
+var _DEFAULTS = {
+};
+
+
+/**
+ * Construct a new UserEditView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.observatories
+ * @param options.user
+ */
+var UserEditView = function (options) {
+  var _this,
+      _initialize,
+
+      _admin,
+      _confirmpassword,
+      _email,
+      _enabled,
+      _name,
+      _observatories,
+      _options,
+      _password,
+      _user,
+      _username;
+
+  _this = View(options);
+
+  _initialize = function (options) {
+    var el = _this.el;
+
+    _options = Util.extend({}, _DEFAULTS, options);
+    _user = _options.user;
+
+    _this.el.innerHTML = [
+      '<ul>',
+        '<li>',
+          '<label class="name" for="useredit-name">Name</label>',
+          '<input type="text" id="useredit-name" placeholder="John Doe"/>',
+        '</li>',
+        '<li>',
+          '<label class="username" for="useredit-username">',
+                'User Name</label>',
+          '<input type="text" id="useredit-username" placeholder="jdoe"/>',
+        '</li>',
+        '<li>',
+          '<label class="default-observatory-id" for="default-observatory-id">',
+                'Default Observatory</label>',
+          '<select id="default-observatory-id"></select>',
+        '</li>',
+        '<li>',
+          '<label class="email" for="email">',
+                'Email</label>',
+          '<input type="text" id="email" placeholder="jdoe@usgs.gov"/>',
+        '</li>',
+        '<li>',
+          '<label class="password" for="password">',
+                'Password</label>',
+          '<input type="password" id="password"/>',
+        '</li>',
+        '<li>',
+          '<label class="confirm-password" for="confirm-password">',
+                'Confirm Password</label>',
+          '<input type="password" id="confirm-password"/>',
+        '</li>',
+        '<li>',
+          '<label class="admin">',
+            '<input type="checkbox" id="admin"/>',
+            'Admin',
+          '</label>',
+        '</li>',
+        '<li>',
+          '<label class="enabled">',
+            '<input type="checkbox" id="enabled"/>',
+            'Enabled',
+          '</label>',
+        '</li>',
+      '</ul>'
+    ].join('');
+
+    _name = el.querySelector('#useredit-name');
+    _username = el.querySelector('#useredit-username');
+    _observatories = CollectionSelectBox({
+        el: el.querySelector('#default-observatory-id'),
+        allowDeselect: true,
+        collection: _options.observatories
+      });
+    _email = el.querySelector('#email');
+    _password = el.querySelector('#password');
+    _confirmpassword = el.querySelector('#confirm-password');
+    _admin = el.querySelector('#admin');
+    _enabled = el.querySelector('#enabled');
+  };
+
+  _this.render = function () {
+    _name.value = _user.get('name');
+    _username.value = _user.get('username');
+    _observatories.selectById(_user.get('default_observatory_id'));
+    _email.value = _user.get('email');
+    _password.value = '';
+    _confirmpassword.value = '';
+    if (_user.get('admin') === 'Y') {
+      _admin.checked = 'checked';
+    } else {
+      _admin.removeAttribute('checked');
+    }
+
+    if (_user.get('enabled') === 'Y') {
+      _enabled.checked = 'checked';
+    } else {
+      _enabled.removeAttribute('checked');
+    }
+  };
+
+  _this.updateModel = function () {
+    var values = {},
+        observatory;
+
+    values.name = _name.value;
+    values.username = _username.value;
+    observatory = _options.observatories.getSelected();
+    values.default_observatory_id = observatory === null ?
+        null : observatory.id;
+    values.email = _email.value;
+    values.admin = _admin.checked ? 'Y' : 'N';
+    values.enabled = _enabled.checked ? 'Y' : 'N';
+    if (_password.value === _confirmpassword.value && _password.value !== '') {
+      values.password = _password.value;
+    }
+
+    _options.user.set(values);
+  };
+
+  _initialize(options);
+  options = null;
+  return _this;
+};
+
+module.exports = UserEditView;

@@ -1,134 +1,93 @@
-/* global define, describe, it */
-define([
-	'chai',
+/* global chai, describe, it, sinon */
+'use strict';
 
-	'mvc/Collection',
-	'mvc/Model',
-
-	'geomag/ObservatoryFactory',
-	'geomag/ObservationMetaView'
-], function (
-	chai,
-
-	Collection,
-	Model,
-
-	ObservatoryFactory,
-	ObservationMetaView
-) {
-	'use strict';
+var ObservationBaselineCalculator =
+        require('geomag/ObservationBaselineCalculator'),
+    Observation = require('geomag/Observation'),
+    ObservationMetaView = require('geomag/ObservationMetaView');
 
 
-	var expect = chai.expect;
+var expect = chai.expect;
 
 
-	var factory = new ObservatoryFactory();
+describe('Unit tests for ObservationMetaView', function () {
+  var calculator,
+      observation = Observation(),
+      view;
 
-	// stub in methods
-	factory.getObservatory = function (options) {
-		options.success(this._getObservatory({
-			id: options.id,
-			default_pier_id: 4,
-			piers: [
-				{id: 3, name: 'Pier 3', default_mark_id: 10, correction: 1.23,
-						default_electronics_id: 5, default_theodolite_id: 6,
-						marks: [{id: 10, name: 'Mark 10', azimuth: 4.56}]},
-				{id: 4, name: 'Pier 4', default_mark_id: 12, correction: 7.89,
-						default_electronics_id: 7, default_theodolite_id: 6,
-						marks: [{id: 11, name: 'Mark 11', azimuth: 10.11},
-						        {id: 12, name: 'Mark 12', azimuth: 12.13}]}
-			],
-			instruments: [
-				{id: 5, type: 'electronics', name: 'Electronics1', serial: '1234'},
-				{id: 6, type: 'theodolite', name: 'Theodolite1', serial: 'abcd'},
-				{id: 7, type: 'electronics', name: 'Electronics2', serial: '1235'},
-				{id: 8, type: 'theodolite', name: 'Theodolite2', serial: 'abce'}
-			],
-			observations: []
-		}));
-	};
+  calculator = ObservationBaselineCalculator();
+  observation = Observation();
+
+  view = ObservationMetaView({
+    calculator: calculator,
+    observation: observation,
+  });
 
 
-	describe('Unit tests for ObservationMetaView', function () {
+  // PhantomJS doesn't parse dates properly. This should work fine in
+  // browser testing, and should be verified periodically. This should be
+  // fixed in PhantomJS 2.0.x, but the grunt plugin needs to be updated.
+  describe.skip('getJulianDay', function () {
+    it('works for basic, non-leap years', function () {
+      expect(view.getJulianDay(new Date('2015-01-01 12:30:30'))).to.equal(1);
+      expect(view.getJulianDay(new Date('2015-02-01 12:30:30'))).to.equal(32);
+      expect(view.getJulianDay(new Date('2015-06-01 12:30:30'))).to.equal(152);
+      expect(view.getJulianDay(new Date('2015-12-31 12:30:30'))).to.equal(365);
+    });
 
-		var observation = factory.newObservation(),
-		    calculator = new Model(),
-		    view;
+    it('works for basic, leap years', function () {
+      expect(view.getJulianDay(new Date('2012-01-01 12:30:30'))).to.equal(1);
+      expect(view.getJulianDay(new Date('2012-02-01 12:30:30'))).to.equal(32);
+      expect(view.getJulianDay(new Date('2012-06-01 12:30:30'))).to.equal(153);
+      expect(view.getJulianDay(new Date('2012-12-31 12:30:30'))).to.equal(366);
+    });
 
+    it('works for centuries', function () {
+      expect(view.getJulianDay(new Date('1900-01-01 12:30:30'))).to.equal(1);
+      expect(view.getJulianDay(new Date('1900-02-01 12:30:30'))).to.equal(32);
+      expect(view.getJulianDay(new Date('1900-06-01 12:30:30'))).to.equal(152);
+      expect(view.getJulianDay(new Date('1900-12-31 12:30:30'))).to.equal(365);
+    });
 
-		// load an observatory
-		// view._setObservatory(observatory);
+    it('works for millenia', function () {
+      expect(view.getJulianDay(new Date('2000-01-01 12:30:30'))).to.equal(1);
+      expect(view.getJulianDay(new Date('2000-02-01 12:30:30'))).to.equal(32);
+      expect(view.getJulianDay(new Date('2000-06-01 12:30:30'))).to.equal(153);
+      expect(view.getJulianDay(new Date('2000-12-31 12:30:30'))).to.equal(366);
+    });
+  });
 
+  describe('render', function () {
+    it('can be called without blowing up', function () {
+      view.render();
+    });
 
-		describe('setObservatory()', function () {
+    it('is called when observation changes', function () {
+      var spy = sinon.spy(view, 'render');
 
-			it('sets defaults for empty observation', function () {
-				view = new ObservationMetaView({
-					observation: observation,
-					calculator: calculator,
-					observatories: new Collection(factory._getObservatories([
-						{id: 1, name: 'Observatory 1'},
-						{id: 5, name: 'Observatory 5'}
-					]))
-				});
+      observation.trigger('change');
 
-				view._observatorySelectView.selectById(5);
+      expect(spy.callCount).to.equal(1);
+      spy.restore();
+    });
 
-				expect(observation.get('electronics_id')).to.equal(7);
-				expect(observation.get('theodolite_id')).to.equal(6);
-				expect(observation.get('mark_id')).to.equal(12);
-			});
+    it('updates the date, julianDay, and pierTemp fields', function () {
+      var //dateEl = view.el.querySelector('.observation-date'),
+          // julianEl = view.el.querySelector('.julian-day-value'),
+          tempEl = view.el.querySelector('.pier-temperature');
 
-		});
+      observation.set({
+        begin: new Date('2015-01-01 12:30:30'),
+        pier_temperature: 35
+      });
 
-		describe('updates calculator properties', function () {
-
-			it ('sets trueAzimuthOfMark property', function () {
-				expect(calculator.get('trueAzimuthOfMark')).to.equal(12.13);
-				view._marksSelectView.selectById(11);
-				expect(calculator.get('trueAzimuthOfMark')).to.equal(10.11);
-			});
-
-			it ('sets pierCorrection property', function () {
-				expect(calculator.get('pierCorrection')).to.equal(7.89);
-				view._pierSelectView.selectById(3);
-				expect(calculator.get('pierCorrection')).to.equal(1.23);
-			});
-
-		});
-
-		describe('updated observation properties', function () {
-
-			it('sets observatory_id property', function () {
-				view._observatorySelectView.selectById(1);
-				expect(observation.get('observatory_id')).to.equal(1);
-				view._observatorySelectView.selectById(5);
-				expect(observation.get('observatory_id')).to.equal(5);
-			});
-
-			it('sets mark_id property', function () {
-				view._marksSelectView.selectById(11);
-				expect(observation.get('mark_id')).to.equal(11);
-				view._marksSelectView.selectById(12);
-				expect(observation.get('mark_id')).to.equal(12);
-			});
-
-			it('sets electronics_id property', function () {
-				view._electronicsSelectView.selectById(7);
-				expect(observation.get('electronics_id')).to.equal(7);
-				view._electronicsSelectView.selectById(5);
-				expect(observation.get('electronics_id')).to.equal(5);
-			});
-
-			it('sets theodolite_id property', function () {
-				view._theodoliteSelectView.selectById(8);
-				expect(observation.get('theodolite_id')).to.equal(8);
-				view._theodoliteSelectView.selectById(6);
-				expect(observation.get('theodolite_id')).to.equal(6);
-			});
-
-		});
-
-	});
+      // PhantomJS doesn't parse dates properly. This should work fine in
+      // browser testing, and should be verified periodically. This should be
+      // fixed in PhantomJS 2.0.x, but the grunt plugin needs to be updated.
+      // expect(dateEl.value).to.equal('2015-01-01');
+      // expect(julianEl.value).to.equal('1');
+      expect(tempEl.value).to.equal('35');
+    });
+  });
 
 });

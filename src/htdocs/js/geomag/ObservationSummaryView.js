@@ -1,433 +1,418 @@
-/* global define, MOUNT_PATH */
-define([
-	'mvc/View',
-	'util/Util',
+/* global MOUNT_PATH */
+'use strict';
 
-	'geomag/DeclinationSummaryView',
-	'geomag/Formatter',
-	'geomag/HorizontalIntensitySummaryView',
-	'geomag/VerticalIntensitySummaryView',
-	'geomag/UserFactory'
-], function (
-	View,
-	Util,
-
-	DeclinationSummaryView,
-	Format,
-	HorizontalIntensitySummaryView,
-	VerticalIntensitySummaryView,
-	UserFactory
-) {
-	'use strict';
+var DeclinationSummaryView = require('geomag/DeclinationSummaryView'),
+    Format = require('geomag/Formatter'),
+    HorizontalSummaryView = require('geomag/HorizontalIntensitySummaryView'),
+    UserFactory = require('geomag/UserFactory'),
+    Util = require('util/Util'),
+    VerticalSummaryView = require('geomag/VerticalIntensitySummaryView'),
+    View = require('mvc/View');
 
 
-	var DEFAULTS = {
-		UserFactory: new UserFactory({
-			url: MOUNT_PATH + '/user_data.php'
-		})
-	};
+var _DEFAULTS = {
+  UserFactory: UserFactory({
+    url: MOUNT_PATH + '/user_data.php'
+  })
+};
 
 
-	var ObservationSummaryView = function (options) {
-		this._options = Util.extend({}, DEFAULTS, options);
-		View.call(this, this._options);
-	};
-	ObservationSummaryView.prototype = Object.create(View.prototype);
+var ObservationSummaryView = function (options) {
+  var _this,
+      _initialize,
 
-	ObservationSummaryView.prototype.render = function () {
-		this._renderDeclination();
-		this._renderInclination();
-		this._renderSummaryBottom();
-	};
+      _baselineMinMean,
+      _baselineMinRange,
+      _baselineMinStdDev,
+      _baselineNtMean,
+      _baselineNtRange,
+      _baselineNtStdDev,
+      _baselineValuesMean,
+      _baselineValuesRange,
+      _baselineValuesStdDev,
+      _calculator,
+      _checkedBy,
+      _declinationSummaryView,
+      _electronicsTemperature,
+      _fluxgateTemperature,
+      _horizontalIntensitySummaryView,
+      _observation,
+      _options,
+      _outsideTemperature,
+      _pierTemperature,
+      _protonTemperature,
+      _readings,
+      _userFactory,
+      _verticalBaselineValuesMean,
+      _verticalBaselineValuesRange,
+      _verticalBaselineValuesStdDev,
+      _verticalIntensitySummaryView,
 
-	ObservationSummaryView.prototype._renderDeclination = function () {
-		var readings = this._readings.data(),
-		    declinationSummaryView = this._declinationSummaryView,
-		    calculator = this._calculator,
-		    i = null,
-		    len = null,
-		    reading,
-		    range,
-		    baselineD = [],
-		    eBaseline = [],
-		    baselineDStats,
-		    eBaselineStats;
+      _bindings,
+      _querySelectors,
+      _renderDeclination,
+      _renderHorizontalIntensitySummaryView,
+      _renderInclination,
+      _renderSummaryBottom,
+      _renderVerticalIntensitySummaryView;
 
-		Util.empty(declinationSummaryView);
+  _options = Util.extend({}, _DEFAULTS, options);
+  _this = View(_options);
 
-		for (i = 0, len = readings.length; i < len; i++) {
-			reading = readings[i];
-			// create view if it does not exist
-			if (!reading.hasOwnProperty('_declinationSummary')) {
-				reading._declinationSummary = new DeclinationSummaryView({
-					el:document.createElement('tr'),
-					reading:reading,
-					calculator:calculator
-				});
-			}
-			// insert view
-			declinationSummaryView.appendChild(reading._declinationSummary._el);
+  _initialize = function () {
+    var el = _this.el;
 
-			// insert view
-			if (reading.get('declination_valid') === 'Y') {
-				baselineD.push(calculator.dBaseline(reading));
-				eBaseline.push(calculator.eBaseline(reading));
-			}
-		}
+    _calculator = _options.baselineCalculator;
+    _observation = _options.observation;
+    _readings = _observation.get('readings');
+    _userFactory = _options.UserFactory;
 
-		baselineDStats = calculator.getStats(baselineD);
-		eBaselineStats = calculator.getStats(eBaseline);
+    el.innerHTML = [
+      '<section class="observation-summary-view">',
+        '<h2>Declination</h2>',
+        '<table class="declination-summary">',
+          '<thead>',
+            '<tr>',
+              '<th scope="col" class="name">Set</th>',
+              '<th scope="col" class="valid">Valid</th>',
+              '<th scope="col" class="start-time">Start Time</th>',
+              '<th scope="col" class="end-time">End Time</th>',
+              '<th scope="col" class="absolute-declination">Absolute</th>',
+              '<th scope="col" class="ord-min">Ordinate</th>',
+              '<th scope="col" class="baseline-values">Baseline</th>',
+              '<th scope="col" class="baseline-values">Baseline</th>',
+              '<th scope="col" class="shift">180&#176; Shift</th>',
+            '</tr>',
+          '</thead>',
+          '<tbody class="declination-summary-view">',
+          '</tbody>',
+          '<tfoot>',
+            '<tr>',
+              '<th scope="row" colspan="6" class="mean">Mean</th>',
+              '<td class="baseline-min-mean"></td>',
+              '<td class="baseline-nt-mean"></td>',
+            '</tr>',
+            '<tr>',
+              '<th scope="row" colspan="6" class="declination-range">',
+                  'Range</th>',
+              '<td class="baseline-min-range"></td>',
+              '<td class="baseline-nt-range"></td>',
+            '</tr>',
+            '<tr>',
+              '<th scope="row" colspan="6" class="baseline-std-dev">',
+                  'Standard Deviation</th>',
+              '<td class="baseline-min-std-dev"></td>',
+              '<td class="baseline-nt-std-dev"></td>',
+            '</tr>',
+          '</tfoot>',
+        '</table>',
+        '<hr/>',
+        '<h2>Horizontal Intensity</h2>',
+        '<table class="horizontal-summary">',
+          '<thead>',
+            '<tr>',
+              '<th scope="col" class="name">Set</th>',
+              '<th scope="col" class="valid">Valid</th>',
+              '<th scope="col" class="start-time">Start Time</th>',
+              '<th scope="col" class="end-time">End Time</th>',
+              '<th scope="col" class="abs-value">Absolute</th>',
+              '<th scope="col" class="ord">Ordinate</th>',
+              '<th scope="col" class="baseline-values">Baseline</th>',
+            '</tr>',
+          '</thead>',
+          '<tbody class="horizontal-intensity-summary-view">',
+          '</tbody>',
+          '<tfoot>',
+            '<tr>',
+              '<th scope="row" colspan="6" class="mean">Mean</th>',
+              '<td class="baseline-values-mean"></td>',
+            '</tr>',
+            '<tr>',
+              '<th scope="row" colspan="6" class="range">Range</th>',
+              '<td class="baseline-values-range"></td>',
+            '</tr>',
+            '<tr>',
+              '<th scope="row" colspan="6" class="Std-dev">',
+                  'Standard Deviation</th>',
+              '<td class="baseline-values-std-dev"></td>',
+            '</tr>',
+          '</tfoot>',
+        '</table>',
+        '<hr/>',
+        '<h2>Vertical Intensity</h2>',
+        '<table class="vertical-summary">',
+          '<thead>',
+            '<tr>',
+              '<th scope="col" class="name">Set</th>',
+              '<th scope="col" class="valid">Valid</th>',
+              '<th scope="col" class="start-time">Start Time</th>',
+              '<th scope="col" class="end-time">End Time</th>',
+              '<th scope="col" class="abs-value">Absolute</th>',
+              '<th scope="col" class="ord">Ordinate</th>',
+              '<th scope="col" class="baseline-values">Baseline</th>',
+            '</tr>',
+          '</thead>',
+          '<tbody class="vertical-intensity-summary-view">',
+          '</tbody>',
+          '<tfoot>',
+            '<tr>',
+              '<th scope="row" colspan="6" class="mean">Mean</th>',
+              '<td class="vertical-baseline-values-mean"></td>',
+            '</tr>',
+            '<tr>',
+              '<th scope="row" colspan="6" class="range">Range</th>',
+              '<td class="vertical-baseline-values-range"></td>',
+            '</tr>',
+            '<tr>',
+              '<th scope="row" colspan="6" class="std-dev">',
+                  'Standard Deviation</th>',
+              '<td class="vertical-baseline-values-std-dev"></td>',
+            '</tr>',
+          '</tfoot>',
+        '</table>',
+        '<hr/>',
+        '<h2>Temperatures</h2>',
+        '<table class="temperature-view">',
+          '<thead>',
+            '<tr>',
+              '<th scope="col">Pier</th>',
+              '<th scope="col">Electronics</th>',
+              '<th scope="col">Fluxgate</th>',
+              '<th scope="col">Proton</th>',
+              '<th scope="col">Outside</th>',
+            '</tr>',
+          '</thead>',
+          '<tbody>',
+            '<tr>',
+              '<td class="pier-temp-value"></td>',
+              '<td class="electronics-temp-value"></td>',
+              '<td class="fluxgate-temp-value"></td>',
+              '<td class="proton-temp-value"></td>',
+              '<td class="outside-temp-value"></td>',
+            '</tr>',
+          '</tbody>',
+        '</table>',
+      '</section>'
+    ].join('');
 
-		this._baselineMinMean.innerHTML = Format.minutes(baselineDStats.mean);
-		this._baselineNtMean.innerHTML =
-				Format.nanoteslas(eBaselineStats.mean);
+    _querySelectors();
+    _bindings();
+    _this.render();
+  };
 
-		range = baselineDStats.max - baselineDStats.min;
-		this._baselineMinRange.innerHTML = Format.minutes(range);
+  _bindings = function () {
+    _calculator.on('change', 'render', _this);
 
-		range = eBaselineStats.max - eBaselineStats.min;
-		this._baselineNtRange.innerHTML = Format.nanoteslas(range);
+    _observation.eachReading(function (reading) {
+      reading.on('change', 'render', _this);
+      reading.eachMeasurement(function (measurement) {
+        measurement.on('change', 'render', _this);
+      });
+    });
+  };
 
-		this._baselineMinStdDev.innerHTML =
-				Format.minutes(baselineDStats.stdDev);
-		this._baselineNtStdDev.innerHTML =
-				Format.nanoteslas(eBaselineStats.stdDev);
-	};
+  _querySelectors = function () {
+    var el = _this.el;
 
-	ObservationSummaryView.prototype._renderInclination = function () {
-		this._renderHorizontalIntensitySummaryView();
-		this._renderVerticalIntensitySummaryView();
-	};
+    // Declination summary view
+    _declinationSummaryView = el.querySelector('.declination-summary-view');
+    _baselineMinMean = el.querySelector('.baseline-min-mean');
+    _baselineNtMean = el.querySelector('.baseline-nt-mean');
+    _baselineMinRange = el.querySelector('.baseline-min-range');
+    _baselineNtRange = el.querySelector('.baseline-nt-range');
+    _baselineMinStdDev = el.querySelector('.baseline-min-std-dev');
+    _baselineNtStdDev = el.querySelector('.baseline-nt-std-dev');
 
-	ObservationSummaryView.prototype._renderHorizontalIntensitySummaryView =
-			function () {
-		var readings = this._readings.data(),
-		    horizontalIntensitySummaryView = this._horizontalIntensitySummaryView,
-		    calculator = this._calculator,
-		    i = null,
-		    len = null,
-		    reading,
-		    range,
-		    baselineH = [],
-		    baselineHStats;
+    // Horizontal Intensity Summary view
+    _horizontalIntensitySummaryView =
+      el.querySelector('.horizontal-intensity-summary-view');
+    _baselineValuesMean = el.querySelector('.baseline-values-mean');
+    _baselineValuesRange = el.querySelector('.baseline-values-range');
+    _baselineValuesStdDev = el.querySelector('.baseline-values-std-dev');
 
-		Util.empty(horizontalIntensitySummaryView);
+    // Vertical Intensity Summary View
+    _verticalIntensitySummaryView =
+      el.querySelector('.vertical-intensity-summary-view');
+    _verticalBaselineValuesMean =
+      el.querySelector('.vertical-baseline-values-mean');
+    _verticalBaselineValuesRange =
+      el.querySelector('.vertical-baseline-values-range');
+    _verticalBaselineValuesStdDev =
+      el.querySelector('.vertical-baseline-values-std-dev');
 
-		for (i = 0, len = readings.length; i < len; i++) {
-			reading = readings[i];
+    // Bottom Summary View
+    _observation.on('change', 'render', _this);
+    _pierTemperature = el.querySelector('.pier-temp-value');
+    _electronicsTemperature = el.querySelector('.electronics-temp-value');
+    _fluxgateTemperature = el.querySelector('.fluxgate-temp-value');
+    _protonTemperature = el.querySelector('.proton-temp-value');
+    _outsideTemperature = el.querySelector('.outside-temp-value');
+    _checkedBy = el.querySelector('.checked-by-value');
+  };
 
-			if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
-				reading._horizontalIntensitySummary =
-						new HorizontalIntensitySummaryView({
-					el:document.createElement('tr'),
-					reading:reading,
-					calculator:calculator
-				});
-			}
-			// insert view
-			horizontalIntensitySummaryView.appendChild(
-				reading._horizontalIntensitySummary._el);
+  _renderDeclination = function () {
+    var readings = _readings.data(),
+        i = null,
+        len = null,
+        reading,
+        range,
+        baselineD = [],
+        eBaseline = [],
+        baselineDStats,
+        eBaselineStats;
 
-			if (reading.get('horizontal_intensity_valid') === 'Y') {
-				baselineH.push(calculator.hBaseline(reading));
-			}
-		}
-		baselineHStats = calculator.getStats(baselineH);
-		this._baselineValuesMean.innerHTML =
-				Format.nanoteslas(baselineHStats.mean);
+    Util.empty(_declinationSummaryView);
 
-		range = baselineHStats.max - baselineHStats.min;
-		this._baselineValuesRange.innerHTML = Format.nanoteslas(range);
+    for (i = 0, len = readings.length; i < len; i++) {
+      reading = readings[i];
 
-		this._baselineValuesStdDev.innerHTML =
-				Format.nanoteslas(baselineHStats.stdDev);
-	};
+      // create view if it does not exist
+      if (!reading.hasOwnProperty('_declinationSummary')) {
+        reading._declinationSummary = DeclinationSummaryView({
+          el: document.createElement('tr'),
+          reading: reading,
+          calculator: _calculator
+        });
+      }
+      // insert view
+      _declinationSummaryView.appendChild(reading._declinationSummary.el);
 
-	ObservationSummaryView.prototype._renderVerticalIntensitySummaryView =
-			function () {
-		var readings = this._readings.data(),
-		    verticalIntensitySummaryView = this._verticalIntensitySummaryView,
-		    calculator = this._calculator,
-		    i = null,
-		    len = null,
-		    reading,
-		    range,
-		    baselineZ = [],
-		    baselineZStats;
+      // insert view
+      if (reading.get('declination_valid') === 'Y') {
+        baselineD.push(_calculator.dBaseline(reading));
+        eBaseline.push(_calculator.eBaseline(reading));
+      }
+    }
 
-		Util.empty(verticalIntensitySummaryView);
-		for (i = 0, len = readings.length; i < len; i++) {
-			reading = readings[i];
+    baselineDStats = _calculator.getStats(baselineD);
+    eBaselineStats = _calculator.getStats(eBaseline);
 
-			// Create view if it does not exits
-			if (!reading.hasOwnProperty('_verticalIntensitySummary')) {
-				reading._verticalIntensitySummary = new VerticalIntensitySummaryView({
-					el:document.createElement('tr'),
-					reading:reading,
-					calculator:calculator
-				});
-			}
-			// insert view
-			verticalIntensitySummaryView.appendChild
-					(reading._verticalIntensitySummary._el);
+    _baselineMinMean.innerHTML = Format.minutes(baselineDStats.mean);
+    _baselineNtMean.innerHTML = Format.nanoteslas(eBaselineStats.mean);
 
-			if (reading.get('vertical_intensity_valid') === 'Y') {
-				baselineZ.push(calculator.zBaseline(reading));
-			}
-		}
-		baselineZStats = calculator.getStats(baselineZ);
+    range = baselineDStats.max - baselineDStats.min;
+    _baselineMinRange.innerHTML = Format.minutes(range);
 
-		this._verticalBaselineValuesMean.innerHTML =
-				Format.nanoteslas(baselineZStats.mean);
+    range = eBaselineStats.max - eBaselineStats.min;
+    _baselineNtRange.innerHTML = Format.nanoteslas(range);
 
-		range = baselineZStats.max - baselineZStats.min;
-		this._verticalBaselineValuesRange.innerHTML = Format.nanoteslas(range);
+    _baselineMinStdDev.innerHTML = Format.minutes(baselineDStats.stdDev);
+    _baselineNtStdDev.innerHTML = Format.nanoteslas(eBaselineStats.stdDev);
+  };
 
-		this._verticalBaselineValuesStdDev.innerHTML =
-				Format.nanoteslas(baselineZStats.stdDev);
-	};
+  _renderHorizontalIntensitySummaryView = function () {
+    var readings = _readings.data(),
+        i = null,
+        len = null,
+        reading,
+        range,
+        baselineH = [],
+        baselineHStats;
 
-	ObservationSummaryView.prototype._renderSummaryBottom = function () {
-		var _this = this,
-		    observation = this._observation,
-		    reviewed = observation.get('reviewed'),
-		    reviewer = observation.get('reviewer_user_id');
+    Util.empty(_horizontalIntensitySummaryView);
 
-		this._pierTemperature.innerHTML =
-				Format.celsius(observation.get('pier_temperature'),1);
-		this._electronicsTemperature.innerHTML = 'elec temp';
-		this._fluxgateTemperature.innerHTML = 'flux temp';
-		this._protonTemperature.innerHTML = 'prot temp';
-		this._outsideTemperature.innerHTML = 'outs temp';
-		this._remarks.innerHTML = observation.get('annotation');
+    for (i = 0, len = readings.length; i < len; i++) {
+      reading = readings[i];
 
-		if (reviewed === 'Y' && reviewer) {
-			// set reviewer to reviwer_user_id while fetching the user name.
-			this._checkedBy.innerHTML = reviewer;
+      // create view if it does not exist
+      if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
+        reading._horizontalIntensitySummary = HorizontalSummaryView({
+          el: document.createElement('tr'),
+          reading: reading,
+          calculator: _calculator
+        });
+      }
+      // insert view
+      _horizontalIntensitySummaryView.appendChild(
+        reading._horizontalIntensitySummary.el);
 
-			this._userFactory.get({
-				data: {'id': reviewer},
-				success: function (data) {
-					// replace reviwer_user_id with user name once it is returned.
-					_this._checkedBy.innerHTML = data.name;
-				}
-			});
-		}
+      // insert view
+      if (reading.get('horizontal_intensity_valid') === 'Y') {
+        baselineH.push(_calculator.hBaseline(reading));
+      }
+    }
 
-	};
+    baselineHStats = _calculator.getStats(baselineH);
 
-	ObservationSummaryView.prototype._initialize = function () {
-		var el = this._el;
+    _baselineValuesMean.innerHTML = Format.nanoteslas(baselineHStats.mean);
 
-		this._observation = this._options.observation;
-		this._calculator = this._options.baselineCalculator;
-		this._readings = this._observation.get('readings');
-		this._userFactory = this._options.UserFactory;
+    range = baselineHStats.max - baselineHStats.min;
+    _baselineValuesRange.innerHTML = Format.nanoteslas(range);
 
-		el.innerHTML = [
-			'<section class="observation-summary-view">',
-				'<h2>Declination</h2>',
-				'<table class="declination-summary">',
-					'<thead>',
-						'<tr>',
-							'<th scope="col" class="name">Set</th>',
-							'<th scope="col" class="valid">Valid</th>',
-							'<th scope="col" class="start-time">Start Time</th>',
-							'<th scope="col" class="end-time">End Time</th>',
-							'<th scope="col" class="absolute-declination">Absolute</th>',
-							'<th scope="col" class="ord-min">Ordinate</th>',
-							'<th scope="col" class="baseline-values">Baseline</th>',
-							'<th scope="col" class="baseline-values">Baseline</th>',
-							'<th scope="col" class="observer">Observer</th>',
-							'<th scope="col" class="shift">180&#176; Shift</th>',
-						'</tr>',
-					'</thead>',
-					'<tbody class="declination-summary-view">',
-					'</tbody>',
-					'<tfoot>',
-						'<tr>',
-							'<th scope="row" colspan="6" class="mean">Mean</th>',
-							'<td class="baseline-min-mean"></td>',
-							'<td class="baseline-nt-mean"></td>',
-						'</tr>',
-						'<tr>',
-							'<th scope="row" colspan="6" class="declination-range">',
-									'Range</th>',
-							'<td class="baseline-min-range"></td>',
-							'<td class="baseline-nt-range"></td>',
-						'</tr>',
-						'<tr>',
-							'<th scope="row" colspan="6" class="baseline-std-dev">',
-									'Standard Deviation</th>',
-							'<td class="baseline-min-std-dev"></td>',
-							'<td class="baseline-nt-std-dev"></td>',
-						'</tr>',
-					'</tfoot>',
-				'</table>',
-				'<hr/>',
-				'<h2>Horizontal Intensity</h2>',
-				'<table class="horizontal-summary">',
-					'<thead>',
-						'<tr>',
-							'<th scope="col" class="name">Set</th>',
-							'<th scope="col" class="valid">Valid</th>',
-							'<th scope="col" class="start-time">Start Time</th>',
-							'<th scope="col" class="end-time">End Time</th>',
-							'<th scope="col" class="abs-value">Absolute</th>',
-							'<th scope="col" class="ord">Ordinate</th>',
-							'<th scope="col" class="baseline-values">Baseline</th>',
-							'<th scope="col" class="observer">Observer</th>',
-						'</tr>',
-					'</thead>',
-					'<tbody class="horizontal-intensity-summary-view">',
-					'</tbody>',
-					'<tfoot>',
-						'<tr>',
-							'<th scope="row" colspan="6" class="mean">Mean</th>',
-							'<td class="baseline-values-mean"></td>',
-						'</tr>',
-						'<tr>',
-							'<th scope="row" colspan="6" class="range">Range</th>',
-							'<td class="baseline-values-range"></td>',
-						'</tr>',
-						'<tr>',
-							'<th scope="row" colspan="6" class="Std-dev">',
-									'Standard Deviation</th>',
-							'<td class="baseline-values-std-dev"></td>',
-						'</tr>',
-					'</tfoot>',
-				'</table>',
-				'<hr/>',
-				'<h2>Vertical Intensity</h2>',
-				'<table class="vertical-summary">',
-					'<thead>',
-						'<tr>',
-							'<th scope="col" class="name">Set</th>',
-							'<th scope="col" class="valid">Valid</th>',
-							'<th scope="col" class="start-time">Start Time</th>',
-							'<th scope="col" class="end-time">End Time</th>',
-							'<th scope="col" class="abs-value">Absolute</th>',
-							'<th scope="col" class="ord">Ordinate</th>',
-							'<th scope="col" class="baseline-values">Baseline</th>',
-							'<th scope="col" class="observer">Observer</th>',
-						'</tr>',
-					'</thead>',
-					'<tbody class="vertical-intensity-summary-view">',
-					'</tbody>',
-					'<tfoot>',
-						'<tr>',
-							'<th scope="row" colspan="6" class="mean">Mean</th>',
-							'<td class="vertical-baseline-values-mean"></td>',
-						'</tr>',
-						'<tr>',
-							'<th scope="row" colspan="6" class="range">Range</th>',
-							'<td class="vertical-baseline-values-range"></td>',
-						'</tr>',
-						'<tr>',
-							'<th scope="row" colspan="6" class="std-dev">',
-									'Standard Deviation</th>',
-							'<td class="vertical-baseline-values-std-dev"></td>',
-						'</tr>',
-					'</tfoot>',
-				'</table>',
-				'<hr/>',
-				'<h2>Temperatures</h2>',
-				'<table class="temperature-view">',
-					'<thead>',
-						'<tr>',
-							'<th scope="col">Pier</th>',
-							'<th scope="col">Electronics</th>',
-							'<th scope="col">Fluxgate</th>',
-							'<th scope="col">Proton</th>',
-							'<th scope="col">Outside</th>',
-						'</tr>',
-					'</thead>',
-					'<tbody>',
-						'<tr>',
-							'<td class="pier-temp-value"></td>',
-							'<td class="electronics-temp-value"></td>',
-							'<td class="fluxgate-temp-value"></td>',
-							'<td class="proton-temp-value"></td>',
-							'<td class="outside-temp-value"></td>',
-						'</tr>',
-					'</tbody>',
-				'</table>',
-				'<hr/>',
-				'<section class="reviewer">',
-					'<h2>Reviewer</h2>',
-					'<div>Reviewed by <span class="checked-by-value"></span></div>',
-					'<label for="observation-remarks">Reviewer comments</label>',
-					'<textarea id="observation-remarks"></textarea>',
-				'</section>',
-			'</section>'
-		].join('');
+    _baselineValuesStdDev.innerHTML = Format.nanoteslas(baselineHStats.stdDev);
+  };
 
-		this._querySelectors();
-		this._bindings();
-		this.render();
-	};
+  _renderInclination = function () {
+    _renderHorizontalIntensitySummaryView();
+    _renderVerticalIntensitySummaryView();
+  };
 
-	ObservationSummaryView.prototype._querySelectors = function () {
-		var el = this._el;
+  _renderSummaryBottom = function () {
+    _pierTemperature.innerHTML =
+        Format.celsius(_observation.get('pier_temperature'),1);
+    _electronicsTemperature.innerHTML =
+        Format.celsius(_observation.get('elect_temperature'),1);
+    _fluxgateTemperature.innerHTML =
+        Format.celsius(_observation.get('flux_temperature'),1);
+    _protonTemperature.innerHTML =
+        Format.celsius(_observation.get('proton_temperature'),1);
+    _outsideTemperature.innerHTML =
+        Format.celsius(_observation.get('outside_temperature'),1);
+  };
 
-		// Declination summary view
-		this._declinationSummaryView =
-			el.querySelector('.declination-summary-view');
-		this._baselineMinMean = el.querySelector('.baseline-min-mean');
-		this._baselineNtMean = el.querySelector('.baseline-nt-mean');
-		this._baselineMinRange = el.querySelector('.baseline-min-range');
-		this._baselineNtRange = el.querySelector('.baseline-nt-range');
-		this._baselineMinStdDev = el.querySelector('.baseline-min-std-dev');
-		this._baselineNtStdDev = el.querySelector('.baseline-nt-std-dev');
+  _renderVerticalIntensitySummaryView = function () {
+    var readings = _readings.data(),
+        i = null,
+        len = null,
+        reading,
+        range,
+        baselineZ = [],
+        baselineZStats;
 
-		// Horizontal Intensity Summary view
-		this._horizontalIntensitySummaryView =
-			el.querySelector('.horizontal-intensity-summary-view');
-		this._baselineValuesMean = el.querySelector('.baseline-values-mean');
-		this._baselineValuesRange = el.querySelector('.baseline-values-range');
-		this._baselineValuesStdDev = el.querySelector('.baseline-values-std-dev');
+    Util.empty(_verticalIntensitySummaryView);
 
-		// Vertical Intensity Summary View
-		this._verticalIntensitySummaryView =
-			el.querySelector('.vertical-intensity-summary-view');
-		this._verticalBaselineValuesMean =
-			el.querySelector('.vertical-baseline-values-mean');
-		this._verticalBaselineValuesRange =
-			el.querySelector('.vertical-baseline-values-range');
-		this._verticalBaselineValuesStdDev =
-			el.querySelector('.vertical-baseline-values-std-dev');
+    for (i = 0, len = readings.length; i < len; i++) {
+      reading = readings[i];
 
-		// Bottom Summary View
-		this._observation.on('change', this.render, this);
-		this._pierTemperature = el.querySelector('.pier-temp-value');
-		this._electronicsTemperature = el.querySelector('.electronics-temp-value');
-		this._fluxgateTemperature = el.querySelector('.fluxgate-temp-value');
-		this._protonTemperature = el.querySelector('.proton-temp-value');
-		this._outsideTemperature = el.querySelector('.outside-temp-value');
-		this._checkedBy = el.querySelector('.checked-by-value');
-		this._remarks = el.querySelector('.reviewer > textarea');
-	};
+      // Create view if it does not exits
+      if (!reading.hasOwnProperty('_verticalIntensitySummary')) {
+        reading._verticalIntensitySummary = VerticalSummaryView({
+          el: document.createElement('tr'),
+          reading: reading,
+          calculator: _calculator
+        });
+      }
+      // insert view
+      _verticalIntensitySummaryView.appendChild
+          (reading._verticalIntensitySummary.el);
 
-	ObservationSummaryView.prototype._bindings = function () {
-		var _this = this;
+      if (reading.get('vertical_intensity_valid') === 'Y') {
+        baselineZ.push(_calculator.zBaseline(reading));
+      }
+    }
 
-		this._onChange = this._onChange.bind(this);
-		this._remarks.addEventListener('change', this._onChange);
-		this._calculator.on('change', this.render, this);
+    baselineZStats = _calculator.getStats(baselineZ);
 
-		this._observation.eachReading(function (reading) {
-			reading.on('change', _this.render, _this);
-			reading.eachMeasurement(function (measurement) {
-				measurement.on('change', _this.render, _this);
-			});
-		});
-	};
+    _verticalBaselineValuesMean.innerHTML =
+        Format.nanoteslas(baselineZStats.mean);
 
-	ObservationSummaryView.prototype._onChange = function () {
-		this._observation.set({
-			annotation: this._remarks.value
-		});
-	};
+    range = baselineZStats.max - baselineZStats.min;
+    _verticalBaselineValuesRange.innerHTML = Format.nanoteslas(range);
 
-	return ObservationSummaryView;
-});
+    _verticalBaselineValuesStdDev.innerHTML =
+        Format.nanoteslas(baselineZStats.stdDev);
+  };
+
+
+  _this.render = function () {
+    _renderDeclination();
+    _renderInclination();
+    _renderSummaryBottom();
+  };
+
+  _initialize(options);
+  options = null;
+  return _this;
+};
+
+module.exports = ObservationSummaryView;

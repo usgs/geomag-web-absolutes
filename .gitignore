@@ -1,9 +1,9 @@
-node_modules
+.build
 .DS_Store
-dist
-.tmp
 .sass-cache
-geomag-baseline-calculator.sublime-workspace
+*.sublime-workspace
+dist
+node_modules
 src/conf/config.ini
 src/conf/httpd.conf
 testdata.db
