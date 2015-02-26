@@ -35,6 +35,13 @@ var concurrent = {
     'uglify:observation',
     'uglify:plot',
     'uglify:useradmin'
+  ],
+  cssmin: [
+    'cssmin:index',
+    'cssmin:login',
+    'cssmin:observation',
+    'cssmin:plot',
+    'cssmin:useradmin'
   ]
 };
 

@@ -14,7 +14,8 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean',
     'dev',
-    'cssmin',
+    'copy:dist',
+    'concurrent:cssmin',
     'concurrent:uglify'
   ]);
 
