@@ -345,7 +345,8 @@ var ObservationMetaView = function (options) {
    * Updated observation begin and pier_temperature attributes from form.
    */
   _onChange = function () {
-    var pierTemperature = _pierTemperature.value;
+    var pierTemperature = _pierTemperature.value,
+        today = Date().getTime();
 
     pierTemperature = (pierTemperature === '' ?
         null : parseFloat(pierTemperature));
@@ -354,6 +355,11 @@ var ObservationMetaView = function (options) {
       begin: Format.parseDate(_date.value),
       pier_temperature: pierTemperature
     });
+
+    if (_date.value > today) {
+      _date.value = today;
+    }
+
   };
 
   /**
