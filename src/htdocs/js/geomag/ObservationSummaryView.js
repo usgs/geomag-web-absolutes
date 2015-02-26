@@ -348,16 +348,17 @@ var ObservationSummaryView = function (options) {
   };
 
   _renderSummaryBottom = function () {
-    _pierTemperature.innerHTML =
-        Format.celsius(_observation.get('pier_temperature'),1);
-    _electronicsTemperature.innerHTML =
-        Format.celsius(_observation.get('elect_temperature'),1);
-    _fluxgateTemperature.innerHTML =
-        Format.celsius(_observation.get('flux_temperature'),1);
-    _protonTemperature.innerHTML =
-        Format.celsius(_observation.get('proton_temperature'),1);
-    _outsideTemperature.innerHTML =
-        Format.celsius(_observation.get('outside_temperature'),1);
+    var electTemp = _observation.get('elect_temperature'),
+        fluxgateTemp = _observation.get('flux_temperature'),
+        pierTemp = _observation.get('pier_temperature'),
+        protonTemp = _observation.get('proton_temperature'),
+        outsideTemp = _observation.get('outside_temperature');
+
+    _pierTemperature.innerHTML = Format.celsius(pierTemp,1);
+    _electronicsTemperature.innerHTML = Format.celsius(electTemp,1);
+    _fluxgateTemperature.innerHTML = Format.celsius(fluxgateTemp,1);
+    _protonTemperature.innerHTML = Format.celsius(protonTemp,1);
+    _outsideTemperature.innerHTML = Format.celsius(outsideTemp,1);
   };
 
   _renderVerticalIntensitySummaryView = function () {

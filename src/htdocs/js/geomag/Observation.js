@@ -19,7 +19,7 @@ var _DEFAULTS = {
   'elect_temperature': null,
   'flux_temperature': null,
   'proton_temperature': null,
-  'outside_temperature': null,
+  'outside_temperature':null,
   'reviewed': 'N',
   'annotation': null,
   'readings': null

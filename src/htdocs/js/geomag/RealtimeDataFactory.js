@@ -13,7 +13,8 @@ var _DEFAULTS = {
   'starttime': null,
   'endtime': null,
   'channels': ['H','E','Z','F'],
-  'freq': 'seconds'
+  'freq': 'seconds',
+  'temperatureChannels': ['TO', 'TP', 'TE', 'TF']
 };
 
 
@@ -73,6 +74,16 @@ var RealtimeDataFactory = function (options) {
         _options.success(RealtimeData(data));
       }
     });
+  };
+
+  _this.getRealtimeTemperatureData = function (options) {
+    if (options.channels === undefined ){
+      options.channels = _DEFAULTS.temperatureChannels;
+    }
+    if (options.freq === undefined) {
+      options.freq = 'minutes';
+    }
+    _this.getRealtimeData(options);
   };
 
 
