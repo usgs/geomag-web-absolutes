@@ -271,7 +271,7 @@ var ReadingView = function (options) {
       _this._northDownMeasurement
     ];
 
-    thisTime = this.get('time');
+    thisTime = this.get('time') % 86400000; // Only look at time, not date
 
     for (i = 0, len = measurements.length; i < len; i++) {
       measurement = measurements[i];
@@ -280,10 +280,14 @@ var ReadingView = function (options) {
       if (thatTime === null) {
         continue;
       }
+
+      thatTime = thatTime % 86400000; // Only look at time, not date
+
       if (this === measurement) {
         isEarlierMeasurement = false;
         continue;
       }
+
       if ((isEarlierMeasurement && thisTime < thatTime) ||
           (!isEarlierMeasurement && thisTime > thatTime)) {
         _showWarning(this, measurement);

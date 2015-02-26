@@ -388,6 +388,7 @@ var ObservationView = function (options) {
 
     // bind realtime data factory and measurements.
     _realtimeDataFactory.on('change:observatory', _getRealtimeData);
+    _observation.on('change:begin', _getRealtimeData);
     _observation.eachMeasurement(function (measurement) {
       measurement.on('change:time', _getRealtimeData);
     });
