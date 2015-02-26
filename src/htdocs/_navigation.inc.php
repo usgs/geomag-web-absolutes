@@ -16,6 +16,7 @@ if (isset($CURRENT_USER)) {
         'Observation Input');
 
   if ($CURRENT_USER['admin'] === 'Y') {
+    $navItems .= navItem($MOUNT_PATH . '/plot.php', 'Baseline Plot');
     $navItems .= navItem($MOUNT_PATH . '/useradmin.php', 'Administer Users');
   }
 

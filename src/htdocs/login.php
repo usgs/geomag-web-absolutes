@@ -44,7 +44,7 @@ if (!isset($TEMPLATE)) {
   }
 ?>
   <label for="username">Username</label>
-  <input id="username" name="username" />
+  <input id="username" name="username" type="text"/>
 
   <label for="password">Password</label>
   <input id="password" name="password" type="password"/>
