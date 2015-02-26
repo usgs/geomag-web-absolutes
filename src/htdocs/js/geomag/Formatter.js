@@ -100,9 +100,9 @@ var roundHalfToEven = function (value, digits) {
       diff = powValue - truncate(powValue);
 
   if (Math.abs(diff - 0.5) < EPSILON) {
-    return roundToEven(powValue) / n;
+    return (roundToEven(powValue) / n).toFixed(digits);
   }
-  return value;
+  return value.toFixed(digits);
 };
 
 /**
@@ -250,7 +250,7 @@ var degrees = function (angle, digits) {
     return angle;
   }
 
-  return rawDegrees(roundHalfToEven(angle,digits).toFixed(digits));
+  return rawDegrees(roundHalfToEven(angle,digits));
 };
 
 /**
@@ -273,7 +273,7 @@ var minutes = function (angle, digits) {
   if (isNaN(angle)) {
     return '&ndash;';
   } else {
-    return rawMinutes(roundHalfToEven(angle,digits).toFixed(digits));
+    return rawMinutes(roundHalfToEven(angle,digits));
   }
 };
 
@@ -376,7 +376,7 @@ var celsius = function (temperature, digits) {
   if (typeof digits === 'undefined') {
     digits = _DEFAULT_DIGITS;
   }
-  return rawCelsius(roundHalfToEven(temperature,digits).toFixed(digits));
+  return rawCelsius(roundHalfToEven(temperature,digits));
 };
 
 /**
@@ -397,7 +397,7 @@ var fahrenheit = function (temperature, digits) {
     digits = _DEFAULT_DIGITS;
   }
 
-  return rawCelsius(roundHalfToEven(temperature,digits).toFixed(digits));
+  return rawCelsius(roundHalfToEven(temperature,digits));
 };
 
 /**
@@ -417,7 +417,7 @@ var nanoteslas = function (nT, digits) {
   if (isNaN(nT)) {
     return '&ndash;';
   } else {
-    return rawNanoteslas(roundHalfToEven(nT, digits).toFixed(digits));
+    return rawNanoteslas(roundHalfToEven(nT, digits));
   }
 };
 

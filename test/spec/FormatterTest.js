@@ -162,15 +162,17 @@ describe('Formatter Unit Tests', function () {
 
   describe('roundHalfToEven()', function () {
     it('rounds correctly', function() {
-      expect(Format.roundHalfToEven(0.0)).to.equal(0.00);
+      expect(Format.roundHalfToEven(0.0)).to.equal('0');
       // Defaults to 0 digits
-      expect(Format.roundHalfToEven(1.5)).to.equal(2.0);
+      expect(Format.roundHalfToEven(1.5)).to.equal('2');
       // Rounding to 2 digits doesn't round half to Even.
-      expect(Format.roundHalfToEven(1.5,2)).to.equal(1.5);
+      expect(Format.roundHalfToEven(1.5,2)).to.equal('1.50');
       // Only rounds if .xx5
-      expect(Format.roundHalfToEven(1.1234,2)).to.equal(1.1234);
+      expect(Format.roundHalfToEven(1.1234,2)).to.equal('1.12');
       // Rounds if .xx5
-      expect(Format.roundHalfToEven(1.1250001,2)).to.equal(1.12);
+      expect(Format.roundHalfToEven(1.1250001,2)).to.equal('1.12');
+      // Rounds to nearest even
+      expect(Format.roundHalfToEven(1.1350001,2)).to.equal('1.14');
     });
   });
 
