@@ -132,7 +132,7 @@ var rawFahrenheit = function (temperature) {
 var rawMinutes = function (angle) {
   var buf = [];
 
-  if (angle === null) {
+  if (isNaN(angle)) {
     return '&ndash;';
   }
 
@@ -155,7 +155,7 @@ var rawMinutes = function (angle) {
 var rawNanoteslas = function (nT) {
   var buf = [];
 
-  if (nT === null) {
+  if (isNaN(nT)) {
     return '&ndash;';
   }
 
