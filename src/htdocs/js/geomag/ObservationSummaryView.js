@@ -348,9 +348,7 @@ var ObservationSummaryView = function (options) {
   };
 
   _renderSummaryBottom = function () {
-    var reviewed = _observation.get('reviewed'),
-        reviewer = _observation.get('reviewer_user_id'),
-        electTemp = _observation.get('elect_temperature'),
+    var electTemp = _observation.get('elect_temperature'),
         fluxgateTemp = _observation.get('flux_temperature'),
         pierTemp = _observation.get('pier_temperature'),
         protonTemp = _observation.get('proton_temperature'),
@@ -361,20 +359,6 @@ var ObservationSummaryView = function (options) {
     _fluxgateTemperature.innerHTML = Format.celsius(fluxgateTemp,1);
     _protonTemperature.innerHTML = Format.celsius(protonTemp,1);
     _outsideTemperature.innerHTML = Format.celsius(outsideTemp,1);
-    _remarks.innerHTML = _observation.get('annotation');
-
-    if (reviewed === 'Y' && reviewer) {
-      // set reviewer to reviwer_user_id while fetching the user name.
-      _checkedBy.innerHTML = reviewer;
-
-      _userFactory.get({
-        data: {'id': reviewer},
-        success: function (data) {
-          // replace reviwer_user_id with user name once it is returned.
-          _checkedBy.innerHTML = data.name;
-        }
-      });
-    }
   };
 
   _renderVerticalIntensitySummaryView = function () {
