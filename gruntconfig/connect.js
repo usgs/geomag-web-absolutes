@@ -30,6 +30,7 @@ var rewrites = [
 
 var rewriteMiddleware = rewriteModule.getMiddleware(rewrites
     /*,{verbose:true}*/);
+var proxyMiddleware = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
 // middleware to send CORS headers
 var corsMiddleware = function (req, res, next) {
@@ -77,7 +78,7 @@ var connect = {
       open: 'http://localhost:8000/index.php',
       port: 8000,
       middleware: function (connect, options) {
-        var middlewares = [rewriteMiddleware, corsMiddleware],
+        var middlewares = [proxyMiddleware, rewriteMiddleware, corsMiddleware],
             paths = options.base,
             path;
 
@@ -126,7 +127,7 @@ var connect = {
       open: 'http://localhost:8002/index.php',
       port: 8002,
       middleware: function (connect, options) {
-        var middlewares = [rewriteMiddleware, corsMiddleware],
+        var middlewares = [proxyMiddleware, rewriteMiddleware, corsMiddleware],
             paths = options.base,
             path;
 
