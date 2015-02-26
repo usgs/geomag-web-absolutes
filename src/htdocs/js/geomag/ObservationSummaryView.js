@@ -356,31 +356,11 @@ var ObservationSummaryView = function (options) {
         protonTemp = _observation.get('proton_temperature'),
         outsideTemp = _observation.get('outside_temperature');
 
-    if (pierTemp !== null) {
-      _pierTemperature.innerHTML = Format.celsius(pierTemp,1);
-    }
-    if (electTemp !== null) {
-      _electronicsTemperature.innerHTML = Format.celsius(electTemp,1);
-    } else {
-      _electronicsTemperature.innerHTML = 'elec temp';
-    }
-    if (fluxgateTemp !== null) {
-      _fluxgateTemperature.innerHTML = Format.celsius(fluxgateTemp,1);
-    } else {
-      _fluxgateTemperature.innerHTML = 'flux temp';
-    }
-    if (protonTemp !== null) {
-      _protonTemperature.innerHTML = Format.celsius(protonTemp,1);
-    }
-    else {
-      _protonTemperature.innerHTML = 'prot temp';
-    }
-    if (outsideTemp !== null) {
-      _outsideTemperature.innerHTML = Format.celsius(outsideTemp,1);
-    }
-    else {
-      _outsideTemperature.innerHTML = 'outs temp';
-    }
+    _pierTemperature.innerHTML = Format.celsius(pierTemp,1);
+    _electronicsTemperature.innerHTML = Format.celsius(electTemp,1);
+    _fluxgateTemperature.innerHTML = Format.celsius(fluxgateTemp,1);
+    _protonTemperature.innerHTML = Format.celsius(protonTemp,1);
+    _outsideTemperature.innerHTML = Format.celsius(outsideTemp,1);
     _remarks.innerHTML = _observation.get('annotation');
 
     if (reviewed === 'Y' && reviewer) {
