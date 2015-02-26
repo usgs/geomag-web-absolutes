@@ -68,7 +68,7 @@ var ObservationMetaView = function (options) {
       _options,
       _pierSelectView,
       _pierTemperature,
-      _reviewerName
+      _reviewerName,
       _theodoliteSelectView,
       _user,
       _userFactory,
@@ -419,7 +419,7 @@ var ObservationMetaView = function (options) {
         m = begin.getUTCMonth() + 1,
         d = begin.getUTCDate(),
         observer = _observation.get('observer_user_id'),
-        reviewer = obs.get('reviewer_user_id');
+        reviewer = _observation.get('reviewer_user_id');
 
     _date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
     _julianDay.value = _this.getJulianDay(begin);
