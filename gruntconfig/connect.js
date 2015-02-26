@@ -2,8 +2,9 @@
 
 var config = require('./config');
 
-var gateway = require('gateway');
-var rewriteModule = require('http-rewrite-middleware');
+var gateway = require('gateway'),
+    proxyMiddleware = require('grunt-connect-proxy/lib/utils').proxyRequest,
+    rewriteModule = require('http-rewrite-middleware');
 
 // var iniConfig = require('ini').parse(require('fs')
 //     .readFileSync('./src/conf/config.ini', 'utf-8'));
@@ -28,15 +29,13 @@ var rewrites = [
   }
 ];
 
-var rewriteMiddleware = rewriteModule.getMiddleware(rewrites
-    /*,{verbose:true}*/);
-var proxyMiddleware = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
 // middleware to send CORS headers
 var corsMiddleware = function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'accept,origin,authorization,content-type');
+  res.setHeader('Access-Control-Allow-Headers',
+      'accept,origin,authorization,content-type');
   return next();
 };
 
@@ -75,9 +74,13 @@ var connect = {
       open: 'http://localhost:8000/index.php',
       port: 8000,
       middleware: function (connect, options) {
-        var middlewares = [proxyMiddleware, rewriteMiddleware, corsMiddleware],
+        var middlewares,
             paths = options.base,
-            path;
+            path,
+            rewriteMiddleware;
+
+        rewriteMiddleware = rewriteModule.getMiddleware(rewrites);
+        middlewares = [proxyMiddleware, rewriteMiddleware, corsMiddleware];
 
         for (var i = 0; i < paths.length; i++) {
           path = paths[i];
@@ -124,9 +127,13 @@ var connect = {
       open: 'http://localhost:8002/index.php',
       port: 8002,
       middleware: function (connect, options) {
-        var middlewares = [proxyMiddleware, rewriteMiddleware, corsMiddleware],
+        var middlewares,
             paths = options.base,
-            path;
+            path,
+            rewriteMiddleware;
+
+        rewriteMiddleware = rewriteModule.getMiddleware(rewrites);
+        middlewares = [proxyMiddleware, rewriteMiddleware, corsMiddleware];
 
         for (var i = 0; i < paths.length; i++) {
           path = paths[i];
