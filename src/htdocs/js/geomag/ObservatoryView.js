@@ -35,12 +35,10 @@ var ObservatoryView = function (options) {
   _this = View(_options);
 
   _initialize = function () {
-    var el = _this.el,
-        hash;
+    var el = _this.el;
 
     _factory = _options.factory;
     _observatoryId = _options.observatoryId;
-    hash = _getHash();
 
     // Overview of a single observatory
     if (_observatoryId) {
@@ -64,8 +62,6 @@ var ObservatoryView = function (options) {
 
       _observatorySelect = el.querySelector('.observatories');
       _observatorySelect.addEventListener('change', function () {
-        // var value = _this.value.replace('observatory_', '');
-        // window.location.hash = '#' + value;
         window.location.hash = '#' + _observatoryId;
       });
 
@@ -89,7 +85,6 @@ var ObservatoryView = function (options) {
 
     for (var i = 0; i < data.length; i++) {
       observatory = data[i];
-      // _observatoryId = 'observatory_' + observatory.get('id');
       _observatoryId = observatory.get('id');
 
       markup.push([
@@ -136,12 +131,10 @@ var ObservatoryView = function (options) {
     // load observatories
     _factory.getObservatories({
       success: function (observatories) {
-        var hash = _getHash();
-
         if (_observatorySelect) {
           _buildObservatoryList(observatories);
 
-          if (!hash) {
+          if (!_getHash()) {
             if (window.location.replace) {
               window.location.replace('#' + observatories[0].get('id'));
             } else {
