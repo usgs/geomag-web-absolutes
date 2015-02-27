@@ -423,6 +423,8 @@ var ObservationView = function (options) {
       measurement.on('change:time', _getRealtimeData);
     });
 
+    _observation.on('change', _updateErrorCount);
+
     // bind to measurement change
     _observation.eachMeasurement(function (measurement) {
       measurement.on('change', _updateErrorCount);
@@ -515,8 +517,12 @@ var ObservationView = function (options) {
         errorDiv,
         measurementErrors,
         saveButton = el.querySelector('#saveButton'),
-        readingErrors, setNumber, list, header;
+        readingErrors, setNumber, list, header,
+        begin_error = _observation.get('begin_error');
 
+    if (begin_error !== null) {
+      errors.push('<li>' + begin_error + '</li>');
+    }
 
     _observation.eachReading(function (reading) {
 
