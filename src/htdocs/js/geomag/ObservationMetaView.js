@@ -7,6 +7,7 @@ var Collection = require('mvc/Collection'),
     User = require('geomag/User'),
     UserFactory = require('geomag/UserFactory'),
     Util = require('util/Util'),
+    Validate = require('geomag/Validate'),
     View = require('mvc/View');
 
 
@@ -78,7 +79,9 @@ var ObservationMetaView = function (options) {
       _formatMark,
       _formatPier,
       _onChange,
-      _setObservatory;
+      _setObservatory,
+      _updateErrorState,
+      _validateDate;
 
 
   _this = View(options);
@@ -345,21 +348,48 @@ var ObservationMetaView = function (options) {
    * Updated observation begin and pier_temperature attributes from form.
    */
   _onChange = function () {
-    var pierTemperature = _pierTemperature.value,
-        today = Date().getTime();
+    var error = null,
+        pierTemperature;
+
+    error = _validateDate(_date.value);
+    pierTemperature = _pierTemperature.value;
 
     pierTemperature = (pierTemperature === '' ?
         null : parseFloat(pierTemperature));
 
-    _observation.set({
-      begin: Format.parseDate(_date.value),
-      pier_temperature: pierTemperature
-    });
-
-    if (_date.value > today) {
-      _date.value = today;
+    if (error === null) {
+      // no errors on date, set date values
+      _observation.set({
+        begin: Format.parseDate(_date.value),
+        pier_temperature: pierTemperature
+      });
+    } else {
+      _observation.set({'date': error});
     }
+  };
 
+  _validateDate = function (date) {
+    var validDate = true,
+        helpText = null;
+
+    if (!Validate.validDate(date)) {
+      validDate = false;
+      helpText = 'Invalid Date. Future dates are not valid';
+    }
+    _updateErrorState(_date, validDate, helpText);
+    return helpText;
+  };
+
+  _updateErrorState = function (el, valid, helpText) {
+    if (valid){
+      // passes validation
+      el.classList.remove('error');
+      el.removeAttribute('title');
+    } else {
+      // does not pass validation
+      el.className = 'error';
+      el.title = helpText;
+    }
   };
 
   /**
