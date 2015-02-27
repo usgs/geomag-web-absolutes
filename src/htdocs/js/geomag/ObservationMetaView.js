@@ -371,7 +371,7 @@ var ObservationMetaView = function (options) {
 
     pierTemperature = _pierTemperature.value;
 
-     pierTemperature = (pierTemperature === '' ?
+    pierTemperature = (pierTemperature === '' ?
         null : parseFloat(pierTemperature));
    };
 
@@ -381,7 +381,7 @@ var ObservationMetaView = function (options) {
 
     if (!Validate.validDate(date)) {
       validDate = false;
-      helpText = 'Invalid Date. Future dates are not valid';
+      helpText = 'Invalid Date. Future dates are not valid.';
     }
     _updateErrorState(_date, validDate, helpText);
     return helpText;
