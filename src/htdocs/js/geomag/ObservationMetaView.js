@@ -462,9 +462,6 @@ var ObservationMetaView = function (options) {
   _this.render = function () {
     var begin = new Date(_observation.get('begin') || (new Date()).getTime()),
         begin_error = _observation.get('begin_error'),
-        // y = begin.getUTCFullYear(),
-        // m = begin.getUTCMonth() + 1,
-        // d = begin.getUTCDate(),
         observer = _observation.get('observer_user_id'),
         reviewer = _observation.get('reviewer_user_id');
 
@@ -475,8 +472,6 @@ var ObservationMetaView = function (options) {
       _julianDay.value = '';
     }
 
-    //_date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
-
     _pierTemperature.value = _observation.get('pier_temperature');
 
     _observerName.value = observer;
@@ -485,7 +480,6 @@ var ObservationMetaView = function (options) {
       _userFactory.get({
         data: {'id': observer},
         success: function (data) {
-          // replace observer_user_id with username once it is returned.
           _observerName.value = data.username;
         }
       });
@@ -496,7 +490,6 @@ var ObservationMetaView = function (options) {
       _userFactory.get({
         data: {'id': reviewer},
         success: function (data) {
-          // replace reviewer_user_id with username once it is returned.
           _reviewerName.value = data.username;
         }
       });
