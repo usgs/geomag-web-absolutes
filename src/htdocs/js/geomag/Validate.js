@@ -1,5 +1,7 @@
 'use strict';
 
+var Format = require('geomag/Formatter');
+
 var Validate = {
 
   validDegrees: function (value) {
@@ -30,6 +32,18 @@ var Validate = {
       return true;
     }
     return false;
+  },
+
+  validDate: function (value) {
+    var currentDate;
+
+    currentDate = new Date().getTime();
+    currentDate = Format.date(currentDate);
+
+    if (value > currentDate) {
+      return false;
+    }
+    return true;
   },
 
   isNull: function (value) {
