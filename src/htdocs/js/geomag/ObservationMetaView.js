@@ -78,7 +78,8 @@ var ObservationMetaView = function (options) {
       _formatInstrument,
       _formatMark,
       _formatPier,
-      _onChange,
+      _onDateChange,
+      _onPierTempChange,
       _setObservatory,
       _updateErrorState,
       _validateDate;
@@ -191,10 +192,11 @@ var ObservationMetaView = function (options) {
     _observerName = el.querySelector('.observer-name');
     _reviewerName = el.querySelector('.reviewer-name');
 
-    _date.addEventListener('change', _onChange);
+    _date.addEventListener('change', _onDateChange);
+
     // This makes sure the Julian day updates, among other things
     _observation.on('change', 'render', _this);
-    _pierTemperature.addEventListener('change', _onChange);
+    _pierTemperature.addEventListener('change', _onPierTempChange);
 
 
     _observatorySelectView.on('change', function (selected) {
@@ -347,27 +349,31 @@ var ObservationMetaView = function (options) {
    *
    * Updated observation begin and pier_temperature attributes from form.
    */
-  _onChange = function () {
-    var error = null,
-        pierTemperature;
+
+  _onDateChange = function () {
+    var error = null;
 
     error = _validateDate(_date.value);
-    pierTemperature = _pierTemperature.value;
-
-    pierTemperature = (pierTemperature === '' ?
-        null : parseFloat(pierTemperature));
 
     if (error === null) {
       // no errors on date, set date values
       _observation.set({
         begin: Format.parseDate(_date.value),
-        pier_temperature: pierTemperature,
         begin_error: null
       });
     } else {
       _observation.set({'begin_error': error});
     }
   };
+
+   _onPierTempChange = function () {
+    var pierTemperature;
+
+    pierTemperature = _pierTemperature.value;
+
+     pierTemperature = (pierTemperature === '' ?
+        null : parseFloat(pierTemperature));
+   };
 
   _validateDate = function (date) {
     var validDate = true,
