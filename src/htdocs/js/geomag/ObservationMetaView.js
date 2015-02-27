@@ -361,10 +361,11 @@ var ObservationMetaView = function (options) {
       // no errors on date, set date values
       _observation.set({
         begin: Format.parseDate(_date.value),
-        pier_temperature: pierTemperature
+        pier_temperature: pierTemperature,
+        begin_error: null
       });
     } else {
-      _observation.set({'date': error});
+      _observation.set({'begin_error': error});
     }
   };
 
@@ -460,14 +461,22 @@ var ObservationMetaView = function (options) {
 
   _this.render = function () {
     var begin = new Date(_observation.get('begin') || (new Date()).getTime()),
-        y = begin.getUTCFullYear(),
-        m = begin.getUTCMonth() + 1,
-        d = begin.getUTCDate(),
+        begin_error = _observation.get('begin_error'),
+        // y = begin.getUTCFullYear(),
+        // m = begin.getUTCMonth() + 1,
+        // d = begin.getUTCDate(),
         observer = _observation.get('observer_user_id'),
         reviewer = _observation.get('reviewer_user_id');
 
-    _date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
-    _julianDay.value = _this.getJulianDay(begin);
+    if (begin_error === null) {
+      _date.value = Format.date(begin);
+      _julianDay.value = _this.getJulianDay(begin);
+    } else {
+      _julianDay.value = '';
+    }
+
+    //_date.value = y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
+
     _pierTemperature.value = _observation.get('pier_temperature');
 
     _observerName.value = observer;
