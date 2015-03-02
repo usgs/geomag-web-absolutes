@@ -30,6 +30,7 @@ module.exports = function (grunt) {
 
     'jshint:test',
     'concurrent:test',
+    'concurrent:copytest',
     'connect:test',
     'mocha_phantomjs',
 
