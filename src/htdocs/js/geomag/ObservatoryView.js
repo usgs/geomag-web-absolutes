@@ -10,7 +10,8 @@ var Events = require('util/Events'),
 
 var _DEFAULTS = {
   observatoryId: null,
-  factory: ObservatoryFactory()
+  factory: ObservatoryFactory(),
+  user: null
 };
 
 
@@ -24,6 +25,7 @@ var ObservatoryView = function (options) {
       _observatorySelect,
       _observatoryTitle,
       _options,
+      _user,
 
       _buildObservatoryList,
       _getHash,
@@ -39,9 +41,10 @@ var ObservatoryView = function (options) {
 
     _factory = _options.factory;
     _observatoryId = _options.observatoryId;
+    _user = _options.user;
 
     // Overview of a single observatory
-    if (_observatoryId) {
+    if (_user.get('admin') !== 'Y') {
       el.innerHTML = [
         '<h2 class="observatory-title">Observatory #', _observatoryId, '</h2>',
         '<section class="observations-view"></section>',
@@ -81,14 +84,15 @@ var ObservatoryView = function (options) {
 
   _buildObservatoryList = function (data) {
     var markup = [],
-        observatory;
+        observatory,
+        observatoryId;
 
     for (var i = 0; i < data.length; i++) {
       observatory = data[i];
-      _observatoryId = observatory.get('id');
+      observatoryId = observatory.get('id');
 
       markup.push([
-        '<option value="', _observatoryId, '" id="', _observatoryId, '">',
+        '<option value="', observatoryId, '" id="', observatoryId, '">',
           observatory.get('name') ,
         '</option>'
       ].join(''));
