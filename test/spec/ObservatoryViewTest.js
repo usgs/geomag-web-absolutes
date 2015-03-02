@@ -3,6 +3,7 @@
 
 var observatories = require('./observatories'),
     ObservatoryView = require('geomag/ObservatoryView'),
+    User = require('geomag/User'),
     Xhr = require('util/Xhr');
 
 
@@ -11,7 +12,12 @@ var expect = chai.expect;
 var stub;
 
 var DEFAULTS = {
-  observatoryId: null
+  observatoryId: null,
+  user: User({
+    admin: 'Y',
+    enabled: 'Y',
+    username: 'test'
+  })
 };
 
 var observatoryView;
