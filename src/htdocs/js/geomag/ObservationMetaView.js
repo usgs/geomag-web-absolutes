@@ -368,7 +368,11 @@ var ObservationMetaView = function (options) {
 
     pierTemperature = (pierTemperature === '' ?
         null : parseFloat(pierTemperature));
-   };
+
+    _observation.set({
+      pier_temperature: pierTemperature
+    })
+  };
 
   _validateDate = function (date) {
     var validDate = true,
@@ -400,8 +404,8 @@ var ObservationMetaView = function (options) {
       el.removeAttribute('title');
     } else {
       // does not pass validation
-      el.className = 'error';
-      el.title = helpText;
+      el.classList.add('error');
+      el.setAttribute('title', 'helpText');
     }
   };
 
