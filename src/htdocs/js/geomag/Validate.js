@@ -1,7 +1,5 @@
 'use strict';
 
-var Format = require('geomag/Formatter');
-
 var Validate = {
 
   validDegrees: function (value) {
@@ -34,16 +32,12 @@ var Validate = {
     return false;
   },
 
+  /**
+   * @param value {Integer}
+   *      A timestamp in milliseconds from the epoch.
+   */
   validDate: function (value) {
-    var currentDate;
-
-    currentDate = new Date().getTime();
-    currentDate = Format.date(currentDate);
-
-    if (value > currentDate) {
-      return false;
-    }
-    return true;
+    return (value <= (new Date()).getTime());
   },
 
   isNull: function (value) {

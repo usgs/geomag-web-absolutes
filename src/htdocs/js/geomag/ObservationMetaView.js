@@ -351,19 +351,25 @@ var ObservationMetaView = function (options) {
    */
 
   _onDateChange = function () {
-    var error = null;
-
-    error = _validateDate(_date.value);
-
-    if (error === null) {
-      // no errors on date, set date values
+    try {
       _observation.set({
-        begin: Format.parseDate(_date.value),
+        begin: _validateDate(_date.value),
         begin_error: null
       });
-    } else {
-      _observation.set({'begin_error': error});
+    } catch (e) {
+      _observation.set({begin_error: e.message});
     }
+    // error = _validateDate(_date.value);
+    //
+    // if (error === null) {
+    //   // no errors on date, set date values
+    //   _observation.set({
+    //     begin: Format.parseDate(_date.value),
+    //     begin_error: null
+    //   });
+    // } else {
+    //   _observation.set({'begin_error': error});
+    // }
   };
 
    _onPierTempChange = function () {
@@ -379,12 +385,23 @@ var ObservationMetaView = function (options) {
     var validDate = true,
         helpText = null;
 
-    if (!Validate.validDate(date)) {
+    var parsedDate = Format.parseDate(date);
+
+    if (parsedDate === null) {
+      validDate = false;
+      helpText = 'Entered value does not look like a date. Format: YYYY-MM-DD';
+    } else if (!Validate.validDate(parsedDate)) {
       validDate = false;
       helpText = 'Invalid Date. Future dates are not valid.';
     }
+
     _updateErrorState(_date, validDate, helpText);
-    return helpText;
+
+    if (!validDate) {
+      throw new Error(helpText);
+    }
+
+    return parsedDate;
   };
 
   _updateErrorState = function (el, valid, helpText) {

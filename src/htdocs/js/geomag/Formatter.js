@@ -447,11 +447,19 @@ var nanoteslas = function (nT, digits) {
  * @return {Number} corresponding epoch timestamp (for 00:00:00), or null.
  */
 var parseDate = function (date) {
-  if (date !== '') {
-    var parts = date.split('-');
-    return Date.UTC(parseInt(parts[0], 10),
+  var parsedDate,
+      parts;
+
+  if (date !== '' && date.indexOf('-') !== -1) {
+    parts = date.split('-');
+
+    parsedDate = Date.UTC(parseInt(parts[0], 10),
         parseInt(parts[1], 10) - 1,
         parseInt(parts[2], 10));
+
+    if (!isNaN(parsedDate)) {
+      return parsedDate;
+    }
   }
   return null;
 };
