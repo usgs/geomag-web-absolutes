@@ -7,11 +7,10 @@ var ObservatoryView = require('geomag/ObservatoryView'),
 var id = observatoryId,
     user = User.getCurrentUser();
 
-if (user.get('admin') !== 'Y') {
-  id = parseInt(user.get('default_observatory_id'), 10);
-}
+id = parseInt(user.get('default_observatory_id'), 10);
 
 ObservatoryView({
   el: document.querySelector('.observatory-view'),
-  observatoryId: id
+  observatoryId: id,
+  user: user
 });

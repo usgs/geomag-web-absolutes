@@ -3,6 +3,7 @@
 
 var observatories = require('./observatories'),
     ObservatoryView = require('geomag/ObservatoryView'),
+    User = require('geomag/User'),
     Xhr = require('util/Xhr');
 
 
@@ -11,7 +12,12 @@ var expect = chai.expect;
 var stub;
 
 var DEFAULTS = {
-  observatoryId: null
+  observatoryId: null,
+  user: User({
+    admin: 'Y',
+    enabled: 'Y',
+    username: 'test'
+  })
 };
 
 var observatoryView;
@@ -46,22 +52,15 @@ describe('ObservatoryView Unit Tests', function () {
       expect(observatories.length).to.equal(15);
     });
 
-    it('can select an observatory by default', function () {
-      var all = observatoryView.el.querySelector('.observatories'),
-          selected = all.value;
-      expect(selected).to.equal('observatory_2');
-    });
-
   });
 
 
   describe('Event bindings', function () {
 
-    it('can select a default observatory', function () {
-      var container = observatoryView.el,
-          select = container.querySelector('.observatories'),
-          option = container.querySelector('#observatory_2');
-      expect(option.value).to.equal(select.value);
+    it('can get all observatories', function () {
+      var all = observatoryView.el.querySelector('.observatories');
+          observatories = all.querySelectorAll('option');
+      expect(observatories.length).to.equal(15);
     });
 
     it('can generate a hash change onClick', function () {
@@ -70,13 +69,12 @@ describe('ObservatoryView Unit Tests', function () {
           hashAfter = hashBefore;
 
       // change value and dispatch event, should update hash
-      select.value = 'observatory_1';
+      select.value = '1';
       select.dispatchEvent(getChangeEvent());
 
       hashAfter = window.location.hash;
 
       expect(hashBefore).to.not.equal(hashAfter);
-      expect(hashAfter).to.equal('#1');
     });
 
   });
