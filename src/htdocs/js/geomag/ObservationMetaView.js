@@ -359,17 +359,6 @@ var ObservationMetaView = function (options) {
     } catch (e) {
       _observation.set({begin_error: e.message});
     }
-    // error = _validateDate(_date.value);
-    //
-    // if (error === null) {
-    //   // no errors on date, set date values
-    //   _observation.set({
-    //     begin: Format.parseDate(_date.value),
-    //     begin_error: null
-    //   });
-    // } else {
-    //   _observation.set({'begin_error': error});
-    // }
   };
 
    _onPierTempChange = function () {
