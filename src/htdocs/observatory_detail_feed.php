@@ -21,8 +21,7 @@ try {
   // 09/04/12 -- EMM: This exception is for testing client-side error handling.
   //                  Remove it for production.
   // throw new Exception('foo');
-  $json = str_replace('\"', '"', json_encode($OBSERVATORY_FACTORY->
-      getObservatory($id)));
+  $json = json_encode($OBSERVATORY_FACTORY->getObservatory($id));
   if (isset($_REQUEST['callback'])) {
     header('Content-Type: text/javascript');
     echo $_REQUEST['callback'] . '(' . $json . ');';
