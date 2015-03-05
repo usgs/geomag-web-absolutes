@@ -2,6 +2,7 @@
 'use strict';
 
 var observatories = require('./observatories'),
+    observatory1 = require('./observatory1'),
     ObservatoryView = require('geomag/ObservatoryView'),
     User = require('geomag/User'),
     Xhr = require('util/Xhr');
@@ -32,7 +33,13 @@ describe('ObservatoryView Unit Tests', function () {
 
   before(function () {
     stub = sinon.stub(Xhr, 'ajax', function (options) {
-      options.success(observatories);
+      var url = options.url;
+
+      if (url === '/observatory_summary_feed.php') {
+        options.success(observatories);
+      } else if (url === '/observatory_detail_feed.php') {
+        options.success(observatory1);
+      }
     });
 
     observatoryView = ObservatoryView(DEFAULTS);
