@@ -21,6 +21,7 @@ var ObservatoryView = function (options) {
 
       _factory,
       _observationsView,
+      _observatories,
       _observatoryId,
       _observatorySelect,
       _observatoryTitle,
@@ -30,6 +31,7 @@ var ObservatoryView = function (options) {
       _buildObservatoryList,
       _getHash,
       _getObservatories,
+      _getObservatoryId,
       _getObservations,
       _setObservatoryTitle;
 
@@ -65,7 +67,7 @@ var ObservatoryView = function (options) {
 
       _observatorySelect = el.querySelector('.observatories');
       _observatorySelect.addEventListener('change', function () {
-        window.location.hash = '#' + _observatoryId;
+        window.location.hash = '#' + _observatorySelect.value;
       });
 
       // Gets observatories and then renders observations for either...
@@ -120,35 +122,47 @@ var ObservatoryView = function (options) {
     return hash;
   };
 
+  _getObservatoryId = function () {
+    var id = _getHash();
+
+    if (id === null) {
+      id = _observatoryId;
+    }
+
+    if (id === null) {
+      id = _observatories[0].get('id');
+    }
+
+    return id;
+  };
+
   _getObservations = function () {
     _observationsView = null;
 
-    if (typeof _observatoryId !== 'undefined' && _observatoryId !== null) {
-      _observationsView = ObservationsView({
-          el: _this.el.querySelector('.observations-view'),
-          observatoryId: _observatoryId
-      });
-    }
+    _observationsView = ObservationsView({
+        el: _this.el.querySelector('.observations-view'),
+        observatoryId: _getObservatoryId()
+    });
   };
 
   _getObservatories = function () {
     // load observatories
     _factory.getObservatories({
       success: function (observatories) {
-        if (_observatorySelect) {
-          _buildObservatoryList(observatories);
+        _observatories = observatories;
 
-          if (!_getHash()) {
-            if (window.location.replace) {
-              window.location.replace('#' + observatories[0].get('id'));
-            } else {
-              window.location.hash = '#' + observatories[0].get('id');
-            }
+        if (_observatorySelect) {
+          _buildObservatoryList(_observatories);
+
+          if (window.location.replace) {
+            window.location.replace('#' + _getObservatoryId());
           } else {
-            _this.render();
+            window.location.hash = '#' + _getObservatoryId();
           }
+
+          _this.render();
         } else {
-          _setObservatoryTitle(observatories);
+          _setObservatoryTitle(_observatories);
         }
       }
     });
@@ -170,9 +184,7 @@ var ObservatoryView = function (options) {
 
 
   _this.render = function () {
-    if (_observatorySelect && _observatoryId) {
-      _observatorySelect.value = _observatoryId;
-    }
+    _observatorySelect.value = _getObservatoryId();
 
     _getObservations();
   };
