@@ -279,7 +279,7 @@ var ObservationSummaryView = function (options) {
 
       // insert view
       if (reading.get('declination_valid') === 'Y') {
-        baselineD.push(_calculator.dBaseline(reading));
+        baselineD.push(_calculator.dBaseline(reading)*60);
         eBaseline.push(_calculator.eBaseline(reading));
       }
     }
