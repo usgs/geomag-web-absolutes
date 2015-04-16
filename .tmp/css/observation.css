@@ -1,0 +1,825 @@
+/* line 2, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist,
+.tablist > nav,
+.tablist-tab,
+.tablist-container,
+.tablist-panel,
+.tablist-backward-button,
+.tab-position-indicator,
+.tablist-forward-button {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 19, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tab-position-indicator {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  width: 60px;
+  margin-left: -30px;
+  text-align: center;
+  padding: 1px;
+  border-radius: 1em;
+  text-shadow: 0 1px 0 #fff;
+  z-index: 1;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+  background: #f0f0f0;
+  color: #666;
+  border: 1px solid #999;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* line 42, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist {
+  position: relative;
+  margin: 1em 0 0;
+}
+/* line 47, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist span.fade {
+  -webkit-transition-property: opacity, visibility;
+  -webkit-transition-duration: .25s, 0s;
+  -webkit-transition-delay: .75s, 1s;
+  -webkit-transition-timing-function: ease-out, linear;
+  transition-property: opacity, visibility;
+  transition-duration: .25s, 0s;
+  transition-delay: .75s, 1s;
+  transition-timing-function: ease-out, linear;
+  opacity: 0;
+  visibility: collapse;
+}
+/* line 64, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist > .tablist-container {
+  padding: 0 34px;
+  width: 100%;
+  overflow: hidden;
+  border-top: 1px solid #ddd;
+  background: #f9f9f9;
+}
+/* line 72, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist > .tablist-container > nav {
+  display: block;
+  position: relative;
+  white-space: nowrap;
+  bottom: 1px;
+  z-index: 1;
+  line-height: 1.5;
+}
+/* line 80, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist > .tablist-container > nav.smooth {
+  transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+}
+/* line 86, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist > .tablist-container > nav > .tablist-tab-selected {
+  box-shadow: none;
+}
+/* line 90, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist > .tablist-container > nav > .tablist-tab-selected:after {
+  position: absolute;
+  content: '';
+  margin-bottom: -1px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  z-index: 1;
+}
+/* line 105, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist > .tablist-container:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+/* line 111, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist > .tablist-container img {
+  max-width: 100%;
+}
+
+/* line 119, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-tab {
+  display: inline-block;
+  border-right: 1px solid #ccc;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  color: #333;
+  background: #ededed;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 40px;
+  text-shadow: 0 1px 1px #fff;
+}
+/* line 133, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-tab:first-child {
+  border-left: 1px solid #ddd;
+}
+/* line 137, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-tab:focus {
+  outline: none;
+}
+/* line 141, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-tab:hover {
+  text-decoration: underline;
+}
+
+/* line 147, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-tab-selected {
+  position: relative;
+  color: #000;
+  background: #fff;
+}
+/* line 152, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-tab-selected:focus {
+  text-decoration: underline;
+  color: #000;
+}
+/* line 157, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-tab-selected:hover {
+  text-decoration: none;
+}
+
+/* line 164, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-panel {
+  padding: 0 1em 1em;
+  border: 1px solid #ddd;
+  margin-bottom: 8px;
+  position: relative;
+  top: -1px;
+  display: none;
+}
+/* line 175, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-panel img {
+  max-width: 100%;
+}
+
+/* line 181, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-panel-selected {
+  display: block;
+}
+
+/* line 185, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-backward-button,
+.tablist-forward-button {
+  position: absolute;
+  top: 0;
+  display: block;
+  height: 41px;
+  width: 35px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background: #fff;
+  z-index: 10;
+}
+/* line 197, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-backward-button > .image,
+.tablist-forward-button > .image {
+  position: absolute;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAABOCAYAAACUlsCTAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAH5JREFUeNrs2UENgDAQRcENCpBQCUjDEZIqBQmwB0gawo0T2ZnkG3jppW0EAAAAAAAAb5oEEVtuzy3VIxzXysZYhwilY8y5LoYYYoghhhhiiCGGGDViTC7FToMIIogggggiiCCCCH/jOX/gg+cRo3yEW5MAAAAAAADgm1OAAQAnKpPP/4VJ5gAAAABJRU5ErkJggg==);
+  background-size: 33px 39px;
+  background-position: 0;
+  background-repeat: no-repeat;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.6;
+  z-index: 3;
+}
+
+/* line 213, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-backward-button {
+  left: 0;
+  box-shadow: 3px 0 1px rgba(0, 0, 0, 0.07);
+}
+/* line 217, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-backward-button > .image {
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  filter: FlipH;
+  -ms-filter: "FlipH";
+}
+
+/* line 227, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+.tablist-forward-button {
+  right: 0;
+  box-shadow: -3px 0 1px rgba(0, 0, 0, 0.07);
+}
+
+@media print {
+  /* line 233, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+  .tablist-container,
+  .tab-position-indicator,
+  .tablist-forward-button,
+  .tablist-backward-button {
+    display: none;
+  }
+
+  /* line 240, ../../node_modules/hazdev-tablist/src/tablist/TabList.scss */
+  .tablist-panel {
+    border-color: #ddd;
+  }
+}
+/* line 1, ../../src/htdocs/css/_Formatter.scss */
+.units {
+  padding-left: 3px;
+}
+
+/* line 1, ../../src/htdocs/css/_ReadingView.scss */
+.reading-group-view {
+  margin: 1em 0;
+}
+
+/* line 6, ../../src/htdocs/css/_ReadingView.scss */
+.reading-view > .row {
+  border-bottom: 1px solid #aaa;
+}
+
+/* line 15, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input .first-mark-down th, .declination-input .first-mark-down td,
+.declination-input .east-up th,
+.declination-input .east-up td {
+  padding-bottom: 1em;
+}
+/* line 24, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input .first-mark-up > .measurement-time > input,
+.declination-input .first-mark-up > .measurement-e,
+.declination-input .first-mark-down > .measurement-time > input,
+.declination-input .first-mark-down > .measurement-e,
+.declination-input .second-mark-up > .measurement-time > input,
+.declination-input .second-mark-up > .measurement-e,
+.declination-input .second-mark-down > .measurement-time > input,
+.declination-input .second-mark-down > .measurement-e {
+  display: none;
+}
+/* line 30, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input .measurement-h,
+.declination-input .measurement-z,
+.declination-input .measurement-f {
+  display: none;
+}
+
+/* line 38, ../../src/htdocs/css/_ReadingView.scss */
+.inclination-input .measurement-e {
+  display: none;
+}
+
+/* line 43, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input,
+.inclination-input {
+  margin-bottom: 1em;
+  float: left;
+}
+/* line 48, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input table,
+.inclination-input table {
+  margin-right: 2em;
+}
+/* line 51, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input table .units,
+.inclination-input table .units {
+  display: none;
+}
+/* line 55, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input table > thead > tr > th > small,
+.inclination-input table > thead > tr > th > small {
+  font-size: 0.7em;
+  font-weight: normal;
+  margin-left: -2px;
+}
+/* line 62, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input tbody th,
+.inclination-input tbody th {
+  text-align: left;
+  padding-right: 0.5em;
+}
+/* line 67, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input input,
+.inclination-input input {
+  width: 4em;
+}
+/* line 70, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input .measurement-time > input,
+.inclination-input .measurement-time > input {
+  width: 6em;
+}
+/* line 77, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input .measurement-degrees > input,
+.declination-input .measurement-minutes > input,
+.declination-input .measurement-seconds > input,
+.inclination-input .measurement-degrees > input,
+.inclination-input .measurement-minutes > input,
+.inclination-input .measurement-seconds > input {
+  text-align: center;
+}
+/* line 82, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input .measurement-seconds,
+.inclination-input .measurement-seconds {
+  padding-right: 1em;
+}
+/* line 86, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input .measurement-h,
+.declination-input .measurement-z,
+.inclination-input .measurement-h,
+.inclination-input .measurement-z {
+  padding-right: 0.5em;
+}
+/* line 91, ../../src/htdocs/css/_ReadingView.scss */
+.declination-input td.measurement-h,
+.declination-input td.measurement-e,
+.declination-input td.measurement-z,
+.declination-input td.measurement-f,
+.inclination-input td.measurement-h,
+.inclination-input td.measurement-e,
+.inclination-input td.measurement-z,
+.inclination-input td.measurement-f {
+  font-size: smaller;
+  text-align: center;
+}
+
+/* line 100, ../../src/htdocs/css/_ReadingView.scss */
+.declination-output,
+.inclination-output {
+  float: left;
+  margin-bottom: 1em;
+  padding: 1em;
+  border: 1px solid #d8d8d8;
+  background: #f8f8f8;
+}
+
+/* line 9, ../../src/htdocs/css/_ObservationMetaView.scss */
+.observation-meta-view .top-aligned > label,
+.observation-meta-view .top-aligned > .label,
+.observation-meta-view .left-aligned > label,
+.observation-meta-view .left-aligned > .label,
+.observation-meta-view .right-aligned > label,
+.observation-meta-view .right-aligned > .label {
+  padding: 0;
+  margin: 0;
+  display: block;
+  font-weight: bold;
+  padding-right: 5px;
+  line-height: 1.9;
+}
+/* line 19, ../../src/htdocs/css/_ObservationMetaView.scss */
+.observation-meta-view .top-aligned > input,
+.observation-meta-view .top-aligned > select,
+.observation-meta-view .top-aligned > textarea,
+.observation-meta-view .top-aligned > .value,
+.observation-meta-view .left-aligned > input,
+.observation-meta-view .left-aligned > select,
+.observation-meta-view .left-aligned > textarea,
+.observation-meta-view .left-aligned > .value,
+.observation-meta-view .right-aligned > input,
+.observation-meta-view .right-aligned > select,
+.observation-meta-view .right-aligned > textarea,
+.observation-meta-view .right-aligned > .value {
+  margin-bottom: 1em;
+}
+/* line 26, ../../src/htdocs/css/_ObservationMetaView.scss */
+.observation-meta-view .top-aligned > textarea,
+.observation-meta-view .left-aligned > textarea,
+.observation-meta-view .right-aligned > textarea {
+  width: 100%;
+}
+/* line 31, ../../src/htdocs/css/_ObservationMetaView.scss */
+.observation-meta-view .julian-day-value {
+  padding: 0.5em;
+  font-size: 0.75em;
+  background: #f8f8f8;
+  width: 3em;
+  margin-left: 2px;
+  text-align: center;
+}
+@media screen and (min-width: 768px) {
+  /* line 44, ../../src/htdocs/css/_ObservationMetaView.scss */
+  .observation-meta-view .left-aligned > label,
+  .observation-meta-view .left-aligned > .label,
+  .observation-meta-view .right-aligned > label,
+  .observation-meta-view .right-aligned > .label {
+    float: left;
+    clear: left;
+    width: 7em;
+    padding-right: 8px;
+  }
+  /* line 52, ../../src/htdocs/css/_ObservationMetaView.scss */
+  .observation-meta-view .left-aligned > input,
+  .observation-meta-view .left-aligned > select,
+  .observation-meta-view .left-aligned > textarea,
+  .observation-meta-view .left-aligned > .value,
+  .observation-meta-view .right-aligned > input,
+  .observation-meta-view .right-aligned > select,
+  .observation-meta-view .right-aligned > textarea,
+  .observation-meta-view .right-aligned > .value {
+    float: left;
+    margin-bottom: 5px;
+  }
+  /* line 60, ../../src/htdocs/css/_ObservationMetaView.scss */
+  .observation-meta-view .left-aligned:after,
+  .observation-meta-view .right-aligned:after {
+    display: block;
+    content: ' ';
+    clear: both;
+  }
+  /* line 68, ../../src/htdocs/css/_ObservationMetaView.scss */
+  .observation-meta-view .right-aligned > label,
+  .observation-meta-view .right-aligned > .label {
+    text-align: right;
+  }
+}
+
+/* line 3, ../../src/htdocs/css/_ObservationView.scss */
+.observation-view .tablist {
+  border-color: #aaa;
+}
+/* line 6, ../../src/htdocs/css/_ObservationView.scss */
+.observation-view .tablist .tablist-backward-button,
+.observation-view .tablist .tablist-forward-button,
+.observation-view .tablist .tablist-container,
+.observation-view .tablist .tablist-panel,
+.observation-view .tablist .tablist-tab {
+  border-color: #aaa;
+}
+/* line 14, ../../src/htdocs/css/_ObservationView.scss */
+.observation-view .tablist .tablist-panel {
+  padding: 0 1em;
+}
+/* line 18, ../../src/htdocs/css/_ObservationView.scss */
+.observation-view .tablist .row {
+  margin: 0;
+}
+
+/* line 5, ../../src/htdocs/css/_DeclinationView.scss */
+.declination-view > dl {
+  margin: 0;
+}
+/* line 8, ../../src/htdocs/css/_DeclinationView.scss */
+.declination-view > dl > dt {
+  float: left;
+  clear: left;
+  width: 13em;
+  font-weight: bold;
+  margin-top: 4px;
+}
+/* line 16, ../../src/htdocs/css/_DeclinationView.scss */
+.declination-view > dl > dd {
+  float: left;
+  width: 6em;
+  text-align: right;
+  margin-top: 4px;
+  margin-left: 1em;
+}
+/* line 22, ../../src/htdocs/css/_DeclinationView.scss */
+.declination-view > dl > dd .degrees-minutes {
+  display: block;
+}
+/* line 29, ../../src/htdocs/css/_DeclinationView.scss */
+.declination-view .west-up-minus-east-down,
+.declination-view .west-up-minus-east-down-value {
+  padding-top: 10px;
+}
+
+/* line 5, ../../src/htdocs/css/_InclinationView.scss */
+.inclination-view > dl {
+  margin: 0;
+}
+/* line 8, ../../src/htdocs/css/_InclinationView.scss */
+.inclination-view > dl > dt {
+  float: left;
+  clear: left;
+  width: 12em;
+  font-weight: bold;
+  margin-top: 4px;
+}
+/* line 16, ../../src/htdocs/css/_InclinationView.scss */
+.inclination-view > dl > dd {
+  float: left;
+  width: 6em;
+  text-align: right;
+  margin-top: 4px;
+  margin-left: 1em;
+}
+/* line 23, ../../src/htdocs/css/_InclinationView.scss */
+.inclination-view > dl > dd .degrees-minutes {
+  display: block;
+}
+/* line 30, ../../src/htdocs/css/_InclinationView.scss */
+.inclination-view .south-down-minus-north-up,
+.inclination-view .south-down-minus-north-up-value {
+  padding-top: 10px;
+}
+
+/* line 3, ../../src/htdocs/css/_MagnetometerOrdinatesView.scss */
+.magnetometer-ordinates-output .channel,
+.magnetometer-ordinates-output .mean,
+.magnetometer-ordinates-output .absolute,
+.magnetometer-ordinates-output .baseline {
+  padding-right: 16px;
+}
+/* line 10, ../../src/htdocs/css/_MagnetometerOrdinatesView.scss */
+.magnetometer-ordinates-output table {
+  padding: 1em;
+  border: 1px solid #d8d8d8;
+  background: #f8f8f8;
+}
+/* line 16, ../../src/htdocs/css/_MagnetometerOrdinatesView.scss */
+.magnetometer-ordinates-output td.mean,
+.magnetometer-ordinates-output td.absolute,
+.magnetometer-ordinates-output td.baseline {
+  text-align: right;
+}
+/* line 22, ../../src/htdocs/css/_MagnetometerOrdinatesView.scss */
+.magnetometer-ordinates-output .dMean,
+.magnetometer-ordinates-output .scaleValue {
+  font-style: italic;
+}
+/* line 27, ../../src/htdocs/css/_MagnetometerOrdinatesView.scss */
+.magnetometer-ordinates-output .pier-correction-value {
+  padding-left: 7px;
+}
+/* line 30, ../../src/htdocs/css/_MagnetometerOrdinatesView.scss */
+.magnetometer-ordinates-output .pier-correction {
+  font-size: smaller;
+}
+/* line 33, ../../src/htdocs/css/_MagnetometerOrdinatesView.scss */
+.magnetometer-ordinates-output .pier-correction td {
+  padding-top: 1em;
+}
+
+/* line 2, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view > table {
+  width: 100%;
+}
+/* line 12, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view .declination-summary > tfoot > tr:first-child > th,
+.observation-summary-view .declination-summary > tfoot > tr:first-child > td,
+.observation-summary-view .horizontal-summary > tfoot > tr:first-child > th,
+.observation-summary-view .horizontal-summary > tfoot > tr:first-child > td,
+.observation-summary-view .vertical-summary > tfoot > tr:first-child > th,
+.observation-summary-view .vertical-summary > tfoot > tr:first-child > td {
+  padding-top: 1em;
+}
+/* line 17, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view .declination-summary > tfoot > tr > th,
+.observation-summary-view .declination-summary > tfoot > tr > td,
+.observation-summary-view .horizontal-summary > tfoot > tr > th,
+.observation-summary-view .horizontal-summary > tfoot > tr > td,
+.observation-summary-view .vertical-summary > tfoot > tr > th,
+.observation-summary-view .vertical-summary > tfoot > tr > td {
+  text-align: right;
+}
+/* line 25, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view hr {
+  height: 0;
+  border: 0;
+  border-top: 1px solid #aaa;
+  margin: 1em 0;
+}
+/* line 32, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view textarea {
+  margin: 1.6rem 0;
+}
+/* line 37, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view .temperature-view th {
+  width: 7em;
+  text-align: left;
+}
+/* line 43, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view .reviewer > label {
+  font-weight: bold;
+}
+/* line 46, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view .reviewer > div {
+  font-weight: bold;
+}
+/* line 48, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view .reviewer > div > span {
+  font-weight: normal;
+}
+/* line 52, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view .reviewer > textarea {
+  width: 100%;
+  height: 5em;
+}
+/* line 63, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view .declination-summary-view .valid,
+.observation-summary-view .declination-summary-view .start-time,
+.observation-summary-view .declination-summary-view .end-time,
+.observation-summary-view .declination-summary-view .observer,
+.observation-summary-view .declination-summary-view .shift,
+.observation-summary-view .horizontal-intensity-summary-view .valid,
+.observation-summary-view .horizontal-intensity-summary-view .start-time,
+.observation-summary-view .horizontal-intensity-summary-view .end-time,
+.observation-summary-view .horizontal-intensity-summary-view .observer,
+.observation-summary-view .horizontal-intensity-summary-view .shift,
+.observation-summary-view .vertical-intensity-summary-view .valid,
+.observation-summary-view .vertical-intensity-summary-view .start-time,
+.observation-summary-view .vertical-intensity-summary-view .end-time,
+.observation-summary-view .vertical-intensity-summary-view .observer,
+.observation-summary-view .vertical-intensity-summary-view .shift {
+  text-align: center;
+}
+/* line 72, ../../src/htdocs/css/_ObservationSummaryView.scss */
+.observation-summary-view .declination-summary-view .absolute-declination,
+.observation-summary-view .declination-summary-view .ord-min,
+.observation-summary-view .declination-summary-view .baseline-min,
+.observation-summary-view .declination-summary-view .baseline-nt,
+.observation-summary-view .declination-summary-view .abs-value,
+.observation-summary-view .declination-summary-view .ord,
+.observation-summary-view .declination-summary-view .baseline-values,
+.observation-summary-view .horizontal-intensity-summary-view .absolute-declination,
+.observation-summary-view .horizontal-intensity-summary-view .ord-min,
+.observation-summary-view .horizontal-intensity-summary-view .baseline-min,
+.observation-summary-view .horizontal-intensity-summary-view .baseline-nt,
+.observation-summary-view .horizontal-intensity-summary-view .abs-value,
+.observation-summary-view .horizontal-intensity-summary-view .ord,
+.observation-summary-view .horizontal-intensity-summary-view .baseline-values,
+.observation-summary-view .vertical-intensity-summary-view .absolute-declination,
+.observation-summary-view .vertical-intensity-summary-view .ord-min,
+.observation-summary-view .vertical-intensity-summary-view .baseline-min,
+.observation-summary-view .vertical-intensity-summary-view .baseline-nt,
+.observation-summary-view .vertical-intensity-summary-view .abs-value,
+.observation-summary-view .vertical-intensity-summary-view .ord,
+.observation-summary-view .vertical-intensity-summary-view .baseline-values {
+  text-align: right;
+}
+
+/* line 1, ../../src/htdocs/css/_ModalView.scss */
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  padding: 56px 0 61px;
+  background-color: #EEE;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 9999;
+  overflow-y: auto;
+  font-size: .95em;
+}
+
+/* line 11, ../../src/htdocs/css/_ModalView.scss */
+.modal-dialog {
+  position: relative;
+  width: 90%;
+  max-width: 304px;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  background-color: #FFF;
+}
+
+/* line 20, ../../src/htdocs/css/_ModalView.scss */
+.modal-header {
+  padding: 0 36px 0 0;
+  /* Space on right for close link [X]*/
+  background-color: #DDD;
+  border-bottom: 1px solid #999;
+  color: #333;
+}
+
+/* line 26, ../../src/htdocs/css/_ModalView.scss */
+.modal-title {
+  margin: 0;
+  padding: 10px 16px;
+  outline: 0;
+}
+
+/* line 31, ../../src/htdocs/css/_ModalView.scss */
+.modal-close-link {
+  display: block;
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 25px;
+  height: 24px;
+  color: #fff;
+  font: bold 18px/1.2 'Arial';
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  background: #BBB;
+  border: 1px solid #999;
+}
+
+/* line 48, ../../src/htdocs/css/_ModalView.scss */
+.modal-close-link:hover {
+  color: #C10C0C;
+}
+
+/* line 49, ../../src/htdocs/css/_ModalView.scss */
+.modal-content {
+  margin: 0 0 0 16px;
+  padding: 8px 16px 4px 0;
+  max-height: 540px;
+  overflow-y: auto;
+}
+
+/* line 55, ../../src/htdocs/css/_ModalView.scss */
+.modal-footer {
+  padding: 4px 0 8px;
+  margin: 4px 12px 0;
+}
+
+/* line 59, ../../src/htdocs/css/_ModalView.scss */
+.modal-error > .modal-header > .modal-title,
+.modal-warning > .modal-header > .modal-title,
+.modal-success > .modal-header > .modal-title {
+  padding-left: 6px;
+}
+
+/* line 64, ../../src/htdocs/css/_ModalView.scss */
+.modal-error > .modal-header,
+.modal-warning > .modal-header,
+.modal-success > .modal-header {
+  padding-left: 36px;
+  /* Move text over so more room for icon */
+  background-repeat: no-repeat;
+  /* Success Image */
+  background-position: 6px 6px;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAidJREFUeNrsVz1PAkEQ3b0DtAFJsLGDRO1MUCs7KjsTC3+AlBYkd4WFFVBZWHAJhSVY2ZjgPxAbrVQSKz8KKitIEArlgDvzSMC95RbvDpHG15Ahu+8xHzszUNM0ySwgkRlhZsI+1qCUCg9GNPlYl829T58Z7Uim5Z7foN35Lq0GevSirvSORBxsWqnFsBFe1GTlfc444cVEwI9YaEuHNaWneRYO5aX7ZsBY9xLKkC49NFPGhkhYmONgXnrxKgrgLjhcFRc8bQWM5UkLCBzgciSMnHrxdDe6S0rbJXK1c0WUNcXiOTjHVjWAQnIrWkgUyP7q/tA+ezqz49SEHuPJOK3eAeAdK5osJ0nxuWg5A05wC4XxTt2IxiNxktvKDW31Vh0RFXFbhNEc3IZ4AAhqj5rwLM8t8SFxKprZzPQ9BqqtKlFv1LHneW5PvToajJL0Zvo7r9dJ0tAb0x8SbIgvq5ek/Fb+/ekE79i3ifeaWEpYCmri6YQGz+YCYghpOBDu57PRblhCnL3L9vPrdHgIPcZoY22EEKIAPhFiRABATsdVMQ+e2yKMecralXql3xDsUHwquioonntkLPpPaYcvfTQJtv8CsfOYqzB3Dkz/2LGIIc5/h1zCe7ZZOBUVcdouAnYLAHI7yG+lVnEcZnYhcLSBYIhPOpODuvTaShkrrjYQXMCv9SqKu6yoqwaCEC1+yCr/Bn8qJNzh9y1HOf7z9fb/L8w08SXAANhQMS2GAi+8AAAAAElFTkSuQmCC");
+}
+
+/* line 74, ../../src/htdocs/css/_ModalView.scss */
+.modal-error > .modal-header {
+  /* Error Image */
+  background-position: 6px 6px;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAUtJREFUeNrsV90RgjAMbj0f5XQDcQ9/cAIcgY6hA8ijbIAjyATgzx7qBnr6jsHrAwhpVYjwYO5yvR5tv3xJkwYexzGrQ1qsJqkNuJ2ecM7RhdtOZwaDDWqBmi+fT6ARaDC53zfYGemw8sykABgAEyC/AAyTxAgBBkQqYKWrAXQFQ/gBKJNrQ7kXFZQxbExYOiVDuQbm4m3G0lqngjvkYMxzjGVMw4ov8TSJuY6xT5A9vjKPZcqYBMCmPBtlbBPWDFsFbBECW2jlenVzf7FgveHwK5TL4cDOyyV6dhvb2BuNWH8+/5peF/Zf93t2AW3uI5FxFVh6dt1SrsbY5grIzjCOROn0fDzGt9sAc3VE6N1IFeOAEDjQ1WoKd5+gVg90tVoQsBXadJKdg1chqFfUjTSrEZDMRUnmXhr0bcbUzZ4W+Cft7f8XhlIeAgwA18yeF8BNYgAAAAAASUVORK5CYII=");
+}
+
+/* line 79, ../../src/htdocs/css/_ModalView.scss */
+.modal-warning > .modal-header {
+  /* Warning Image */
+  background-position: 6px 3px;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAaFJREFUeNrsl7FOwzAQQM+IGZURpIqyIbGkI10IG2Mm5nxC/qD5A39COjMxsqUsMKZ/QBASrBE/YM7pBVLHDo7T0AFOusZ17Xs+3/mcMiEE7EL2YEfy98DgGmPxBrFUZ6YLGIETVEE6cQG7bnViaA+31ehhUPO20qArk5UfjNlCR/jIUNXtzVGn7BiKobY60kCB+qIuhqw9Rm898hYWtwAvr+v+kzFAePM1THq92mpWIzitYurPQE4qVbZrsU63utVoMMSHr/ttdLDx1aex/SsXJRQ3wbzzxhROc3qXzLlk1Ts0sI110Rx3MCVU5FAeIprr7HEC7pI4gXHF0lOvB9gjG/ZgSo65jfXLWXt+mBLN5DFXE6oDTE00bgXGFcrz2noW5XHCwlGqco51EpLN9pKJg7KesdXJCkvptF659tW3Chvo8gng4fF72/0Lq0SLER43PKY3iawttlKKD4DDs0Z4bKSgSyRXazX/CaormRYx1iZa6TG8Mxn81NZCjlfi3f26HVzjZTzuFO8rOBLLCvxsuOCHkBzBp+z/L8xvyacAAwAbycjAG3fSqgAAAABJRU5ErkJggg==");
+}
+
+/* line 1, ../../src/htdocs/css/_Alerts.scss */
+.alert {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 10px 15px;
+  background: #ebf7fd;
+  color: #2d7091;
+  border: 1px solid rgba(45, 112, 145, 0.3);
+  border-radius: 4px;
+  text-shadow: 0 1px 0 #fff;
+}
+/* line 11, ../../src/htdocs/css/_Alerts.scss */
+.alert > header {
+  border-bottom: 1px solid rgba(45, 112, 145, 0.3);
+  padding: 3px 0 10px 5px;
+  font-weight: bold;
+  font-size: 18px;
+}
+/* line 18, ../../src/htdocs/css/_Alerts.scss */
+.alert > ul {
+  margin: 15px 0 5px;
+  padding: 0 0 0 25px;
+}
+
+/* line 24, ../../src/htdocs/css/_Alerts.scss */
+.alert.success {
+  background: #f2fae3;
+  color: #659f13;
+  border: 1px solid rgba(101, 159, 19, 0.3);
+}
+/* line 29, ../../src/htdocs/css/_Alerts.scss */
+.alert.success > header {
+  border-bottom: 1px solid rgba(101, 159, 19, 0.3);
+}
+
+/* line 34, ../../src/htdocs/css/_Alerts.scss */
+.alert.error,
+input.error {
+  background: #fff1f0;
+  color: #d85030;
+  border: 1px solid rgba(216, 80, 48, 0.3);
+}
+/* line 40, ../../src/htdocs/css/_Alerts.scss */
+.alert.error > header,
+input.error > header {
+  border-bottom: 1px solid rgba(216, 80, 48, 0.3);
+}
+
+/* line 45, ../../src/htdocs/css/_Alerts.scss */
+.alert.warning {
+  background: #fffceb;
+  color: #e28327;
+  border: 1px solid rgba(226, 131, 39, 0.3);
+}
+/* line 50, ../../src/htdocs/css/_Alerts.scss */
+.alert.warning > header {
+  border-bottom: 1px solid rgba(226, 131, 39, 0.3);
+}

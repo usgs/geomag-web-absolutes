@@ -1,0 +1,19 @@
+/* line 1, ../../src/htdocs/css/tabular.scss */
+.tabular {
+  float: left;
+}
+/* line 4, ../../src/htdocs/css/tabular.scss */
+.tabular > dt {
+  float: left;
+  clear: left;
+}
+/* line 9, ../../src/htdocs/css/tabular.scss */
+.tabular > dd {
+  float: left;
+}
+/* line 13, ../../src/htdocs/css/tabular.scss */
+.tabular:after {
+  display: block;
+  content: ' ';
+  clear: left;
+}

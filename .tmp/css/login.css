@@ -1,0 +1,15 @@
+/* line 1, ../../src/htdocs/css/login.scss */
+.error {
+  color: red;
+}
+
+/* line 5, ../../src/htdocs/css/login.scss */
+label,
+button {
+  display: block;
+}
+
+/* line 10, ../../src/htdocs/css/login.scss */
+button {
+  margin-top: 12px;
+}
