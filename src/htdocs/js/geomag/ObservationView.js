@@ -64,9 +64,9 @@ var __saveError = function (status, xhr) {
  */
 var __publishSuccess = function () {
   (ModalView(
-    '<h3>Success!</h3><p>Your observation has been published.</p>',
+    '<h3>Success!</h3><p>Your observation has been finalized.</p>',
     {
-      title: 'Publish Successful',
+      title: 'Baselines successfully finalized',
       classes: ['modal-success'],
       closable: true
     }
@@ -85,7 +85,7 @@ var __publishError = function (status, xhr) {
   (ModalView(
     '<h3>Error</h3><p>' + xhr.response + '</p>',
     {
-      title: 'Publish Failed',
+      title: 'Failed to finalize baselines',
       classes: ['modal-error'],
       closable: true
     }
@@ -178,7 +178,7 @@ var ObservationView = function (options) {
     // Add publish button for admin users
     if (_user.get('admin') === 'Y') {
       publishButton = document.createElement('button');
-      publishButton.innerHTML = 'Publish';
+      publishButton.innerHTML = 'Finalize';
       controls.appendChild(publishButton);
 
       publishButton.addEventListener('click', _onPublishClick);
@@ -313,7 +313,7 @@ var ObservationView = function (options) {
         );
       });
     } catch (e) {
-      __publishError('Publish Failed', e.message);
+      __publishError('Failed to finalize baselines', e.message);
     }
   };
 
@@ -508,7 +508,7 @@ var ObservationView = function (options) {
     var controls = _this.el.querySelector('.observation-view-controls');
 
     controls.innerHTML =
-        '<div class="alert success">Observation has been published.</div>';
+        '<div class="alert success">Observation has been finalized.</div>';
   };
 
   _updateErrorCount = function () {
