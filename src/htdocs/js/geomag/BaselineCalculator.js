@@ -146,10 +146,10 @@ var BaselineCalculator = function () {
   _this.magneticDeclination =
         function (magneticSouthMeridian, geographicMeridian, shift) {
     var magneticDecl = magneticSouthMeridian - geographicMeridian;
-    while (magneticDecl >= 180.0) {
+    while (magneticDecl >= 90.0) {
       magneticDecl -= 180.0;
     }
-    while (magneticDecl < 0) {
+    while (magneticDecl < -90) {
       magneticDecl += 180.0;
     }
      // Apply the declination shift if there is one
