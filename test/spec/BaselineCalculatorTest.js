@@ -206,7 +206,7 @@ describe('Unit tests for BaselineCalculator', function () {
     it('computes correctly when given no shift', function () {
       var magneticSouthMeridian = 1.0,
           geographicMeridian = 2.0,
-          expected = 179.0;
+          expected = -1.0;
 
       expect(calc.magneticDeclination(
           magneticSouthMeridian, geographicMeridian)).to.equal(expected);
@@ -216,7 +216,7 @@ describe('Unit tests for BaselineCalculator', function () {
       var magneticSouthMeridian = 1.0,
           geographicMeridian = 2.0,
           shift = 3.0,
-          expected = 182.0;
+          expected = 179.0;
 
       expect(calc.magneticDeclination(
           magneticSouthMeridian, geographicMeridian, shift))
@@ -227,7 +227,7 @@ describe('Unit tests for BaselineCalculator', function () {
       var magneticSouthMeridian = 1.0,
           geographicMeridian = 2.0,
           shift = -3.0,
-          expected = 176.0;
+          expected = -181.0;
 
       expect(calc.magneticDeclination(
           magneticSouthMeridian, geographicMeridian, shift))
@@ -238,7 +238,7 @@ describe('Unit tests for BaselineCalculator', function () {
       var magneticSouthMeridian = 1.0,
           geographicMeridian = 2.0,
           shift = 0,
-          expected = 179.0;
+          expected = -1.0;
 
       expect(calc.magneticDeclination(
           magneticSouthMeridian, geographicMeridian, shift))
