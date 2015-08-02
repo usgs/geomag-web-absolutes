@@ -353,6 +353,7 @@ var degreesAndDegreesMinutes = function (angle, digits) {
 
 /**
  * Degrees, minutes, seconds to decimal angle
+ * If the "minutes" include decimals, the "seconds" are ignored and replaced.
  *
  * @param degs {Number}
  *        The degree portion of the angle value. If this is a decimal,
@@ -369,8 +370,12 @@ var degreesAndDegreesMinutes = function (angle, digits) {
  * @see MeasurementViewTest#degree_inversion_check
  */
 var dmsToDecimal = function (degs, mins, secs) {
-  return (parseInt(secs, 10) / 3600) + (parseFloat(mins) / 60) +
-      parseFloat(degs);
+  if (mins - Math.floor(mins) === 0) {
+    return (parseInt(secs, 10) / 3600) + (parseFloat(mins) / 60) +
+        parseFloat(degs);
+  } else {
+    return (parseFloat(mins) / 60) + parseFloat(degs);
+  }
 };
 
 /**
