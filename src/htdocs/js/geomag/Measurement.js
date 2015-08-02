@@ -78,7 +78,6 @@ var Measurement = function (options) {
   };
 
 
-
   options = null;
   return _this;
 };
