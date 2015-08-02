@@ -34,9 +34,9 @@ describe('Formatter Unit Tests', function () {
       // Decimal degree value
       expect(Format.dmsToDecimal(29.5, 29, 60)).to.equal(30.0);
       // Decimal minute value
-      expect(Format.dmsToDecimal(0, 29.5, 30)).to.equal(0.5);
+      expect(Format.dmsToDecimal(0, 29.5, 30)).to.equal(29.5/60.0);
       // Decimal degree and minute value
-      expect(Format.dmsToDecimal(29.5, 29.5, 30)).to.equal(30.0);
+      expect(Format.dmsToDecimal(29.5, 29.5, 30)).to.equal(29.5 + 29.5/60.0);
 
       // Some tests from real observations
       expect(Format.dmsToDecimal(120, 0, 36)).to.equal(120.010);
