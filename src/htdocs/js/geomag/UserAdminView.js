@@ -71,13 +71,35 @@ var UserAdminView = function (options) {
         _users.reset(data);
 
         _users.sort(function(a, b) {
-          // sort by username first
+          // move disabled users to the bottom of the list.
           if (a.get('username') < b.get('username')) {
             return -1;
           } else {
             return 1;
           }
         });
+
+        _users.sort(function(a, b) {
+          // move disabled users to the bottom of the list.
+          if (a.get('enabled') < b.get('enabled')) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
+
+        // _users.sort(function(a, b) {
+        //   // move disabled users to the bottom of the list.
+        //   if (a.get('enabled') === 'N') {
+        //     return 1;
+        //   } else {
+        //     if (a.get('username') < b.get('username')) {
+        //       return -1;
+        //     } else {
+        //       return 0;
+        //     }
+        //   }
+        // });
       },
       error: function () {/* TODO :: Show modal dialog error message */}
     });
