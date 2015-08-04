@@ -2,8 +2,8 @@ geomag-baseline-calculator
 ==========================
 
 Enter Geomagnetic absolute measurements to calculate *baselines* to be applied
-to raw magnetometer data. Publish the calibration points for use in magnetic
-data processing software.
+to raw magnetometer data. Finalize and publish the calibration points for use
+in magnetic data processing software.
 
 Getting Started
 ---------------
