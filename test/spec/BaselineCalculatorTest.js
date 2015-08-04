@@ -216,7 +216,7 @@ describe('Unit tests for BaselineCalculator', function () {
       var magneticSouthMeridian = 1.0,
           geographicMeridian = 2.0,
           shift = 3.0,
-          expected = 179.0;
+          expected = 2.0;
 
       expect(calc.magneticDeclination(
           magneticSouthMeridian, geographicMeridian, shift))
@@ -227,7 +227,7 @@ describe('Unit tests for BaselineCalculator', function () {
       var magneticSouthMeridian = 1.0,
           geographicMeridian = 2.0,
           shift = -3.0,
-          expected = -181.0;
+          expected = -4.0;
 
       expect(calc.magneticDeclination(
           magneticSouthMeridian, geographicMeridian, shift))
