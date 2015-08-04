@@ -5,6 +5,10 @@ var CollectionTable = require('mvc/CollectionTable'),
     Util = require('util/Util');
 
 
+var SPAN_OPEN = '<span class="disabled">',
+    SPAN_CLOSED = '</span>';
+
+
 var _DEFAULTS = {
   className: 'collection-table users-view tabular',
   clickToSelect: false,
@@ -13,6 +17,9 @@ var _DEFAULTS = {
       className: 'username',
       title: 'Username',
       format: function (user) {
+        if (user.get('enabled') === 'N') {
+          return SPAN_OPEN + user.get('username') + SPAN_CLOSED;
+        }
         return user.get('username');
       }
     },
@@ -22,6 +29,9 @@ var _DEFAULTS = {
       format: function (user) {
         if (user.get('email') === null) {
           return '&ndash;';
+        }
+        if (user.get('enabled') === 'N') {
+          return SPAN_OPEN + user.get('email') + SPAN_CLOSED;
         }
         return user.get('email');
       }
@@ -33,6 +43,9 @@ var _DEFAULTS = {
         if (user.get('name') === null) {
           return '&ndash;';
         }
+        if (user.get('enabled') === 'N') {
+          return SPAN_OPEN + user.get('name') + SPAN_CLOSED;
+        }
         return user.get('name');
       }
     },
@@ -40,6 +53,9 @@ var _DEFAULTS = {
       className: 'admin',
       title: 'Admin',
       format: function (user) {
+        if (user.get('enabled') === 'N') {
+          return SPAN_OPEN + user.get('admin') + SPAN_CLOSED;
+        }
         return user.get('admin');
       }
     },
@@ -47,6 +63,9 @@ var _DEFAULTS = {
       className: 'enabled',
       title: 'Enabled',
       format: function (user) {
+        if (user.get('enabled') === 'N') {
+          return SPAN_OPEN + user.get('enabled') + SPAN_CLOSED;
+        }
         return user.get('enabled');
       }
     },
@@ -56,6 +75,9 @@ var _DEFAULTS = {
       format: function (user) {
         if (user.get('last_login') === null) {
           return '&ndash;';
+        }
+        if (user.get('enabled') === 'N') {
+          return SPAN_OPEN + user.get('last_login') + SPAN_CLOSED;
         }
         return Format.date(parseInt(user.get('last_login'), 10)*1000);
       }
