@@ -107,12 +107,20 @@ var MeasurementView = function (options) {
       }
     };
 
-    onAngleChange = function (/*evt*/) {
+    onAngleChange = function (evt) {
       var degrees = _this._degreesInput.value,
           minutes = _this._minutesInput.value,
           seconds = _this._secondsInput.value,
           error = null;
 
+      if (evt.target === _this._minutesInput) {
+        // When decimal minutes are entered, clear corresponding seconds value.
+        if (minutes.indexOf('.') !== -1) {
+          seconds = 0;
+          // In case the angle doesn't change, keep inputs consistent.
+          _this._secondsInput.value = 0;
+        }
+      }
       // validate angle change
       error = _validateAngle(degrees, minutes, seconds);
 
