@@ -69,6 +69,20 @@ var UserAdminView = function (options) {
       success: function (data) {
         data = data.map(function (info) {return User(info);});
         _users.reset(data);
+
+        _users.sort(function(a, b) {
+          // move disabled users to the bottom of the list.
+          if (a.get('enabled') === 'N') {
+            return 2;
+          } else {
+            // sort enabled users by username.
+            if (a.get('username') < b.get('username')) {
+              return -1;
+            } else {
+              return 1;
+            }
+          }
+        });
       },
       error: function () {/* TODO :: Show modal dialog error message */}
     });
