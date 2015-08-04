@@ -5,9 +5,12 @@ var CollectionTable = require('mvc/CollectionTable'),
     Util = require('util/Util');
 
 
-var SPAN_OPEN = '<span class="disabled">',
-    SPAN_CLOSED = '</span>';
-
+var _formatEnabled = function (user, content) {
+  if (user.get('enabled') === 'N') {
+    return '<span class="disabled">' + content + '</span>';
+  }
+  return content;
+};
 
 var _DEFAULTS = {
   className: 'collection-table users-view tabular',
@@ -17,10 +20,7 @@ var _DEFAULTS = {
       className: 'username',
       title: 'Username',
       format: function (user) {
-        if (user.get('enabled') === 'N') {
-          return SPAN_OPEN + user.get('username') + SPAN_CLOSED;
-        }
-        return user.get('username');
+        return _formatEnabled(user, user.get('username'));
       }
     },
     {
@@ -30,10 +30,7 @@ var _DEFAULTS = {
         if (user.get('email') === null) {
           return '&ndash;';
         }
-        if (user.get('enabled') === 'N') {
-          return SPAN_OPEN + user.get('email') + SPAN_CLOSED;
-        }
-        return user.get('email');
+        return _formatEnabled(user, user.get('email'));
       }
     },
     {
@@ -43,30 +40,21 @@ var _DEFAULTS = {
         if (user.get('name') === null) {
           return '&ndash;';
         }
-        if (user.get('enabled') === 'N') {
-          return SPAN_OPEN + user.get('name') + SPAN_CLOSED;
-        }
-        return user.get('name');
+        return _formatEnabled(user, user.get('name'));
       }
     },
     {
       className: 'admin',
       title: 'Admin',
       format: function (user) {
-        if (user.get('enabled') === 'N') {
-          return SPAN_OPEN + user.get('admin') + SPAN_CLOSED;
-        }
-        return user.get('admin');
+        return _formatEnabled(user, user.get('admin'));
       }
     },
     {
       className: 'enabled',
       title: 'Enabled',
       format: function (user) {
-        if (user.get('enabled') === 'N') {
-          return SPAN_OPEN + user.get('enabled') + SPAN_CLOSED;
-        }
-        return user.get('enabled');
+        return _formatEnabled(user, user.get('enabled'));
       }
     },
     {
@@ -76,10 +64,8 @@ var _DEFAULTS = {
         if (user.get('last_login') === null) {
           return '&ndash;';
         }
-        if (user.get('enabled') === 'N') {
-          return SPAN_OPEN + user.get('last_login') + SPAN_CLOSED;
-        }
-        return Format.date(parseInt(user.get('last_login'), 10)*1000);
+        return _formatEnabled(user,
+          Format.date(parseInt(user.get('last_login'), 10)*1000));
       }
     },
     {
