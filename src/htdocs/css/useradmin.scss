@@ -8,7 +8,12 @@ ul {
 label {
   display:block;
 }
-
+label#enabled {
+  display:inline;
+}
+input[type=checkbox] {
+  margin:12px 4px 0 16px;
+}
 span.disabled {
-  opacity: 0.6;
+  opacity:0.6;
 }

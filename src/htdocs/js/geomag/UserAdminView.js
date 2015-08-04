@@ -47,6 +47,9 @@ var UserAdminView = function (options) {
     _this.el.innerHTML = [
         '<section class="user-admin-control">',
           '<button class="edituser" data-id="">Create User</button>',
+          '<label id="enabled">',
+            '<input type="checkbox" name="enabled">Show disabled users',
+          '</label>',
         '<section>',
         '<section class="users-view-wrapper"></section>'
     ].join('');
@@ -68,21 +71,17 @@ var UserAdminView = function (options) {
     _factory.get({
       success: function (data) {
         data = data.map(function (info) {return User(info);});
-        _users.reset(data);
 
-        _users.sort(function(a, b) {
-          // move disabled users to the bottom of the list.
-          if (a.get('enabled') === 'N') {
-            return 2;
+        data.sort(function(a, b) {
+          // sort alphabetically by username.
+          if (a.get('username') < b.get('username')) {
+            return -1;
           } else {
-            // sort enabled users by username.
-            if (a.get('username') < b.get('username')) {
-              return -1;
-            } else {
-              return 1;
-            }
+            return 1;
           }
         });
+
+        _users.reset(data);
       },
       error: function () {/* TODO :: Show modal dialog error message */}
     });
