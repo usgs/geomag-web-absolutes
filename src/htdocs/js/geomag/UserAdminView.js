@@ -25,10 +25,12 @@ var UserAdminView = function (options) {
   var _this,
       _initialize,
 
+      _allUsers,
       _editview,
       _factory,
       _modalview,
       _observatories,
+      _showEnabledUsers,
       _user,
       _users,
       _usersView,
@@ -36,7 +38,8 @@ var UserAdminView = function (options) {
       _getUsers,
       _onEditClick,
       _onUserCancel,
-      _onUserSave;
+      _onUserSave,
+      _showUsers;
 
   _this = View(Util.extend({}, _DEFAULTS, options));
 
@@ -47,8 +50,9 @@ var UserAdminView = function (options) {
     _this.el.innerHTML = [
         '<section class="user-admin-control">',
           '<button class="edituser" data-id="">Create User</button>',
-          '<label id="enabled">',
-            '<input type="checkbox" name="enabled">Show disabled users',
+          '<label id="enabled" for="showEnabledUsers">',
+            '<input type="checkbox" name="showEnabledUsers"',
+            ' id="showEnabledUsers">Show disabled users',
           '</label>',
         '<section>',
         '<section class="users-view-wrapper"></section>'
@@ -63,6 +67,8 @@ var UserAdminView = function (options) {
     });
 
     _this.el.addEventListener('click', _onEditClick);
+    _showEnabledUsers = _this.el.querySelector('#showEnabledUsers');
+    _showEnabledUsers.addEventListener('click', _showUsers);
 
     _getUsers();
   };
@@ -81,7 +87,8 @@ var UserAdminView = function (options) {
           }
         });
 
-        _users.reset(data);
+        _allUsers = data;
+        _showUsers();
       },
       error: function () {/* TODO :: Show modal dialog error message */}
     });
@@ -160,6 +167,23 @@ var UserAdminView = function (options) {
     );
 
     _modalview.show();
+  };
+
+  _showUsers = function () {
+    var users;
+
+    if (_showEnabledUsers.checked) {
+      _users.reset(_allUsers);
+    } else {
+      // Create an array of 'enabled' users only.
+      users = [];
+      _allUsers.forEach(function(a){
+        if (a.get('enabled') === 'Y') {
+          users.push(a);
+        }
+      });
+      _users.reset(users);
+    }
   };
 
 
