@@ -5,6 +5,13 @@ var CollectionTable = require('mvc/CollectionTable'),
     Util = require('util/Util');
 
 
+var _formatEnabled = function (user, content) {
+  if (user.get('enabled') === 'N') {
+    return '<span class="disabled">' + content + '</span>';
+  }
+  return content;
+};
+
 var _DEFAULTS = {
   className: 'collection-table users-view tabular',
   clickToSelect: false,
@@ -13,7 +20,7 @@ var _DEFAULTS = {
       className: 'username',
       title: 'Username',
       format: function (user) {
-        return user.get('username');
+        return _formatEnabled(user, user.get('username'));
       }
     },
     {
@@ -23,7 +30,7 @@ var _DEFAULTS = {
         if (user.get('email') === null) {
           return '&ndash;';
         }
-        return user.get('email');
+        return _formatEnabled(user, user.get('email'));
       }
     },
     {
@@ -33,21 +40,21 @@ var _DEFAULTS = {
         if (user.get('name') === null) {
           return '&ndash;';
         }
-        return user.get('name');
+        return _formatEnabled(user, user.get('name'));
       }
     },
     {
       className: 'admin',
       title: 'Admin',
       format: function (user) {
-        return user.get('admin');
+        return _formatEnabled(user, user.get('admin'));
       }
     },
     {
       className: 'enabled',
       title: 'Enabled',
       format: function (user) {
-        return user.get('enabled');
+        return _formatEnabled(user, user.get('enabled'));
       }
     },
     {
@@ -57,7 +64,8 @@ var _DEFAULTS = {
         if (user.get('last_login') === null) {
           return '&ndash;';
         }
-        return Format.date(parseInt(user.get('last_login'), 10)*1000);
+        return _formatEnabled(user,
+          Format.date(parseInt(user.get('last_login'), 10)*1000));
       }
     },
     {
