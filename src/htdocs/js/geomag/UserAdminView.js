@@ -52,7 +52,7 @@ var UserAdminView = function (options) {
           '<button class="edituser" data-id="">Create User</button>',
           '<label id="enabled" for="showEnabledUsers">',
             '<input type="checkbox" name="showEnabledUsers"',
-            ' id="showEnabledUsers">Show disabled users',
+            ' id="showEnabledUsers" checked>Only show enabled users',
           '</label>',
         '<section>',
         '<section class="users-view-wrapper"></section>'
@@ -173,8 +173,6 @@ var UserAdminView = function (options) {
     var users;
 
     if (_showEnabledUsers.checked) {
-      _users.reset(_allUsers);
-    } else {
       // Create an array of 'enabled' users only.
       users = [];
       _allUsers.forEach(function(a){
@@ -183,6 +181,8 @@ var UserAdminView = function (options) {
         }
       });
       _users.reset(users);
+    } else {
+      _users.reset(_allUsers);
     }
   };
 
