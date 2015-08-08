@@ -6,14 +6,13 @@ var DeclinationView = require('geomag/DeclinationView'),
     Measurement = require('geomag/Measurement'),
     MeasurementView = require('geomag/MeasurementView'),
     ModalView = require('mvc/ModalView'),
-    ObservationBaselineCalculator =
-        require('geomag/ObservationBaselineCalculator'),
+    Calculator = require('geomag/ObservationBaselineCalculator'),
     Util = require('util/Util'),
     View = require('mvc/View');
 
 
 var _DEFAULTS = {
-  baselineCalculator: ObservationBaselineCalculator()
+  baselineCalculator: Calculator()
 };
 
 
