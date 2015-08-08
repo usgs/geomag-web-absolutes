@@ -16,18 +16,18 @@ var _DEFAULTS = {
 };
 
 
-  /**
-   * Construct a new DeclinationSummaryView.
-   *
-   * @param options {Object}
-   *        view options.
-   * @param options.calculator {geomag.ObservationBaselineCalculator}
-   *        the calculator to use.
-   * @param options.observation {Observation}
-   *        observation to display.
-   * @param options.reading {geomag.Reading}
-   *        the reading to display.
-   */
+/**
+ * Construct a new ReadingView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.calculator {geomag.ObservationBaselineCalculator}
+ *        the calculator to use.
+ * @param options.observation {Observation}
+ *        observation to display.
+ * @param options.reading {geomag.Reading}
+ *        the reading to display.
+ */
 var ReadingView = function (options) {
   var _this,
       _initialize,

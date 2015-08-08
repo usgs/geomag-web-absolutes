@@ -21,6 +21,16 @@ var _DEFAULTS = {
 };
 
 
+/**
+ * Construct a new ReadingGroupView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.calculator {geomag.ObservationBaselineCalculator}
+ *        the calculator to use.
+ * @param options.observation {Observation}
+ *        observation to display.
+ */
 var ReadingGroupView = function (options) {
   var _this,
       _initialize,
@@ -52,7 +62,6 @@ var ReadingGroupView = function (options) {
     //         you will have to re-render
     _this.render();
   };
-
 
   _createSummaryTab = function (observation) {
     var el = document.createElement('div'),
