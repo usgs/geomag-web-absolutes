@@ -416,9 +416,9 @@ var ObservationView = function (options) {
 
     // create reading group view
     _readingGroupView = ReadingGroupView({
+      calculator: _calculator,
       el: el.querySelector('.reading-group-view-wrapper'),
-      observation: _observation,
-      calculator: _calculator
+      observation: _observation
     });
 
     // load observatories for meta view
@@ -503,10 +503,10 @@ var ObservationView = function (options) {
 
     // create observation meta view
     _observationMetaView = ObservationMetaView({
+      calculator: _calculator,
       el: el.querySelector('.observation-meta-wrapper'),
       observation: _observation,
       observatories: _observatories,
-      calculator: _calculator,
       observatoryId: parseInt(window.location.hash.replace('#', ''), 10)
     });
   };
