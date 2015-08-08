@@ -166,6 +166,19 @@ var ReadingView = function (options) {
       observation: _this._observation
     });
 
+    _this._secondMarkUpView = MeasurementView({
+      el: _this.el.querySelector('.second-mark-up'),
+      measurement: _this._secondMarkUpMeasurement,
+      observation: _this._observation
+    });
+
+    _this._secondMarkDownView = MeasurementView({
+      el: _this.el.querySelector('.second-mark-down'),
+      measurement: _this._secondMarkDownMeasurement,
+      observation: _this._observation
+    });
+
+
     _this._westDownView = MeasurementView({
       el: _this.el.querySelector('.west-down'),
       measurement: _this._westDownMeasurement,
@@ -188,25 +201,6 @@ var ReadingView = function (options) {
       el: _this.el.querySelector('.east-up'),
       measurement: _this._eastUpMeasurement,
       observation: _this._observation
-    });
-
-    _this._secondMarkUpView = MeasurementView({
-      el: _this.el.querySelector('.second-mark-up'),
-      measurement: _this._secondMarkUpMeasurement,
-      observation: _this._observation
-    });
-
-    _this._secondMarkDownView = MeasurementView({
-      el: _this.el.querySelector('.second-mark-down'),
-      measurement: _this._secondMarkDownMeasurement,
-      observation: _this._observation
-    });
-
-    _this._declinationView = DeclinationView({
-      el: _this.el.querySelector('.declination-output'),
-      reading: _this._reading,
-      observation: _this._observation,
-      calculator: _this._calculator
     });
 
 
@@ -234,13 +228,20 @@ var ReadingView = function (options) {
       observation: _this._observation
     });
 
+
+    _this._declinationView = DeclinationView({
+      el: _this.el.querySelector('.declination-output'),
+      reading: _this._reading,
+      observation: _this._observation,
+      calculator: _this._calculator
+    });
+
     _this._inclinationView = InclinationView({
       el: _this.el.querySelector('.inclination-output'),
       reading: _this._reading,
       observation: _this._observation,
       calculator: _this._calculator
     });
-
 
     _this._magnetometerOrdinatesView = MagnetometerOrdinatesView({
       el: _this.el.querySelector('.magnetometer-ordinates-output'),
