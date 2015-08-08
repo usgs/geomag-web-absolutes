@@ -93,6 +93,16 @@ var __publishError = function (status, xhr) {
 };
 
 
+/**
+ * Construct a new ObservationView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.calculator {geomag.ObservationBaselineCalculator}
+ *        the calculator to use.
+ * @param options.factory {geomag.ObservatoryFactory}
+ *        the factory to use.
+ */
 var ObservationView = function (options) {
   var _this,
       _initialize,
