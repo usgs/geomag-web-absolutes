@@ -1,12 +1,12 @@
 'use strict';
 
-var DeclinationView = require('geomag/DeclinationView'),
+var Calculator = require('geomag/ObservationBaselineCalculator'),
+    DeclinationView = require('geomag/DeclinationView'),
     InclinationView = require('geomag/InclinationView'),
     MagnetometerOrdinatesView = require('geomag/MagnetometerOrdinatesView'),
     Measurement = require('geomag/Measurement'),
     MeasurementView = require('geomag/MeasurementView'),
     ModalView = require('mvc/ModalView'),
-    Calculator = require('geomag/ObservationBaselineCalculator'),
     Util = require('util/Util'),
     View = require('mvc/View');
 
@@ -21,9 +21,12 @@ var _DEFAULTS = {
    *
    * @param options {Object}
    *        view options.
-   * @param options.calculator
-   * @param options.observation
-   * @param options.reading
+   * @param options.calculator {geomag.ObservationBaselineCalculator}
+   *        the calculator to use.
+   * @param options.observation {Observation}
+   *        observation to display.
+   * @param options.reading {geomag.Reading}
+   *        the reading to display.
    */
 var ReadingView = function (options) {
   var _this,
@@ -42,9 +45,9 @@ var ReadingView = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function () {
+    _this._calculator = _options.calculator;
     _this._observation = _options.observation;
     _this._reading = _options.reading;
-    _this._calculator = _options.calculator;
     _this._measurements = _this._reading.getMeasurements();
 
     _this._firstMarkUpMeasurement =

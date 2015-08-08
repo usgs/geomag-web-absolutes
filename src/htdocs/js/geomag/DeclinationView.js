@@ -12,16 +12,16 @@ var _DEFAULT_OPTIONS = {
 };
 
 
-  /**
-   * Construct a new DeclinationView.
-   *
-   * @param options {Object}
-   *        view options.
-   * @param options.calculator {geomag.ObservationBaselineCalculator}
-   *        the calculator to use.
-   * @param options.reading {geomag.Reading}
-   *        the reading to display.
-   */
+/**
+ * Construct a new DeclinationView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.calculator {geomag.ObservationBaselineCalculator}
+ *        the calculator to use.
+ * @param options.reading {geomag.Reading}
+ *        the reading to display.
+ */
 var DeclinationView = function (options) {
   var _this,
       _initialize,
