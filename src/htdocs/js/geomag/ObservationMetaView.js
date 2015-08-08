@@ -52,6 +52,16 @@ var __select_by_id = function (collection, id) {
 };
 
 
+/**
+ * Construct a new ObservationMetaView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.calculator {geomag.ObservationBaselineCalculator}
+ *        the calculator to use.
+ * @param options.observation {Observation}
+ *        observation to display.
+ */
 var ObservationMetaView = function (options) {
   var _this,
       _initialize,
@@ -84,15 +94,10 @@ var ObservationMetaView = function (options) {
       _updateErrorState,
       _validateDate;
 
-
   _this = View(options);
-
   /**
-   * Construct a new ObservationMetaView.
-   *
-   * @param options {Object}
-   * @param options.observation {Observation}
-   *        observation to display.
+   * Initialize view, and call render.
+   * @param options {Object} same as constructor.
    */
   _initialize = function (options) {
     _options = Util.extend({}, _DEFAULTS, options);
@@ -527,6 +532,5 @@ var ObservationMetaView = function (options) {
   options = null;
   return _this;
 };
-
 
 module.exports = ObservationMetaView;
