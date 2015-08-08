@@ -8,7 +8,7 @@ var View = require('mvc/View'),
     ObservatoryFactory = require('geomag/ObservatoryFactory'),
     ObservationMetaView = require('geomag/ObservationMetaView'),
     ReadingGroupView = require('geomag/ReadingGroupView'),
-    ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
+    Calculator = require('geomag/ObservationBaselineCalculator'),
     RealtimeDataFactory = require('geomag/RealtimeDataFactory'),
     User = require('geomag/User');
 
@@ -16,7 +16,7 @@ var View = require('mvc/View'),
 var _DEFAULTS = {
   observationId: null,
   factory: ObservatoryFactory(),
-  baselineCalculator: ObservationBaselineCalculator(),
+  calculator: Calculator(),
   realtimeDataFactory: RealtimeDataFactory()
 };
 
@@ -129,7 +129,7 @@ var ObservationView = function (options) {
 
     options = Util.extend({}, _DEFAULTS, options);
 
-    _calculator = options.baselineCalculator;
+    _calculator = options.calculator;
     _factory = options.factory;
     _observation = null;
     _observatories = null;
@@ -407,7 +407,7 @@ var ObservationView = function (options) {
     _readingGroupView = ReadingGroupView({
       el: el.querySelector('.reading-group-view-wrapper'),
       observation: _observation,
-      baselineCalculator: _calculator
+      calculator: _calculator
     });
 
     // load observatories for meta view

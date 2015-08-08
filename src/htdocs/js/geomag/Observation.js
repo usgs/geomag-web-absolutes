@@ -29,11 +29,11 @@ var _DEFAULTS = {
 /**
  * Construct a new Observation.
  *
- * @param option {Object}
+ * @param options {Object}
  *        view options.
- * @param option.baselineCalculator {geomag.ObservationBaselineCalculator}
+ * @param options.calculator {geomag.ObservationBaselineCalculator}
  *        the calculator to use.
- * @param option.reading {geomag.Reading}
+ * @param options.reading {geomag.Reading}
  *        the reading to display.
  */
 var Observation = function (options) {

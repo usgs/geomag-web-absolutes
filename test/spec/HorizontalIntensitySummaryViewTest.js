@@ -2,7 +2,7 @@
 'use strict';
 
 var HorizontalIntensitySummaryView = require('geomag/HorizontalIntensitySummaryView'),
-    ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
+    Calculator = require('geomag/ObservationBaselineCalculator'),
     ObservatoryFactory = require('geomag/ObservatoryFactory'),
     Reading = require('geomag/Reading');
 
@@ -26,7 +26,7 @@ describe('HorizontalIntensitySummaryViewTest', function () {
 
     beforeEach(function () {
       reading = Reading();
-      calculator = ObservationBaselineCalculator();
+      calculator = Calculator();
       factory = ObservatoryFactory();
       view = HorizontalIntensitySummaryView({
         el: document.createElement('tr'),
@@ -81,7 +81,7 @@ describe('HorizontalIntensitySummaryViewTest', function () {
           checkBoxBefore,
           checkBoxAfter,
           reading = Reading(),
-          calculator = ObservationBaselineCalculator();
+          calculator = Calculator();
 
       view = HorizontalIntensitySummaryView({
         el: document.createElement('tr'),

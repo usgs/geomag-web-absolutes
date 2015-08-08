@@ -17,7 +17,7 @@ var __truncate_angle_seconds = function (angle) {
 
 
 var _DEFAULTS = {
-  baselineCalculator: Calculator()
+  calculator: Calculator()
 };
 
 
@@ -42,7 +42,7 @@ var ReadingGroupView = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
 
     _observation = options.observation;
-    _calculator = options.baselineCalculator;
+    _calculator = options.calculator;
 
     _tablist = TabList({tabPosition: 'top'});
     _tablist.el.classList.add('reading-group-view');
@@ -62,7 +62,7 @@ var ReadingGroupView = function (options) {
     summaryView = ObservationSummaryView({
       el: el,
       observation: observation,
-      baselineCalculator: _calculator
+      calculator: _calculator
     });
 
     return {
@@ -84,7 +84,7 @@ var ReadingGroupView = function (options) {
       el: el,
       observation: observation,
       reading: reading,
-      baselineCalculator: _calculator
+      calculator: _calculator
     });
 
     tbody = el.querySelector('.inclination-input > table > tbody');

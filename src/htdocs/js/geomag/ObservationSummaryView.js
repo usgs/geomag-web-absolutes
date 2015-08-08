@@ -17,6 +17,14 @@ var _DEFAULTS = {
 };
 
 
+/**
+ * Construct a new ObservationSummaryView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.calculator {geomag.ObservationBaselineCalculator}
+ *        the calculator to use.
+ */
 var ObservationSummaryView = function (options) {
   var _this,
       _initialize,
@@ -62,7 +70,7 @@ var ObservationSummaryView = function (options) {
   _initialize = function () {
     var el = _this.el;
 
-    _calculator = _options.baselineCalculator;
+    _calculator = _options.calculator;
     _observation = _options.observation;
     _readings = _observation.get('readings');
     _userFactory = _options.UserFactory;

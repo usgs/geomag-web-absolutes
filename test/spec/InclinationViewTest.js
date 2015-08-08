@@ -13,7 +13,7 @@ var Format = require('geomag/Formatter'),
 var expect = chai.expect;
 
 // dummy ObservationBaselineCalculator for testing
-var testObservationBaselineCalculator = Util.extend(Model(), {
+var testCalculator = Util.extend(Model(), {
   inclination: function() { return 1; },
   horizontalComponent: function () { return 2; },
   verticalComponent: function () { return 3; },
@@ -41,7 +41,7 @@ describe('Unit tests for InclinationView class', function () {
     view = InclinationView({
       reading: reading,
       observation: observation,
-      baselineCalculator: testObservationBaselineCalculator
+      calculator: testCalculator
     });
 
     it('binds measurement change to render', function () {
@@ -64,13 +64,13 @@ describe('Unit tests for InclinationView class', function () {
   describe('Render', function () {
 
     it('updates view elements', function () {
-      var calculator = testObservationBaselineCalculator,
+      var calculator = testCalculator,
           view;
 
       view = InclinationView({
         reading: Reading(),
         observation: Observation(),
-        baselineCalculator: calculator
+        calculator: calculator
       });
 
       expect(view._inclinationAngle.innerHTML).to.equal(

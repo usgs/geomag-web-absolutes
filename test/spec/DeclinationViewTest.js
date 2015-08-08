@@ -13,7 +13,7 @@ var DeclinationView = require('geomag/DeclinationView'),
 var expect = chai.expect;
 
 // dummy ObservationBaselineCalculator for testing
-var testObservationBaselineCalculator = Util.extend(Model(), {
+var testCalculator = Util.extend(Model(), {
   magneticSouthMeridian: function() { return 1; },
   meanMark: function () { return 2; },
   magneticAzimuthMark: function () { return 3; },
@@ -45,7 +45,7 @@ describe('Unit tests for DeclinationView class', function () {
     view = DeclinationView({
       reading: reading,
       observation: observation,
-      baselineCalculator: testObservationBaselineCalculator
+      calculator: testCalculator
     });
 
     it('binds measurement change to render', function () {
@@ -70,21 +70,21 @@ describe('Unit tests for DeclinationView class', function () {
 
     // it('binds calculator change to render', function () {
     //   view.called = false;
-    //   testObservationBaselineCalculator.trigger('change');
+    //   testCalculator.trigger('change');
     //   expect(view.called).to.equal(true);
     // });
 
   });
 
   describe('Render', function () {
-    var calculator = testObservationBaselineCalculator,
+    var calculator = testCalculator,
           view;
 
     it('updates view elements', function () {
       view = DeclinationView({
         reading: Reading(),
         observation: Observation(),
-        baselineCalculator: calculator
+        calculator: calculator
       });
 
       // These are equal, this is probably bs.

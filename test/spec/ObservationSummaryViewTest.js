@@ -2,7 +2,7 @@
 'use strict';
 
 var Observation = require('geomag/Observation'),
-    ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
+    Calculator = require('geomag/ObservationBaselineCalculator'),
     ObservationSummaryView = require('geomag/ObservationSummaryView');
 
 
@@ -15,10 +15,10 @@ describe('ObservationSummaryViewTest', function () {
       observation;
 
   beforeEach(function () {
-    calculator = ObservationBaselineCalculator();
+    calculator = Calculator();
     observation = Observation();
     view = ObservationSummaryView({
-      baselineCalculator: calculator,
+      calculator: calculator,
       observation: observation
     });
 

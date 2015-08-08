@@ -12,7 +12,7 @@ var DeclinationView = require('geomag/DeclinationView'),
 
 
 var _DEFAULTS = {
-  baselineCalculator: Calculator()
+  calculator: Calculator()
 };
 
 
@@ -21,7 +21,7 @@ var _DEFAULTS = {
    *
    * @param options {Object}
    *        view options.
-   * @param options.baselineCalculator
+   * @param options.calculator
    * @param options.observation
    * @param options.reading
    */
@@ -44,7 +44,7 @@ var ReadingView = function (options) {
   _initialize = function () {
     _this._observation = _options.observation;
     _this._reading = _options.reading;
-    _this._calculator = _options.baselineCalculator;
+    _this._calculator = _options.calculator;
     _this._measurements = _this._reading.getMeasurements();
 
     _this._firstMarkUpMeasurement =
@@ -203,7 +203,7 @@ var ReadingView = function (options) {
       el: _this.el.querySelector('.declination-output'),
       reading: _this._reading,
       observation: _this._observation,
-      baselineCalculator: _this._calculator
+      calculator: _this._calculator
     });
 
 
@@ -235,7 +235,7 @@ var ReadingView = function (options) {
       el: _this.el.querySelector('.inclination-output'),
       reading: _this._reading,
       observation: _this._observation,
-      baselineCalculator: _this._calculator
+      calculator: _this._calculator
     });
 
 
@@ -243,7 +243,7 @@ var ReadingView = function (options) {
       el: _this.el.querySelector('.magnetometer-ordinates-output'),
       reading: _this._reading,
       observation: _this._observation,
-      baselineCalculator: _this._calculator
+      calculator: _this._calculator
     });
   };
 

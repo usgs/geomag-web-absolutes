@@ -7,7 +7,7 @@ var Format = require('geomag/Formatter'),
 
 
 var _DEFAULT_OPTIONS = {
-  'baselineCalculator': null,
+  'calculator': null,
   'reading': null
 };
 
@@ -15,11 +15,11 @@ var _DEFAULT_OPTIONS = {
 /**
  * Construct a new InclinationView.
  *
- * @param option {Object}
+ * @param options {Object}
  *        view options.
- * @param option.baselineCalculator {geomag.ObservationBaselineCalculator}
+ * @param options.calculator {geomag.ObservationBaselineCalculator}
  *        the calculator to use.
- * @param option.reading {geomag.Reading}
+ * @param options.reading {geomag.Reading}
  *        the reading to display.
  */
 var InclinationView = function (options) {
@@ -39,7 +39,7 @@ var InclinationView = function (options) {
 
     _this._observation = _options.observation;
     _this._reading = _options.reading;
-    _this._calculator = _options.baselineCalculator;
+    _this._calculator = _options.calculator;
     _this._measurements = _this._reading.getMeasurements();
 
     el.classList.add('inclination-view');

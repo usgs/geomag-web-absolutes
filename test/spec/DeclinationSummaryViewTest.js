@@ -2,7 +2,7 @@
 'use strict';
 
 var DeclinationSummaryView = require('geomag/DeclinationSummaryView'),
-    ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
+    Calculator = require('geomag/ObservationBaselineCalculator'),
     ObservatoryFactory = require('geomag/ObservatoryFactory'),
     Reading = require('geomag/Reading');
 
@@ -36,7 +36,7 @@ describe('DeclinationSummaryViewTest', function () {
 
     beforeEach(function () {
       reading = Reading();
-      calculator = ObservationBaselineCalculator();
+      calculator = Calculator();
       factory = ObservatoryFactory();
       view = DeclinationSummaryView({
         el: document.createElement('tr'),
@@ -96,7 +96,7 @@ describe('DeclinationSummaryViewTest', function () {
           checkBoxBefore,
           checkBoxAfter,
           reading = Reading(),
-          calculator = ObservationBaselineCalculator();
+          calculator = Calculator();
 
       view = DeclinationSummaryView({
         el: document.createElement('tr'),
@@ -116,7 +116,7 @@ describe('DeclinationSummaryViewTest', function () {
     });
 
     it('Should set shift +/- 180', function () {
-      var calculator = ObservationBaselineCalculator(),
+      var calculator = Calculator(),
           dropDown,
           el = document.createElement('tr'),
           view,

@@ -4,13 +4,13 @@
 var BaselineCalculator = require('geomag/BaselineCalculator'),
     Collection = require('mvc/Collection'),
     Measurement = require('geomag/Measurement'),
-    ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
+    Calculator = require('geomag/ObservationBaselineCalculator'),
     Reading = require('geomag/Reading');
 
 
 var expect = chai.expect;
 
-var calc = ObservationBaselineCalculator({
+var calc = Calculator({
     calculator: BaselineCalculator(),
     pierCorrection: -23.1,
     trueAzimuthOfMark: 199.1383

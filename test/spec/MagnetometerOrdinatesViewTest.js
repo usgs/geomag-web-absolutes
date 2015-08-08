@@ -5,7 +5,7 @@ var Format = require('geomag/Formatter'),
     MagnetometerOrdinatesView = require('geomag/MagnetometerOrdinatesView'),
     Measurement = require('geomag/Measurement'),
     Observation = require('geomag/Observation'),
-    ObservationBaselineCalculator = require('geomag/ObservationBaselineCalculator'),
+    Calculator = require('geomag/ObservationBaselineCalculator'),
     Reading = require('geomag/Reading');
 
 
@@ -25,12 +25,12 @@ describe('Unit tests for MagnetometerOrdinatesView', function () {
     beforeEach(function () {
       reading = Reading();
       observation = Observation();
-      calculator = ObservationBaselineCalculator();
+      calculator = Calculator();
 
       view = MagnetometerOrdinatesView({
         reading: reading,
         observation: observation,
-        baselineCalculator: calculator
+        calculator: calculator
       });
 
       renderSpy = sinon.spy(view, 'render');
@@ -82,7 +82,7 @@ describe('Unit tests for MagnetometerOrdinatesView', function () {
 
     function format4 (number) {return number.toFixed(4);}
 
-    calculator = ObservationBaselineCalculator();
+    calculator = Calculator();
 
     //Stub function in ObservationBaselineCalculator.
     sinon.stub(calculator,
@@ -122,7 +122,7 @@ describe('Unit tests for MagnetometerOrdinatesView', function () {
     view = MagnetometerOrdinatesView({
       reading: reading,
       observation: observation,
-      baselineCalculator: calculator
+      calculator: calculator
     });
 
     it('updates view elements for hMean', function () {

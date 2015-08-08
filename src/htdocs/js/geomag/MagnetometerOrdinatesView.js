@@ -8,7 +8,7 @@ var Format = require('geomag/Formatter'),
 
 var _DEFAULTS = {
   'observation': null,
-  'baselineCalculator': null,
+  'calculator': null,
   'readings': null
 };
 
@@ -16,8 +16,10 @@ var _DEFAULTS = {
   /**
    * Construct a new MagnetometerOrdinatesView.
    *
-   * @param option {Object}
+   * @param options {Object}
    *        view options.
+   * @param options.calculator {geomag.ObservationBaselineCalculator}
+   *        the calculator to use.
    */
 var MagnetometerOrdinatesView = function (options) {
   var _this,
@@ -37,7 +39,7 @@ var MagnetometerOrdinatesView = function (options) {
 
     measurements = _options.reading.getMeasurements();
     _this._reading = _options.reading;
-    _this._calculator = _options.baselineCalculator;
+    _this._calculator = _options.calculator;
 
     el.innerHTML = [
       '<table>',
