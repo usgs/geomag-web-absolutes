@@ -1,8 +1,8 @@
 'use strict';
 
 var Format = require('geomag/Formatter'),
-    Util = require('util/Util'),
     Measurement = require('geomag/Measurement'),
+    Util = require('util/Util'),
     View = require('mvc/View');
 
 
@@ -37,7 +37,6 @@ var InclinationView = function (options) {
   _initialize = function () {
     var el = _this.el;
 
-    _this._observation = _options.observation;
     _this._reading = _options.reading;
     _this._calculator = _options.calculator;
     _this._measurements = _this._reading.getMeasurements();
