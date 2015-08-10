@@ -51,8 +51,8 @@ var ReadingGroupView = function (options) {
   _initialize = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
 
-    _observation = options.observation;
     _calculator = options.calculator;
+    _observation = options.observation;
 
     _tablist = TabList({tabPosition: 'top'});
     _tablist.el.classList.add('reading-group-view');
@@ -69,9 +69,9 @@ var ReadingGroupView = function (options) {
 
     el.classList.add('summary-wrapper');
     summaryView = ObservationSummaryView({
+      calculator: _calculator,
       el: el,
-      observation: observation,
-      calculator: _calculator
+      observation: observation
     });
 
     return {
@@ -90,10 +90,10 @@ var ReadingGroupView = function (options) {
 
     el.classList.add('reading-wrapper');
     readingView = ReadingView({
+      calculator: _calculator,
       el: el,
       observation: observation,
-      reading: reading,
-      calculator: _calculator
+      reading: reading
     });
 
     tbody = el.querySelector('.inclination-input > table > tbody');
