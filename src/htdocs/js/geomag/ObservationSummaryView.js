@@ -277,9 +277,9 @@ var ObservationSummaryView = function (options) {
       // create view if it does not exist
       if (!reading.hasOwnProperty('_declinationSummary')) {
         reading._declinationSummary = DeclinationSummaryView({
+          calculator: _calculator,
           el: document.createElement('tr'),
-          reading: reading,
-          calculator: _calculator
+          reading: reading
         });
       }
       // insert view
@@ -325,9 +325,9 @@ var ObservationSummaryView = function (options) {
       // create view if it does not exist
       if (!reading.hasOwnProperty('_horizontalIntensitySummary')) {
         reading._horizontalIntensitySummary = HorizontalSummaryView({
+          calculator: _calculator,
           el: document.createElement('tr'),
-          reading: reading,
-          calculator: _calculator
+          reading: reading
         });
       }
       // insert view
@@ -386,9 +386,9 @@ var ObservationSummaryView = function (options) {
       // Create view if it does not exits
       if (!reading.hasOwnProperty('_verticalIntensitySummary')) {
         reading._verticalIntensitySummary = VerticalSummaryView({
+          calculator: _calculator,
           el: document.createElement('tr'),
-          reading: reading,
-          calculator: _calculator
+          reading: reading
         });
       }
       // insert view
