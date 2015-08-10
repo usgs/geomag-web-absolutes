@@ -15,8 +15,8 @@ var View = require('mvc/View'),
 
 var _DEFAULTS = {
   calculator: Calculator(),
-  observationId: null,
   factory: ObservatoryFactory(),
+  observationId: null,
   realtimeDataFactory: RealtimeDataFactory()
 };
 
