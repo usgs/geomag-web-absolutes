@@ -1,8 +1,7 @@
 /* global MOUNT_PATH */
 'use strict';
 
-var Calculator = require('geomag/ObservationBaselineCalculator'),
-    Collection = require('mvc/Collection'),
+var Collection = require('mvc/Collection'),
     Instrument = require('geomag/Instrument'),
     Mark = require('geomag/Mark'),
     Measurement = require('geomag/Measurement'),
@@ -227,6 +226,7 @@ var ObservatoryFactory = function (options) {
   var _this,
       _initialize,
 
+      _calculator,
       _observationDetailUrl,
       _observationPublishUrl,
       _observatoryDetailUrl,
@@ -249,6 +249,8 @@ var ObservatoryFactory = function (options) {
 
   _initialize = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
+
+    _calculator = options.calculator;
 
     _observationDetailUrl = options.observationDetailUrl;
     _observationPublishUrl = options.observationPublishUrl;
@@ -461,25 +463,24 @@ var ObservatoryFactory = function (options) {
    *
    * @param reading {object}
    */
-  _this.setCalibrationD = function (reading) {
+  _this.setCalibrationD = function (reading, calculator) {
     var absolute,
         baseline,
-        calculator,
         endtime,
         measurements,
         starttime,
         time,
         valid;
 
+    _calculator = calculator;
     measurements = _this.getDeclinationMeasurements(reading);
-    calculator = Calculator();
 
     time = _this.getMeasurementValues(measurements, 'time');
     starttime = Math.min(Number.parseInt(time));
     endtime = Math.max(Number.parseInt(time));
     valid = reading.get('declination_valid');
-    absolute = calculator.magneticDeclination(reading);
-    baseline = calculator.dBaseline(reading);
+    absolute = _calculator.magneticDeclination(reading);
+    baseline = _calculator.dBaseline(reading);
 
     reading.set({
       startD: starttime,
@@ -495,25 +496,24 @@ var ObservatoryFactory = function (options) {
    *
    * @param reading {object}
    */
-  _this.setCalibrationH = function (reading) {
+  _this.setCalibrationH = function (reading, calculator) {
     var absolute,
         baseline,
-        calculator,
         endtime,
         measurements,
         starttime,
         time,
         valid;
 
+    _calculator = calculator;
     measurements = _this.getHorizontalIntensityMeasurements(reading);
-    calculator = Calculator();
 
     time = _this.getMeasurementValues(measurements, 'time');
     starttime = Math.min(Number.parseInt(time));
     endtime = Math.max(Number.parseInt(time));
     valid = reading.get('horizontal_intensity_valid');
-    absolute = calculator.horizontalComponent(reading);
-    baseline = calculator.hBaseline(reading);
+    absolute = _calculator.horizontalComponent(reading);
+    baseline = _calculator.hBaseline(reading);
 
     reading.set({
       startH: starttime,
@@ -529,25 +529,24 @@ var ObservatoryFactory = function (options) {
    *
    * @param reading {object}
    */
-  _this.setCalibrationZ = function (reading) {
+  _this.setCalibrationZ = function (reading, calculator) {
     var absolute,
         baseline,
-        calculator,
         endtime,
         measurements,
         starttime,
         time,
         valid;
 
+    _calculator = calculator;
     measurements = _this.getVerticalIntensityMeasurements(reading);
-    calculator = Calculator();
 
     time = _this.getMeasurementValues(measurements, 'time');
     starttime = Math.min(Number.parseInt(time));
     endtime = Math.max(Number.parseInt(time));
     valid = reading.get('vertical_intensity_valid');
-    absolute = calculator.verticalComponent(reading);
-    baseline = calculator.zBaseline(reading);
+    absolute = _calculator.verticalComponent(reading);
+    baseline = _calculator.zBaseline(reading);
 
     reading.set({
       startZ: starttime,
