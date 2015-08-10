@@ -14,9 +14,9 @@ var View = require('mvc/View'),
 
 
 var _DEFAULTS = {
+  calculator: Calculator(),
   observationId: null,
   factory: ObservatoryFactory(),
-  calculator: Calculator(),
   realtimeDataFactory: RealtimeDataFactory()
 };
 
@@ -615,9 +615,9 @@ var ObservationView = function (options) {
     for (i = 0, len = readings.length; i < len; i++) {
       reading = readings[i];
 
-      _factory.setCalibrationD(reading);
-      _factory.setCalibrationH(reading);
-      _factory.setCalibrationZ(reading);
+      _factory.setCalibrationD(reading, _calculator);
+      _factory.setCalibrationH(reading, _calculator);
+      _factory.setCalibrationZ(reading, _calculator);
     }
   };
 
