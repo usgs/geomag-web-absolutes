@@ -419,7 +419,9 @@ var ObservationMetaView = function (options) {
    * @param {[type]} observatory [description]
    */
   _setObservatory = function (observatory) {
-    var mark,
+    var azimuth = 0,
+        correction = 0,
+        mark,
         mark_id,
         marks,
         electronics_id,
@@ -464,15 +466,20 @@ var ObservationMetaView = function (options) {
       piers.select(pier);
       default_electronics_id = pier.get('default_electronics_id');
       default_theodolite_id = pier.get('default_theodolite_id');
+
+      correction = pier.get('correction');
+      marks = pier.get('marks');
+      mark = marks.get(mark_id);
+      if (mark !== null) {
+        azimuth = mark.get('azimuth');
+      }
     }
     __select_by_id(electronics, electronics_id || default_electronics_id);
     __select_by_id(theodolites, theodolite_id || default_theodolite_id);
 
-    marks = pier.get('marks');
-    mark = marks.get(mark_id);
     _calculator.set({
-      pierCorrection: pier.get('correction'),
-      trueAzimuthOfMark: mark.get('azimuth')
+      pierCorrection: correction,
+      trueAzimuthOfMark: azimuth
     });
     // update views
     _electronicsSelectView.setCollection(electronics);
