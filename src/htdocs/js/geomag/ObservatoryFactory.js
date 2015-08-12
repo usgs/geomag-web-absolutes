@@ -679,6 +679,38 @@ var ObservatoryFactory = function (options) {
   };
 
   /**
+   * Parse an array of measurement values into an array of scalar values
+   * that match the key "name"
+   *
+   * @param  {object} measurements
+   *                  a collection of measurements
+   * @param  {string} name
+   *                  the measurement model value to be returned
+   *
+   * @return {array} an array of values that match the key "name"
+   */
+  _this.getMeasurementValuesInclination = function (measurements, name) {
+    var i = null,
+        len = null,
+        value,
+        values = [];
+
+    for (i = 0, len = measurements.length; i < len; i++) {
+      value = measurements[i].get(name);
+      if (value !== null) {
+        if (measurements[i].get('type') === Measurement.SOUTH_DOWN ||
+            measurements[i].get('type') === Measurement.NORTH_UP ||
+            measurements[i].get('type') === Measurement.SOUTH_UP ||
+            measurements[i].get('type') === Measurement.NORTH_DOWN) {
+          values.push(measurements[i].get(name));
+        }
+      }
+    }
+
+    return values;
+  };
+
+  /**
    * Parse an array of observatories into objects.
    *
    * @param observatories {Array<Object>}.
