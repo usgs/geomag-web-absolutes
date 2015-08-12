@@ -124,7 +124,8 @@ var DeclinationSummaryView = function (options) {
 
     _valid.checked = (_reading.get('declination_valid') === 'Y');
 
-    times = _factory.getMeasurementValues(measurements, 'time');
+    times = _factory.getMeasurementValuesDeclination(measurements, 'time');
+    console.log(times);
     if (times.length > 0) {
       startTime = Math.min.apply(null, times);
       endTime = Math.max.apply(null, times);
