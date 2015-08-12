@@ -474,7 +474,7 @@ var ObservatoryFactory = function (options) {
 
     measurements = _this.getDeclinationMeasurements(reading);
 
-    time = _this.getMeasurementValues(measurements, 'time');
+    time = _this.getMeasurementValuesDeclination(measurements, 'time');
     starttime = Math.min(Number.parseInt(time));
     endtime = Math.max(Number.parseInt(time));
     valid = reading.get('declination_valid');
@@ -506,7 +506,7 @@ var ObservatoryFactory = function (options) {
 
     measurements = _this.getHorizontalIntensityMeasurements(reading);
 
-    time = _this.getMeasurementValues(measurements, 'time');
+    time = _this.getMeasurementValuesInclination(measurements, 'time');
     starttime = Math.min(Number.parseInt(time));
     endtime = Math.max(Number.parseInt(time));
     valid = reading.get('horizontal_intensity_valid');
@@ -538,7 +538,7 @@ var ObservatoryFactory = function (options) {
 
     measurements = _this.getVerticalIntensityMeasurements(reading);
 
-    time = _this.getMeasurementValues(measurements, 'time');
+    time = _this.getMeasurementValuesInclination(measurements, 'time');
     starttime = Math.min(Number.parseInt(time));
     endtime = Math.max(Number.parseInt(time));
     valid = reading.get('vertical_intensity_valid');
