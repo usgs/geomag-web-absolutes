@@ -66,10 +66,10 @@ var ObservationMetaView = function (options) {
   var _this,
       _initialize,
 
-      _allUsers,
       _calculator,
       _date,
       _electronicsSelectView,
+      _enabledUsers,
       _marksSelectView,
       _julianDay,
       _observation,
@@ -430,9 +430,15 @@ var ObservationMetaView = function (options) {
           }
         });
 
-        _allUsers = Collection(data);
+        _enabledUsers = [];
+        data.forEach(function(a){
+          if (a.get('enabled') === 'Y') {
+            _enabledUsers.push(a);
+          }
+        });
+        _enabledUsers = Collection(_enabledUsers);
         // load observers collection
-        _observerSelectView.setCollection(_allUsers);
+        _observerSelectView.setCollection(_enabledUsers);
         _observerSelectView.selectById(_observation.get('observer_user_id'));
       },
       error: function () {/* TODO :: Show modal dialog error message */}
