@@ -76,6 +76,7 @@ var ObservationMetaView = function (options) {
       _observatoryId,
       _observatorySelectView,
       _observatories,
+      _observerContainer,
       _observerName,
       _observerSelectView,
       _options,
@@ -129,18 +130,21 @@ var ObservationMetaView = function (options) {
       '<section class="observation-meta-view">',
         '<div class="row">',
           '<div class="column one-of-two left-aligned">',
-            '<label for="', idPrefix, '-date"',
-                ' class="print-hidden">Date</label>',
+            '<label for="', idPrefix, '-date" class="print-hidden">',
+              'Date',
+            '</label>',
             '<input id="',  idPrefix, '-date" type="text"',
                 ' class="observation-date" placeholder="YYYY-MM-DD"/>',
 
-            '<label for="', idPrefix, '-julian-day"',
-                ' class="print-hidden">Julian Day</label>',
+            '<label for="', idPrefix, '-julian-day" class="print-hidden">',
+              'Julian Day',
+            '</label>',
             '<input id="', idPrefix, '-julian-day" type="text"',
                 ' class="julian-day-value" disabled />',
 
             '<label for="', idPrefix, '-piertemp" class="print-hidden">',
-                'Pier <abbr title="Temperature">Temp</abbr></label>',
+                'Pier <abbr title="Temperature">Temp</abbr>',
+            '</label>',
             '<input id="',  idPrefix, '-piertemp" type="text"',
                 ' class="pier-temperature"/>',
 
@@ -150,8 +154,10 @@ var ObservationMetaView = function (options) {
               '</label>',
               '<input id="', idPrefix, '-observer" type="text"',
                   ' class="observer-name" disabled />',
-              '<select id="', idPrefix, '-observer"',
-                ' class="observer-select hidden"></select>',
+              '<span class="observer-container hidden">',
+                '<select id="', idPrefix, '-observer"',
+                  ' class="observer-select"></select>',
+              '</span>',
             '</div>',
 
             '<label for="', idPrefix, '-reviewer" class="print-hidden">',
@@ -162,28 +168,31 @@ var ObservationMetaView = function (options) {
           '</div>',
 
           '<div class="column one-of-two left-aligned">',
-            '<label for="', idPrefix, '-observatory"',
-                ' class="print-hidden">Observatory</label>',
+            '<label for="', idPrefix, '-observatory" class="print-hidden">',
+              'Observatory',
+            '</label>',
             '<select id="', idPrefix, '-observatory"',
                 ' class="observatory"></select>',
 
-            '<label for="', idPrefix, '-pier"',
-                ' class="print-hidden">Pier</label>',
-            '<select id="', idPrefix, '-pier"',
-                ' class="pier"></select>',
+            '<label for="', idPrefix, '-pier" class="print-hidden">',
+              'Pier',
+            '</label>',
+            '<select id="', idPrefix, '-pier" class="pier"></select>',
 
-            '<label for="', idPrefix, '-mark"',
-                ' class="print-hidden">Mark</label>',
-            '<select id="', idPrefix, '-mark"',
-                ' class="mark"></select>',
+            '<label for="', idPrefix, '-mark" class="print-hidden">',
+              'Mark',
+            '</label>',
+            '<select id="', idPrefix, '-mark" class="mark"></select>',
 
-            '<label for="', idPrefix, '-electronics"',
-                ' class="print-hidden">Electronics</label>',
+            '<label for="', idPrefix, '-electronics" class="print-hidden">',
+              'Electronics',
+            '</label>',
             '<select id="', idPrefix, '-electronics"',
                 ' class="electronics"></select>',
 
-            '<label for="', idPrefix, '-theodolite"',
-                ' class="print-hidden">Theodolite</label>',
+            '<label for="', idPrefix, '-theodolite" class="print-hidden">',
+              'Theodolite',
+            '</label>',
             '<select id="', idPrefix, '-theodolite"',
                 ' class="theodolite"></select>',
           '</div>',
@@ -226,6 +235,7 @@ var ObservationMetaView = function (options) {
     _date = el.querySelector('.observation-date');
     _julianDay = el.querySelector('.julian-day-value');
     _pierTemperature = el.querySelector('.pier-temperature');
+    _observerContainer = el.querySelector('.observer-container');
     _observerName = el.querySelector('.observer-name');
     _reviewerName = el.querySelector('.reviewer-name');
 
@@ -421,6 +431,7 @@ var ObservationMetaView = function (options) {
         });
 
         _allUsers = Collection(data);
+        // load observers collection
         _observerSelectView.setCollection(_allUsers);
         _observerSelectView.selectById(_observation.get('observer_user_id'));
       },
@@ -585,32 +596,29 @@ var ObservationMetaView = function (options) {
 
     _pierTemperature.value = _observation.get('pier_temperature');
 
+    // Display user ids until usernames are populated.
     _observerName.value = observer;
     _reviewerName.value = reviewer;
+    // Obtain and set observer name.
     if (observer) {
       _userFactory.get({
         data: {'id': observer},
         success: function (data) {
           _observerName.value = data.username;
-          if ((data.enabled === 'Y') && (user_admin === 'Y') && (reviewed ==='N')) {
-            console.log('Do some stuff');
-            // if (_observerSelectView) {
-            //   console.log(_observerSelectView);
-            //   if (_observerSelectView.classList) {
-            //     console.log(_observerSelectView.classList);
-            //     _observerName.classList.add('hidden');
-            //     if (_observerSelectView.classList.contains('hidden')) {
-            //       _observerSelectView.classList.remove('hidden');
-            //     }
-            //   } else {console.log('No classlist...');}
-            // }
+          if ((data.enabled === 'Y') && (user_admin === 'Y') &&
+              (reviewed ==='N') && (_observerContainer.classList)) {
+            // Hide the observer text box and show the select box instead.
+            _observerName.classList.add('hidden');
+            if (_observerContainer.classList.contains('hidden')) {
+              _observerContainer.classList.remove('hidden');
+            }
           }
         }
       });
       } else {
       _observerName.value = _user.get('username');
     }
-
+    // Obtain and set reviewer name.
     if (reviewer) {
       _userFactory.get({
         data: {'id': reviewer},
