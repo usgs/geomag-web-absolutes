@@ -7,7 +7,8 @@
   .left-aligned,
   .right-aligned {
     > label,
-    > .label {
+    > .label,
+    > .observer label {
       padding: 0;
       margin: 0;
       display: block;
@@ -17,6 +18,8 @@
     }
 
     > input,
+    > .observer input,
+    > .observer select,
     > select,
     > textarea,
     > .value {
@@ -37,12 +40,18 @@
     text-align: center;
   }
 
+  .hidden {
+    display: none;
+    visibility: hidden;
+  }
+
   // left and right stack, and change label text alignment
   @media screen and (min-width:768px) {
     .left-aligned,
     .right-aligned {
       > label,
-      > .label {
+      > .label,
+      > .observer label {
         float: left;
         clear: left;
         width: 7em;
@@ -50,6 +59,8 @@
       }
 
       > input,
+      > .observer input,
+      > .observer select,
       > select,
       > textarea,
       > .value {
@@ -66,7 +77,8 @@
 
     .right-aligned {
       > label,
-      > .label {
+      > .label,
+      > .observer label {
         text-align: right;
       }
     }
@@ -76,16 +88,20 @@
 @media print {
   .observation-meta-view {
     font-size: 12px;
-    > label {
+    > label,
+    > .observer label {
       font-size: 12px;
     }
     .left-aligned,
     .right-aligned {
-      >label {
+      > label,
+      > .observer label {
         clear: left;
         float: left;
       }
       > input,
+      > .observer input,
+      > .observer select,
       > select,
       > textarea,
       > text,
@@ -100,6 +116,7 @@
   }
 
   .observation-meta-view .left-aligned > label.print-hidden,
+  .observation-meta-view .left-aligned .observer > label.print-hidden,
   .pier-temperature,
   .observer-name,
   .mark,
