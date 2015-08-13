@@ -66,6 +66,7 @@ var ObservationMetaView = function (options) {
   var _this,
       _initialize,
 
+      _allUsers,
       _calculator,
       _date,
       _electronicsSelectView,
@@ -76,6 +77,7 @@ var ObservationMetaView = function (options) {
       _observatorySelectView,
       _observatories,
       _observerName,
+      _observerSelectView,
       _options,
       _pierSelectView,
       _pierTemperature,
@@ -87,7 +89,9 @@ var ObservationMetaView = function (options) {
       _createViewSkeleton,
       _formatInstrument,
       _formatMark,
+      _formatObserver,
       _formatPier,
+      _getUsers,
       _onDateChange,
       _onPierTempChange,
       _setObservatory,
@@ -105,13 +109,16 @@ var ObservationMetaView = function (options) {
     _calculator = _options.calculator;
     _observation = _options.observation;
     _observatories = _options.observatories || Collection([]);
-
     _observatoryId = _options.observatoryId;
 
     _userFactory = _options.UserFactory;
     _user = User.getCurrentUser();
 
     _createViewSkeleton();
+    _getUsers();
+
+    // fill in observation inputs
+    _this.render();
   };
 
   _createViewSkeleton = function () {
@@ -185,6 +192,11 @@ var ObservationMetaView = function (options) {
     ].join('');
 
     // observatory information inputs
+    _observerSelectView = CollectionSelectBox({
+      el: el.querySelector('.observer-select'),
+      emptyText: 'Loading observers...',
+      formatOption: _formatObserver
+    });
     _observatorySelectView = CollectionSelectBox({
       el: el.querySelector('.observatory'),
       emptyText: 'Loading observatories...'
@@ -259,7 +271,20 @@ var ObservationMetaView = function (options) {
           }
         });
       }
+    });
 
+    _observerSelectView.on('change', function (observer) {
+      var observer_id = _observation.get('observer_user_id');
+
+      if (observer === null) {
+          _observation.set({
+            observer_user_id: (observer_id ? observer_id : _user.get('id'))
+          });
+      } else {
+        _observation.set({
+          observer_user_id: observer.id
+        });
+      }
     });
 
     _pierSelectView.on('change', function (pier) {
@@ -326,9 +351,6 @@ var ObservationMetaView = function (options) {
     // load observatories collection
     _observatorySelectView.setCollection(_observatories);
     _observatorySelectView.selectById(_observatoryId);
-
-    // fill in observation inputs
-    _this.render();
   };
 
   /**
@@ -359,6 +381,16 @@ var ObservationMetaView = function (options) {
   };
 
   /**
+   * Formatting callback for observer select view.
+   *
+   * @param observer {User}
+   * @return {String} content for option element.
+   */
+  _formatObserver = function (observer) {
+    return observer.get('username');
+  };
+
+  /**
    * Formatting callback for pier select view.
    *
    * @param pier {Pier}
@@ -373,6 +405,28 @@ var ObservationMetaView = function (options) {
    *
    * Updated observation begin and pier_temperature attributes from form.
    */
+
+  _getUsers = function () {
+    _userFactory.get({
+      success: function (data) {
+        data = data.map(function (info) {return User(info);});
+
+        data.sort(function(a, b) {
+          // sort alphabetically by username.
+          if (a.get('username') < b.get('username')) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+
+        _allUsers = Collection(data);
+        _observerSelectView.setCollection(_allUsers);
+        _observerSelectView.selectById(_observation.get('observer_user_id'));
+      },
+      error: function () {/* TODO :: Show modal dialog error message */}
+    });
+  };
 
   _onDateChange = function () {
     try {
@@ -522,8 +576,6 @@ var ObservationMetaView = function (options) {
         reviewer = _observation.get('reviewer_user_id'),
         user_admin = _user.get('admin');
 
-    console.log('User is admin?');
-    console.log(_user.get('admin'));
     if (begin_error === null) {
       _date.value = Format.date(begin);
       _julianDay.value = _this.getJulianDay(begin);
@@ -539,11 +591,19 @@ var ObservationMetaView = function (options) {
       _userFactory.get({
         data: {'id': observer},
         success: function (data) {
-          console.log('Observer is enabled');
-          console.log(data.enabled);
           _observerName.value = data.username;
           if ((data.enabled === 'Y') && (user_admin === 'Y') && (reviewed ==='N')) {
             console.log('Do some stuff');
+            // if (_observerSelectView) {
+            //   console.log(_observerSelectView);
+            //   if (_observerSelectView.classList) {
+            //     console.log(_observerSelectView.classList);
+            //     _observerName.classList.add('hidden');
+            //     if (_observerSelectView.classList.contains('hidden')) {
+            //       _observerSelectView.classList.remove('hidden');
+            //     }
+            //   } else {console.log('No classlist...');}
+            // }
           }
         }
       });
