@@ -122,41 +122,61 @@ var ObservationMetaView = function (options) {
       '<section class="observation-meta-view">',
         '<div class="row">',
           '<div class="column one-of-two left-aligned">',
-            '<label for="', idPrefix, '-date" class="print-hidden">Date</label>',
+            '<label for="', idPrefix, '-date"',
+                ' class="print-hidden">Date</label>',
             '<input id="',  idPrefix, '-date" type="text"',
                 ' class="observation-date" placeholder="YYYY-MM-DD"/>',
-            '<label for="', idPrefix, '-julian-day" class="print-hidden">Julian Day</label>',
+
+            '<label for="', idPrefix, '-julian-day"',
+                ' class="print-hidden">Julian Day</label>',
             '<input id="', idPrefix, '-julian-day" type="text"',
                 ' class="julian-day-value" disabled />',
+
             '<label for="', idPrefix, '-piertemp" class="print-hidden">',
                 'Pier <abbr title="Temperature">Temp</abbr></label>',
             '<input id="',  idPrefix, '-piertemp" type="text"',
                 ' class="pier-temperature"/>',
-            '<label for="', idPrefix, '-observer" class="print-hidden">',
-              'Observer',
-            '</label>',
-            '<input id="',  idPrefix, '-observer" type="text"',
-                ' class="observer-name" disabled />',
+
+            '<div class="observer">',
+              '<label for="', idPrefix, '-observer" class="print-hidden">',
+                'Observer',
+              '</label>',
+              '<input id="', idPrefix, '-observer" type="text"',
+                  ' class="observer-name" disabled />',
+              '<select id="', idPrefix, '-observer"',
+                ' class="observer-select hidden"></select>',
+            '</div>',
+
             '<label for="', idPrefix, '-reviewer" class="print-hidden">',
               'Reviewer',
             '</label>',
             '<input id="',  idPrefix, '-reviewer" type="text"',
                 ' class="reviewer-name" disabled />',
           '</div>',
+
           '<div class="column one-of-two left-aligned">',
-            '<label for="', idPrefix, '-observatory" class="print-hidden">Observatory</label>',
+            '<label for="', idPrefix, '-observatory"',
+                ' class="print-hidden">Observatory</label>',
             '<select id="', idPrefix, '-observatory"',
                 ' class="observatory"></select>',
-            '<label for="', idPrefix, '-pier" class="print-hidden">Pier</label>',
+
+            '<label for="', idPrefix, '-pier"',
+                ' class="print-hidden">Pier</label>',
             '<select id="', idPrefix, '-pier"',
                 ' class="pier"></select>',
-            '<label for="', idPrefix, '-mark" class="print-hidden">Mark</label>',
+
+            '<label for="', idPrefix, '-mark"',
+                ' class="print-hidden">Mark</label>',
             '<select id="', idPrefix, '-mark"',
                 ' class="mark"></select>',
-            '<label for="', idPrefix, '-electronics" class="print-hidden">Electronics</label>',
+
+            '<label for="', idPrefix, '-electronics"',
+                ' class="print-hidden">Electronics</label>',
             '<select id="', idPrefix, '-electronics"',
                 ' class="electronics"></select>',
-            '<label for="', idPrefix, '-theodolite" class="print-hidden">Theodolite</label>',
+
+            '<label for="', idPrefix, '-theodolite"',
+                ' class="print-hidden">Theodolite</label>',
             '<select id="', idPrefix, '-theodolite"',
                 ' class="theodolite"></select>',
           '</div>',
@@ -498,8 +518,12 @@ var ObservationMetaView = function (options) {
     var begin = new Date(_observation.get('begin') || (new Date()).getTime()),
         begin_error = _observation.get('begin_error'),
         observer = _observation.get('observer_user_id'),
-        reviewer = _observation.get('reviewer_user_id');
+        reviewed = _observation.get('reviewed'),
+        reviewer = _observation.get('reviewer_user_id'),
+        user_admin = _user.get('admin');
 
+    console.log('User is admin?');
+    console.log(_user.get('admin'));
     if (begin_error === null) {
       _date.value = Format.date(begin);
       _julianDay.value = _this.getJulianDay(begin);
@@ -515,12 +539,18 @@ var ObservationMetaView = function (options) {
       _userFactory.get({
         data: {'id': observer},
         success: function (data) {
+          console.log('Observer is enabled');
+          console.log(data.enabled);
           _observerName.value = data.username;
+          if ((data.enabled === 'Y') && (user_admin === 'Y') && (reviewed ==='N')) {
+            console.log('Do some stuff');
+          }
         }
       });
       } else {
       _observerName.value = _user.get('username');
     }
+
     if (reviewer) {
       _userFactory.get({
         data: {'id': reviewer},
