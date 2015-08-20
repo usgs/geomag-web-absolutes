@@ -33,15 +33,6 @@ Readme install dependency details
    Make sure to navigate back to your `geomag-baseline-calculator` project
    directory.
 
-6. Install Sass and Compass with Ruby
-
-        gem install sass
-        gem install compass
-
-7. Use npm to install grunt
-
-        npm install -g grunt-cli
-
 ---
 ### Windows ###
 
@@ -51,26 +42,29 @@ Readme install dependency details
    [Cygwin (http://cygwin.com/install.html)](http://cygwin.com/install.html)
    or another unix-like editor should work too.
 
-  - Choosing PATH environment: We recommend the __last option__ here to include
+   - Choosing PATH environment: We recommend the __last option__ here to include
      Unix tools, but if you don't understand what that entails then use the
      _second option_ which still adds Git to your system PATH.
-  - Besides that, all of the defaults should be sufficient.
+   - Besides that, all of the defaults should be sufficient.
 
-2. Install the latest release of [Node][] for Windows, using the Windows
-   Installer (.msi).
+2. Install the latest release of
+   [Node (http://nodejs.org/download/)](http://nodejs.org/download/) for
+   Windows, using the Windows Installer (.msi).
 
-  - All of the defaults should be sufficient for this.
+   - All of the defaults should be sufficient for this.
 
-3. Install the latest release of [Ruby][] for Windows, using the executable.
+3. Install the latest release of
+   [Ruby (http://rubyinstaller.org/)](http://rubyinstaller.org/) for Windows,
+   using the executable.
 
-  - All of the defaults should be sufficient for this.
+   - All of the defaults should be sufficient for this.
 
 4. Install PHP, from zip.
-  1. Download the appropriate zip file from http://windows.php.net/download/
-  2. Unzip the folder and copy the contents into a new folder on your `C:\`
+   1. Download the appropriate zip file from http://windows.php.net/download/
+   2. Unzip the folder and copy the contents into a new folder on your `C:\`
      drive.
-      `C:\php54`
-  3. Add PHP to your **PATH** (add `C:\php54;` to your "PATH" environment
+        C:\php54
+   3. Add PHP to your **PATH** (add `C:\php54;` to your "PATH" environment
      variable).
 
 5. If you are having trouble with PHP, you can try to install it with node.
@@ -81,15 +75,3 @@ Readme install dependency details
    Make sure to navigate back to your `earthquake-eventadmin` project directory.
 
         git config --global url."https://".insteadOf git://
-
-7. Install Sass and Compass with Ruby
-
-        gem install sass
-        gem install compass
-
-8. Use npm to install grunt
-
-        npm install -g grunt-cli
-
-[Node]: http://nodejs.org/download/
-[Ruby]: http://rubyinstaller.org/

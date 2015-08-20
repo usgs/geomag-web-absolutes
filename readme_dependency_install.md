@@ -1,7 +1,7 @@
 Readme install dependencies
 
 ### [Clone the Project](readme_git_install.md) ###
-Use git to clone geomag-baseline-calculator project from GitHub repository
+Use git to clone the geomag-baseline-calculator project from GitHub repository
 (if you haven't already).
 
 ### Dependencies ###
@@ -21,7 +21,16 @@ the links below for more specific dependency information.
 ### Secondary Dependencies ###
 Make sure you are in your `geomag-baseline-calculator` project directory.
 
-1. Install local npm modules
+1. Install Sass and Compass with Ruby
+
+        gem install sass
+        gem install compass
+
+2. Use npm to install grunt
+
+        npm install -g grunt-cli
+
+3. Install local npm modules
 
         npm install
 
