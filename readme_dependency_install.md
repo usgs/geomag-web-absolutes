@@ -17,6 +17,8 @@ the links below for more specific dependency information.
   1. Sass
   2. Compass
 
+[Dependency install details for Windows and Mac](readme_dependency_install_specifics.md)
+
 ---
 ### Secondary Dependencies ###
 Make sure you are in your `geomag-baseline-calculator` project directory.
@@ -34,4 +36,6 @@ Make sure you are in your `geomag-baseline-calculator` project directory.
 
         npm install
 
-[Dependency install details for Windows and Mac](readme_dependency_install_specifics.md)
+---
+Once dependencies are installed, you need to
+[configure the project](README.md#configure).
