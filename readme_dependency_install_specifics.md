@@ -33,6 +33,9 @@ Readme install dependency details
    Make sure to navigate back to your `geomag-baseline-calculator` project
    directory.
 
+Then continue by
+[installing secondary dependencies](readme_dependency_install.md#secondary-dependencies).
+
 ---
 ### Windows ###
 
@@ -75,3 +78,6 @@ Readme install dependency details
    Make sure to navigate back to your `earthquake-eventadmin` project directory.
 
         git config --global url."https://".insteadOf git://
+
+Then continue by
+[installing secondary dependencies](readme_dependency_install.md#secondary-dependencies).

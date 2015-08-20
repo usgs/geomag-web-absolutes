@@ -6,7 +6,7 @@ below, other wise you can just use this command to get a copy of the project:
       git clone https://github.com/usgs/geomag-baseline-calculator.git
 
 Then continue
-[installing dependencies](readme_dependency_install.md#Dependencies).
+[installing dependencies](readme_dependency_install.md#dependencies).
 
 ---
 ### Fork the project repository ###
@@ -70,4 +70,4 @@ Then continue
   8. Copy your SSH Key into the Key, and click **Add key**.
 
 When all of that is complete, don't for get to
-[continue installing dependencies](readme_dependency_install.md#Dependencies).
+[continue installing dependencies](readme_dependency_install.md#dependencies).
