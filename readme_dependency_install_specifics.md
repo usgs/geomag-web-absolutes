@@ -75,7 +75,8 @@ Then continue by
         npm install -g php
 
 6. Close and re-open your terminal so that your new PATH is loaded.
-   Make sure to navigate back to your `earthquake-eventadmin` project directory.
+   Make sure to navigate back to your `geomag-baseline-calculator` project
+   directory.
 
         git config --global url."https://".insteadOf git://
 

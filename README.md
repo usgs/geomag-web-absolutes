@@ -14,8 +14,10 @@ First time install. Walk through dependencies and other considerations.
 Set up your environment and database, by running the pre-install script.
 
   Unix
+
         ./src/lib/pre-install
   Windows
+
         php src/lib/pre-install.php
 
    If you're not sure what to do, pick
