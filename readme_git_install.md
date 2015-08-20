@@ -58,8 +58,8 @@ Then continue
      Copy the text block that is displayed.
      This is your SSH key.
      - If you can't copy the text from the terminal and you're on Windows, go
-     to `C:\Users\[your username]\.ssh` and open the `id_rsa.pub` file
-     with notepad.
+       to `C:\Users\[your username]\.ssh` and open the `id_rsa.pub` file
+       with notepad.
 
   5. In GitHub, click **Edit Your Profile**.
 

@@ -11,11 +11,12 @@ in magnetic data processing software.
 First time install. Walk through dependencies and other considerations.
 
 ### Configure ###
+Set up your environment and database, by running the pre-install script.
 
-1. Set up your environment and database
-
-   `./src/lib/pre-install` (Unix)
-   `php src/lib/pre-install.php` (Windows)
+  Unix
+        ./src/lib/pre-install
+  Windows
+        php src/lib/pre-install.php
 
    If you're not sure what to do, pick
 
