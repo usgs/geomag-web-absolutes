@@ -14,22 +14,22 @@ First time install. Walk through dependencies and other considerations.
 
 1. Set up your environment and database
 
-    `./src/lib/pre-install` (Unix) `php src/lib/pre-install.php` (Windows)
+   `./src/lib/pre-install` (Unix)
+   `php src/lib/pre-install.php` (Windows)
 
-    If you're not sure what to do, pick
+   If you're not sure what to do, pick
 
-      [3] Re-configure using default configuration as defaults.
+        [3] Re-configure using default configuration as defaults
 
-    Leave all options at their defaults except for
+   Leave all options at their defaults except for
 
-      Would you like to set up the absolutes database at this time [N]
+        Would you like to set up the absolutes database at this time [N]
 
-    to which you should answer `Y`.
+   to which you should answer `Y`.
 
 ### Use ###
-Preview in a browser
 
-Run `grunt` from the install directory.
+To preview in a browser, run `grunt` from the install directory.
 
 ---
 ### Having trouble getting started? ###
@@ -37,6 +37,4 @@ Run `grunt` from the install directory.
 If this is your first time using **grunt**, you need to install the grunt
 command line interface globally:
 
-      npm install -g grunt-cli
-
-[Dependency install details](readme_dependency_install.md)
+        npm install -g grunt-cli

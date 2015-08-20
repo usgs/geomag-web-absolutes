@@ -5,32 +5,42 @@ Readme install dependency details
 
 1. install xcode
 
-      https://developer.apple.com/xcode/
+        https://developer.apple.com/xcode/
 
 2. install homebrew
 
-      http://mxcl.github.io/homebrew/
+        http://mxcl.github.io/homebrew/
 
-3. Use homebrew to install `node`, `git` and `ruby`
+3. Use homebrew to install `node`, `git`, `ruby` and `php`
 
-      brew install node
-      brew install git
-      brew install ruby
+        brew install node
+        brew install git
+        brew install ruby
+        brew install php
 
 4. Update paths as needed in your `~/.bash_profile`:
    (If you use a tool other than brew to install these dependencies, you may
    need to modify these paths to point to the install directories.)
 
-      # brew installed binaries
-      export PATH=$PATH:/usr/local/bin
-      # npm installed binaries
-      export PATH=$PATH:/usr/local/share/npm/bin
-      # gem installed binaries
-      export PATH=$PATH:/usr/local/opt/ruby/bin
+        # brew installed binaries
+        export PATH=$PATH:/usr/local/bin
+        # npm installed binaries
+        export PATH=$PATH:/usr/local/share/npm/bin
+        # gem installed binaries
+        export PATH=$PATH:/usr/local/opt/ruby/bin
 
 5. Close and re-open your terminal so that your new PATH is loaded.
    Make sure to navigate back to your `geomag-baseline-calculator` project
    directory.
+
+6. Install Sass and Compass with Ruby
+
+        gem install sass
+        gem install compass
+
+7. Use npm to install grunt
+
+        npm install -g grunt-cli
 
 ---
 ### Windows ###
@@ -63,10 +73,23 @@ Readme install dependency details
   3. Add PHP to your **PATH** (add `C:\php54;` to your "PATH" environment
      variable).
 
-5. Close and re-open your terminal so that your new PATH is loaded.
+5. If you are having trouble with PHP, you can try to install it with node.
+
+        npm install -g php
+
+6. Close and re-open your terminal so that your new PATH is loaded.
    Make sure to navigate back to your `earthquake-eventadmin` project directory.
 
         git config --global url."https://".insteadOf git://
+
+7. Install Sass and Compass with Ruby
+
+        gem install sass
+        gem install compass
+
+8. Use npm to install grunt
+
+        npm install -g grunt-cli
 
 [Node]: http://nodejs.org/download/
 [Ruby]: http://rubyinstaller.org/

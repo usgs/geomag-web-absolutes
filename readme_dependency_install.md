@@ -13,27 +13,16 @@ the links below for more specific dependency information.
 1. Node
   1. Grunt
   2. PHP-CGI 5.4+
-1. Ruby
+2. Ruby
   1. Sass
   2. Compass
 
 ---
-1. Install PHP
-
-    `brew install php` (Mac)
-    `npm install -g php` (Windows)
-
-1. Install Sass and Compass with Ruby
-
-    `gem install sass`
-
-    `gem install compass`
-
 ### Secondary Dependencies ###
 Make sure you are in your `geomag-baseline-calculator` project directory.
 
 1. Install local npm modules
 
-      npm install
+        npm install
 
 [Dependency install details for Windows and Mac](readme_dependency_install_specifics.md)
