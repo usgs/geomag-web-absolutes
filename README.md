@@ -5,6 +5,8 @@ Enter Geomagnetic absolute measurements to calculate *baselines* to be applied
 to raw magnetometer data. Finalize and publish the calibration points for use
 in magnetic data processing software.
 
+[License](LICENSE.md)
+
 ## Getting Started ##
 
 ### [Install](readme_dependency_install.md) ###

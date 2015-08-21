@@ -8,7 +8,7 @@ Use git to clone the geomag-baseline-calculator project from GitHub repository
 You will need to have the following tools installed in order to run this
 project. Check out the [Mac](readme_dependency_install_specifics.md#mac) and
 [Windows](readme_dependency_install_specifics.md#windows) details here, or in
-the links below for more specific dependency information.
+the link below for more specific dependency information.
 
 1. Node
   1. Grunt
