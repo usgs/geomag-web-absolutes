@@ -463,7 +463,7 @@ var ObservatoryFactory = function (options) {
    *
    * @param reading {object}
    */
-  _this.setCalibrationD = function (reading, calculator) {
+  _this.setCalibrationD = function (reading) {
     var absolute,
         baseline,
         endtime,
@@ -472,7 +472,6 @@ var ObservatoryFactory = function (options) {
         time,
         valid;
 
-    _calculator = calculator;
     measurements = _this.getDeclinationMeasurements(reading);
 
     time = _this.getMeasurementValues(measurements, 'time');
@@ -496,7 +495,7 @@ var ObservatoryFactory = function (options) {
    *
    * @param reading {object}
    */
-  _this.setCalibrationH = function (reading, calculator) {
+  _this.setCalibrationH = function (reading) {
     var absolute,
         baseline,
         endtime,
@@ -505,7 +504,6 @@ var ObservatoryFactory = function (options) {
         time,
         valid;
 
-    _calculator = calculator;
     measurements = _this.getHorizontalIntensityMeasurements(reading);
 
     time = _this.getMeasurementValues(measurements, 'time');
@@ -529,7 +527,7 @@ var ObservatoryFactory = function (options) {
    *
    * @param reading {object}
    */
-  _this.setCalibrationZ = function (reading, calculator) {
+  _this.setCalibrationZ = function (reading) {
     var absolute,
         baseline,
         endtime,
@@ -538,7 +536,6 @@ var ObservatoryFactory = function (options) {
         time,
         valid;
 
-    _calculator = calculator;
     measurements = _this.getVerticalIntensityMeasurements(reading);
 
     time = _this.getMeasurementValues(measurements, 'time');

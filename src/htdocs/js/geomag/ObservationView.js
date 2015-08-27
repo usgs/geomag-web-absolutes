@@ -5,10 +5,10 @@ var View = require('mvc/View'),
     Util = require('util/Util'),
     ModalView = require('mvc/ModalView'),
 
+    Calculator = require('geomag/ObservationBaselineCalculator'),
     ObservatoryFactory = require('geomag/ObservatoryFactory'),
     ObservationMetaView = require('geomag/ObservationMetaView'),
     ReadingGroupView = require('geomag/ReadingGroupView'),
-    Calculator = require('geomag/ObservationBaselineCalculator'),
     RealtimeDataFactory = require('geomag/RealtimeDataFactory'),
     User = require('geomag/User');
 
@@ -614,9 +614,9 @@ var ObservationView = function (options) {
     for (i = 0, len = readings.length; i < len; i++) {
       reading = readings[i];
 
-      _factory.setCalibrationD(reading, _calculator);
-      _factory.setCalibrationH(reading, _calculator);
-      _factory.setCalibrationZ(reading, _calculator);
+      _factory.setCalibrationD(reading);
+      _factory.setCalibrationH(reading);
+      _factory.setCalibrationZ(reading);
     }
   };
 
