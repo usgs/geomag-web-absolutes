@@ -14,10 +14,10 @@ var View = require('mvc/View'),
 
 
 var _DEFAULTS = {
-  calculator: Calculator(),
-  factory: ObservatoryFactory(),
+  calculator: null,
+  factory: null,
   observationId: null,
-  realtimeDataFactory: RealtimeDataFactory()
+  realtimeDataFactory: null
 };
 
 /**
@@ -140,13 +140,14 @@ var ObservationView = function (options) {
 
     _options = Util.extend({}, _DEFAULTS, options);
 
-    _calculator = _options.calculator;
-    _factory = _options.factory;
+    _calculator = _options.calculator || Calculator();
+    _factory = _options.factory || ObservatoryFactory();
     _observation = null;
     _observatories = null;
     _observationMetaView = null;
     _readingGroupView = null;
-    _realtimeDataFactory = _options.realtimeDataFactory;
+    _realtimeDataFactory =
+        _options.realtimeDataFactory || RealtimeDataFactory();
     _user = User.getCurrentUser();
 
     el.innerHTML = [
