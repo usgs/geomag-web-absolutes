@@ -124,7 +124,6 @@ var ObservationView = function (options) {
       _onObservatorySelect,
       _onPublishClick,
       _onSaveClick,
-      _options,
       _publishObservation,
       _removeControls,
       _saveObservation,
@@ -138,16 +137,15 @@ var ObservationView = function (options) {
   _initialize = function (options) {
     var el = _this.el;
 
-    _options = Util.extend({}, _DEFAULTS, options);
+    options = Util.extend({}, _DEFAULTS, options);
 
-    _calculator = _options.calculator || Calculator();
-    _factory = _options.factory || ObservatoryFactory();
+    _calculator = options.calculator || Calculator();
+    _factory = options.factory || ObservatoryFactory();
     _observation = null;
     _observatories = null;
     _observationMetaView = null;
     _readingGroupView = null;
-    _realtimeDataFactory =
-        _options.realtimeDataFactory || RealtimeDataFactory();
+    _realtimeDataFactory = options.realtimeDataFactory || RealtimeDataFactory();
     _user = User.getCurrentUser();
 
     el.innerHTML = [
@@ -165,7 +163,7 @@ var ObservationView = function (options) {
 
     // load observation
     _factory.getObservation({
-      id: _options.observationId || null,
+      id: options.observationId || null,
       success: _setObservation
     });
   };
