@@ -7,7 +7,7 @@ var Format = require('geomag/Formatter'),
 
 
 var _DEFAULTS = {
-  factory: ObservatoryFactory()
+  factory: null
 };
 
 
@@ -54,7 +54,7 @@ var HorizontalIntensitySummaryView = function (options) {
 
     _options = Util.extend({}, _DEFAULTS, options);
     _calculator = _options.calculator;
-    _factory = _options.factory;
+    _factory = _options.factory || ObservatoryFactory();
     _reading = _options.reading;
 
     el.innerHTML = [
@@ -100,17 +100,22 @@ var HorizontalIntensitySummaryView = function (options) {
 
 
   _this.render = function () {
-    var measurements = _reading.get('measurements').data(),
-        startTime = null,
-        endTime = null,
+    var endTime,
+        inclinations,
+        measurements,
+        startTime,
         times;
+
+    startTime = null;
+    endTime = null;
+    measurements = _reading.get('measurements').data();
+    inclinations = _factory.getInclinations(measurements);
 
     _name.innerHTML = _reading.get('set_number');
 
     _valid.checked = (_reading.get('horizontal_intensity_valid') === 'Y');
 
-    times = _factory.getMeasurementValues(
-        _factory.getInclinations(measurements), 'time');
+    times = _factory.getMeasurementValues(inclinations, 'time');
     if (times.length > 0) {
       startTime = Math.min.apply(null, times);
       endTime = Math.max.apply(null, times);

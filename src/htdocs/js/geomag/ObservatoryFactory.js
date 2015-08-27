@@ -466,18 +466,22 @@ var ObservatoryFactory = function (options) {
   _this.setCalibrationD = function (reading) {
     var absolute,
         baseline,
+        calculator,
+        declinations,
         endtime,
         measurements,
         starttime,
-        time,
+        times,
         valid;
 
     measurements = _this.getDeclinationMeasurements(reading);
 
-    time =
-        _this.getMeasurementValues(_this.getDeclinations(measurements), 'time');
-    starttime = Math.min(Number.parseInt(time));
-    endtime = Math.max(Number.parseInt(time));
+    declinations = _this.getDeclinations(measurements);
+    calculator = Calculator();
+
+    times = _this.getMeasurementValues(declinations, 'time');
+    starttime = Math.min.apply(null, times);
+    endtime = Math.max.apply(null, times);
     valid = reading.get('declination_valid');
     absolute = _calculator.magneticDeclination(reading);
     baseline = _calculator.dBaseline(reading);
@@ -500,17 +504,20 @@ var ObservatoryFactory = function (options) {
     var absolute,
         baseline,
         endtime,
+        inclinations,
         measurements,
         starttime,
-        time,
+        times,
         valid;
 
     measurements = _this.getHorizontalIntensityMeasurements(reading);
 
-    time =
-        _this.getMeasurementValues(_this.getInclinations(measurements), 'time');
-    starttime = Math.min(Number.parseInt(time));
-    endtime = Math.max(Number.parseInt(time));
+    inclinations = _this.getInclinations(measurements);
+    calculator = Calculator();
+
+    times = _this.getMeasurementValues(inclinations, 'time').map(Number);
+    starttime = Math.min.apply(null, times);
+    endtime = Math.max.apply(null, times);
     valid = reading.get('horizontal_intensity_valid');
     absolute = _calculator.horizontalComponent(reading);
     baseline = _calculator.hBaseline(reading);
@@ -533,17 +540,20 @@ var ObservatoryFactory = function (options) {
     var absolute,
         baseline,
         endtime,
+        inclinations,
         measurements,
         starttime,
-        time,
+        times,
         valid;
 
     measurements = _this.getVerticalIntensityMeasurements(reading);
 
-    time =
-        _this.getMeasurementValues(_this.getInclinations(measurements), 'time');
-    starttime = Math.min(Number.parseInt(time));
-    endtime = Math.max(Number.parseInt(time));
+    inclinations = _this.getInclinations(measurements);
+    calculator = Calculator();
+
+    times = _this.getMeasurementValues(inclinations, 'time');
+    starttime = Math.min.apply(null, times);
+    endtime = Math.max.apply(null, times);
     valid = reading.get('vertical_intensity_valid');
     absolute = _calculator.verticalComponent(reading);
     baseline = _calculator.zBaseline(reading);
@@ -659,20 +669,21 @@ var ObservatoryFactory = function (options) {
    * @return {array} an array of measurements
    */
   _this.getDeclinations = function (measurements) {
-    var i = null,
-        len = null,
-        value,
-        declinationMeasurements = [];
+    var declinationMeasurements,
+        i,
+        len,
+        type;
+
+    i = null;
+    len = null;
+    type = null;
+    declinationMeasurements = [];
 
     for (i = 0, len = measurements.length; i < len; i++) {
-      value = measurements[i].get(name);
-      if (value !== null) {
-        if (measurements[i].get('type') === Measurement.WEST_DOWN ||
-            measurements[i].get('type') === Measurement.EAST_DOWN ||
-            measurements[i].get('type') === Measurement.WEST_UP ||
-            measurements[i].get('type') === Measurement.EAST_UP) {
-          declinationMeasurements.push(measurements[i]);
-        }
+      type = measurements[i].get('type');
+      if (type === Measurement.WEST_DOWN || type === Measurement.EAST_DOWN ||
+          type === Measurement.WEST_UP || type === Measurement.EAST_UP) {
+        declinationMeasurements.push(measurements[i]);
       }
     }
 
@@ -689,20 +700,21 @@ var ObservatoryFactory = function (options) {
    * @return {array} an array of measurements
    */
   _this.getInclinations = function (measurements) {
-    var i = null,
-        len = null,
-        value,
-        inclinationMeasurements = [];
+    var i,
+        inclinationMeasurements,
+        len,
+        type;
+
+    i = null;
+    len = null;
+    type = null;
+    inclinationMeasurements = [];
 
     for (i = 0, len = measurements.length; i < len; i++) {
-      value = measurements[i].get(name);
-      if (value !== null) {
-        if (measurements[i].get('type') === Measurement.SOUTH_DOWN ||
-            measurements[i].get('type') === Measurement.NORTH_UP ||
-            measurements[i].get('type') === Measurement.SOUTH_UP ||
-            measurements[i].get('type') === Measurement.NORTH_DOWN) {
-          inclinationMeasurements.push(measurements[i]);
-        }
+      type = measurements[i].get('type');
+      if (type === Measurement.SOUTH_DOWN || type === Measurement.NORTH_UP ||
+          type === Measurement.SOUTH_UP || type === Measurement.NORTH_DOWN) {
+        inclinationMeasurements.push(measurements[i]);
       }
     }
 
