@@ -445,10 +445,6 @@ var ObservationMetaView = function (options) {
         electronics_id: null,
         theodolite_id: null
       });
-      _calculator.set({
-        pierCorrection: 0,
-        trueAzimuthOfMark: 0
-      });
     }
 
     // read these after they were potentially reset
