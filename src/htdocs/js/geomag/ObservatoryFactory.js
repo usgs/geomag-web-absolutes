@@ -634,32 +634,6 @@ var ObservatoryFactory = function (options) {
   };
 
   /**
-   * Parse an array of measurement values into an array of scalar values
-   * that match the key "name"
-   *
-   * @param  {object} measurements
-   *                  a collection of measurements
-   * @param  {string} name
-   *                  the measurement model value to be returned
-   *
-   * @return {array} an array of values that match the key "name"
-   */
-  _this.getMeasurementValues = function (measurements, name) {
-    var i = null,
-        len = null,
-        value,
-        values = [];
-
-    for (i = 0, len = measurements.length; i < len; i++) {
-      value = measurements[i].get(name);
-      if (value !== null) {
-        values.push(measurements[i].get(name));
-      }
-    }
-    return values;
-  };
-
-  /**
    * Parse an array of measurements to find only the one that belong to
    * declination
    *
@@ -719,6 +693,36 @@ var ObservatoryFactory = function (options) {
     }
 
     return inclinationMeasurements;
+  };
+
+  /**
+   * Parse an array of measurement values into an array of scalar values
+   * that match the key "name"
+   *
+   * @param  {object} measurements
+   *                  a collection of measurements
+   * @param  {string} name
+   *                  the measurement model value to be returned
+   *
+   * @return {array} an array of values that match the key "name"
+   */
+  _this.getMeasurementValues = function (measurements, name) {
+    var i,
+        len,
+        value,
+        values;
+
+    i = null;
+    len = null;
+    values = [];
+
+    for (i = 0, len = measurements.length; i < len; i++) {
+      value = measurements[i].get(name);
+      if (value !== null) {
+        values.push(measurements[i].get(name));
+      }
+    }
+    return values;
   };
 
   /**
