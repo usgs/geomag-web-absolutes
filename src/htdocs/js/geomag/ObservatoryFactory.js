@@ -474,7 +474,8 @@ var ObservatoryFactory = function (options) {
 
     measurements = _this.getDeclinationMeasurements(reading);
 
-    time = _this.getMeasurementValuesDeclination(measurements, 'time');
+    time =
+        _this.getMeasurementValues(_this.getDeclinations(measurements), 'time');
     starttime = Math.min(Number.parseInt(time));
     endtime = Math.max(Number.parseInt(time));
     valid = reading.get('declination_valid');
@@ -506,7 +507,8 @@ var ObservatoryFactory = function (options) {
 
     measurements = _this.getHorizontalIntensityMeasurements(reading);
 
-    time = _this.getMeasurementValuesInclination(measurements, 'time');
+    time =
+        _this.getMeasurementValues(_this.getInclinations(measurements), 'time');
     starttime = Math.min(Number.parseInt(time));
     endtime = Math.max(Number.parseInt(time));
     valid = reading.get('horizontal_intensity_valid');
@@ -538,7 +540,8 @@ var ObservatoryFactory = function (options) {
 
     measurements = _this.getVerticalIntensityMeasurements(reading);
 
-    time = _this.getMeasurementValuesInclination(measurements, 'time');
+    time =
+        _this.getMeasurementValues(_this.getInclinations(measurements), 'time');
     starttime = Math.min(Number.parseInt(time));
     endtime = Math.max(Number.parseInt(time));
     valid = reading.get('vertical_intensity_valid');
@@ -647,21 +650,19 @@ var ObservatoryFactory = function (options) {
   };
 
   /**
-   * Parse an array of measurement values into an array of scalar values
-   * that match the key "name"
+   * Parse an array of measurements to find only the one that belong to
+   * declination
    *
    * @param  {object} measurements
    *                  a collection of measurements
-   * @param  {string} name
-   *                  the measurement model value to be returned
    *
-   * @return {array} an array of values that match the key "name"
+   * @return {array} an array of measurements
    */
-  _this.getMeasurementValuesDeclination = function (measurements, name) {
+  _this.getDeclinations = function (measurements) {
     var i = null,
         len = null,
         value,
-        values = [];
+        declinationMeasurements = [];
 
     for (i = 0, len = measurements.length; i < len; i++) {
       value = measurements[i].get(name);
@@ -670,30 +671,28 @@ var ObservatoryFactory = function (options) {
             measurements[i].get('type') === Measurement.EAST_DOWN ||
             measurements[i].get('type') === Measurement.WEST_UP ||
             measurements[i].get('type') === Measurement.EAST_UP) {
-          values.push(measurements[i].get(name));
+          declinationMeasurements.push(measurements[i]);
         }
       }
     }
 
-    return values;
+    return declinationMeasurements;
   };
 
   /**
-   * Parse an array of measurement values into an array of scalar values
-   * that match the key "name"
+   * Parse an array of measurements to find only the ones that belong to
+   * inclination
    *
    * @param  {object} measurements
    *                  a collection of measurements
-   * @param  {string} name
-   *                  the measurement model value to be returned
    *
-   * @return {array} an array of values that match the key "name"
+   * @return {array} an array of measurements
    */
-  _this.getMeasurementValuesInclination = function (measurements, name) {
+  _this.getInclinations = function (measurements) {
     var i = null,
         len = null,
         value,
-        values = [];
+        inclinationMeasurements = [];
 
     for (i = 0, len = measurements.length; i < len; i++) {
       value = measurements[i].get(name);
@@ -702,12 +701,12 @@ var ObservatoryFactory = function (options) {
             measurements[i].get('type') === Measurement.NORTH_UP ||
             measurements[i].get('type') === Measurement.SOUTH_UP ||
             measurements[i].get('type') === Measurement.NORTH_DOWN) {
-          values.push(measurements[i].get(name));
+          inclinationMeasurements.push(measurements[i]);
         }
       }
     }
 
-    return values;
+    return inclinationMeasurements;
   };
 
   /**

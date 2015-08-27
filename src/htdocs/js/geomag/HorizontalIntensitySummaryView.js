@@ -109,7 +109,8 @@ var HorizontalIntensitySummaryView = function (options) {
 
     _valid.checked = (_reading.get('horizontal_intensity_valid') === 'Y');
 
-    times = _factory.getMeasurementValuesInclination(measurements, 'time');
+    times = _factory.getMeasurementValues(
+        _factory.getInclinations(measurements), 'time');
     if (times.length > 0) {
       startTime = Math.min.apply(null, times);
       endTime = Math.max.apply(null, times);
