@@ -12,7 +12,7 @@ var Calculator = require('geomag/ObservationBaselineCalculator'),
 
 
 var _DEFAULTS = {
-  calculator: Calculator()
+  calculator: null
 };
 
 
@@ -32,7 +32,11 @@ var ReadingView = function (options) {
   var _this,
       _initialize,
 
+      _calculator,
+      _measurements,
+      _observation,
       _options,
+      _reading,
 
       _formatType,
       _onTimeChange,
@@ -45,30 +49,30 @@ var ReadingView = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function () {
-    _this._calculator = _options.calculator;
-    _this._observation = _options.observation;
-    _this._reading = _options.reading;
-    _this._measurements = _this._reading.getMeasurements();
+    _calculator = _options.calculator || Calculator();
+    _observation = _options.observation;
+    _reading = _options.reading;
+    _measurements = _reading.getMeasurements();
 
     _this._firstMarkUpMeasurement =
-        _this._measurements[Measurement.FIRST_MARK_UP][0];
+        _measurements[Measurement.FIRST_MARK_UP][0];
     _this._firstMarkDownMeasurement =
-        _this._measurements[Measurement.FIRST_MARK_DOWN][0];
-    _this._westDownMeasurement = _this._measurements[Measurement.WEST_DOWN][0];
-    _this._eastDownMeasurement = _this._measurements[Measurement.EAST_DOWN][0];
-    _this._westUpMeasurement = _this._measurements[Measurement.WEST_UP][0];
-    _this._eastUpMeasurement = _this._measurements[Measurement.EAST_UP][0];
+        _measurements[Measurement.FIRST_MARK_DOWN][0];
+    _this._westDownMeasurement = _measurements[Measurement.WEST_DOWN][0];
+    _this._eastDownMeasurement = _measurements[Measurement.EAST_DOWN][0];
+    _this._westUpMeasurement = _measurements[Measurement.WEST_UP][0];
+    _this._eastUpMeasurement = _measurements[Measurement.EAST_UP][0];
     _this._secondMarkUpMeasurement =
-        _this._measurements[Measurement.SECOND_MARK_UP][0];
+        _measurements[Measurement.SECOND_MARK_UP][0];
     _this._secondMarkDownMeasurement =
-        _this._measurements[Measurement.SECOND_MARK_DOWN][0];
+        _measurements[Measurement.SECOND_MARK_DOWN][0];
 
     _this._southDownMeasurement =
-        _this._measurements[Measurement.SOUTH_DOWN][0];
-    _this._northUpMeasurement = _this._measurements[Measurement.NORTH_UP][0];
-    _this._southUpMeasurement = _this._measurements[Measurement.SOUTH_UP][0];
+        _measurements[Measurement.SOUTH_DOWN][0];
+    _this._northUpMeasurement = _measurements[Measurement.NORTH_UP][0];
+    _this._southUpMeasurement = _measurements[Measurement.SOUTH_UP][0];
     _this._northDownMeasurement =
-        _this._measurements[Measurement.NORTH_DOWN][0];
+        _measurements[Measurement.NORTH_DOWN][0];
 
     _this._westDownMeasurement.on('change:time', _onTimeChange,
           _this._westDownMeasurement);
@@ -157,97 +161,97 @@ var ReadingView = function (options) {
     _this._firstMarkUpView = MeasurementView({
       el: _this.el.querySelector('.first-mark-up'),
       measurement: _this._firstMarkUpMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
     _this._firstMarkDownView = MeasurementView({
       el: _this.el.querySelector('.first-mark-down'),
       measurement: _this._firstMarkDownMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
     _this._secondMarkUpView = MeasurementView({
       el: _this.el.querySelector('.second-mark-up'),
       measurement: _this._secondMarkUpMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
     _this._secondMarkDownView = MeasurementView({
       el: _this.el.querySelector('.second-mark-down'),
       measurement: _this._secondMarkDownMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
 
     _this._westDownView = MeasurementView({
       el: _this.el.querySelector('.west-down'),
       measurement: _this._westDownMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
     _this._eastDownView = MeasurementView({
       el: _this.el.querySelector('.east-down'),
       measurement: _this._eastDownMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
     _this._westUpView = MeasurementView({
       el: _this.el.querySelector('.west-up'),
       measurement: _this._westUpMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
     _this._eastUpView = MeasurementView({
       el: _this.el.querySelector('.east-up'),
       measurement: _this._eastUpMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
 
     _this._southDownView = MeasurementView({
       el: _this.el.querySelector('.south-down'),
       measurement: _this._southDownMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
     _this._northUpView = MeasurementView({
       el: _this.el.querySelector('.north-up'),
       measurement: _this._northUpMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
     _this._southUpView = MeasurementView({
       el: _this.el.querySelector('.south-up'),
       measurement: _this._southUpMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
     _this._northDownView = MeasurementView({
       el: _this.el.querySelector('.north-down'),
       measurement: _this._northDownMeasurement,
-      observation: _this._observation
+      observation: _observation
     });
 
 
     _this._declinationView = DeclinationView({
       el: _this.el.querySelector('.declination-output'),
-      reading: _this._reading,
-      observation: _this._observation,
-      calculator: _this._calculator
+      reading: _reading,
+      observation: _observation,
+      calculator: _calculator
     });
 
     _this._inclinationView = InclinationView({
       el: _this.el.querySelector('.inclination-output'),
-      reading: _this._reading,
-      observation: _this._observation,
-      calculator: _this._calculator
+      reading: _reading,
+      observation: _observation,
+      calculator: _calculator
     });
 
     _this._magnetometerOrdinatesView = MagnetometerOrdinatesView({
       el: _this.el.querySelector('.magnetometer-ordinates-output'),
-      reading: _this._reading,
-      observation: _this._observation,
-      calculator: _this._calculator
+      reading: _reading,
+      observation: _observation,
+      calculator: _calculator
     });
   };
 
