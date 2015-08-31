@@ -76,8 +76,6 @@ var ObservationMetaView = function (options) {
       _observatoryId,
       _observatorySelectView,
       _observatories,
-      _observerContainer,
-      // _observerName,
       _observerSelect,
       _observerSelectView,
       _options,
@@ -149,15 +147,11 @@ var ObservationMetaView = function (options) {
             '<input id="',  idPrefix, '-piertemp" type="text"',
                 ' class="pier-temperature"/>',
 
-            '<div class="observer">',
-              '<label for="', idPrefix, '-observer" class="print-hidden">',
-                'Observer',
-              '</label>',
-              '<span class="observer-container">',
-                '<select id="', idPrefix, '-observer"',
-                  ' class="observer-select" disabled="disabled"></select>',
-              '</span>',
-            '</div>',
+            '<label for="', idPrefix, '-observer" class="print-hidden">',
+              'Observer',
+            '</label>',
+            '<select id="', idPrefix, '-observer"',
+              ' class="observer-select" disabled="disabled"></select>',
 
             '<label for="', idPrefix, '-reviewer" class="print-hidden">',
               'Reviewer',
@@ -234,7 +228,6 @@ var ObservationMetaView = function (options) {
     _date = el.querySelector('.observation-date');
     _julianDay = el.querySelector('.julian-day-value');
     _pierTemperature = el.querySelector('.pier-temperature');
-    _observerContainer = el.querySelector('.observer-container');
     _observerSelect = el.querySelector('.observer-select');
     _reviewerName = el.querySelector('.reviewer-name');
 

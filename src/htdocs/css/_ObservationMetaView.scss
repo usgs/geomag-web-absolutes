@@ -7,8 +7,7 @@
   .left-aligned,
   .right-aligned {
     > label,
-    > .label,
-    > .observer label {
+    > .label {
       padding: 0;
       margin: 0;
       display: block;
@@ -18,7 +17,6 @@
     }
 
     > input,
-    > .observer span select,
     > select,
     > textarea,
     > .value {
@@ -49,8 +47,7 @@
     .left-aligned,
     .right-aligned {
       > label,
-      > .label,
-      > .observer label {
+      > .label {
         float: left;
         clear: left;
         width: 7em;
@@ -58,7 +55,6 @@
       }
 
       > input,
-      > .observer span select,
       > select,
       > textarea,
       > .value {
@@ -75,8 +71,7 @@
 
     .right-aligned {
       > label,
-      > .label,
-      > .observer label {
+      > .label {
         text-align: right;
       }
     }
@@ -86,19 +81,16 @@
 @media print {
   .observation-meta-view {
     font-size: 12px;
-    > label,
-    > .observer label {
+    > label {
       font-size: 12px;
     }
     .left-aligned,
     .right-aligned {
-      > label,
-      > .observer label {
+      > label {
         clear: left;
         float: left;
       }
       > input,
-      > .observer span select,
       > select,
       > textarea,
       > text,
@@ -113,7 +105,6 @@
   }
 
   .observation-meta-view .left-aligned > label.print-hidden,
-  .observation-meta-view .left-aligned .observer > label.print-hidden,
   .pier-temperature,
   .mark,
   .electronics,
