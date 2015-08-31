@@ -18,7 +18,6 @@
     }
 
     > input,
-    > .observer input,
     > .observer span select,
     > select,
     > textarea,
@@ -59,7 +58,6 @@
       }
 
       > input,
-      > .observer input,
       > .observer span select,
       > select,
       > textarea,
@@ -100,7 +98,6 @@
         float: left;
       }
       > input,
-      > .observer input,
       > .observer span select,
       > select,
       > textarea,
@@ -118,7 +115,6 @@
   .observation-meta-view .left-aligned > label.print-hidden,
   .observation-meta-view .left-aligned .observer > label.print-hidden,
   .pier-temperature,
-  .observer-name,
   .mark,
   .electronics,
   .theodolite {

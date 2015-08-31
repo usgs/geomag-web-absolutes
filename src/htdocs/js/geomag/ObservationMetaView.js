@@ -77,7 +77,8 @@ var ObservationMetaView = function (options) {
       _observatorySelectView,
       _observatories,
       _observerContainer,
-      _observerName,
+      // _observerName,
+      _observerSelect,
       _observerSelectView,
       _options,
       _pierSelectView,
@@ -152,11 +153,9 @@ var ObservationMetaView = function (options) {
               '<label for="', idPrefix, '-observer" class="print-hidden">',
                 'Observer',
               '</label>',
-              '<input id="', idPrefix, '-observer" type="text"',
-                  ' class="observer-name" disabled />',
-              '<span class="observer-container hidden">',
+              '<span class="observer-container">',
                 '<select id="', idPrefix, '-observer"',
-                  ' class="observer-select"></select>',
+                  ' class="observer-select" disabled="disabled"></select>',
               '</span>',
             '</div>',
 
@@ -236,7 +235,7 @@ var ObservationMetaView = function (options) {
     _julianDay = el.querySelector('.julian-day-value');
     _pierTemperature = el.querySelector('.pier-temperature');
     _observerContainer = el.querySelector('.observer-container');
-    _observerName = el.querySelector('.observer-name');
+    _observerSelect = el.querySelector('.observer-select');
     _reviewerName = el.querySelector('.reviewer-name');
 
     _date.addEventListener('change', _onDateChange);
@@ -588,7 +587,6 @@ var ObservationMetaView = function (options) {
   _this.render = function () {
     var begin = new Date(_observation.get('begin') || (new Date()).getTime()),
         begin_error = _observation.get('begin_error'),
-        observer = _observation.get('observer_user_id'),
         reviewed = _observation.get('reviewed'),
         reviewer = _observation.get('reviewer_user_id'),
         user_admin = _user.get('admin');
@@ -602,28 +600,13 @@ var ObservationMetaView = function (options) {
 
     _pierTemperature.value = _observation.get('pier_temperature');
 
-    // Display user ids until usernames are populated.
-    _observerName.value = observer;
-    _reviewerName.value = reviewer;
-    // Obtain and set observer name.
-    if (observer) {
-      _userFactory.get({
-        data: {'id': observer},
-        success: function (data) {
-          _observerName.value = data.username;
-          if ((data.enabled === 'Y') && (user_admin === 'Y') &&
-              (reviewed ==='N') && (_observerContainer.classList)) {
-            // Hide the observer text box and show the select box instead.
-            _observerName.classList.add('hidden');
-            if (_observerContainer.classList.contains('hidden')) {
-              _observerContainer.classList.remove('hidden');
-            }
-          }
-        }
-      });
-      } else {
-      _observerName.value = _user.get('username');
+    // Disable the observer select if non-admin user or finalized observation.
+    if (user_admin === 'N' || reviewed === 'Y') {
+      _observerSelect.setAttribute('disabled', 'disabled');
     }
+
+    // Display user id until username is populated.
+    _reviewerName.value = reviewer;
     // Obtain and set reviewer name.
     if (reviewer) {
       _userFactory.get({
