@@ -466,7 +466,6 @@ var ObservatoryFactory = function (options) {
   _this.setCalibrationD = function (reading) {
     var absolute,
         baseline,
-        calculator,
         declinations,
         endtime,
         measurements,
@@ -475,9 +474,7 @@ var ObservatoryFactory = function (options) {
         valid;
 
     measurements = _this.getDeclinationMeasurements(reading);
-
     declinations = _this.getDeclinations(measurements);
-    calculator = Calculator();
 
     times = _this.getMeasurementValues(declinations, 'time');
     starttime = Math.min.apply(null, times);
@@ -511,9 +508,7 @@ var ObservatoryFactory = function (options) {
         valid;
 
     measurements = _this.getHorizontalIntensityMeasurements(reading);
-
     inclinations = _this.getInclinations(measurements);
-    calculator = Calculator();
 
     times = _this.getMeasurementValues(inclinations, 'time').map(Number);
     starttime = Math.min.apply(null, times);
@@ -547,9 +542,7 @@ var ObservatoryFactory = function (options) {
         valid;
 
     measurements = _this.getVerticalIntensityMeasurements(reading);
-
     inclinations = _this.getInclinations(measurements);
-    calculator = Calculator();
 
     times = _this.getMeasurementValues(inclinations, 'time');
     starttime = Math.min.apply(null, times);
