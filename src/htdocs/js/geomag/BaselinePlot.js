@@ -15,7 +15,7 @@ var _DEFAULTS = {
 var _PLOT_DEFAULTS = {
   data: [],
   height: 160,
-  margin: {top: 30, right: 20, bottom: 30, left: 50},
+  margin: {top: 8, right: 20, bottom: 25, left: 50},
   width: 640,
   yUnits: 'nT'
 };
