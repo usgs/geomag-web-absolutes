@@ -111,38 +111,17 @@ var ObservationsView = function (options) {
 
   // create, "add new observation" button
   _this.getAddObservationButton = function (observatoryId) {
-    var button = document.createElement('button'),
-        buttonExists = false,
-        buttonText = 'Add New Observation',
-        child,
-        children,
-        el = _this.el.querySelector('.observations-new');
+    var el = _this.el.querySelector('.observations-new'),
+        button = document.createElement('button');
 
-    if (el.hasChildNodes()) {
-      children = el.childNodes;
+    button.role = 'button';
+    button.innerHTML = 'Add New Observation';
 
-      for (var i = 0; i < children.length; i++) {
-        child = children[i];
+    button.addEventListener('click', function () {
+      window.location = MOUNT_PATH + '/observation/#' + observatoryId;
+    });
 
-        if (child.nodeName === 'BUTTON') {
-          if (child.textContent === buttonText) {
-            buttonExists = true;
-          }
-        }
-
-      }
-    }
-
-    if (!buttonExists) {
-      button.role = 'button';
-      button.innerHTML = buttonText;
-
-      button.addEventListener('click', function () {
-        window.location = MOUNT_PATH + '/observation/#' + observatoryId;
-      });
-
-      el.appendChild(button);
-    }
+    el.appendChild(button);
   };
 
   // get all observations
