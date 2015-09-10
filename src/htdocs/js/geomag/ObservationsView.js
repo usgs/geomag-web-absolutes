@@ -133,9 +133,13 @@ var ObservationsView = function (options) {
 
   // get all observations
   _this.getAllObservations = function (observatory) {
-    var el = _this.el.querySelector('.observations-all'),
-        observations = observatory.get('observations').data();
+    var el,
+        observations;
 
+    el = _this.el.querySelector('.observations-all');
+    observations = observatory.get('observations').data();
+
+    Util.empty(el);
     el.appendChild(_buildObservationList(observations));
   };
 
