@@ -19,6 +19,7 @@
     > input,
     > select,
     > textarea,
+    > .admin,
     > .value {
       margin-bottom: 1em;
     }
@@ -26,6 +27,11 @@
     > textarea {
       width: 100%;
     }
+  }
+
+  .admin {
+    margin: 0;
+    padding: 8px 10px;
   }
 
   .julian-day-value {
@@ -57,6 +63,7 @@
       > input,
       > select,
       > textarea,
+      > .admin,
       > .value {
         float: left;
         margin-bottom: 5px;
@@ -94,6 +101,7 @@
       > select,
       > textarea,
       > text,
+      > .admin,
       > .value {
         float: left;
         margin-bottom: 0px;

@@ -66,6 +66,7 @@ var ObservationMetaView = function (options) {
   var _this,
       _initialize,
 
+      _admin,
       _calculator,
       _date,
       _electronicsSelectView,
@@ -158,6 +159,9 @@ var ObservationMetaView = function (options) {
             '</label>',
             '<select id="',  idPrefix, '-reviewer"',
                 ' class="reviewer-select" disabled="disabled"></select>',
+            '<p class="alert info admin hidden">',
+              'Selected reviewer is not an admin user.',
+            '</p>',
           '</div>',
 
           '<div class="column one-of-two left-aligned">',
@@ -230,6 +234,7 @@ var ObservationMetaView = function (options) {
     });
 
     // observation inputs
+    _admin = el.querySelector('.admin');
     _date = el.querySelector('.observation-date');
     _julianDay = el.querySelector('.julian-day-value');
     _pierTemperature = el.querySelector('.pier-temperature');
@@ -281,7 +286,9 @@ var ObservationMetaView = function (options) {
     });
 
     _observerSelectView.on('change', function (observer) {
-      var observer_id = _observation.get('observer_user_id');
+      var observer_id;
+
+      observer_id = _observation.get('observer_user_id');
 
       if (observer === null) {
           _observation.set({
@@ -295,7 +302,9 @@ var ObservationMetaView = function (options) {
     });
 
     _reviewerSelectView.on('change', function (reviewer) {
-      var reviewer_id = _observation.get('reviewer_user_id');
+      var reviewer_id;
+
+      reviewer_id = _observation.get('reviewer_user_id');
 
       if (reviewer === null) {
           _observation.set({
@@ -305,6 +314,8 @@ var ObservationMetaView = function (options) {
         _observation.set({
           reviewer_user_id: reviewer.id
         });
+
+        _admin.classList.toggle('hidden', reviewer.get('admin') === 'Y');
       }
     });
 
@@ -437,8 +448,6 @@ var ObservationMetaView = function (options) {
   _getUsers = function () {
     _userFactory.get({
       success: function (data) {
-        var reviewers;
-
         data = data.map(function (info) {return User(info);});
 
         data.sort(function(a, b) {
@@ -449,21 +458,13 @@ var ObservationMetaView = function (options) {
             return 1;
           }
         });
-
-        reviewers = [];
-        data.forEach(function(a){
-          if (a.get('admin') === 'Y') {
-            reviewers.push(a);
-          }
-        });
-        reviewers = Collection(reviewers);
         data = Collection(data);
 
         // load observers collection
         _observerSelectView.setCollection(data);
         _observerSelectView.selectById(_observation.get('observer_user_id'));
         // load reviewers collection
-        _reviewerSelectView.setCollection(reviewers);
+        _reviewerSelectView.setCollection(data);
         _reviewerSelectView.selectById(_observation.get('reviewer_user_id'));
       },
       error: function () {/* TODO :: Show modal dialog error message */}
