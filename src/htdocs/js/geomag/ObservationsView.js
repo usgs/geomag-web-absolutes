@@ -27,7 +27,8 @@ var ObservationsView = function (options) {
       _observatoryId,
 
       _buildObservationList,
-      _formatDate;
+      _formatDate,
+      _onObservationClick;
 
   _options = Util.extend({}, _DEFAULTS, options);
   _this = View(_options);
@@ -103,6 +104,10 @@ var ObservationsView = function (options) {
     return list;
   };
 
+  _onObservationClick = function () {
+    window.location = MOUNT_PATH + '/observation/#' + _observatoryId;
+  };
+
   _formatDate = function (observation) {
       var begin = new Date(observation.get('begin') || new Date().getTime()),
       y = begin.getUTCFullYear(),
@@ -114,16 +119,14 @@ var ObservationsView = function (options) {
 
 
   // create, "add new observation" button
-  _this.getAddObservationButton = function (observatoryId) {
+  _this.getAddObservationButton = function () {
     var el = _this.el.querySelector('.observations-new'),
         button = document.createElement('button');
 
     button.role = 'button';
     button.innerHTML = 'Add New Observation';
 
-    button.addEventListener('click', function () {
-      window.location = MOUNT_PATH + '/observation/#' + observatoryId;
-    });
+    button.addEventListener('click', _onObservationClick);
 
     el.appendChild(button);
   };
@@ -152,7 +155,8 @@ var ObservationsView = function (options) {
 
   _this.render = function (observatory) {
     // create, "add new observation" button
-    _this.getAddObservationButton(observatory.get('id'));
+    _observatoryId = observatory.get('id');
+    _this.getAddObservationButton();
 
     // first pass, get all observations, this can be removed once
     // observation status is implemented, see methods below
@@ -165,6 +169,15 @@ var ObservationsView = function (options) {
     //_this.getCompletedObservations(observations);
   };
 
+  _this.destroy = function () {
+    var button = _this.el.querySelector('button');
+
+    // Remove event listeners
+    button.removeEventListener('click', _onObservationClick);
+
+    // Clean up private methods
+    _onObservationClick = null;
+  };
 
 
   // TODO, get all pending observations
