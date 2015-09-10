@@ -80,7 +80,8 @@ var ObservationMetaView = function (options) {
       _options,
       _pierSelectView,
       _pierTemperature,
-      _reviewerName,
+      _reviewerSelect,
+      _reviewerSelectView,
       _theodoliteSelectView,
       _user,
       _userFactory,
@@ -150,13 +151,13 @@ var ObservationMetaView = function (options) {
               'Observer',
             '</label>',
             '<select id="', idPrefix, '-observer"',
-              ' class="observer-select" disabled="disabled"></select>',
+                ' class="observer-select" disabled="disabled"></select>',
 
             '<label for="', idPrefix, '-reviewer" class="print-hidden">',
               'Reviewer',
             '</label>',
-            '<input id="',  idPrefix, '-reviewer" type="text"',
-                ' class="reviewer-name" disabled />',
+            '<select id="',  idPrefix, '-reviewer"',
+                ' class="reviewer-select" disabled="disabled"></select>',
           '</div>',
 
           '<div class="column one-of-two left-aligned">',
@@ -198,6 +199,11 @@ var ObservationMetaView = function (options) {
       emptyText: 'Loading observers...',
       formatOption: _formatUsername
     });
+    _reviewerSelectView = CollectionSelectBox({
+      el: el.querySelector('.reviewer-select'),
+      emptyText: 'Loading reviewers...',
+      formatOption: _formatUsername
+    });
     _observatorySelectView = CollectionSelectBox({
       el: el.querySelector('.observatory'),
       emptyText: 'Loading observatories...'
@@ -228,7 +234,7 @@ var ObservationMetaView = function (options) {
     _julianDay = el.querySelector('.julian-day-value');
     _pierTemperature = el.querySelector('.pier-temperature');
     _observerSelect = el.querySelector('.observer-select');
-    _reviewerName = el.querySelector('.reviewer-name');
+    _reviewerSelect = el.querySelector('.reviewer-select');
 
     _date.addEventListener('change', _onDateChange);
 
@@ -284,6 +290,20 @@ var ObservationMetaView = function (options) {
       } else {
         _observation.set({
           observer_user_id: observer.id
+        });
+      }
+    });
+
+    _reviewerSelectView.on('change', function (reviewer) {
+      var reviewer_id = _observation.get('reviewer_user_id');
+
+      if (reviewer === null) {
+          _observation.set({
+            reviewer_user_id: (reviewer_id ? reviewer_id : _user.get('id'))
+          });
+      } else {
+        _observation.set({
+          reviewer_user_id: reviewer.id
         });
       }
     });
@@ -417,6 +437,8 @@ var ObservationMetaView = function (options) {
   _getUsers = function () {
     _userFactory.get({
       success: function (data) {
+        var reviewers;
+
         data = data.map(function (info) {return User(info);});
 
         data.sort(function(a, b) {
@@ -427,11 +449,22 @@ var ObservationMetaView = function (options) {
             return 1;
           }
         });
+
+        reviewers = [];
+        data.forEach(function(a){
+          if (a.get('admin') === 'Y') {
+            reviewers.push(a);
+          }
+        });
+        reviewers = Collection(reviewers);
         data = Collection(data);
 
         // load observers collection
         _observerSelectView.setCollection(data);
         _observerSelectView.selectById(_observation.get('observer_user_id'));
+        // load reviewers collection
+        _reviewerSelectView.setCollection(reviewers);
+        _reviewerSelectView.selectById(_observation.get('reviewer_user_id'));
       },
       error: function () {/* TODO :: Show modal dialog error message */}
     });
@@ -581,7 +614,6 @@ var ObservationMetaView = function (options) {
     var begin = new Date(_observation.get('begin') || (new Date()).getTime()),
         begin_error = _observation.get('begin_error'),
         reviewed = _observation.get('reviewed'),
-        reviewer = _observation.get('reviewer_user_id'),
         user_admin = _user.get('admin');
 
     if (begin_error === null) {
@@ -593,21 +625,11 @@ var ObservationMetaView = function (options) {
 
     _pierTemperature.value = _observation.get('pier_temperature');
 
-    // Disable the observer select if non-admin user or finalized observation.
+    // Disable the observer and reviewer select if non-admin user or
+    //  finalized observation.
     if (user_admin === 'N' || reviewed === 'Y') {
       _observerSelect.setAttribute('disabled', 'disabled');
-    }
-
-    // Display user id until username is populated.
-    _reviewerName.value = reviewer;
-    // Obtain and set reviewer name.
-    if (reviewer) {
-      _userFactory.get({
-        data: {'id': reviewer},
-        success: function (data) {
-          _reviewerName.value = data.username;
-        }
-      });
+      _reviewerSelect.setAttribute('disabled', 'disabled');
     }
   };
 
