@@ -398,9 +398,13 @@ var ObservationView = function (options) {
    *        result of ObservatoryFactory.getObservatory().
    */
   _setObservation = function (observation) {
-    var el = _this.el,
-        observer_user_id = null;
+    var el,
+        observer_user_id,
+        reviewer_user_id;
 
+    el = _this.el;
+    observer_user_id = null;
+    reviewer_user_id = null;
     _observation = observation;
 
     observer_user_id = _observation.get('observer_user_id');
@@ -409,6 +413,14 @@ var ObservationView = function (options) {
     }
     _observation.set({
       observer_user_id: observer_user_id
+    });
+
+    reviewer_user_id = _observation.get('reviewer_user_id');
+    if (reviewer_user_id === null) {
+      reviewer_user_id = _user.get('id');
+    }
+    _observation.set({
+      reviewer_user_id: reviewer_user_id
     });
 
     // Add save/publish buttons based on roles
