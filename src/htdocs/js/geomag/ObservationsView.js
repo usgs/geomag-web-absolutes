@@ -50,6 +50,9 @@ var ObservationsView = function (options) {
 
     // load all observations from an observatory
     _this.getObservations(_observatoryId);
+
+    // create, "add new observation" button
+    _this.getAddObservationButton();
   };
 
   _buildObservationList = function (observations) {
@@ -161,10 +164,8 @@ var ObservationsView = function (options) {
   };
 
   _this.render = function (observatory) {
-    // create, "add new observation" button
     _observatoryId = observatory.get('id');
-    _this.getAddObservationButton();
-
+    
     // first pass, get all observations, this can be removed once
     // observation status is implemented, see methods below
     _this.getAllObservations(observatory);
