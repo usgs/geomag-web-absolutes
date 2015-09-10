@@ -69,7 +69,6 @@ var ObservationMetaView = function (options) {
       _calculator,
       _date,
       _electronicsSelectView,
-      _enabledUsers,
       _marksSelectView,
       _julianDay,
       _observation,
@@ -389,7 +388,14 @@ var ObservationMetaView = function (options) {
    * @return {String} content for option element.
    */
   _formatObserver = function (observer) {
-    return observer.get('username');
+    var username;
+
+    username = observer.get('username');
+    if (observer.get('enabled') === 'N') {
+      username = username + ' (disabled)';
+    }
+
+    return username;
   };
 
   /**
@@ -421,16 +427,10 @@ var ObservationMetaView = function (options) {
             return 1;
           }
         });
+        data = Collection(data);
 
-        _enabledUsers = [];
-        data.forEach(function(a){
-          if (a.get('enabled') === 'Y') {
-            _enabledUsers.push(a);
-          }
-        });
-        _enabledUsers = Collection(_enabledUsers);
         // load observers collection
-        _observerSelectView.setCollection(_enabledUsers);
+        _observerSelectView.setCollection(data);
         _observerSelectView.selectById(_observation.get('observer_user_id'));
       },
       error: function () {/* TODO :: Show modal dialog error message */}
