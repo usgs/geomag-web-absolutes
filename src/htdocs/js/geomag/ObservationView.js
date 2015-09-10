@@ -345,7 +345,7 @@ var ObservationView = function (options) {
   _publishObservation = function (callback, errback) {
     _factory.publishObservation({
       observation: _observation,
-      user: _user,
+      user: _observation.get('reviewer_user_id'),
       success: function (observation) {
         _observation.set({
           reviewed: observation.get('reviewed'),
