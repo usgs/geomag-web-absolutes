@@ -120,14 +120,17 @@ var ObservationsView = function (options) {
 
   // create, "add new observation" button
   _this.getAddObservationButton = function () {
-    var el = _this.el.querySelector('.observations-new'),
-        button = document.createElement('button');
+    var el,
+        button;
 
+    el = _this.el.querySelector('.observations-new');
+    button = document.createElement('button');
     button.role = 'button';
     button.innerHTML = 'Add New Observation';
 
     button.addEventListener('click', _onObservationClick);
 
+    Util.empty(el);
     el.appendChild(button);
   };
 
