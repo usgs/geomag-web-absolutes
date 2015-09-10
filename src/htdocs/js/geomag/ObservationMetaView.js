@@ -88,8 +88,8 @@ var ObservationMetaView = function (options) {
       _createViewSkeleton,
       _formatInstrument,
       _formatMark,
-      _formatObserver,
       _formatPier,
+      _formatUsername,
       _getUsers,
       _onDateChange,
       _onPierTempChange,
@@ -196,7 +196,7 @@ var ObservationMetaView = function (options) {
     _observerSelectView = CollectionSelectBox({
       el: el.querySelector('.observer-select'),
       emptyText: 'Loading observers...',
-      formatOption: _formatObserver
+      formatOption: _formatUsername
     });
     _observatorySelectView = CollectionSelectBox({
       el: el.querySelector('.observatory'),
@@ -382,23 +382,6 @@ var ObservationMetaView = function (options) {
   };
 
   /**
-   * Formatting callback for observer select view.
-   *
-   * @param observer {User}
-   * @return {String} content for option element.
-   */
-  _formatObserver = function (observer) {
-    var username;
-
-    username = observer.get('username');
-    if (observer.get('enabled') === 'N') {
-      username = username + ' (disabled)';
-    }
-
-    return username;
-  };
-
-  /**
    * Formatting callback for pier select view.
    *
    * @param pier {Pier}
@@ -406,6 +389,23 @@ var ObservationMetaView = function (options) {
    */
   _formatPier = function (pier) {
     return pier.get('name') + ' (' + pier.get('correction') + ' nT)';
+  };
+
+  /**
+   * Formatting callback for observer select view.
+   *
+   * @param observer {User}
+   * @return {String} content for option element.
+   */
+  _formatUsername = function (user) {
+    var name;
+
+    name = user.get('username');
+    if (user.get('enabled') === 'N') {
+      name = name + ' (disabled)';
+    }
+
+    return name;
   };
 
   /**
