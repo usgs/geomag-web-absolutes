@@ -57,11 +57,13 @@ You will need administrator access for these steps.
 
    - All of the defaults should be sufficient for this.
 
-3. Install the latest release of
+3. Install the latest stable release of
    [Ruby (http://rubyinstaller.org/)](http://rubyinstaller.org/) for Windows,
    using the executable.
 
    - All of the defaults should be sufficient for this.
+   - You will probably need to add Ruby to your system `PATH` so that you
+     can run `gem` commands.
 
 4. Install PHP, from zip.
    1. Download the appropriate zip file from http://windows.php.net/download/
