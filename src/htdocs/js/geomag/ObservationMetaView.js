@@ -448,6 +448,8 @@ var ObservationMetaView = function (options) {
   _getUsers = function () {
     _userFactory.get({
       success: function (data) {
+        var reviewers;
+
         data = data.map(function (info) {return User(info);});
 
         data.sort(function(a, b) {
@@ -458,13 +460,15 @@ var ObservationMetaView = function (options) {
             return 1;
           }
         });
+
+        reviewers = Collection(data);
         data = Collection(data);
 
         // load observers collection
         _observerSelectView.setCollection(data);
         _observerSelectView.selectById(_observation.get('observer_user_id'));
         // load reviewers collection
-        _reviewerSelectView.setCollection(data);
+        _reviewerSelectView.setCollection(reviewers);
         _reviewerSelectView.selectById(_observation.get('reviewer_user_id'));
       },
       error: function () {/* TODO :: Show modal dialog error message */}
