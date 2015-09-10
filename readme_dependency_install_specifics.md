@@ -38,6 +38,7 @@ Then continue by
 
 ---
 ### Windows ###
+You will need administrator access for these steps.
 
 1. You will need a terminal tool for Windows.
    [Git Bash (http://git-scm.com/download/win)](http://git-scm.com/download/win)
@@ -51,7 +52,7 @@ Then continue by
    - Besides that, all of the defaults should be sufficient.
 
 2. Install the latest release of
-   [Node (http://nodejs.org/download/)](http://nodejs.org/download/) for
+   [Node (http://nodejs.org/)](http://nodejs.org/) for
    Windows, using the Windows Installer (.msi).
 
    - All of the defaults should be sufficient for this.
