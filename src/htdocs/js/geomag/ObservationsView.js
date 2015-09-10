@@ -53,16 +53,19 @@ var ObservationsView = function (options) {
 
   _buildObservationList = function (observations) {
     var classname,
-        list = document.createElement('ul'),
-        markup = [],
+        list,
+        markup,
         observation,
+        p,
         tooltip;
 
     if (observations === null || observations.length === 0) {
-      list.innerHTML = '<li class="empty">There are no observations.</li>';
-      return list;
+      p = document.createElement('p');
+      p.innerHTML = '<p class="alert info">There are no observations.</p>';
+      return p;
     }
 
+    markup = [];
     for (var i = 0; i < observations.length; i++) {
       observation = observations[i];
       classname = observation.get('reviewed');
@@ -94,6 +97,7 @@ var ObservationsView = function (options) {
       );
     }
 
+    list = document.createElement('ul');
     list.innerHTML = markup.join('');
 
     return list;
