@@ -176,7 +176,14 @@ var ObservationsView = function (options) {
     button.removeEventListener('click', _onObservationClick);
 
     // Clean up private methods
+    _buildObservationList = null;
+    _formatDate = null;
     _onObservationClick = null;
+
+    // Clean up private variables
+    _factory = null;
+    _options = null;
+    _observatoryId = null;
   };
 
 
