@@ -315,7 +315,11 @@ var ObservationMetaView = function (options) {
           reviewer_user_id: reviewer.id
         });
 
-        _admin.classList.toggle('hidden', reviewer.get('admin') === 'Y');
+        if (reviewer.get('admin') === 'Y') {
+          _admin.classList.add('hidden');
+        } else {
+          _admin.classList.remove('hidden');
+        }
       }
     });
 
