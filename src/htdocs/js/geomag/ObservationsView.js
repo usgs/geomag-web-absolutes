@@ -23,13 +23,14 @@ var ObservationsView = function (options) {
       _initialize,
 
       _addObservationButton,
+      _allObservationsEl,
       _factory,
       _options,
       _observatoryId,
 
       _buildObservationList,
       _formatDate,
-      _onObservationClick;
+      _onAddObservationClick;
 
   _options = Util.extend({}, _DEFAULTS, options);
   _this = View(_options);
@@ -38,32 +39,28 @@ var ObservationsView = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function () {
-    var buttonContainer;
-
     _factory = _options.factory;
     _observatoryId = _options.observatoryId;
 
     _this.el.innerHTML = [
         '<h2>Observations</h2>',
-        '<section class="observations-new"></section>',
+        '<section class="observations-new">',
+          '<button role="button" class="add-observation">',
+            'Add New Observation',
+          '</button>',
+        '</section>',
         '<section class="observations-all"></section>'
         // '<section class="observations-pending"></section>', // TODO
         // '<section class="observations-completed"></section>' // TODO
     ].join('');
 
+    _addObservationButton = _this.el.querySelector('.add-observation');
+    _addObservationButton.addEventListener('click', _onAddObservationClick);
+
+    _allObservationsEl = _this.el.querySelector('.observations-all');
+
     // load all observations from an observatory
     _this.getObservations(_observatoryId);
-
-    // create, "Add New Observation" button
-    _addObservationButton = document.createElement('button');
-    _addObservationButton.role = 'button';
-    _addObservationButton.innerHTML = 'Add New Observation';
-
-    _addObservationButton.addEventListener('click', _onObservationClick);
-
-    buttonContainer = _this.el.querySelector('.observations-new');
-    Util.empty(buttonContainer);
-    buttonContainer.appendChild(_addObservationButton);
   };
 
   _buildObservationList = function (observations) {
@@ -119,7 +116,7 @@ var ObservationsView = function (options) {
     return list;
   };
 
-  _onObservationClick = function () {
+  _onAddObservationClick = function () {
     window.location = MOUNT_PATH + '/observation/#' + _observatoryId;
   };
 
@@ -134,14 +131,12 @@ var ObservationsView = function (options) {
 
   // get all observations
   _this.getAllObservations = function (observatory) {
-    var el,
-        observations;
+    var observations;
 
-    el = _this.el.querySelector('.observations-all');
     observations = observatory.get('observations').data();
 
-    Util.empty(el);
-    el.appendChild(_buildObservationList(observations));
+    Util.empty(_allObservationsEl);
+    _allObservationsEl.appendChild(_buildObservationList(observations));
   };
 
   // get observations from observatoryId
@@ -152,14 +147,22 @@ var ObservationsView = function (options) {
         _this.render(observatory);
       },
       error: function () {
-        _this.el.innerHTML = '<p>The observatory (id = ' + observatoryId +
-            ') that you requested does not exists in the database.</p>';
+        _this.render(null);
       }
     });
   };
 
   _this.render = function (observatory) {
+    if (observatory === null) {
+      _addObservationButton.setAttribute('disabled', 'disabled');
+      _allObservationsEl.innerHTML = '<p class="alert error">' +
+          'Observatory not found.' +
+          '</p>';
+      return;
+    }
+
     _observatoryId = observatory.get('id');
+    _addObservationButton.removeAttribute('disabled');
 
     // first pass, get all observations, this can be removed once
     // observation status is implemented, see methods below
@@ -173,18 +176,17 @@ var ObservationsView = function (options) {
   };
 
   _this.destroy = function () {
-    var button = _this.el.querySelector('button');
-
     // Remove event listeners
-    button.removeEventListener('click', _onObservationClick);
+    _addObservationButton.removeEventListener('click', _onAddObservationClick);
 
     // Clean up private methods
     _buildObservationList = null;
     _formatDate = null;
-    _onObservationClick = null;
+    _onAddObservationClick = null;
 
     // Clean up private variables
     _addObservationButton = null;
+    _allObservationsEl = null;
     _factory = null;
     _options = null;
     _observatoryId = null;
