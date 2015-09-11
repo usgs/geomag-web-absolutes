@@ -15,7 +15,7 @@ var _DEFAULTS = {
 var _PLOT_DEFAULTS = {
   data: [],
   height: 160,
-  margin: {top: 30, right: 20, bottom: 30, left: 50},
+  margin: {top: 8, right: 20, bottom: 25, left: 50},
   width: 640,
   yUnits: 'nT'
 };
@@ -23,7 +23,7 @@ var _PLOT_DEFAULTS = {
 /**
  * Private inner class.
  *
- * This class is does the actual D3 plotting work. The BaselinePLot contains
+ * This class does the actual D3 plotting work. The BaselinePLot contains
  * an instance of this Plot class for each of the baseline plots it displays.
  *
  */
@@ -290,12 +290,14 @@ var BaselinePlot = function (params) {
     _hPlot = Plot({
       el: el.querySelector('.baseline-plot-h-wrapper'),
       key: 'baseH',
-      validKey: 'horizontal_intensity_valid'
+      validKey: 'horizontal_intensity_valid',
+      height: 120
     });
     _dPlot = Plot({
       el: el.querySelector('.baseline-plot-e-wrapper'),
       key: 'baseD',
       validKey: 'declination_valid',
+      height: 120,
       yUnits: 'minutes',
       computeRange: function (data) {
         var dcount,
@@ -342,7 +344,8 @@ var BaselinePlot = function (params) {
     _zPlot = Plot({
       el: el.querySelector('.baseline-plot-z-wrapper'),
       key: 'baseZ',
-      validKey: 'vertical_intensity_valid'
+      validKey: 'vertical_intensity_valid',
+      height: 120
     });
 
     Events.on('hashchange', _onHashChange);
