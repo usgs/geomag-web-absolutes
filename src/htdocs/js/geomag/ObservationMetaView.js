@@ -635,6 +635,9 @@ var ObservationMetaView = function (options) {
     if (user_admin === 'N' || reviewed === 'Y') {
       _observerSelect.setAttribute('disabled', 'disabled');
       _reviewerSelect.setAttribute('disabled', 'disabled');
+    } else {
+      _observerSelect.removeAttribute('disabled');
+      _reviewerSelect.removeAttribute('disabled');
     }
   };
 
