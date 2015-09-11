@@ -22,6 +22,7 @@ var ObservationsView = function (options) {
   var _this,
       _initialize,
 
+      _addObservationButton,
       _factory,
       _options,
       _observatoryId,
@@ -37,6 +38,8 @@ var ObservationsView = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function () {
+    var buttonContainer;
+
     _factory = _options.factory;
     _observatoryId = _options.observatoryId;
 
@@ -51,8 +54,16 @@ var ObservationsView = function (options) {
     // load all observations from an observatory
     _this.getObservations(_observatoryId);
 
-    // create, "add new observation" button
-    _this.getAddObservationButton();
+    // create, "Add New Observation" button
+    _addObservationButton = document.createElement('button');
+    _addObservationButton.role = 'button';
+    _addObservationButton.innerHTML = 'Add New Observation';
+
+    _addObservationButton.addEventListener('click', _onObservationClick);
+
+    buttonContainer = _this.el.querySelector('.observations-new');
+    Util.empty(buttonContainer);
+    buttonContainer.appendChild(_addObservationButton);
   };
 
   _buildObservationList = function (observations) {
@@ -121,23 +132,6 @@ var ObservationsView = function (options) {
     return y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
   };
 
-
-  // create, "add new observation" button
-  _this.getAddObservationButton = function () {
-    var el,
-        button;
-
-    el = _this.el.querySelector('.observations-new');
-    button = document.createElement('button');
-    button.role = 'button';
-    button.innerHTML = 'Add New Observation';
-
-    button.addEventListener('click', _onObservationClick);
-
-    Util.empty(el);
-    el.appendChild(button);
-  };
-
   // get all observations
   _this.getAllObservations = function (observatory) {
     var el,
@@ -190,6 +184,7 @@ var ObservationsView = function (options) {
     _onObservationClick = null;
 
     // Clean up private variables
+    _addObservationButton = null;
     _factory = null;
     _options = null;
     _observatoryId = null;
