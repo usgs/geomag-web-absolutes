@@ -65,7 +65,8 @@ var ObservationsView = function (options) {
 
     if (observations === null || observations.length === 0) {
       p = document.createElement('p');
-      p.innerHTML = '<p class="alert info">There are no observations.</p>';
+      p.className = 'alert info';
+      p.innerHTML = 'There are no observations.';
       return p;
     }
 
@@ -165,7 +166,7 @@ var ObservationsView = function (options) {
 
   _this.render = function (observatory) {
     _observatoryId = observatory.get('id');
-    
+
     // first pass, get all observations, this can be removed once
     // observation status is implemented, see methods below
     _this.getAllObservations(observatory);
