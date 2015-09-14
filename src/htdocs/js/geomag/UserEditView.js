@@ -32,6 +32,7 @@ var UserEditView = function (options) {
       _user,
       _username;
 
+
   _this = View(options);
 
   _initialize = function (options) {
@@ -138,6 +139,7 @@ var UserEditView = function (options) {
 
     _options.user.set(values);
   };
+
 
   _initialize(options);
   options = null;

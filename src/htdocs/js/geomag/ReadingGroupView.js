@@ -42,6 +42,7 @@ var ReadingGroupView = function (options) {
       _createTab,
       _createSummaryTab;
 
+
   _this = View(options);
 
   /**

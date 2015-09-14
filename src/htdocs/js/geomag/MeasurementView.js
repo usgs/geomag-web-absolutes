@@ -46,6 +46,7 @@ var MeasurementView = function (options) {
       _validateAngle,
       _validateTime;
 
+
   options = Util.extend({}, _DEFAULTS, options);
   _this = View(options);
   /**
@@ -238,6 +239,7 @@ var MeasurementView = function (options) {
     _this._zValue.innerHTML = (z === null ? '&ndash;' : Format.nanoteslas(z));
     _this._fValue.innerHTML = (f === null ? '&ndash;' : Format.nanoteslas(f));
   };
+
 
   _initialize(options);
   options = null;

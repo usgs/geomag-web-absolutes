@@ -63,6 +63,7 @@ var ObservationSummaryView = function (options) {
       _renderSummaryBottom,
       _renderVerticalIntensitySummaryView;
 
+
   options = Util.extend({}, _DEFAULTS, options);
   _this = View(options);
 
@@ -417,6 +418,7 @@ var ObservationSummaryView = function (options) {
     _renderInclination();
     _renderSummaryBottom();
   };
+
 
   _initialize(options);
   options = null;

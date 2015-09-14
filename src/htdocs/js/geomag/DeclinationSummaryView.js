@@ -43,6 +43,7 @@ var DeclinationSummaryView = function (options) {
 
       _onChange;
 
+
   _this = View(options);
   /**
    * Initialize view, and call render.
@@ -146,6 +147,7 @@ var DeclinationSummaryView = function (options) {
     _baselineMin.innerHTML = Format.minutes(_calculator.dBaseline(_reading)*60);
     _eBaseline.innerHTML = Format.nanoteslas(_calculator.eBaseline(_reading));
   };
+
 
   _initialize(options);
   options = null;

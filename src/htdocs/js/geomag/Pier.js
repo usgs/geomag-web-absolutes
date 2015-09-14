@@ -25,6 +25,7 @@ var _DEFAULTS = {
 var Pier = function (options) {
   var _this;
 
+
   options = Util.extend({}, _DEFAULTS, options);
   _this = Model(options);
 
@@ -43,6 +44,7 @@ var Pier = function (options) {
       return null;
     }
   };
+
 
   options = null;
   return _this;

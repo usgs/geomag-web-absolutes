@@ -27,6 +27,7 @@ var ObservationBaselineCalculator = function (options) {
 
       _calculator;
 
+
     _this = Model(Util.extend({}, _DEFAULTS, options));
 
     _initialize = function (options) {
@@ -465,6 +466,7 @@ var ObservationBaselineCalculator = function (options) {
         _this.meanZ(reading)
     );
   };
+
 
   _initialize(options || {});
   options = null;

@@ -42,6 +42,7 @@ var Observation = function (options) {
 
       _updateMeasurementTimes;
 
+
   _this = Model(Util.extend({}, _DEFAULTS, options));
   /**
    * Initialize view, and call render.
@@ -113,6 +114,7 @@ var Observation = function (options) {
       callback(readings[i]);
     }
   };
+
 
   _initialize();
   options = null;

@@ -41,6 +41,7 @@ var HorizontalIntensitySummaryView = function (options) {
 
       _onChange;
 
+
   _this = View(options);
   /**
    * Initialize view, and call render.
@@ -129,6 +130,7 @@ var HorizontalIntensitySummaryView = function (options) {
     _baselineValues.innerHTML =
         Format.nanoteslas(_calculator.hBaseline(_reading));
   };
+
 
   _initialize(options);
   options = null;

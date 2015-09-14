@@ -25,6 +25,7 @@ var MagnetometerOrdinatesView = function (options) {
   var _this,
       _initialize;
 
+
   options = Util.extend({}, _DEFAULTS, options);
   _this = View(options);
   /**
@@ -172,6 +173,7 @@ var MagnetometerOrdinatesView = function (options) {
             'scaleValue = ', calculator.scaleValue(reading).toFixed(4),
         '</code>'].join('');
   };
+
 
   _initialize(options);
   options = null;

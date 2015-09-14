@@ -31,6 +31,7 @@ var ObservationsView = function (options) {
       _formatDate,
       _onAddObservationClick;
 
+
   options = Util.extend({}, _DEFAULTS, options);
   _this = View(options);
   /**
@@ -228,6 +229,7 @@ var ObservationsView = function (options) {
   //   el.innerHTML = '<h3>Completed</h3>';
   //   el.appendChild(_buildObservationList(completed));
   // };
+
 
   _initialize(options);
   options = null;

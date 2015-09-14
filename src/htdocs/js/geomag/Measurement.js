@@ -34,6 +34,7 @@ var _DEFAULTS = {
 var Measurement = function (options) {
   var _this;
 
+
   options = Util.extend({}, _DEFAULTS, options);
   _this = Model(options);
 

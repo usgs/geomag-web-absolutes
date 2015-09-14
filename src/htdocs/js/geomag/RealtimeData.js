@@ -15,6 +15,7 @@ var RealtimeData = function (options) {
       _data,
       _times;
 
+
   _this = {};
 
   _initialize = function (options) {
@@ -73,6 +74,7 @@ var RealtimeData = function (options) {
 
     return r;
   };
+
 
   _initialize(options);
   options = null;

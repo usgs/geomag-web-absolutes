@@ -30,6 +30,7 @@ var _DEFAULTS = {
 var Observatory = function (options) {
   var _this;
 
+
   options =  Util.extend({}, _DEFAULTS, options);
   _this = Model(options);
 
@@ -138,6 +139,7 @@ var Observatory = function (options) {
     }
     return Collection(theodolites);
   };
+
 
   options = null;
   return _this;

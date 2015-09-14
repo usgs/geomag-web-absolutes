@@ -34,6 +34,7 @@ var ObservatoryView = function (options) {
       _getObservations,
       _setObservatoryTitle;
 
+
   options = Util.extend({}, _DEFAULTS, options);
   _this = View(options);
 
@@ -187,6 +188,7 @@ var ObservatoryView = function (options) {
 
     _getObservations();
   };
+
 
   _initialize(options);
   options = null;

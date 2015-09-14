@@ -26,7 +26,9 @@ var _DEFAULTS = {
 var User = function (options) {
   var _this;
 
+
   _this = Model(Util.extend({}, _DEFAULTS, options));
+
 
   options = null;
   return _this;

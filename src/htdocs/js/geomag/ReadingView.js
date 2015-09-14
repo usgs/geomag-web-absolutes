@@ -41,6 +41,7 @@ var ReadingView = function (options) {
       _onTimeChange,
       _showWarning;
 
+
   options = Util.extend({}, _DEFAULTS, options);
   _this = View(options);
     /**
@@ -335,6 +336,7 @@ var ReadingView = function (options) {
   _this.render = function () {
     // TODO :: Render current model
   };
+
 
   _initialize(options);
   options = null;

@@ -98,6 +98,7 @@ var ObservationMetaView = function (options) {
       _updateErrorState,
       _validateDate;
 
+
   _this = View(options);
   /**
    * Initialize view, and call render.
@@ -643,6 +644,7 @@ var ObservationMetaView = function (options) {
       _reviewerSelect.removeAttribute('disabled');
     }
   };
+
 
   _initialize(options);
   options = null;

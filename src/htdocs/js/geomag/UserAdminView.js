@@ -41,6 +41,7 @@ var UserAdminView = function (options) {
       _onUserSave,
       _showUsers;
 
+
   _this = View(Util.extend({}, _DEFAULTS, options));
 
   _initialize = function (options) {

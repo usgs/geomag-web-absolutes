@@ -41,6 +41,7 @@ var VerticalIntensitySummaryView = function (options) {
 
       _onChange;
 
+
   _this = View(options);
   /**
    * Initialize view, and call render.
@@ -128,6 +129,7 @@ var VerticalIntensitySummaryView = function (options) {
     _baselineValue.innerHTML =
         Format.nanoteslas(_calculator.zBaseline(_reading));
   };
+
 
   _initialize(options);
   options = null;

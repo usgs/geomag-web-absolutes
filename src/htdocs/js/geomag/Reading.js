@@ -39,6 +39,7 @@ var Reading = function (options) {
   var _this,
       _initialize;
 
+
   _this = Model(Util.extend({}, _DEFAULTS, options));
 
   /**
@@ -130,6 +131,7 @@ var Reading = function (options) {
 
     return r;
   };
+
 
   _initialize();
   options = null;

@@ -6,7 +6,7 @@ var Format = require('geomag/Formatter'),
     View = require('mvc/View');
 
 
-var _DEFAULT_OPTIONS = {
+var _DEFAULTS = {
   'calculator': null,
   'reading': null
 };
@@ -26,7 +26,8 @@ var DeclinationView = function (options) {
   var _this,
       _initialize;
 
-  options = Util.extend({}, _DEFAULT_OPTIONS, options);
+
+  options = Util.extend({}, _DEFAULTS, options);
   _this = View(options);
   /**
    * Initialize view, and call render.
@@ -124,6 +125,7 @@ var DeclinationView = function (options) {
     _this._eastUpMinusWestDown.innerHTML =
         Format.minutes(calculator.eastUpMinusWestDown(reading)*60);
   };
+
 
   _initialize(options);
   options = null;

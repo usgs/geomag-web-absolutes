@@ -93,6 +93,7 @@ var ObservatorySummary = function (factory, attributes) {
     _factory.getObservatory(options);
   };
 
+
   _initialize(factory);
   factory = null;
   attributes = null;
@@ -137,6 +138,7 @@ var ObservationSummary = function (factory, attributes) {
     options.id = this.id;
     _factory.getObservation(options);
   };
+
 
   _initialize(factory);
   factory = null;
@@ -198,6 +200,7 @@ var ObservationDetail = function (factory, attributes) {
     _factory.getObservatories(options);
   };
 
+
   _initialize(factory);
   factory = null;
   attributes = null;
@@ -244,6 +247,7 @@ var ObservatoryFactory = function (options) {
       _serializeObservation,
       _toMilliseconds,
       _toSeconds;
+
 
   _this = {};
 
@@ -939,6 +943,7 @@ var ObservatoryFactory = function (options) {
     }
     return Math.round(milliseconds / 1000);
   };
+
 
   _initialize(options);
   options = null;

@@ -22,6 +22,7 @@ var UserFactory = function (options) {
 
       _options;
 
+
   _this = {};
 
   _initialize = function (options) {
@@ -68,6 +69,7 @@ var UserFactory = function (options) {
     options.success();
     console.log('update');
   };
+
 
   _initialize(options);
   options = null;
