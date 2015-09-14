@@ -23,12 +23,10 @@ var _DEFAULTS = {
  * @param  options {Object} pier attributes.
  */
 var Pier = function (options) {
-  var _this,
+  var _this;
 
-      _options;
-
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = Model(_options);
+  options = Util.extend({}, _DEFAULTS, options);
+  _this = Model(options);
 
   /**
    * Get the default mark for the pier.

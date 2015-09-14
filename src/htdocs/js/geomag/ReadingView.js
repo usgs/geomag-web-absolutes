@@ -35,23 +35,22 @@ var ReadingView = function (options) {
       _calculator,
       _measurements,
       _observation,
-      _options,
       _reading,
 
       _formatType,
       _onTimeChange,
       _showWarning;
 
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = View(_options);
+  options = Util.extend({}, _DEFAULTS, options);
+  _this = View(options);
     /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function () {
-    _calculator = _options.calculator || Calculator();
-    _observation = _options.observation;
-    _reading = _options.reading;
+  _initialize = function (options) {
+    _calculator = options.calculator || Calculator();
+    _observation = options.observation;
+    _reading = options.reading;
     _measurements = _reading.getMeasurements();
 
     _this._firstMarkUpMeasurement =
@@ -337,7 +336,7 @@ var ReadingView = function (options) {
     // TODO :: Render current model
   };
 
-  _initialize();
+  _initialize(options);
   options = null;
   return _this;
 };

@@ -25,7 +25,6 @@ var ObservatoryView = function (options) {
       _observatoryId,
       _observatorySelect,
       _observatoryTitle,
-      _options,
       _user,
 
       _buildObservatoryList,
@@ -35,15 +34,15 @@ var ObservatoryView = function (options) {
       _getObservations,
       _setObservatoryTitle;
 
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = View(_options);
+  options = Util.extend({}, _DEFAULTS, options);
+  _this = View(options);
 
-  _initialize = function () {
+  _initialize = function (options) {
     var el = _this.el;
 
-    _factory = _options.factory;
-    _observatoryId = _options.observatoryId;
-    _user = _options.user;
+    _factory = options.factory;
+    _observatoryId = options.observatoryId;
+    _user = options.user;
 
     // Overview of a single observatory
     if (_user.get('admin') !== 'Y') {

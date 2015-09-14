@@ -1,13 +1,13 @@
 'use strict';
 
-var View = require('mvc/View'),
-    Collection = require('mvc/Collection'),
-    Util = require('util/Util'),
+var Collection = require('mvc/Collection'),
     ModalView = require('mvc/ModalView'),
+    Util = require('util/Util'),
+    View = require('mvc/View'),
 
     Calculator = require('geomag/ObservationBaselineCalculator'),
-    ObservatoryFactory = require('geomag/ObservatoryFactory'),
     ObservationMetaView = require('geomag/ObservationMetaView'),
+    ObservatoryFactory = require('geomag/ObservatoryFactory'),
     ReadingGroupView = require('geomag/ReadingGroupView'),
     RealtimeDataFactory = require('geomag/RealtimeDataFactory'),
     User = require('geomag/User');
@@ -19,6 +19,7 @@ var _DEFAULTS = {
   observationId: null,
   realtimeDataFactory: null
 };
+
 
 /**
  * Callback to show publish success in modal dialog.

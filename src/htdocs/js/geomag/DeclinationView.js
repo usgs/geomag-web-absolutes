@@ -24,21 +24,19 @@ var _DEFAULT_OPTIONS = {
  */
 var DeclinationView = function (options) {
   var _this,
-      _initialize,
+      _initialize;
 
-      _options;
-
-  _options = Util.extend({}, _DEFAULT_OPTIONS, options);
-  _this = View(_options);
+  options = Util.extend({}, _DEFAULT_OPTIONS, options);
+  _this = View(options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function () {
+  _initialize = function (options) {
     var el = _this.el;
 
-    _this._reading = _options.reading;
-    _this._calculator = _options.calculator;
+    _this._reading = options.reading;
+    _this._calculator = options.calculator;
     _this._measurements = _this._reading.getMeasurements();
 
     el.classList.add('declination-view');
@@ -75,7 +73,7 @@ var DeclinationView = function (options) {
         el.querySelector('.east-up-minus-west-down-value');
 
     // when reading changes render view
-    _options.reading.on('change', 'render', _this);
+    _this._reading.on('change', 'render', _this);
 
     // also render when any related inputs change
     _this._measurements[Measurement.FIRST_MARK_UP][0].on(
@@ -127,7 +125,7 @@ var DeclinationView = function (options) {
         Format.minutes(calculator.eastUpMinusWestDown(reading)*60);
   };
 
-  _initialize();
+  _initialize(options);
   options = null;
   return _this;
 };

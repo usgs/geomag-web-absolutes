@@ -29,6 +29,7 @@ MEASUREMENT_TYPE_LABELS[Measurement.NORTH_UP] = 'North Up';
 MEASUREMENT_TYPE_LABELS[Measurement.SOUTH_UP] = 'South Up';
 MEASUREMENT_TYPE_LABELS[Measurement.NORTH_DOWN] = 'North Down';
 
+
 /**
  * Construct a new DeclinationSummaryView.
  *
@@ -41,25 +42,23 @@ var MeasurementView = function (options) {
     var _this,
       _initialize,
 
-      _options,
-
       _updateErrorState,
       _validateAngle,
       _validateTime;
 
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = View(_options);
+  options = Util.extend({}, _DEFAULTS, options);
+  _this = View(options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function () {
+  _initialize = function (options) {
     var el = _this.el,
         onTimeChange = null,
         onAngleChange = null;
 
-    _this._measurement = _options.measurement;
-    _this._observation = _options.observation;
+    _this._measurement = options.measurement;
+    _this._observation = options.observation;
 
     el.innerHTML = [
       '<th scope="row" class="measurement-type">',
@@ -240,7 +239,7 @@ var MeasurementView = function (options) {
     _this._fValue.innerHTML = (f === null ? '&ndash;' : Format.nanoteslas(f));
   };
 
-  _initialize();
+  _initialize(options);
   options = null;
   return _this;
 };

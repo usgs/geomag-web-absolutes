@@ -45,7 +45,6 @@ var ObservationSummaryView = function (options) {
       _fluxgateTemperature,
       _horizontalIntensitySummaryView,
       _observation,
-      _options,
       _outsideTemperature,
       _pierTemperature,
       _protonTemperature,
@@ -64,16 +63,16 @@ var ObservationSummaryView = function (options) {
       _renderSummaryBottom,
       _renderVerticalIntensitySummaryView;
 
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = View(_options);
+  options = Util.extend({}, _DEFAULTS, options);
+  _this = View(options);
 
-  _initialize = function () {
+  _initialize = function (options) {
     var el = _this.el;
 
-    _calculator = _options.calculator;
-    _observation = _options.observation;
+    _calculator = options.calculator;
+    _observation = options.observation;
     _readings = _observation.get('readings');
-    _userFactory = _options.UserFactory;
+    _userFactory = options.UserFactory;
 
     el.innerHTML = [
       '<section class="observation-summary-view">',

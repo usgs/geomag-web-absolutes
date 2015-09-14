@@ -20,6 +20,7 @@ var _PLOT_DEFAULTS = {
   yUnits: 'nT'
 };
 
+
 /**
  * Private inner class.
  *

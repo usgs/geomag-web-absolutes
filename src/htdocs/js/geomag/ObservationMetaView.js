@@ -78,7 +78,6 @@ var ObservationMetaView = function (options) {
       _observatories,
       _observerSelect,
       _observerSelectView,
-      _options,
       _pierSelectView,
       _pierTemperature,
       _reviewerSelect,
@@ -105,14 +104,14 @@ var ObservationMetaView = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function (options) {
-    _options = Util.extend({}, _DEFAULTS, options);
+    options = Util.extend({}, _DEFAULTS, options);
 
-    _calculator = _options.calculator;
-    _observation = _options.observation;
-    _observatories = _options.observatories || Collection([]);
-    _observatoryId = _options.observatoryId;
+    _calculator = options.calculator;
+    _observation = options.observation;
+    _observatories = options.observatories || Collection([]);
+    _observatoryId = options.observatoryId;
 
-    _userFactory = _options.UserFactory;
+    _userFactory = options.UserFactory;
     _user = User.getCurrentUser();
 
     _createViewSkeleton();

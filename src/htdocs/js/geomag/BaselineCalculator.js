@@ -1,7 +1,7 @@
 'use strict';
 
 var getScaleValueCoefficient = function () {
-return 3437.7468;
+  return 3437.7468;
 };
 
 var _SCALE_VALUE_COEFFICIENT = getScaleValueCoefficient();
@@ -292,6 +292,7 @@ var BaselineCalculator = function () {
 
   // Expose some static values
   BaselineCalculator._SCALE_VALUE_COEFFICIENT = _SCALE_VALUE_COEFFICIENT;
+
 
   return _this;
 };

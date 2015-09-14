@@ -25,22 +25,21 @@ var ObservationsView = function (options) {
       _addObservationButton,
       _allObservationsEl,
       _factory,
-      _options,
       _observatoryId,
 
       _buildObservationList,
       _formatDate,
       _onAddObservationClick;
 
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = View(_options);
+  options = Util.extend({}, _DEFAULTS, options);
+  _this = View(options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
   _initialize = function () {
-    _factory = _options.factory;
-    _observatoryId = _options.observatoryId;
+    _factory = options.factory;
+    _observatoryId = options.observatoryId;
 
     _this.el.innerHTML = [
         '<h2>Observations</h2>',
@@ -188,7 +187,6 @@ var ObservationsView = function (options) {
     _addObservationButton = null;
     _allObservationsEl = null;
     _factory = null;
-    _options = null;
     _observatoryId = null;
   };
 
@@ -231,7 +229,7 @@ var ObservationsView = function (options) {
   //   el.appendChild(_buildObservationList(completed));
   // };
 
-  _initialize();
+  _initialize(options);
   options = null;
   return _this;
 };

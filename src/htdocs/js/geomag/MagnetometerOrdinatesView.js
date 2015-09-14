@@ -23,23 +23,21 @@ var _DEFAULTS = {
    */
 var MagnetometerOrdinatesView = function (options) {
   var _this,
-      _initialize,
+      _initialize;
 
-      _options;
-
-  _options = Util.extend({}, _DEFAULTS, options);
-  _this = View(_options);
+  options = Util.extend({}, _DEFAULTS, options);
+  _this = View(options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function () {
+  _initialize = function (options) {
     var el = _this.el,
         measurements;
 
-    measurements = _options.reading.getMeasurements();
-    _this._reading = _options.reading;
-    _this._calculator = _options.calculator;
+    measurements = options.reading.getMeasurements();
+    _this._reading = options.reading;
+    _this._calculator = options.calculator;
 
     el.innerHTML = [
       '<table>',
@@ -175,7 +173,7 @@ var MagnetometerOrdinatesView = function (options) {
         '</code>'].join('');
   };
 
-  _initialize();
+  _initialize(options);
   options = null;
   return _this;
 };

@@ -28,12 +28,10 @@ var _DEFAULTS = {
  * @param  options {Object} observatory attributes.
  */
 var Observatory = function (options) {
-  var _this,
+  var _this;
 
-      _options;
-
-  _options =  Util.extend({}, _DEFAULTS, options);
-  _this = Model(_options);
+  options =  Util.extend({}, _DEFAULTS, options);
+  _this = Model(options);
 
 
   /**

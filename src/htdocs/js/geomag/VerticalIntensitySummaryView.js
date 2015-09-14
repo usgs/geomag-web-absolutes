@@ -11,18 +11,18 @@ var _DEFAULTS = {
 };
 
 
-  /**
-   * Construct a new VerticalIntensitySummaryView.
-   *
-   * @param options {Object}
-   *        view options.
-   * @param options.calculator {geomag.ObservationBaselineCalculator}
-   *        the calculator to use.
-   * @param options.factory {geomag.ObservatoryFactory}
-   *        the factory to use.
-   * @parem options.reading {geomag.Reading}
-   *        the reading to display.
-   */
+/**
+ * Construct a new VerticalIntensitySummaryView.
+ *
+ * @param options {Object}
+ *        view options.
+ * @param options.calculator {geomag.ObservationBaselineCalculator}
+ *        the calculator to use.
+ * @param options.factory {geomag.ObservatoryFactory}
+ *        the factory to use.
+ * @parem options.reading {geomag.Reading}
+ *        the reading to display.
+ */
 var VerticalIntensitySummaryView = function (options) {
   var _this,
       _initialize,
@@ -34,7 +34,6 @@ var VerticalIntensitySummaryView = function (options) {
       _factory,
       _measurements,
       _name,
-      _options,
       _ord,
       _reading,
       _startTime,
@@ -52,10 +51,10 @@ var VerticalIntensitySummaryView = function (options) {
         i = null,
         len = null;
 
-    _options = Util.extend({}, _DEFAULTS, options);
-    _calculator = _options.calculator;
-    _factory = _options.factory || ObservatoryFactory();
-    _reading = _options.reading;
+    options = Util.extend({}, _DEFAULTS, options);
+    _calculator = options.calculator;
+    _factory = options.factory || ObservatoryFactory();
+    _reading = options.reading;
 
     el.innerHTML = [
       '<th class="name" scope="row"></th>',

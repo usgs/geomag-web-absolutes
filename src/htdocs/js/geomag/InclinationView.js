@@ -24,21 +24,19 @@ var _DEFAULT_OPTIONS = {
  */
 var InclinationView = function (options) {
   var _this,
-      _initialize,
+      _initialize;
 
-      _options;
-
-  _options = Util.extend({}, _DEFAULT_OPTIONS, options);
-  _this = View(_options);
+  options = Util.extend({}, _DEFAULT_OPTIONS, options);
+  _this = View(options);
   /**
    * Initialize view, and call render.
    * @param options {Object} same as constructor.
    */
-  _initialize = function () {
+  _initialize = function (options) {
     var el = _this.el;
 
-    _this._reading = _options.reading;
-    _this._calculator = _options.calculator;
+    _this._reading = options.reading;
+    _this._calculator = options.calculator;
     _this._measurements = _this._reading.getMeasurements();
 
     el.classList.add('inclination-view');
@@ -71,7 +69,7 @@ var InclinationView = function (options) {
         '.north-down-minus-south-up-value');
 
     // when reading changes render view
-    _options.reading.on('change', 'render', _this);
+    _this._reading.on('change', 'render', _this);
 
     // also render when any related inputs change
     _this._measurements[Measurement.SOUTH_DOWN][0].on(
@@ -111,7 +109,7 @@ var InclinationView = function (options) {
         Format.minutes(calculator.northDownMinusSouthUp(reading)*60);
   };
 
-  _initialize();
+  _initialize(options);
   options = null;
   return _this;
 };

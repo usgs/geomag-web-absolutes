@@ -1,6 +1,5 @@
 'use strict';
 
-
 var Events = require('util/Events'),
     Util = require('util/Util'),
     Xhr = require('util/Xhr');

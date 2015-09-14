@@ -34,7 +34,6 @@ var HorizontalIntensitySummaryView = function (options) {
       _factory,
       _measurements,
       _name,
-      _options,
       _ord,
       _reading,
       _startTime,
@@ -52,10 +51,10 @@ var HorizontalIntensitySummaryView = function (options) {
         i = null,
         len = null;
 
-    _options = Util.extend({}, _DEFAULTS, options);
-    _calculator = _options.calculator;
-    _factory = _options.factory || ObservatoryFactory();
-    _reading = _options.reading;
+    options = Util.extend({}, _DEFAULTS, options);
+    _calculator = options.calculator;
+    _factory = options.factory || ObservatoryFactory();
+    _reading = options.reading;
 
     el.innerHTML = [
       '<th class="name" scope="row"></th>',
