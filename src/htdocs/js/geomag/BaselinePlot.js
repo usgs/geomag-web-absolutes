@@ -211,11 +211,32 @@ var Plot = function (params) {
     _this.render();
   };
 
-
   _this.destroy = Util.compose(_this.destroy, function () {
+    // Clean up private methods
+    _computeRange = null;
+    _createDataPoint = null;
+    _onSizeChange = null;
+    _updateAxes = null;
+    _updateMean = null;
+    _updatePlotHelpers = null;
+    _updateScatter = null;
+
+    // Clean up private variables
     _allData = null;
-    _valueKey = null;
+    _height = null;
+    _margin = null;
     _meanData = null;
+    _meanLine = null;
+    _rawData = null;
+    _svg = null;
+    _validKey = null;
+    _valueKey = null;
+    _width = null;
+    _xAxis = null;
+    _xScale = null;
+    _yAxis = null;
+    _yScale = null;
+    _yUnits = null;
 
     _this = null;
   });
@@ -395,6 +416,27 @@ var BaselinePlot = function (params) {
     });
   };
 
+
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Clean up private methods
+        _onData = null;
+        _onHashChange = null;
+
+        // Clean up private variables
+        _data = null;
+        _dPlot = null;
+        _factory = null;
+        _height = null;
+        _hPlot = null;
+        _width = null;
+        _zPlot = null;
+
+        _this = null;
+      },
+      // parent class destroy method
+      _this.destroy);
 
   _this.render = function () {
     _hPlot.setData(_data);
