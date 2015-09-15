@@ -42,6 +42,8 @@ var MeasurementView = function (options) {
     var _this,
       _initialize,
 
+      _onAngleChange,
+      _onTimeChange,
       _updateErrorState,
       _validateAngle,
       _validateTime;
@@ -54,9 +56,7 @@ var MeasurementView = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function (options) {
-    var el = _this.el,
-        onTimeChange = null,
-        onAngleChange = null;
+    var el = _this.el;
 
     _this._measurement = options.measurement;
     _this._observation = options.observation;
@@ -87,63 +87,63 @@ var MeasurementView = function (options) {
     _this._zValue = el.querySelector('.measurement-z');
     _this._fValue = el.querySelector('.measurement-f');
 
-    onTimeChange = function (/*evt*/) {
-      var time = _this._timeInput.value,
-          error = null;
-
-      // validate time change
-      error = _validateTime(time);
-
-      if (error === null) {
-        // no errors on measurement, set measurement values
-        _this._measurement.set({
-          // TODO, add offset
-          'time': Format.parseRelativeTime(time,
-              _this._observation.get('begin')),
-          'time_error': null
-        });
-      } else {
-        _this._measurement.set({'time_error': error});
-      }
-    };
-
-    onAngleChange = function (evt) {
-      var degrees = _this._degreesInput.value,
-          minutes = _this._minutesInput.value,
-          seconds = _this._secondsInput.value,
-          error = null;
-
-      if (evt.target === _this._minutesInput) {
-        // When decimal minutes are entered, clear corresponding seconds value.
-        if (minutes.indexOf('.') !== -1) {
-          seconds = 0;
-          // In case the angle doesn't change, keep inputs consistent.
-          _this._secondsInput.value = 0;
-        }
-      }
-      // validate angle change
-      error = _validateAngle(degrees, minutes, seconds);
-
-      if (error === null) {
-        // no errors on measurement, set measurement values
-        _this._measurement.set({
-          'angle': Format.dmsToDecimal(degrees, minutes, seconds),
-          'angle_error': null
-        });
-      } else {
-        _this._measurement.set({
-          'angle_error': 'Invalid Angle. Check Deg, Min, Sec values.'
-        });
-      }
-    };
-
     _this._measurement.on('change', _this.render, _this);
-    _this._timeInput.addEventListener('blur', onTimeChange);
-    _this._degreesInput.addEventListener('blur', onAngleChange);
-    _this._minutesInput.addEventListener('blur', onAngleChange);
-    _this._secondsInput.addEventListener('blur', onAngleChange);
+    _this._timeInput.addEventListener('blur', _onTimeChange);
+    _this._degreesInput.addEventListener('blur', _onAngleChange);
+    _this._minutesInput.addEventListener('blur', _onAngleChange);
+    _this._secondsInput.addEventListener('blur', _onAngleChange);
 
     _this.render();
+  };
+
+  _onAngleChange = function (evt) {
+    var degrees = _this._degreesInput.value,
+        minutes = _this._minutesInput.value,
+        seconds = _this._secondsInput.value,
+        error = null;
+
+    if (evt.target === _this._minutesInput) {
+      // When decimal minutes are entered, clear corresponding seconds value.
+      if (minutes.indexOf('.') !== -1) {
+        seconds = 0;
+        // In case the angle doesn't change, keep inputs consistent.
+        _this._secondsInput.value = 0;
+      }
+    }
+    // validate angle change
+    error = _validateAngle(degrees, minutes, seconds);
+
+    if (error === null) {
+      // no errors on measurement, set measurement values
+      _this._measurement.set({
+        'angle': Format.dmsToDecimal(degrees, minutes, seconds),
+        'angle_error': null
+      });
+    } else {
+      _this._measurement.set({
+        'angle_error': 'Invalid Angle. Check Deg, Min, Sec values.'
+      });
+    }
+  };
+
+  _onTimeChange = function (/*evt*/) {
+    var time = _this._timeInput.value,
+        error = null;
+
+    // validate time change
+    error = _validateTime(time);
+
+    if (error === null) {
+      // no errors on measurement, set measurement values
+      _this._measurement.set({
+        // TODO, add offset
+        'time': Format.parseRelativeTime(time,
+            _this._observation.get('begin')),
+        'time_error': null
+      });
+    } else {
+      _this._measurement.set({'time_error': error});
+    }
   };
 
   _updateErrorState = function (el, valid, helpText) {
@@ -205,10 +205,21 @@ var MeasurementView = function (options) {
   _this.destroy = Util.compose(
       // sub class destroy method
       function () {
+        // Remove event listeners
+        _this._timeInput.removeEventListener('blur', _onTimeChange);
+        _this._degreesInput.removeEventListener('blur', _onAngleChange);
+        _this._minutesInput.removeEventListener('blur', _onAngleChange);
+        _this._secondsInput.removeEventListener('blur', _onAngleChange);
+
         // Clean up private methods
+        _onAngleChange = null;
+        _onTimeChange = null;
         _updateErrorState = null;
         _validateAngle = null;
         _validateTime = null;
+
+        // Clean up private variables
+        _this = null;
       },
       // parent class destroy method
       _this.destroy);

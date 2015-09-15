@@ -157,6 +157,8 @@ var MagnetometerOrdinatesView = function (options) {
         _this._reading.removeEventListener('change', 'render', _this);
 
         // Clean up private variables
+        _measurements = null;
+        
         _this = null;
       },
       // parent class destroy method
