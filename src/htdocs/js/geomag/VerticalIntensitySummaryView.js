@@ -116,7 +116,6 @@ var VerticalIntensitySummaryView = function (options) {
         _factory = null;
         _measurements = null;
         _name = null;
-        _options = null;
         _ord = null;
         _reading = null;
         _startTime = null;

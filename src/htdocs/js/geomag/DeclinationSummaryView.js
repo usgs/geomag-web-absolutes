@@ -113,6 +113,7 @@ var DeclinationSummaryView = function (options) {
     });
   };
 
+
   _this.destroy = Util.compose(
       // sub class destroy method
       function () {

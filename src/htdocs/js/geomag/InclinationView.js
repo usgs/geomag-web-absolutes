@@ -118,6 +118,7 @@ var InclinationView = function (options) {
         Format.minutes(calculator.northDownMinusSouthUp(reading)*60);
   };
 
+
   _initialize(options);
   options = null;
   return _this;

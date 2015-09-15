@@ -129,6 +129,7 @@ var ObservationsView = function (options) {
     return y + '-' + (m<10?'0':'') + m + '-' + (d<10?'0':'') + d;
   };
 
+
   // get all observations
   _this.getAllObservations = function (observatory) {
     var observations;
@@ -156,7 +157,8 @@ var ObservationsView = function (options) {
       // sub class destroy method
       function () {
         // Remove event listeners
-        _addObservationButton.removeEventListener('click', _onAddObservationClick);
+        _addObservationButton.removeEventListener('click',
+            _onAddObservationClick);
 
         // Clean up private methods
         _buildObservationList = null;

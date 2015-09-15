@@ -124,6 +124,7 @@ var Observation = function (options) {
       // parent class destroy method
       _this.destroy);
 
+
   _initialize();
   options = null;
   return _this;

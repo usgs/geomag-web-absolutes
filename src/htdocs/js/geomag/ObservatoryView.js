@@ -183,12 +183,6 @@ var ObservatoryView = function (options) {
   };
 
 
-  _this.render = function () {
-    _observatorySelect.value = _getObservatoryId();
-
-    _getObservations();
-  };
-
   _this.destroy = Util.compose(
       // sub class destroy method
       function () {
@@ -214,6 +208,12 @@ var ObservatoryView = function (options) {
       },
       // parent class destroy method
       _this.destroy);
+
+  _this.render = function () {
+    _observatorySelect.value = _getObservatoryId();
+
+    _getObservations();
+  };
 
 
   _initialize(options);

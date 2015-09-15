@@ -221,7 +221,6 @@ var Plot = function (params) {
   });
 
   _this.render = function () {
-
     // Clear out previous plot
     _this.el.innerHTML = '';
 
