@@ -107,6 +107,28 @@ var DeclinationView = function (options) {
   _this.destroy = Util.compose(
       // sub class destroy method
       function () {
+        // Remove event listeners
+        _this._reading.removeEventListener('change', 'render', _this);
+        _this._measurements[Measurement.FIRST_MARK_UP][0].removeEventListener(
+            'change', 'render', _this);
+        _this._measurements[Measurement.FIRST_MARK_DOWN][0].removeEventListener(
+            'change', 'render', _this);
+        _this._measurements[Measurement.WEST_DOWN][0].removeEventListener(
+            'change', 'render', _this);
+        _this._measurements[Measurement.EAST_DOWN][0].removeEventListener(
+            'change', 'render', _this);
+        _this._measurements[Measurement.WEST_UP][0].removeEventListener(
+            'change', 'render', _this);
+        _this._measurements[Measurement.EAST_UP][0].removeEventListener(
+            'change', 'render', _this);
+        _this._measurements[Measurement.SECOND_MARK_UP][0].removeEventListener(
+            'change', 'render', _this);
+        _this._measurements[Measurement.SECOND_MARK_DOWN][0].removeEventListener(
+            'change', 'render', _this);
+        _this._calculator.removeEventListener('change', 'render', _this);
+
+        // Clean up private variables
+        _this = null;
       },
       // parent class destroy method
       _this.destroy);
