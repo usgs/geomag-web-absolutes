@@ -93,6 +93,20 @@ var InclinationView = function (options) {
   _this.destroy = Util.compose(
       // sub class destroy method
       function () {
+        // Remove event listeners
+        _this._reading.removeEventListener('change', 'render', _this);
+        _this._measurements[Measurement.SOUTH_DOWN][0].removeEventListener(
+            'change', 'render', _this);
+        _this._measurements[Measurement.NORTH_UP][0].removeEventListener(
+            'change', 'render', _this);
+        _this._measurements[Measurement.SOUTH_UP][0].removeEventListener(
+            'change', 'render', _this);
+        _this._measurements[Measurement.NORTH_DOWN][0].removeEventListener(
+            'change', 'render', _this);
+        _this._calculator.removeEventListener('change', 'render', _this);
+
+        // Clean up private variables
+        _this = null;
       },
       // parent class destroy method
       _this.destroy);
