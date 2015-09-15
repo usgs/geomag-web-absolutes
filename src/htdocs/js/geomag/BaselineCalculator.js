@@ -294,6 +294,7 @@ var BaselineCalculator = function () {
    * Clean up private variables, methods, and remove event listeners.
    */
   _this.destroy = function () {
+    _this = null;
   };
 
   // Expose some static values
