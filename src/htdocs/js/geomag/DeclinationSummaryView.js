@@ -138,6 +138,8 @@ var DeclinationSummaryView = function (options) {
         _shift = null;
         _startTime = null;
         _valid = null;
+
+        _this = null;
       },
       // parent class destroy method
       _this.destroy);
