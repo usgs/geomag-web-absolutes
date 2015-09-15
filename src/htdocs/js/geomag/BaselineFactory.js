@@ -61,10 +61,15 @@ var BaselineFactory = function (params) {
   /**
    * Clean up private variables, methods, and remove event listeners.
    */
-  _this.destroy = function () {
-    // Clean up private variable
+  _this.destroy = Util.compose(
+  // sub class destroy method
+  function () {
+    // Clean up private variables
     _dataUrl = null;
-  };
+    _this = null;
+  },
+  // parent class destroy method
+  _this.destroy);
 
 
   _initialize(params);
