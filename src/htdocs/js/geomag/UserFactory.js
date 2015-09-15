@@ -30,11 +30,6 @@ var UserFactory = function (options) {
   };
 
 
-  _this.destroy = function(options) {
-    options.success();
-    console.log('destroy');
-  };
-
   /**
    * Get a list of observatories
    *
@@ -69,6 +64,15 @@ var UserFactory = function (options) {
     options.success();
     console.log('update');
   };
+
+  _this.destroy = Util.compose(
+    // sub class destroy method
+    function () {
+      // Clean up private variables
+      _options = null;
+    },
+    // parent class destroy method
+    _this.destroy);
 
 
   _initialize(options);

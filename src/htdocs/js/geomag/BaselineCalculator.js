@@ -290,6 +290,12 @@ var BaselineCalculator = function () {
     return (zAbsolute - zComputed);
   };
 
+  /**
+   * Clean up private variables, methods, and remove event listeners.
+   */
+  _this.destroy = function () {
+  };
+
   // Expose some static values
   BaselineCalculator._SCALE_VALUE_COEFFICIENT = _SCALE_VALUE_COEFFICIENT;
 

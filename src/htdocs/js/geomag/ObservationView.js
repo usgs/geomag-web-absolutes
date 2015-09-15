@@ -621,6 +621,47 @@ var ObservationView = function (options) {
     }
   };
 
+  _this.destroy = Util.compose(
+    // sub class destroy method
+    function () {
+      var el = _this.el.querySelector('.observation-view-controls'),
+          saveButton = el.querySelector('#saveButton'),
+          publishButton = el.querySelector('#publishButton');
+
+      // Remove event listeners
+      saveButton.removeEventListener('click', _onSaveClick);
+      publishButton.removeEventListener('click', _onPublishClick);
+      _annotation.removeEventListener('change', _onChange);
+
+      // Clean up private methods
+      _createControls = null;
+      _formatMeasurementErrors = null;
+      _getRealtimeData = null;
+      _onChange = null;
+      _onObservatorySelect = null;
+      _onPublishClick = null;
+      _onSaveClick = null;
+      _publishObservation = null;
+      _removeControls = null;
+      _saveObservation = null;
+      _setObservation = null;
+      _setObservatories = null;
+      _updateErrorCount = null;
+  
+      // Clean up private variables
+      _annotation = null;
+      _calculator = null;
+      _factory = null;
+      _observation = null;
+      _observatories = null;
+      _observationMetaView = null;
+      _readingGroupView = null;
+      _realtimeDataFactory = null;
+      _user = null;
+    },
+    // parent class destroy method
+    _this.destroy);
+
 
   _initialize(options);
   options = null;

@@ -75,6 +75,12 @@ var RealtimeData = function (options) {
     return r;
   };
 
+  _this.destroy = function () {
+    // Clean up private variables
+    _data = null;
+    _times = null;
+  };
+
 
   _initialize(options);
   options = null;

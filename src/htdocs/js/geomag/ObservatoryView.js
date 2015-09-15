@@ -189,6 +189,32 @@ var ObservatoryView = function (options) {
     _getObservations();
   };
 
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Remove event listeners
+
+
+        // Clean up private methods
+        _buildObservatoryList = null;
+        _getHash = null;
+        _getObservatories = null;
+        _getObservatoryId = null;
+        _getObservations = null;
+        _setObservatoryTitle = null;
+
+        // Clean up private variables
+        _factory = null;
+        _observationsView = null;
+        _observatories = null;
+        _observatoryId = null;
+        _observatorySelect = null;
+        _observatoryTitle = null;
+        _user = null;
+      },
+      // parent class destroy method
+      _this.destroy);
+
 
   _initialize(options);
   options = null;

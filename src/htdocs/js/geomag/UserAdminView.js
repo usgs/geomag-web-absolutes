@@ -188,6 +188,34 @@ var UserAdminView = function (options) {
   };
 
 
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Remove event listeners
+        _this.el.removeEventListener('click', _onEditClick);
+        _showEnabledUsers.removeEventListener('click', _showUsers);
+
+        // Clean up private methods
+        _getUsers = null;
+        _onEditClick = null;
+        _onUserCancel = null;
+        _onUserSave = null;
+        _showUsers = null;
+
+        // Clean up private variables
+        _allUsers = null;
+        _editview = null;
+        _factory = null;
+        _modalview = null;
+        _observatories = null;
+        _showEnabledUsers = null;
+        _user = null;
+        _users = null;
+        _usersView = null;
+      },
+      // parent class destroy method
+      _this.destroy);
+
   _this.render = function () {
   };
 

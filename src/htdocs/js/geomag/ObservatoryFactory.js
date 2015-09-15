@@ -93,6 +93,15 @@ var ObservatorySummary = function (factory, attributes) {
     _factory.getObservatory(options);
   };
 
+  _this.destroy = Util.compose(
+    // sub class destroy method
+    function () {
+      // Clean up private variables
+      _factory = null;
+    },
+    // parent class destroy method
+    _this.destroy);
+
 
   _initialize(factory);
   factory = null;
@@ -138,6 +147,15 @@ var ObservationSummary = function (factory, attributes) {
     options.id = this.id;
     _factory.getObservation(options);
   };
+
+  _this.destroy = Util.compose(
+    // sub class destroy method
+    function () {
+      // Clean up private variables
+      _factory = null;
+    },
+    // parent class destroy method
+    _this.destroy);
 
 
   _initialize(factory);
@@ -199,6 +217,17 @@ var ObservationDetail = function (factory, attributes) {
   _this.getObservatories = function (options) {
     _factory.getObservatories(options);
   };
+
+  _this.destroy = Util.compose(
+    // sub class destroy method
+    function () {
+      // Clean up private variables
+      _factory = null;
+      _observatories = null;
+      _observatory = null;
+    },
+    // parent class destroy method
+    _this.destroy);
 
 
   _initialize(factory);
@@ -942,6 +971,30 @@ var ObservatoryFactory = function (options) {
       return null;
     }
     return Math.round(milliseconds / 1000);
+  };
+
+
+  _this.destroy = function () {
+    // Clean up private methods
+    _getInstruments = null;
+    _getMarks = null;
+    _getMeasurements = null;
+    _getObservatories = null;
+    _getObservation = null;
+    _getObservations = null;
+    _getObservatory = null;
+    _getPiers = null;
+    _getReadings = null;
+    _serializeObservation = null;
+    _toMilliseconds = null;
+    _toSeconds = null;
+
+    // Clean up private variables
+    _calculator = null;
+    _observationDetailUrl = null;
+    _observationPublishUrl = null;
+    _observatoryDetailUrl = null;
+    _observatorySummaryUrl = null;
   };
 
 

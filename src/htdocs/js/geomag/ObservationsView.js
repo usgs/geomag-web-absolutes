@@ -152,6 +152,26 @@ var ObservationsView = function (options) {
     });
   };
 
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Remove event listeners
+        _addObservationButton.removeEventListener('click', _onAddObservationClick);
+
+        // Clean up private methods
+        _buildObservationList = null;
+        _formatDate = null;
+        _onAddObservationClick = null;
+
+        // Clean up private variables
+        _addObservationButton = null;
+        _allObservationsEl = null;
+        _factory = null;
+        _observatoryId = null;
+      },
+      // parent class destroy method
+      _this.destroy);
+
   _this.render = function (observatory) {
     if (observatory === null) {
       _addObservationButton.setAttribute('disabled', 'disabled');
@@ -174,23 +194,6 @@ var ObservationsView = function (options) {
     // TODO, build completed observations list
     //_this.getCompletedObservations(observations);
   };
-
-  _this.destroy = function () {
-    // Remove event listeners
-    _addObservationButton.removeEventListener('click', _onAddObservationClick);
-
-    // Clean up private methods
-    _buildObservationList = null;
-    _formatDate = null;
-    _onAddObservationClick = null;
-
-    // Clean up private variables
-    _addObservationButton = null;
-    _allObservationsEl = null;
-    _factory = null;
-    _observatoryId = null;
-  };
-
 
   // TODO, get all pending observations
   // _this.getPendingObservations =

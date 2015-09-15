@@ -131,6 +131,14 @@ var MagnetometerOrdinatesView = function (options) {
     _this.render();
   };
 
+
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+      },
+      // parent class destroy method
+      _this.destroy);
+
   _this.render = function () {
     var calculator = _this._calculator,
         reading = _this._reading;

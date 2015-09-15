@@ -467,6 +467,15 @@ var ObservationBaselineCalculator = function (options) {
     );
   };
 
+  _this.destroy = Util.compose(
+    // sub class destroy method
+    function () {
+      // Clean up private variables
+      _calculator = null;
+    },
+    // parent class destroy method
+    _this.destroy);
+
 
   _initialize(options || {});
   options = null;

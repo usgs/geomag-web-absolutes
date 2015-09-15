@@ -140,6 +140,24 @@ var UserEditView = function (options) {
     _options.user.set(values);
   };
 
+  _this.destroy = Util.compose(
+    // sub class destroy method
+    function () {
+      // Clean up private variables
+      _admin = null;
+      _confirmpassword = null;
+      _email = null;
+      _enabled = null;
+      _name = null;
+      _observatories = null;
+      _options = null;
+      _password = null;
+      _user = null;
+      _username = null;
+    },
+    // parent class destroy method
+    _this.destroy);
+
 
   _initialize(options);
   options = null;

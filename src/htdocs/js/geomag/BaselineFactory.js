@@ -58,6 +58,14 @@ var BaselineFactory = function (params) {
     });
   };
 
+  /**
+   * Clean up private variables, methods, and remove event listeners.
+   */
+  _this.destroy = function () {
+    // Clean up private variable
+    _dataUrl = null;
+  };
+
 
   _initialize(params);
   params = null;

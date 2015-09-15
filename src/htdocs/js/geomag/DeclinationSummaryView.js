@@ -113,6 +113,33 @@ var DeclinationSummaryView = function (options) {
     });
   };
 
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Remove event listeners
+        _valid.removeEventListener('change', _onChange);
+        _shift.removeEventListener('change', _onChange);
+
+        // Clean up private method
+        _onChange = null;
+
+        // Clean up private variables
+        _absolute = null;
+        _baselineMin = null;
+        _calculator = null;
+        _eBaseline = null;
+        _endTime = null;
+        _factory = null;
+        _measurements = null;
+        _name = null;
+        _ordMin = null;
+        _reading = null;
+        _shift = null;
+        _startTime = null;
+        _valid = null;
+      },
+      // parent class destroy method
+      _this.destroy);
 
   _this.render = function () {
     var declinations,

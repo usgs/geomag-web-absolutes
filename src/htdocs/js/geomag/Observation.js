@@ -115,6 +115,14 @@ var Observation = function (options) {
     }
   };
 
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Clean up private method
+        _updateMeasurementTimes = null;
+      },
+      // parent class destroy method
+      _this.destroy);
 
   _initialize();
   options = null;

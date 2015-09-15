@@ -619,6 +619,50 @@ var ObservationMetaView = function (options) {
     return Math.round((selectedDate - janOne) / 86400000) + 1;
   };
 
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Remove event listeners
+        _date.removeEventListener('change', _onDateChange);
+        _pierTemperature.removeEventListener('change', _onPierTempChange);
+
+        // Clean up private methods
+        _createViewSkeleton = null;
+        _formatInstrument = null;
+        _formatMark = null;
+        _formatPier = null;
+        _formatUsername = null;
+        _getUsers = null;
+        _onDateChange = null;
+        _onPierTempChange = null;
+        _setObservatory = null;
+        _updateErrorState = null;
+        _validateDate = null;
+
+        // Clean up private variables
+        _admin = null;
+        _calculator = null;
+        _date = null;
+        _electronicsSelectView = null;
+        _marksSelectView = null;
+        _julianDay = null;
+        _observation = null;
+        _observatoryId = null;
+        _observatorySelectView = null;
+        _observatories = null;
+        _observerSelect = null;
+        _observerSelectView = null;
+        _pierSelectView = null;
+        _pierTemperature = null;
+        _reviewerSelect = null;
+        _reviewerSelectView = null;
+        _theodoliteSelectView = null;
+        _user = null;
+        _userFactory = null;
+      },
+      // parent class destroy method
+      _this.destroy);
+
   _this.render = function () {
     var begin = new Date(_observation.get('begin') || (new Date()).getTime()),
         begin_error = _observation.get('begin_error'),

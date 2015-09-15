@@ -201,6 +201,18 @@ var MeasurementView = function (options) {
     return helpText;
   };
 
+
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Clean up private methods
+        _updateErrorState = null;
+        _validateAngle = null;
+        _validateTime = null;
+      },
+      // parent class destroy method
+      _this.destroy);
+
   _this.render = function () {
     var measurement = _this._measurement,
         time = measurement.get('time'),

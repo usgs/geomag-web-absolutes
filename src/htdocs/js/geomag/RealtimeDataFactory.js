@@ -86,6 +86,15 @@ var RealtimeDataFactory = function (options) {
     _this.getRealtimeData(options);
   };
 
+  _this.destroy = Util.compose(
+    // sub class destroy method
+    function () {
+      // Clean up private variables
+      _lastcall = null;
+    },
+    // parent class destroy method
+    _this.destroy);
+
 
   _initialize();
   options = null;

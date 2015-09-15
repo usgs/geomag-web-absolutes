@@ -333,6 +333,23 @@ var ReadingView = function (options) {
   };
 
 
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Clean up private methods
+        _formatType = null;
+        _onTimeChange = null;
+        _showWarning = null;
+
+        // Clean up private variables
+        _calculator = null;
+        _measurements = null;
+        _observation = null;
+        _reading = null;
+      },
+      // parent class destroy method
+      _this.destroy);
+
   _this.render = function () {
     // TODO :: Render current model
   };

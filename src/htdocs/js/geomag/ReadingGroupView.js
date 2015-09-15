@@ -157,6 +157,21 @@ var ReadingGroupView = function (options) {
   };
 
 
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Clean up private methods
+        _createTab = null;
+        _createSummaryTab = null;
+
+        // Clean up private variables
+        _calculator = null;
+        _observation = null;
+        _tablist = null;
+      },
+      // parent class destroy method
+      _this.destroy);
+
   _this.render = function () {
     var readings = _observation.get('readings').data(),
         i,

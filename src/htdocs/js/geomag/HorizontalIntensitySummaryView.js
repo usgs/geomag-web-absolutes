@@ -99,6 +99,31 @@ var HorizontalIntensitySummaryView = function (options) {
   };
 
 
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Remove event listeners
+        _valid.removeEventListener('change', _onChange);
+
+        // Clean up private method
+        _onChange = null;
+
+        // Clean up private methods
+        _absValue = null;
+        _baselineValues = null;
+        _calculator = null;
+        _endTime = null;
+        _factory = null;
+        _measurements = null;
+        _name = null;
+        _ord = null;
+        _reading = null;
+        _startTime = null;
+        _valid = null;
+      },
+      // parent class destroy method
+      _this.destroy);
+
   _this.render = function () {
     var endTime,
         inclinations,

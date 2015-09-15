@@ -413,6 +413,48 @@ var ObservationSummaryView = function (options) {
   };
 
 
+  _this.destroy = Util.compose(
+      // sub class destroy method
+      function () {
+        // Clean up private methods
+        _bindings = null;
+        _querySelectors = null;
+        _renderDeclination = null;
+        _renderHorizontalIntensitySummaryView = null;
+        _renderInclination = null;
+        _renderSummaryBottom = null;
+        _renderVerticalIntensitySummaryView = null;
+
+        // Clean up private variables
+        _baselineMinMean = null;
+        _baselineMinRange = null;
+        _baselineMinStdDev = null;
+        _baselineNtMean = null;
+        _baselineNtRange = null;
+        _baselineNtStdDev = null;
+        _baselineValuesMean = null;
+        _baselineValuesRange = null;
+        _baselineValuesStdDev = null;
+        _calculator = null;
+        _checkedBy = null;
+        _declinationSummaryView = null;
+        _electronicsTemperature = null;
+        _fluxgateTemperature = null;
+        _horizontalIntensitySummaryView = null;
+        _observation = null;
+        _outsideTemperature = null;
+        _pierTemperature = null;
+        _protonTemperature = null;
+        _readings = null;
+        _userFactory = null;
+        _verticalBaselineValuesMean = null;
+        _verticalBaselineValuesRange = null;
+        _verticalBaselineValuesStdDev = null;
+        _verticalIntensitySummaryView = null;
+      },
+      // parent class destroy method
+      _this.destroy);
+
   _this.render = function () {
     _renderDeclination();
     _renderInclination();
