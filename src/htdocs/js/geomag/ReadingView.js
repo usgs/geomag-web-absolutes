@@ -229,14 +229,12 @@ var ReadingView = function (options) {
       observation: _observation,
       calculator: _calculator
     });
-
     _this._inclinationView = InclinationView({
       el: _this.el.querySelector('.inclination-output'),
       reading: _reading,
       observation: _observation,
       calculator: _calculator
     });
-
     _this._magnetometerOrdinatesView = MagnetometerOrdinatesView({
       el: _this.el.querySelector('.magnetometer-ordinates-output'),
       reading: _reading,
@@ -327,7 +325,22 @@ var ReadingView = function (options) {
       // sub class destroy method
       function () {
         // Remove event listeners
-
+        _westDownMeasurement.removeEventListener(
+            'change:time', _onTimeChange, _westDownMeasurement);
+        _eastDownMeasurement.removeEventListener(
+            'change:time', _onTimeChange, _eastDownMeasurement);
+        _westUpMeasurement.removeEventListener(
+            'change:time', _onTimeChange, _westUpMeasurement);
+        _eastUpMeasurement.removeEventListener(
+            'change:time', _onTimeChange, _eastUpMeasurement);
+        _southDownMeasurement.removeEventListener(
+            'change:time', _onTimeChange, _southDownMeasurement);
+        _northDownMeasurement.removeEventListener(
+            'change:time', _onTimeChange, _northDownMeasurement);
+        _southUpMeasurement.removeEventListener(
+            'change:time', _onTimeChange, _southUpMeasurement);
+        _northUpMeasurement.removeEventListener(
+            'change:time', _onTimeChange, _northUpMeasurement);
 
         // Clean up private methods
         _formatType = null;
