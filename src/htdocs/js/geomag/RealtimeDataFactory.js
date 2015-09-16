@@ -91,6 +91,8 @@ var RealtimeDataFactory = function (options) {
     function () {
       // Clean up private variables
       _lastcall = null;
+
+      _this = null;
     },
     // parent class destroy method
     _this.destroy);
