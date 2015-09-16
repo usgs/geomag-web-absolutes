@@ -20,13 +20,15 @@ var UserFactory = function (options) {
   var _this,
       _initialize,
 
-      _options;
+      _url;
 
 
   _this = {};
 
   _initialize = function (options) {
-    _options = Util.extend({}, _DEFAULTS, options);
+    options = Util.extend({}, _DEFAULTS, options);
+
+    _url = options.url;
   };
 
 
@@ -36,7 +38,7 @@ var UserFactory = function (options) {
    */
   _this.get = function(options) {
     Xhr.ajax({
-      url: _options.url,
+      url: _url,
       data: options.data || {},
       success: function (data) {
         if (options.success) {
@@ -49,7 +51,7 @@ var UserFactory = function (options) {
 
   _this.save = function(options) {
     Xhr.ajax({
-      url: _options.url,
+      url: _url,
       rawdata: JSON.stringify(options.data),
       method: (options.data.id) ? 'PUT' : 'POST',
       success: function () {
@@ -69,7 +71,7 @@ var UserFactory = function (options) {
     // sub class destroy method
     function () {
       // Clean up private variables
-      _options = null;
+      _url = null;
     },
     // parent class destroy method
     _this.destroy);
