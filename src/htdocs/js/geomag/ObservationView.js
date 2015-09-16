@@ -114,8 +114,10 @@ var ObservationView = function (options) {
       _observation,
       _observatories,
       _observationMetaView,
+      _publishButton,
       _readingGroupView,
       _realtimeDataFactory,
+      _saveButton,
       _user,
 
       _createControls,
@@ -127,6 +129,7 @@ var ObservationView = function (options) {
       _onSaveClick,
       _publishObservation,
       _removeControls,
+      _removeEventListeners,
       _saveObservation,
       _setObservation,
       _setObservatories,
@@ -136,8 +139,9 @@ var ObservationView = function (options) {
   _this = View(options);
 
   _initialize = function (options) {
-    var el = _this.el;
+    var el;
 
+    el = _this.el;
     options = Util.extend({}, _DEFAULTS, options);
 
     _calculator = options.calculator || Calculator();
@@ -161,7 +165,6 @@ var ObservationView = function (options) {
       '</section>'
     ].join('');
 
-
     // load observation
     _factory.getObservation({
       id: options.observationId || null,
@@ -175,24 +178,24 @@ var ObservationView = function (options) {
    *
    */
   _createControls = function () {
-    var controls = _this.el.querySelector('.observation-view-controls'),
-        saveButton = document.createElement('button'),
-        publishButton;
+    var controls;
 
-    saveButton.id = 'saveButton';
-    saveButton.innerHTML = 'Save Observation';
+    controls = _this.el.querySelector('.observation-view-controls');
 
-    saveButton.addEventListener('click', _onSaveClick);
+    _saveButton = document.createElement('button');
+    _saveButton.id = 'saveButton';
+    _saveButton.innerHTML = 'Save Observation';
 
-    controls.appendChild(saveButton);
+    _saveButton.addEventListener('click', _onSaveClick);
+
+    controls.appendChild(_saveButton);
 
     // Add publish button for admin users
     if (_user.get('admin') === 'Y') {
-      publishButton = document.createElement('button');
-      publishButton.innerHTML = 'Finalize';
-      controls.appendChild(publishButton);
+      _publishButton.innerHTML = 'Finalize';
+      controls.appendChild(_publishButton);
 
-      publishButton.addEventListener('click', _onPublishClick);
+      _publishButton.addEventListener('click', _onPublishClick);
     }
   };
 
@@ -263,33 +266,33 @@ var ObservationView = function (options) {
     });
 
     // request realtime temperature data
-      _realtimeDataFactory.getRealtimeTemperatureData({
-        starttime: starttime,
-        endtime: endtime,
-        success: function (realtimeData) {
-          var averageTime,
-              minuteTime,
-              values;
-          // just get the average time
-          averageTime = Math.floor((starttime + endtime) / 2.0);
-          // temperature data is minute data.
-          minuteTime = averageTime - averageTime % 60;
-          // realtimeData values are in milliseconds, convert seconds to ms.
-          values = realtimeData.getValues(minuteTime*1000);
-          if (values.TO !== undefined) {
-            _observation.set({'outside_temperature':values.TO});
-          }
-          if (values.TP !== undefined) {
-            _observation.set({'proton_temperature':values.TP});
-          }
-          if (values.TE !== undefined) {
-            _observation.set({'elect_temperature':values.TE});
-          }
-          if (values.TF !== undefined) {
-            _observation.set({'flux_temperature':values.TF});
-          }
+    _realtimeDataFactory.getRealtimeTemperatureData({
+      starttime: starttime,
+      endtime: endtime,
+      success: function (realtimeData) {
+        var averageTime,
+            minuteTime,
+            values;
+        // just get the average time
+        averageTime = Math.floor((starttime + endtime) / 2.0);
+        // temperature data is minute data.
+        minuteTime = averageTime - averageTime % 60;
+        // realtimeData values are in milliseconds, convert seconds to ms.
+        values = realtimeData.getValues(minuteTime*1000);
+        if (values.TO !== undefined) {
+          _observation.set({'outside_temperature':values.TO});
         }
-      });
+        if (values.TP !== undefined) {
+          _observation.set({'proton_temperature':values.TP});
+        }
+        if (values.TE !== undefined) {
+          _observation.set({'elect_temperature':values.TE});
+        }
+        if (values.TF !== undefined) {
+          _observation.set({'flux_temperature':values.TF});
+        }
+      }
+    });
 
   };
 
@@ -303,12 +306,16 @@ var ObservationView = function (options) {
    * Called when an observatory is selected.
    */
   _onObservatorySelect = function () {
-    var code = null,
+    var code,
         observatory;
+
+    code = null;
+
     observatory = _observatories.getSelected();
     if (observatory !== null) {
       code = observatory.get('code');
     }
+
     _realtimeDataFactory.set({observatory: code});
   };
 
@@ -400,16 +407,11 @@ var ObservationView = function (options) {
    *        result of ObservatoryFactory.getObservatory().
    */
   _setObservation = function (observation) {
-    var el = _this.el;
+    var el;
+
+    el = _this.el;
 
     _observation = observation;
-
-    // Add save/publish buttons based on roles
-    if (_observation.get('reviewed') === 'N') {
-      _createControls();
-    } else {
-      _removeControls();
-    }
 
     // calculate calibrations for summary view
     _this.updateCalibrations();
@@ -425,7 +427,6 @@ var ObservationView = function (options) {
     _observation.getObservatories({
       success: _setObservatories
     });
-
 
     // bind realtime data factory and measurements.
     _realtimeDataFactory.on('change:observatory', _getRealtimeData);
@@ -449,6 +450,13 @@ var ObservationView = function (options) {
     _annotation = el.querySelector('.annotation > textarea');
     _annotation.innerHTML = _observation.get('annotation');
     _annotation.addEventListener('change', _onChange);
+
+    // Add save/publish buttons based on roles
+    if (_observation.get('reviewed') === 'N') {
+      _createControls();
+    } else {
+      _removeControls();
+    }
   };
 
   /**
@@ -458,13 +466,15 @@ var ObservationView = function (options) {
    *        result of ObservatoryFactory.getObservatories().
    */
   _setObservatories = function (observatories) {
-    var el = _this.el,
-        observatory_id,
-        observatory,
+    var el,
         i,
-        len;
+        len,
+        observatory,
+        observatory_id;
 
-    //filter observatories list for non admin users
+    el = _this.el;
+
+    // filter observatories list for non admin users
     if (_user.get('admin') !== 'Y') {
       observatory_id = _user.get('default_observatory_id');
 
@@ -516,27 +526,68 @@ var ObservationView = function (options) {
    * is successfully published.
    */
   _removeControls = function () {
-    var controls = _this.el.querySelector('.observation-view-controls');
+    var controls;
+
+    controls = _this.el.querySelector('.observation-view-controls');
 
     controls.innerHTML =
         '<div class="alert success">Observation has been finalized.</div>';
+
+    _removeEventListeners();
+  };
+
+  // Remove all event listeners
+  _removeEventListeners = function () {
+    // unbind calibration update to measurement change
+    _observation.eachMeasurement(function (measurement) {
+      measurement.removeEventListener('change', _this.updateCalibrations);
+    });
+
+    // unbind measurement change
+    _observation.eachMeasurement(function (measurement) {
+      measurement.removeEventListener('change', _updateErrorCount);
+    });
+
+    // unbind realtime data factory and measurements.
+    _observation.removeEventListener('change', _updateErrorCount);
+    _observation.eachMeasurement(function (measurement) {
+      measurement.removeEventListener('change:time', _getRealtimeData);
+    });
+    _observation.removeEventListener('change:begin', _getRealtimeData);
+    _realtimeDataFactory.removeEventListener(
+        'change:observatory', _getRealtimeData);
+
+    _annotation.removeEventListener('change', _onChange);
+
+    // These controls are only created if the loaded observation isn't final.
+    if (_publishButton) {
+      _publishButton.removeEventListener('click', _onPublishClick);
+    }
+    if (_saveButton) {
+      _saveButton.removeEventListener('click', _onSaveClick);
+    }
   };
 
   _updateErrorCount = function () {
-    var errors = [],
-        el = _this.el.querySelector('.observation-view-controls'),
+    var begin_error,
+        el,
         errorDiv,
+        errors,
+        header,
+        list,
         measurementErrors,
-        saveButton = el.querySelector('#saveButton'),
-        readingErrors, setNumber, list, header,
-        begin_error = _observation.get('begin_error');
+        readingErrors,
+        setNumber;
+
+    errors = [];
+    el = _this.el.querySelector('.observation-view-controls');
+    begin_error = _observation.get('begin_error');
 
     if (begin_error !== null) {
       errors.push('<li>' + begin_error + '</li>');
     }
 
     _observation.eachReading(function (reading) {
-
       setNumber = reading.get('set_number');
       readingErrors = [];
 
@@ -566,10 +617,8 @@ var ObservationView = function (options) {
     });
 
     errorDiv = el.querySelector('.error');
-
     // errors exist, append details
     if (errors.length > 0) {
-
       list = el.querySelector('.alert > ul');
 
       if (list) {
@@ -588,14 +637,14 @@ var ObservationView = function (options) {
         errorDiv.appendChild(list);
 
         // disable the save button
-        if (saveButton) {
-          saveButton.setAttribute('disabled', 'disabled');
+        if (_saveButton) {
+          _saveButton.setAttribute('disabled', 'disabled');
         }
       }
     } else {
         // enable the save button
-        if (saveButton) {
-          saveButton.removeAttribute('disabled');
+        if (_saveButton) {
+          _saveButton.removeAttribute('disabled');
         }
 
         if (errorDiv) {
@@ -609,8 +658,12 @@ var ObservationView = function (options) {
    * the reading model object
    */
   _this.updateCalibrations = function () {
-    var readings = _observation.get('readings').data(),
-        i, len, reading;
+    var i,
+        len,
+        reading,
+        readings;
+
+    readings = _observation.get('readings').data();
 
     for (i = 0, len = readings.length; i < len; i++) {
       reading = readings[i];
@@ -624,14 +677,7 @@ var ObservationView = function (options) {
   _this.destroy = Util.compose(
     // sub class destroy method
     function () {
-      var el = _this.el.querySelector('.observation-view-controls'),
-          saveButton = el.querySelector('#saveButton'),
-          publishButton = el.querySelector('#publishButton');
-
-      // Remove event listeners
-      saveButton.removeEventListener('click', _onSaveClick);
-      publishButton.removeEventListener('click', _onPublishClick);
-      _annotation.removeEventListener('change', _onChange);
+      _removeEventListeners();
 
       // Clean up private methods
       _createControls = null;
@@ -643,11 +689,12 @@ var ObservationView = function (options) {
       _onSaveClick = null;
       _publishObservation = null;
       _removeControls = null;
+      _removeEventListeners = null;
       _saveObservation = null;
       _setObservation = null;
       _setObservatories = null;
       _updateErrorCount = null;
-  
+
       // Clean up private variables
       _annotation = null;
       _calculator = null;
