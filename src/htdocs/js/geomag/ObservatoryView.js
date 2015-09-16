@@ -32,6 +32,7 @@ var ObservatoryView = function (options) {
       _getObservatories,
       _getObservatoryId,
       _getObservations,
+      _onObservatoryChange,
       _setObservatoryTitle;
 
 
@@ -39,7 +40,9 @@ var ObservatoryView = function (options) {
   _this = View(options);
 
   _initialize = function (options) {
-    var el = _this.el;
+    var el;
+
+    el = _this.el;
 
     _factory = options.factory;
     _observatoryId = options.observatoryId;
@@ -66,9 +69,7 @@ var ObservatoryView = function (options) {
       ].join('');
 
       _observatorySelect = el.querySelector('.observatories');
-      _observatorySelect.addEventListener('change', function () {
-        window.location.hash = '#' + _observatorySelect.value;
-      });
+      _observatorySelect.addEventListener('change', _onObservatoryChange);
 
       // Gets observatories and then renders observations for either...
       // ... (1) The observatory whose Id is in the current window.location.hash
@@ -85,10 +86,11 @@ var ObservatoryView = function (options) {
   };
 
   _buildObservatoryList = function (data) {
-    var markup = [],
+    var markup,
         observatory,
         observatoryId;
 
+    markup = [];
     for (var i = 0; i < data.length; i++) {
       observatory = data[i];
       observatoryId = observatory.get('id');
@@ -123,7 +125,9 @@ var ObservatoryView = function (options) {
   };
 
   _getObservatoryId = function () {
-    var id = _getHash();
+    var id;
+
+    id = _getHash();
 
     if (id === null) {
       id = _observatoryId;
@@ -168,11 +172,16 @@ var ObservatoryView = function (options) {
     });
   };
 
+  _onObservatoryChange = function () {
+    window.location.hash = '#' + _observatorySelect.value;
+  };
+
   _setObservatoryTitle = function (data) {
     var i,
-        len = data.length,
+        len,
         observatory;
 
+    len = data.length;
     for (i = 0; i < len; i++) {
       observatory = data[i];
       if (observatory.get('id') === _observatoryId) {
@@ -187,7 +196,7 @@ var ObservatoryView = function (options) {
       // sub class destroy method
       function () {
         // Remove event listeners
-
+        _observatorySelect.removeEventListener('change', _onObservatoryChange);
 
         // Clean up private methods
         _buildObservatoryList = null;
