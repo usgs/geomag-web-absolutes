@@ -416,6 +416,15 @@ var ObservationSummaryView = function (options) {
   _this.destroy = Util.compose(
       // sub class destroy method
       function () {
+        // Remove event bindings
+        _calculator.removeEventListener('change', 'render', _this);
+        _observation.eachReading(function (reading) {
+          reading.eachMeasurement(function (measurement) {
+            measurement.removeEventListener('change', 'render', _this);
+          });
+          reading.removeEventListener('change', 'render', _this);
+        });
+
         // Clean up private methods
         _bindings = null;
         _querySelectors = null;
