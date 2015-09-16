@@ -56,7 +56,9 @@ var MeasurementView = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function (options) {
-    var el = _this.el;
+    var el;
+
+    el = _this.el;
 
     _this._measurement = options.measurement;
     _this._observation = options.observation;
@@ -97,10 +99,15 @@ var MeasurementView = function (options) {
   };
 
   _onAngleChange = function (evt) {
-    var degrees = _this._degreesInput.value,
-        minutes = _this._minutesInput.value,
-        seconds = _this._secondsInput.value,
-        error = null;
+    var degrees,
+        error,
+        minutes,
+        seconds;
+
+    degrees = _this._degreesInput.value;
+    minutes = _this._minutesInput.value;
+    seconds = _this._secondsInput.value;
+    error = null;
 
     if (evt.target === _this._minutesInput) {
       // When decimal minutes are entered, clear corresponding seconds value.
@@ -127,9 +134,11 @@ var MeasurementView = function (options) {
   };
 
   _onTimeChange = function (/*evt*/) {
-    var time = _this._timeInput.value,
-        error = null;
+    var error,
+        time;
 
+    time = _this._timeInput.value;
+    error = null;
     // validate time change
     error = _validateTime(time);
 
@@ -159,10 +168,15 @@ var MeasurementView = function (options) {
   };
 
   _validateAngle = function (degrees, minutes, seconds) {
-    var validDegrees = true,
-        validMinutes = true,
-        validSeconds = true,
-        helpText = null;
+    var helpText,
+        validDegrees,
+        validMinutes,
+        validSeconds;
+
+    validDegrees = true;
+    validMinutes = true;
+    validSeconds = true;
+    helpText = null;
 
     // DEGREES
     if (!Validate.validDegrees(degrees)) {
@@ -189,8 +203,11 @@ var MeasurementView = function (options) {
   };
 
   _validateTime = function (time) {
-    var validTime = true,
-        helpText = null;
+    var helpText,
+        validTime;
+
+    validTime = true;
+    helpText = null;
 
     if (!Validate.validTime(time)) {
       validTime = false;
@@ -225,17 +242,29 @@ var MeasurementView = function (options) {
       _this.destroy);
 
   _this.render = function () {
-    var measurement = _this._measurement,
-        time = measurement.get('time'),
-        time_error = measurement.get('time_error'),
-        angle = measurement.get('angle'),
-        angle_error = measurement.get('angle_error'),
-        timeString = null,
-        dms = null,
-        h = measurement.get('h'),
-        e = measurement.get('e'),
-        z = measurement.get('z'),
-        f = measurement.get('f');
+    var angle,
+        angle_error,
+        dms,
+        e,
+        f,
+        h,
+        measurement,
+        time,
+        time_error,
+        timeString,
+        z;
+
+    measurement = _this._measurement;
+    time = measurement.get('time');
+    time_error = measurement.get('time_error');
+    angle = measurement.get('angle');
+    angle_error = measurement.get('angle_error');
+    timeString = null;
+    dms = null;
+    h = measurement.get('h');
+    e = measurement.get('e');
+    z = measurement.get('z');
+    f = measurement.get('f');
 
     if (time_error === null) {
       if (time === null) {

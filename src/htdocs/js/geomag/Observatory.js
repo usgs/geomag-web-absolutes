@@ -41,8 +41,12 @@ var Observatory = function (options) {
    * @return {Pier} the default pier, or null if no default is specified.
    */
   _this.getDefaultPier = function () {
-    var piers = _this.get('piers'),
-        default_pier_id = _this.get('default_pier_id');
+    var default_pier_id,
+        piers;
+
+    piers = _this.get('piers');
+    default_pier_id = _this.get('default_pier_id');
+
     if (piers !== null && default_pier_id !== null) {
       return piers.get(default_pier_id);
     } else {
@@ -56,11 +60,15 @@ var Observatory = function (options) {
    * @return {Collection<Instrument>} instruments with type === 'elec'.
    */
   _this.getElectronics = function () {
-    var electronics = [],
-        instruments = _this.get('instruments').data(),
-        instrument,
+    var electronics,
         i,
+        instrument,
+        instruments,
         len;
+
+    electronics = [];
+    instruments = _this.get('instruments').data();
+
     for (i = 0, len = instruments.length; i < len; i++) {
       instrument = instruments[i];
       if (instrument.get('type') === 'electronics') {
@@ -78,12 +86,15 @@ var Observatory = function (options) {
    * @return {Mark} the mark object, or null if not found.
    */
   _this.getMarkById = function (id) {
-    var piers = _this.get('piers').data(),
-        pier,
-        marks,
+    var i,
+        len,
         mark,
-        i,
-        len;
+        marks,
+        pier,
+        piers;
+
+    piers = _this.get('piers').data();
+
     for (i = 0, len = piers.length; i < len; i++) {
       pier = piers[i];
       marks = pier.get('marks');
@@ -103,12 +114,15 @@ var Observatory = function (options) {
    * @return {Pier} the pier object, or null if not found.
    */
   _this.getPierByMarkId = function (id) {
-    var piers = _this.get('piers').data(),
-        pier,
-        marks,
+    var i,
+        len,
         mark,
-        i,
-        len;
+        marks,
+        pier,
+        piers;
+
+    piers = _this.get('piers').data();
+
     for (i = 0, len = piers.length; i < len; i++) {
       pier = piers[i];
       marks = pier.get('marks');
@@ -126,11 +140,15 @@ var Observatory = function (options) {
    * @return {Collection<Instrument>} instruments with type === 'theo'.
    */
   _this.getTheodolites = function () {
-    var theodolites = [],
-        instruments = _this.get('instruments').data(),
+    var i,
         instrument,
-        i,
-        len;
+        instruments,
+        len,
+        theodolites;
+
+    theodolites = [];
+    instruments = _this.get('instruments').data();
+
     for (i = 0, len = instruments.length; i < len; i++) {
       instrument = instruments[i];
       if (instrument.get('type') === 'theodolite') {

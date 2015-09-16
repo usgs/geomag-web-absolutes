@@ -34,7 +34,9 @@ var InclinationView = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function (options) {
-    var el = _this.el;
+    var el;
+
+    el = _this.el;
 
     _this._reading = options.reading;
     _this._calculator = options.calculator;
@@ -115,8 +117,11 @@ var InclinationView = function (options) {
    * Update view based on current reading values.
    */
   _this.render = function () {
-    var calculator = _this._calculator,
-        reading = _this._reading;
+    var calculator,
+        reading;
+
+    calculator = _this._calculator;
+    reading = _this._reading;
 
     _this._inclinationAngle.innerHTML =
         Format.degreesAndDegreesMinutes(calculator.inclination(reading));

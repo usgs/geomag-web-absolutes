@@ -192,6 +192,7 @@ var ObservationView = function (options) {
 
     // Add publish button for admin users
     if (_user.get('admin') === 'Y') {
+      _publishButton = document.createElement('button');
       _publishButton.innerHTML = 'Finalize';
       controls.appendChild(_publishButton);
 

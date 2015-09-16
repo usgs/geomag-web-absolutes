@@ -68,7 +68,9 @@ var ObservationSummaryView = function (options) {
   _this = View(options);
 
   _initialize = function (options) {
-    var el = _this.el;
+    var el;
+
+    el = _this.el;
 
     _calculator = options.calculator;
     _observation = options.observation;
@@ -220,7 +222,9 @@ var ObservationSummaryView = function (options) {
   };
 
   _querySelectors = function () {
-    var el = _this.el;
+    var el;
+
+    el = _this.el;
 
     // Declination summary view
     _declinationSummaryView = el.querySelector('.declination-summary-view');
@@ -259,15 +263,19 @@ var ObservationSummaryView = function (options) {
   };
 
   _renderDeclination = function () {
-    var readings = _readings.data(),
-        i = null,
-        len = null,
-        reading,
-        range,
-        baselineD = [],
-        eBaseline = [],
+    var baselineD,
         baselineDStats,
-        eBaselineStats;
+        eBaseline,
+        eBaselineStats,
+        i,
+        len,
+        range,
+        reading,
+        readings;
+
+    readings = _readings.data();
+    baselineD = [];
+    eBaseline = [];
 
     Util.empty(_declinationSummaryView);
 
@@ -309,13 +317,16 @@ var ObservationSummaryView = function (options) {
   };
 
   _renderHorizontalIntensitySummaryView = function () {
-    var readings = _readings.data(),
-        i = null,
-        len = null,
-        reading,
+    var baselineH,
+        baselineHStats,
+        i,
+        len,
         range,
-        baselineH = [],
-        baselineHStats;
+        reading,
+        readings;
+
+    readings = _readings.data();
+    baselineH = [];
 
     Util.empty(_horizontalIntensitySummaryView);
 
@@ -356,11 +367,17 @@ var ObservationSummaryView = function (options) {
   };
 
   _renderSummaryBottom = function () {
-    var electTemp = _observation.get('elect_temperature'),
-        fluxgateTemp = _observation.get('flux_temperature'),
-        pierTemp = _observation.get('pier_temperature'),
-        protonTemp = _observation.get('proton_temperature'),
-        outsideTemp = _observation.get('outside_temperature');
+    var electTemp,
+        fluxgateTemp,
+        outsideTemp,
+        pierTemp,
+        protonTemp;
+
+    electTemp = _observation.get('elect_temperature');
+    fluxgateTemp = _observation.get('flux_temperature');
+    pierTemp = _observation.get('pier_temperature');
+    protonTemp = _observation.get('proton_temperature');
+    outsideTemp = _observation.get('outside_temperature');
 
     _pierTemperature.innerHTML = Format.celsius(pierTemp,1);
     _electronicsTemperature.innerHTML = Format.celsius(electTemp,1);
@@ -370,13 +387,16 @@ var ObservationSummaryView = function (options) {
   };
 
   _renderVerticalIntensitySummaryView = function () {
-    var readings = _readings.data(),
-        i = null,
-        len = null,
-        reading,
+    var baselineZ,
+        baselineZStats,
+        i,
+        len,
         range,
-        baselineZ = [],
-        baselineZStats;
+        reading,
+        readings;
+
+    readings = _readings.data();
+    baselineZ = [];
 
     Util.empty(_verticalIntensitySummaryView);
 

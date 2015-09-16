@@ -46,11 +46,17 @@ var Reading = function (options) {
    * Initialize view, and call render.
    */
   _initialize = function () {
-    var data = null,
-        i = null,
-        len = null,
-        measurements = _this.get('measurements'),
-        onChangeHandler = null;
+    var data,
+        i,
+        len,
+        measurements,
+        onChangeHandler;
+
+    data = null;
+    i = null;
+    len = null;
+    measurements = _this.get('measurements');
+    onChangeHandler = null;
 
     if (measurements === null) {
       measurements = Collection([
@@ -92,7 +98,9 @@ var Reading = function (options) {
   _this.eachMeasurement = function (callback) {
     var i,
         len,
-        measurements = _this.get('measurements').data();
+        measurements;
+
+    measurements = _this.get('measurements').data();
 
     for (i = 0, len = measurements.length; i < len; i++) {
       callback(measurements[i]);
@@ -112,9 +120,12 @@ var Reading = function (options) {
     var data,
         i,
         m,
-        measurements = _this.get('measurements'),
-        r = {},
+        measurements,
+        r,
         type;
+
+    measurements = _this.get('measurements');
+    r = {};
 
     if (measurements !== null) {
       data = measurements.data();

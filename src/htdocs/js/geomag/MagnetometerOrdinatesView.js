@@ -35,7 +35,9 @@ var MagnetometerOrdinatesView = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function (options) {
-    var el = _this.el;
+    var el;
+
+    el = _this.el;
 
     _measurements = options.reading.getMeasurements();
     _this._reading = options.reading;
@@ -158,15 +160,18 @@ var MagnetometerOrdinatesView = function (options) {
 
         // Clean up private variables
         _measurements = null;
-        
+
         _this = null;
       },
       // parent class destroy method
       _this.destroy);
 
   _this.render = function () {
-    var calculator = _this._calculator,
-        reading = _this._reading;
+    var calculator,
+        reading;
+
+    calculator = _this._calculator;
+    reading = _this._reading;
 
     _this._hMean.innerHTML =
         Format.nanoteslas(calculator.meanH(reading));

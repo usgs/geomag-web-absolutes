@@ -35,8 +35,11 @@ var Pier = function (options) {
    * @return {Mark} the default mark, or null if no default is specified.
    */
   _this.getDefaultMark = function () {
-    var marks = _this.get('marks'),
-        default_mark_id = _this.get('default_mark_id');
+    var default_mark_id,
+        marks;
+
+    marks = _this.get('marks');
+    default_mark_id = _this.get('default_mark_id');
 
     if (marks !== null && default_mark_id !== null) {
       return marks.get(default_mark_id);
