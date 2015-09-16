@@ -33,9 +33,21 @@ var ReadingView = function (options) {
       _initialize,
 
       _calculator,
+      _eastDownMeasurement,
+      _eastUpMeasurement,
+      _firstMarkDownMeasurement,
+      _firstMarkUpMeasurement,
       _measurements,
+      _northDownMeasurement,
+      _northUpMeasurement,
       _observation,
       _reading,
+      _secondMarkDownMeasurement,
+      _secondMarkUpMeasurement,
+      _southDownMeasurement,
+      _southUpMeasurement,
+      _westDownMeasurement,
+      _westUpMeasurement,
 
       _formatType,
       _onTimeChange,
@@ -54,42 +66,32 @@ var ReadingView = function (options) {
     _reading = options.reading;
     _measurements = _reading.getMeasurements();
 
-    _this._firstMarkUpMeasurement =
-        _measurements[Measurement.FIRST_MARK_UP][0];
-    _this._firstMarkDownMeasurement =
-        _measurements[Measurement.FIRST_MARK_DOWN][0];
-    _this._westDownMeasurement = _measurements[Measurement.WEST_DOWN][0];
-    _this._eastDownMeasurement = _measurements[Measurement.EAST_DOWN][0];
-    _this._westUpMeasurement = _measurements[Measurement.WEST_UP][0];
-    _this._eastUpMeasurement = _measurements[Measurement.EAST_UP][0];
-    _this._secondMarkUpMeasurement =
-        _measurements[Measurement.SECOND_MARK_UP][0];
-    _this._secondMarkDownMeasurement =
-        _measurements[Measurement.SECOND_MARK_DOWN][0];
+    _firstMarkUpMeasurement = _measurements[Measurement.FIRST_MARK_UP][0];
+    _firstMarkDownMeasurement = _measurements[Measurement.FIRST_MARK_DOWN][0];
+    _westDownMeasurement = _measurements[Measurement.WEST_DOWN][0];
+    _eastDownMeasurement = _measurements[Measurement.EAST_DOWN][0];
+    _westUpMeasurement = _measurements[Measurement.WEST_UP][0];
+    _eastUpMeasurement = _measurements[Measurement.EAST_UP][0];
+    _secondMarkUpMeasurement = _measurements[Measurement.SECOND_MARK_UP][0];
+    _secondMarkDownMeasurement = _measurements[Measurement.SECOND_MARK_DOWN][0];
 
-    _this._southDownMeasurement =
-        _measurements[Measurement.SOUTH_DOWN][0];
-    _this._northUpMeasurement = _measurements[Measurement.NORTH_UP][0];
-    _this._southUpMeasurement = _measurements[Measurement.SOUTH_UP][0];
-    _this._northDownMeasurement =
-        _measurements[Measurement.NORTH_DOWN][0];
+    _southDownMeasurement = _measurements[Measurement.SOUTH_DOWN][0];
+    _northUpMeasurement = _measurements[Measurement.NORTH_UP][0];
+    _southUpMeasurement = _measurements[Measurement.SOUTH_UP][0];
+    _northDownMeasurement = _measurements[Measurement.NORTH_DOWN][0];
 
-    _this._westDownMeasurement.on('change:time', _onTimeChange,
-          _this._westDownMeasurement);
-    _this._eastDownMeasurement.on('change:time', _onTimeChange,
-          _this._eastDownMeasurement);
-    _this._westUpMeasurement.on('change:time', _onTimeChange,
-          _this._westUpMeasurement);
-    _this._eastUpMeasurement.on('change:time', _onTimeChange,
-          _this._eastUpMeasurement);
-    _this._southDownMeasurement.on('change:time', _onTimeChange,
-          _this._southDownMeasurement);
-    _this._northDownMeasurement.on('change:time', _onTimeChange,
-          _this._northDownMeasurement);
-    _this._southUpMeasurement.on('change:time', _onTimeChange,
-          _this._southUpMeasurement);
-    _this._northUpMeasurement.on('change:time', _onTimeChange,
-          _this._northUpMeasurement);
+    _westDownMeasurement.on('change:time', _onTimeChange, _westDownMeasurement);
+    _eastDownMeasurement.on('change:time', _onTimeChange, _eastDownMeasurement);
+    _westUpMeasurement.on('change:time', _onTimeChange, _westUpMeasurement);
+    _eastUpMeasurement.on('change:time', _onTimeChange, _eastUpMeasurement);
+    _southDownMeasurement.on('change:time', _onTimeChange,
+          _southDownMeasurement);
+    _northDownMeasurement.on('change:time', _onTimeChange,
+          _northDownMeasurement);
+    _southUpMeasurement.on('change:time', _onTimeChange,
+          _southUpMeasurement);
+    _northUpMeasurement.on('change:time', _onTimeChange,
+          _northUpMeasurement);
 
     _this.el.innerHTML = [
       '<section class="reading-view">',
@@ -160,78 +162,66 @@ var ReadingView = function (options) {
 
     _this._firstMarkUpView = MeasurementView({
       el: _this.el.querySelector('.first-mark-up'),
-      measurement: _this._firstMarkUpMeasurement,
+      measurement: _firstMarkUpMeasurement,
       observation: _observation
     });
-
     _this._firstMarkDownView = MeasurementView({
       el: _this.el.querySelector('.first-mark-down'),
-      measurement: _this._firstMarkDownMeasurement,
+      measurement: _firstMarkDownMeasurement,
       observation: _observation
     });
-
     _this._secondMarkUpView = MeasurementView({
       el: _this.el.querySelector('.second-mark-up'),
-      measurement: _this._secondMarkUpMeasurement,
+      measurement: _secondMarkUpMeasurement,
       observation: _observation
     });
-
     _this._secondMarkDownView = MeasurementView({
       el: _this.el.querySelector('.second-mark-down'),
-      measurement: _this._secondMarkDownMeasurement,
+      measurement: _secondMarkDownMeasurement,
       observation: _observation
     });
-
 
     _this._westDownView = MeasurementView({
       el: _this.el.querySelector('.west-down'),
-      measurement: _this._westDownMeasurement,
+      measurement: _westDownMeasurement,
       observation: _observation
     });
-
     _this._eastDownView = MeasurementView({
       el: _this.el.querySelector('.east-down'),
-      measurement: _this._eastDownMeasurement,
+      measurement: _eastDownMeasurement,
       observation: _observation
     });
-
     _this._westUpView = MeasurementView({
       el: _this.el.querySelector('.west-up'),
-      measurement: _this._westUpMeasurement,
+      measurement: _westUpMeasurement,
       observation: _observation
     });
-
     _this._eastUpView = MeasurementView({
       el: _this.el.querySelector('.east-up'),
-      measurement: _this._eastUpMeasurement,
+      measurement: _eastUpMeasurement,
       observation: _observation
     });
-
 
     _this._southDownView = MeasurementView({
       el: _this.el.querySelector('.south-down'),
-      measurement: _this._southDownMeasurement,
+      measurement: _southDownMeasurement,
       observation: _observation
     });
-
     _this._northUpView = MeasurementView({
       el: _this.el.querySelector('.north-up'),
-      measurement: _this._northUpMeasurement,
+      measurement: _northUpMeasurement,
       observation: _observation
     });
-
     _this._southUpView = MeasurementView({
       el: _this.el.querySelector('.south-up'),
-      measurement: _this._southUpMeasurement,
+      measurement: _southUpMeasurement,
       observation: _observation
     });
-
     _this._northDownView = MeasurementView({
       el: _this.el.querySelector('.north-down'),
-      measurement: _this._northDownMeasurement,
+      measurement: _northDownMeasurement,
       observation: _observation
     });
-
 
     _this._declinationView = DeclinationView({
       el: _this.el.querySelector('.declination-output'),
@@ -268,14 +258,14 @@ var ReadingView = function (options) {
     isEarlierMeasurement = true;
 
     measurements = [
-      _this._westDownMeasurement,
-      _this._eastDownMeasurement,
-      _this._westUpMeasurement,
-      _this._eastUpMeasurement,
-      _this._southDownMeasurement,
-      _this._northUpMeasurement,
-      _this._southUpMeasurement,
-      _this._northDownMeasurement
+      _westDownMeasurement,
+      _eastDownMeasurement,
+      _westUpMeasurement,
+      _eastUpMeasurement,
+      _southDownMeasurement,
+      _northUpMeasurement,
+      _southUpMeasurement,
+      _northDownMeasurement
     ];
 
     thisTime = this.get('time') % 86400000; // Only look at time, not date
@@ -336,6 +326,9 @@ var ReadingView = function (options) {
   _this.destroy = Util.compose(
       // sub class destroy method
       function () {
+        // Remove event listeners
+
+
         // Clean up private methods
         _formatType = null;
         _onTimeChange = null;
@@ -343,9 +336,21 @@ var ReadingView = function (options) {
 
         // Clean up private variables
         _calculator = null;
+        _eastDownMeasurement = null;
+        _eastUpMeasurement = null;
+        _firstMarkDownMeasurement = null;
+        _firstMarkUpMeasurement = null;
         _measurements = null;
+        _northDownMeasurement = null;
+        _northUpMeasurement = null;
         _observation = null;
         _reading = null;
+        _secondMarkDownMeasurement = null;
+        _secondMarkUpMeasurement = null;
+        _southDownMeasurement = null;
+        _southUpMeasurement = null;
+        _westDownMeasurement = null;
+        _westUpMeasurement = null;
       },
       // parent class destroy method
       _this.destroy);
