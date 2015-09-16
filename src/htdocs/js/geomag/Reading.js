@@ -132,13 +132,6 @@ var Reading = function (options) {
     return r;
   };
 
-  _this.destroy = Util.compose(
-    // sub class destroy method
-    function () {
-    },
-    // parent class destroy method
-    _this.destroy);
-
 
   _initialize();
   options = null;

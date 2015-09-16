@@ -45,13 +45,6 @@ var Pier = function (options) {
     }
   };
 
-  _this.destroy = Util.compose(
-    // sub class destroy method
-    function () {
-    },
-    // parent class destroy method
-    _this.destroy);
-
 
   options = null;
   return _this;
