@@ -65,8 +65,11 @@ var ReadingGroupView = function (options) {
   };
 
   _createSummaryTab = function (observation) {
-    var el = document.createElement('div'),
-        summaryView = null;
+    var el,
+        summaryView;
+
+    el = document.createElement('div');
+    summaryView = null;
 
     el.classList.add('summary-wrapper');
     summaryView = ObservationSummaryView({
@@ -83,13 +86,15 @@ var ReadingGroupView = function (options) {
 
   _createTab = function (observation, reading, nextReading) {
     var button,
-        el = document.createElement('div'),
-        readingView = null,
+        el,
+        readingView,
         tbody,
         td,
         tr;
 
+    el = document.createElement('div');
     el.classList.add('reading-wrapper');
+    readingView = null;
     readingView = ReadingView({
       calculator: _calculator,
       el: el,
@@ -160,6 +165,8 @@ var ReadingGroupView = function (options) {
   _this.destroy = Util.compose(
       // sub class destroy method
       function () {
+        _tablist.destroy();
+
         // Clean up private methods
         _createTab = null;
         _createSummaryTab = null;
