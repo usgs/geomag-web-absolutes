@@ -1,49 +1,45 @@
-geomag-baseline-calculator
+Geomag Baseline Calculator
 ==========================
 
 Enter Geomagnetic absolute measurements to calculate *baselines* to be applied
 to raw magnetometer data. Finalize and publish the calibration points for use
 in magnetic data processing software.
 
-Getting Started
----------------
+[License](LICENSE.md)
 
-1. [Use git to clone geomag-baseline-calculator from git repository](readme_git_install.md)
+## Getting Started ##
 
-1. [Install needed dependencies and run them](readme_dependency_install.md)
+### [Install](readme_dependency_install.md) ###
+First time install. Walk through dependencies and other considerations.
 
-1. Set up your environment and database
+### Configure ###
+Set up your environment and database, by running the pre-install script.
 
-    `./src/lib/pre-install` (Unix) `php src/lib/pre-install.php` (Windows)
+  Unix
 
-    If you're not sure what to do, pick
+        ./src/lib/pre-install
+  Windows
 
-      `[3] Re-configure using default configuration as defaults.`
+        php src/lib/pre-install.php
 
-    Leave all options at their defaults except for
+   If you're not sure what to do, pick
 
-      `Would you like to set up the absolutes database at this time [N]`,
+        [3] Re-configure using default configuration as defaults
 
-    to which you should answer `Y`.
+   Leave all options at their defaults except for
 
-1. Preview in a browser
+        Would you like to set up the absolutes database at this time [N]
 
-    `grunt`
+   to which you should answer `Y`.
 
-    On windows, `gateway` has trouble resolving default documents so you may
-    need to change the opened url to
+### Use ###
 
-      `http://localhost:8080/index.php`
+To preview in a browser, run `grunt` from the install directory.
 
-    To view the application go to
+---
+### Having trouble getting started? ###
 
-      `http://localhost:8080/observation.php`
+If this is your first time using **grunt**, you need to install the grunt
+command line interface globally:
 
-### Having trouble getting started?
-
-1. If this is your first time using **grunt**, you need to install the grunt
-command line interface globally
-
-    `npm install -g grunt-cli`
-
-[Dependency install details](readme_dependency_install.md)
+        npm install -g grunt-cli
