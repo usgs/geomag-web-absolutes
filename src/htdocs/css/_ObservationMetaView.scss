@@ -1,122 +1,15 @@
-// TODO: generalize into template content layout pattern
-
-
 // all become top aligned on small screens
 .observation-meta-view {
-  .top-aligned,
-  .left-aligned,
-  .right-aligned {
-    > label,
-    > .label {
-      padding: 0;
-      margin: 0;
-      display: block;
-      font-weight: bold;
-      padding-right: 5px;
-      line-height: 1.9;
-    }
-
-    > input,
-    > select,
-    > textarea,
-    > .admin,
-    > .value {
-      margin-bottom: 1em;
-    }
-
-    > textarea {
-      width: 100%;
-    }
-  }
-
-  .admin {
-    margin: 0;
-    padding: 8px 10px;
-  }
-
-  .julian-day-value {
-    padding: 0.5em;
-    font-size: 0.75em;
-    background: #f8f8f8;
-    width: 3em;
-    margin-left: 2px;
-    text-align: center;
-  }
-
   .hidden {
     display: none;
     visibility: hidden;
   }
-
-  // left and right stack, and change label text alignment
-  @media screen and (min-width:768px) {
-    .left-aligned,
-    .right-aligned {
-      > label,
-      > .label {
-        float: left;
-        clear: left;
-        width: 7em;
-        padding-right: 8px;
-      }
-
-      > input,
-      > select,
-      > textarea,
-      > .admin,
-      > .value {
-        float: left;
-        margin-bottom: 5px;
-      }
-
-      &:after {
-        display: block;
-        content: ' ';
-        clear: both;
-      }
-    }
-
-    .right-aligned {
-      > label,
-      > .label {
-        text-align: right;
-      }
-    }
-  }
 }
 
 @media print {
-  .observation-meta-view {
-    font-size: 12px;
-    > label {
-      font-size: 12px;
-    }
-    .left-aligned,
-    .right-aligned {
-      > label {
-        clear: left;
-        float: left;
-      }
-      > input,
-      > select,
-      > textarea,
-      > text,
-      > .admin,
-      > .value {
-        float: left;
-        margin-bottom: 0px;
-      }
-    }
-    input.reviewer-name {
-        display:none;
-    }
-  }
-
-  .observation-meta-view .left-aligned > label.print-hidden,
+  .print-hidden,
   .pier-temperature,
-  .mark,
-  .electronics,
-  .theodolite {
+  .mark {
     display: none;
   }
 }
