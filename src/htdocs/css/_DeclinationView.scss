@@ -1,33 +1,25 @@
-$line-vertical-separation:4px;
-
 .declination-view {
-
   > dl {
     margin: 0;
 
     > dt {
-      float:left;
-      clear:left;
-      width:13em;
-      font-weight:bold;
-      margin-top:$line-vertical-separation;
+      clear: left;
+      float: left;
+      margin-top: 4px;
+      width: 13em;
     }
 
     > dd {
-      float:left;
-      width:6em;
-      text-align:right;
-      margin-top:$line-vertical-separation;
-      margin-left:1em;
+      float: left;
+      margin-left: 1em;
+      margin-top: 4px;
+      text-align: right;
+      width: 6em;
+
       .degrees-minutes {
-        display:block;
+        display: block;
       }
     }
 
-  }
-
-  .west-up-minus-east-down,
-  .west-up-minus-east-down-value {
-    padding-top:10px;
   }
 }
