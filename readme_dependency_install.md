@@ -6,7 +6,6 @@ You will need to have the following tools installed in order to run this project
   1. PHP-CGI 5.4+
 1. Ruby
   1. Sass
-  1. Compass
 
 ---
 1. Install PHP
@@ -18,7 +17,6 @@ You will need to have the following tools installed in order to run this project
 
     `gem install sass`
 
-    `gem install compass`
 
 ### Secondary Dependencies ###
 Make sure you are in your `geomag-baseline-calculator` project directory.

@@ -11,8 +11,12 @@ var watch = {
     ],
     tasks: [
       'jshint:dev',
-      'concurrent:browserify',
-      'concurrent:test',
+      'browserify:index',
+      'browserify:observation',
+      'browserify:plot',
+      'browserify:useradmin',
+      'browserify:bundle', // All source files, one bundle, with aliases
+      'browserify:test',   // Test bootstrap and source
       'mocha_phantomjs'
     ]
   },
@@ -23,7 +27,8 @@ var watch = {
     ],
     tasks: [
       'jshint:test',
-      'concurrent:test',
+      'browserify:bundle', // All source files, one bundle, with aliases
+      'browserify:test'    // Test bootstrap and source
     ]
   },
 
@@ -32,7 +37,7 @@ var watch = {
       config.src + '/**/*.php'
     ],
     tasks: [
-      'concurrent:copy'
+      'copy:dev'
     ]
   },
 
@@ -41,7 +46,7 @@ var watch = {
       config.test + '/*.html'
     ],
     tasks: [
-      'concurrent:copytest'
+      'copy:test'
     ]
   },
 
@@ -50,7 +55,7 @@ var watch = {
       config.src + '/htdocs/css/**/*.scss'
     ],
     tasks: [
-      'concurrent:compass'
+      'postcss'
     ]
   },
 
