@@ -2,6 +2,7 @@
 
 var config = require('./config');
 
+
 var watch = {
   scripts: {
     files: [
@@ -15,6 +16,7 @@ var watch = {
       'mocha_phantomjs'
     ]
   },
+
   test: {
     files: [
       config.test + '/**/*.js',
@@ -33,6 +35,7 @@ var watch = {
       'concurrent:copy'
     ]
   },
+
   html: {
     files: [
       config.test + '/*.html'
@@ -56,7 +59,7 @@ var watch = {
       config.build + '/**/*'
     ],
     options: {
-      livereload: true
+      livereload: config.livereloadPort
     }
   },
 
@@ -68,5 +71,6 @@ var watch = {
     tasks: ['jshint:gruntfile']
   }
 };
+
 
 module.exports = watch;

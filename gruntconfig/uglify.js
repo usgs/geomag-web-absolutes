@@ -2,6 +2,7 @@
 
 var config = require('./config');
 
+
 var uglify = {
   index: {
     src: [config.build + '/' + config.src + '/htdocs/js/index.js'],
@@ -20,5 +21,6 @@ var uglify = {
     dest: config.dist + '/htdocs/js/useradmin.js'
   }
 };
+
 
 module.exports = uglify;

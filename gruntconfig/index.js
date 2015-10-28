@@ -1,5 +1,6 @@
 'use strict';
 
+
 var config = {
   browserify: require('./browserify'),
   clean: require('./clean'),
@@ -28,5 +29,6 @@ var config = {
     'grunt-mocha-phantomjs'
   ]
 };
+
 
 module.exports = config;

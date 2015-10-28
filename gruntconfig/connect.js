@@ -60,10 +60,10 @@ var connect = {
     xforward: false
   }],
 
-
   options: {
     hostname: '*'
   },
+
   dev: {
     options: {
       base: [
@@ -71,8 +71,8 @@ var connect = {
         'node_modules'
       ],
       livereload: true,
-      open: 'http://localhost:8000/index.php',
-      port: 8000,
+      open: 'http://localhost:' + config.buildPort + '/index.php',
+      port: config.buildPort,
       middleware: function (connect, options) {
         var middlewares,
             paths = options.base,
@@ -92,6 +92,7 @@ var connect = {
       }
     }
   },
+
   test: {
     options: {
       base: [
@@ -99,8 +100,8 @@ var connect = {
         config.build + '/' + config.src + '/htdocs',
         'node_modules'
       ],
-      open: 'http://localhost:8001/test.html',
-      port: 8001,
+      open: 'http://localhost:' + config.testPort + '/test.html',
+      port: config.testPort,
       middleware: function (connect, options) {
         var middlewares = [],
             paths = options.base,
@@ -116,6 +117,7 @@ var connect = {
       }
     }
   },
+
   dist: {
     options: {
       base: [
@@ -124,8 +126,8 @@ var connect = {
       ],
       keepalive: true,
       livereload: true,
-      open: 'http://localhost:8002/index.php',
-      port: 8002,
+      open: 'http://localhost:' + config.distPort + '/index.php',
+      port: config.distPort,
       middleware: function (connect, options) {
         var middlewares,
             paths = options.base,
@@ -146,5 +148,6 @@ var connect = {
     }
   }
 };
+
 
 module.exports = connect;

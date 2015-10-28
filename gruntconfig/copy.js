@@ -2,6 +2,7 @@
 
 var config = require('./config');
 
+
 var copy = {
   dev: {
     cwd: config.src,
@@ -43,5 +44,6 @@ var copy = {
     ]
   }
 };
+
 
 module.exports = copy;
