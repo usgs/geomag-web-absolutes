@@ -15,22 +15,29 @@ module.exports = function (grunt) {
     'clean',
     'dev',
     'copy:dist',
-    'concurrent:postcss',
-    'concurrent:uglify'
+    'postcss',
+    'uglify:index',
+    'uglify:observation',
+    'uglify:plot',
+    'uglify:useradmin'
   ]);
 
   // default task useful during development
   grunt.registerTask('default', [
     'jshint:dev',
-    'concurrent:browserify',
-    'concurrent:postcss',
-    'concurrent:copy',
+    'browserify:index',
+    'browserify:observation',
+    'browserify:plot',
+    'browserify:useradmin',
+    'postcss',
+    'copy:dev',
     'configureProxies:dev',
     'connect:dev',
 
     'jshint:test',
-    'concurrent:test',
-    'concurrent:copytest',
+    'browserify:bundle', // All source files, one bundle, with aliases
+    'browserify:test',   // Test bootstrap and source
+    'copy:test',         // Static test content (HTML, etc...)
     'connect:test',
     'mocha_phantomjs',
 
@@ -40,9 +47,12 @@ module.exports = function (grunt) {
   // builds development version of library
   grunt.registerTask('dev', [
     'jshint:dev',
-    'concurrent:browserify',
-    'concurrent:postcss',
-    'concurrent:copy'
+    'browserify:index',
+    'browserify:observation',
+    'browserify:plot',
+    'browserify:useradmin',
+    'postcss',
+    'copy:dev'
   ]);
 
   // starts distribution server and preview
@@ -56,8 +66,9 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'dev',
     'jshint:test',
-    'concurrent:test',
-    'concurrent:copytest',
+    'browserify:bundle', // All source files, one bundle, with aliases
+    'browserify:test',   // Test bootstrap and source
+    'copy:test',         // Static test content (HTML, etc...)
     'connect:test',
     'mocha_phantomjs'
   ]);
