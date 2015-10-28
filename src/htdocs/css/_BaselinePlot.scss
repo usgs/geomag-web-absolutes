@@ -3,17 +3,17 @@ svg {
 }
 
 path {
+  fill: none;
   stroke: lightgrey;
   stroke-width: 1;
-  fill: none;
 }
 
 .axis path,
 .axis line {
   fill: none;
+  shape-rendering: crispEdges;
   stroke: grey;
   stroke-width: 1;
-  shape-rendering: crispEdges;
 }
 
 .dot {
@@ -36,6 +36,6 @@ text {
   h1,
   .alert,
   h2 {
-    display:none;
+    display: none;
   }
 }
