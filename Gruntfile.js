@@ -15,7 +15,7 @@ module.exports = function (grunt) {
     'clean',
     'dev',
     'copy:dist',
-    'concurrent:cssmin',
+    'concurrent:postcss',
     'concurrent:uglify'
   ]);
 
@@ -23,7 +23,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default', [
     'jshint:dev',
     'concurrent:browserify',
-    'concurrent:compass',
+    'concurrent:postcss',
     'concurrent:copy',
     'configureProxies:dev',
     'connect:dev',
@@ -41,7 +41,7 @@ module.exports = function (grunt) {
   grunt.registerTask('dev', [
     'jshint:dev',
     'concurrent:browserify',
-    'concurrent:compass',
+    'concurrent:postcss',
     'concurrent:copy'
   ]);
 

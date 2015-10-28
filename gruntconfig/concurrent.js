@@ -11,12 +11,13 @@ var concurrent = {
     'browserify:plot',
     'browserify:useradmin'
   ],
-  compass: [
-    'compass:index',
-    'compass:login',
-    'compass:observation',
-    'compass:plot',
-    'compass:useradmin'
+  postcss: [
+    // 'postcss:index',
+    // 'postcss:login',
+    // 'postcss:observation',
+    // 'postcss:plot',
+    // 'postcss:useradmin'
+    'postcss'
   ],
   copy: [
     'copy:dev'
@@ -35,13 +36,6 @@ var concurrent = {
     'uglify:observation',
     'uglify:plot',
     'uglify:useradmin'
-  ],
-  cssmin: [
-    'cssmin:index',
-    'cssmin:login',
-    'cssmin:observation',
-    'cssmin:plot',
-    'cssmin:useradmin'
   ]
 };
 
