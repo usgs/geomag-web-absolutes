@@ -10,6 +10,8 @@ var _DEFAULTS = {
   factory: null
 };
 
+var _ID_SET = 0;
+
 
 /**
  * Construct a new HorizontalIntensitySummaryView.
@@ -50,7 +52,8 @@ var HorizontalIntensitySummaryView = function (options) {
   _initialize = function (options) {
     var el = _this.el,
         i = null,
-        len = null;
+        len = null,
+        set = ++_ID_SET;
 
     options = Util.extend({}, _DEFAULTS, options);
     _calculator = options.calculator;
@@ -59,7 +62,10 @@ var HorizontalIntensitySummaryView = function (options) {
 
     el.innerHTML = [
       '<th class="name" scope="row"></th>',
-      '<td class="valid"><input type="checkbox" /></td>',
+      '<td class="valid">',
+        '<input type="checkbox" id="valid-horizontal-', set, '" />',
+        '<label for="valid-horizontal-', set, '"></label>',
+      '</td>',
       '<td class="start-time"></td>',
       '<td class="end-time"></td>',
       '<td class="abs-value"></td>',
