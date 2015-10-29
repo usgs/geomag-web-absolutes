@@ -1,32 +1,13 @@
 .observation-view {
-  textarea#observation-remarks {
-    width: 100%;
-  }
-
   .tablist {
-    border-color: #aaa;
-
-    .tablist-backward-button,
-    .tablist-forward-button,
-    .tablist-container,
-    .tablist-panel,
-    .tablist-tab {
-      border-color: #aaa;
-    }
-
-    .tablist-panel {
-      padding: 0 1em;
-    }
-
     .row {
       margin: 0;
     }
-
   }
 }
 
 @media print {
-  .observation-view-wrapper .observation-view > .observation-view-controls{
+  .observation-view > .observation-view-controls{
     display: none;
   }
 }
