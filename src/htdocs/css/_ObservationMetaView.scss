@@ -7,6 +7,28 @@
 }
 
 @media print {
+  label,
+  input,
+  select {
+    font-size: 12px;
+    display: inline-block;
+  }
+  .column {
+    > label{
+      font-weight: bold;
+      > input,
+      > select {
+        border: none;
+        font-weight: normal;
+        padding: 0;
+        width: auto;
+      }
+      > select {
+        background: none;
+      }
+    }
+  }
+
   .print-hidden,
   .pier-temperature,
   .mark {

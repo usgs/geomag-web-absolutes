@@ -61,19 +61,23 @@
      }
   }
 
+  .tablist-panel,
+  td,
+  th {
+    background: none;
+    border: none;
+    padding: 0 10px;
+  }
+
   .page-header,
   .tab-position-indicator,
   .tablist-container,
-  .tablist >
-  .tablist-forward-button,
-  .tablist >
-  .tablist-backward-button {
-    display:none;
+  .tablist > .tablist-forward-button,
+  .tablist > .tablist-backward-button {
+    display: none;
   }
 
-  .declination-summary-view,
-  .horizontal-intensity-summary-view,
-  .vertical-intensity-summary-view {
+  .declination-summary-view {
     .shift {
       display: none;
     }
