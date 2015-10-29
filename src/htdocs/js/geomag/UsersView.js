@@ -13,7 +13,7 @@ var _formatEnabled = function (user, content) {
 };
 
 var _DEFAULTS = {
-  className: 'collection-table users-view tabular',
+  className: 'collection-table users-view',
   clickToSelect: false,
   columns: [
     {
