@@ -11,12 +11,7 @@ var watch = {
     ],
     tasks: [
       'jshint:dev',
-      'browserify:index',
-      'browserify:observation',
-      'browserify:plot',
-      'browserify:useradmin',
-      'browserify:bundle', // All source files, one bundle, with aliases
-      'browserify:test',   // Test bootstrap and source
+      'browserify',
       'mocha_phantomjs'
     ]
   },
