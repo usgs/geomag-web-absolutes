@@ -30,7 +30,6 @@ if (!isset($TEMPLATE)) {
 
   $TITLE = 'Log in';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/login.css"/>';
   include 'template.inc.php';
 }
 
@@ -40,7 +39,7 @@ if (!isset($TEMPLATE)) {
 <form method="post" action="login.php">
 <?php
   if (isset($error)) {
-    echo '<div class="error">' . $error . '</div>';
+    echo '<div class="alert error">' . $error . '</div>';
   }
 ?>
   <label for="username">Username</label>
