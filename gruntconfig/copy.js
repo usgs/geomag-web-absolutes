@@ -12,7 +12,7 @@ var copy = {
       'conf/**/*',
 
       'htdocs/**/*',
-      '!htdocs/**/*.scss', // Migrated using compass
+      '!htdocs/**/*.scss', // Migrated using postcss
       '!htdocs/**/*.js',   // Migrated using browserify
 
       'lib/**/*'
@@ -37,7 +37,7 @@ var copy = {
       'conf/**/*',
 
       'htdocs/**/*',
-      '!htdocs/**/*.scss', // Migrated using compass
+      '!htdocs/**/*.scss', // Migrated using postcss
       '!htdocs/**/*.js',   // Migrated using browserify
 
       'lib/**/*'
