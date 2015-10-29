@@ -57,7 +57,7 @@ var UserAdminView = function (options) {
             'Only show enabled users',
           '</label>',
         '<section>',
-        '<section class="users-view-wrapper"></section>'
+        '<section class="users-view-wrapper horizontal-scrolling"></section>'
     ].join('');
 
     _users = new Collection([]);
