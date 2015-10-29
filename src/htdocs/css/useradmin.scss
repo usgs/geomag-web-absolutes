@@ -1,19 +1,15 @@
 @import '_ModalView.scss';
 
 ul {
-  list-style-type:none;
-  padding-left:0;
-  margin:0;
+  list-style-type: none;
+  margin: 0;
+  padding-left: 0;
 }
-label {
-  display:block;
+
+user-admin-control > input[type=checkbox] {
+  margin: .5em 0;
 }
-label#enabled {
-  display:inline;
-}
-input[type=checkbox] {
-  margin:12px 4px 0 20px;
-}
+
 span.disabled {
-  opacity:0.6;
+  opacity: 0.6;
 }

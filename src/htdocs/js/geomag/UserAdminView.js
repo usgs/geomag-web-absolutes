@@ -51,9 +51,10 @@ var UserAdminView = function (options) {
     _this.el.innerHTML = [
         '<section class="user-admin-control">',
           '<button class="edituser" data-id="">Create User</button>',
+          '<input type="checkbox" name="showEnabledUsers" ',
+              'id="showEnabledUsers" checked>',
           '<label id="enabled" for="showEnabledUsers">',
-            '<input type="checkbox" name="showEnabledUsers"',
-            ' id="showEnabledUsers" checked>Only show enabled users',
+            'Only show enabled users',
           '</label>',
         '<section>',
         '<section class="users-view-wrapper"></section>'
