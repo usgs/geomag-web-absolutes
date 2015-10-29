@@ -16,10 +16,7 @@ module.exports = function (grunt) {
     'dev',
     'copy:dist',
     'postcss',
-    'uglify:index',
-    'uglify:observation',
-    'uglify:plot',
-    'uglify:useradmin'
+    'uglify'
   ]);
 
   // default task useful during development
