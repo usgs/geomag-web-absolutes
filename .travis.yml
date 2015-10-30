@@ -12,7 +12,5 @@ before_install:
 install:
   - npm install phantomjs
   - npm install
-before_script:
-  - php src/lib/pre-install.php --non-interactive
 script:
   - npm test
