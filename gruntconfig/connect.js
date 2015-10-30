@@ -51,18 +51,20 @@ var mountPHP = function (dir, options) {
 };
 
 var connect = {
-  proxies: [{
-    context: '/map',
-    host: 'geomag.usgs.gov',
-    port: 80,
-    https: false,
-    changeOrigin: true,
-    xforward: false
-  }],
-
   options: {
     hostname: '*'
   },
+
+  proxies: [
+    {
+      changeOrigin: true,
+      context: '/map',
+      host: 'geomag.usgs.gov',
+      https: false,
+      port: 80,
+      xforward: false
+    }
+  ],
 
   dev: {
     options: {
@@ -71,8 +73,6 @@ var connect = {
         'node_modules'
       ],
       livereload: true,
-      open: 'http://localhost:' + config.buildPort + '/index.php',
-      port: config.buildPort,
       middleware: function (connect, options) {
         var middlewares,
             paths = options.base,
@@ -89,7 +89,9 @@ var connect = {
         }
 
         return middlewares;
-      }
+      },
+      open: 'http://localhost:' + config.buildPort + '/index.php',
+      port: config.buildPort
     }
   },
 
@@ -100,8 +102,6 @@ var connect = {
         config.build + '/' + config.src + '/htdocs',
         'node_modules'
       ],
-      open: 'http://localhost:' + config.testPort + '/test.html',
-      port: config.testPort,
       middleware: function (connect, options) {
         var middlewares = [],
             paths = options.base,
@@ -114,7 +114,9 @@ var connect = {
         }
 
         return middlewares;
-      }
+      },
+      open: 'http://localhost:' + config.testPort + '/test.html',
+      port: config.testPort
     }
   },
 
@@ -126,8 +128,6 @@ var connect = {
       ],
       keepalive: true,
       livereload: true,
-      open: 'http://localhost:' + config.distPort + '/index.php',
-      port: config.distPort,
       middleware: function (connect, options) {
         var middlewares,
             paths = options.base,
@@ -144,18 +144,20 @@ var connect = {
         }
 
         return middlewares;
-      }
+      },
+      open: 'http://localhost:' + config.distPort + '/index.php',
+      port: config.distPort
     }
   },
 
   template: {
     options: {
       base: ['node_modules/hazdev-template/dist/htdocs'],
-      port: config.templatePort,
       middleware: function (connect, options, middlewares) {
         middlewares.unshift(mountPHP(options.base[0]));
         return middlewares;
-      }
+      },
+      port: config.templatePort
     }
   }
 };
