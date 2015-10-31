@@ -3,6 +3,9 @@
 var config = require('./config'),
     srcDir = './' + config.src + '/htdocs/js/';
 
+var CWD = process.cwd(),
+    NODE_MODULES = CWD + '/node_modules';
+
 // Modules defined by this (geomag-baseline-calculator) package
 var EXPORTS = [
   srcDir + 'geomag/BaselineCalculator.js:geomag/BaselineCalculator',
@@ -45,49 +48,59 @@ var browserify = {
     browserifyOptions: {
       debug: true,
       paths: [
-        process.cwd() + '/' + config.src + '/htdocs/js',
-        process.cwd() + '/node_modules/hazdev-tablist/src',
-        process.cwd() + '/node_modules/hazdev-webutils/src',
-        process.cwd() + '/node_modules/d3'
+        CWD + '/' + config.src + '/htdocs/js',
+        NODE_MODULES + '/d3',
+        NODE_MODULES + '/hazdev-tablist/src',
+        NODE_MODULES + '/hazdev-webutils/src'
       ]
     }
   },
 
   index: {
-    src: [config.src + '/htdocs/js/index.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/index.js'
+    dest: config.build + '/' + config.src + '/htdocs/js/index.js',
+    src: [
+      config.src + '/htdocs/js/index.js'
+    ]
   },
 
   observation: {
-    src: [config.src + '/htdocs/js/observation.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/observation.js'
+    dest: config.build + '/' + config.src + '/htdocs/js/observation.js',
+    src: [
+      config.src + '/htdocs/js/observation.js'
+    ]
   },
 
   plot: {
-    src: [config.src + '/htdocs/js/plot.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/plot.js'
+    dest: config.build + '/' + config.src + '/htdocs/js/plot.js',
+    src: [
+      config.src + '/htdocs/js/plot.js'
+    ]
   },
 
   useradmin: {
-    src: [config.src + '/htdocs/js/useradmin.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/useradmin.js'
+    dest: config.build + '/' + config.src + '/htdocs/js/useradmin.js',
+    src: [
+      config.src + '/htdocs/js/useradmin.js'
+    ]
   },
 
 
   bundle: {
-    src: [],
     dest: config.build + '/' + config.test + '/geomag-baseline-calculator.js',
     options: {
       alias: EXPORTS
-    }
+    },
+    src: []
   },
 
   test: {
-    src: config.test + '/test.js',
     dest: config.build + '/' + config.test + '/test.js',
     options: {
       external: EXPORTS
-    }
+    },
+    src: [
+      config.test + '/test.js'
+    ]
   }
 };
 
