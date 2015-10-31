@@ -29,7 +29,7 @@ module.exports = function (grunt) {
     'postcss',
     'copy:dev',
     'configureProxies:dev',
-    'connect:dev',
+    'connect:build',
 
     'jshint:test',
     'browserify:bundle', // All source files, one bundle, with aliases

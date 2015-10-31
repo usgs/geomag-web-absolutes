@@ -6,9 +6,6 @@ var gateway = require('gateway'),
     proxyMiddleware = require('grunt-connect-proxy/lib/utils').proxyRequest,
     rewriteModule = require('http-rewrite-middleware');
 
-// var iniConfig = require('ini').parse(require('fs')
-//     .readFileSync('./src/conf/config.ini', 'utf-8'));
-
 var rewrites = [
   // Template
   {
@@ -39,16 +36,21 @@ var corsMiddleware = function (req, res, next) {
   return next();
 };
 
-var mountPHP = function (dir, options) {
-  options = options || {
-    '.php': 'php-cgi',
-    'env': {
-      'PHPRC': process.cwd() + '/node_modules/hazdev-template/dist/conf/php.ini'
-    }
-  };
-
-  return gateway(require('path').resolve(dir), options);
+var addMiddleware = function (connect, options, middlewares) {
+  middlewares.unshift(
+    proxyMiddleware,
+    rewriteModule.getMiddleware(rewrites),
+    corsMiddleware,
+    gateway(options.base[0], {
+      '.php': 'php-cgi',
+      'env': {
+        'PHPRC': 'node_modules/hazdev-template/dist/conf/php.ini'
+      }
+    })
+  );
+  return middlewares;
 };
+
 
 var connect = {
   options: {
@@ -57,66 +59,25 @@ var connect = {
 
   proxies: [
     {
-      changeOrigin: true,
       context: '/map',
+      headers: {
+        host: 'geomag.usgs.gov'
+      },
       host: 'geomag.usgs.gov',
-      https: false,
-      port: 80,
-      xforward: false
+      port: 80
     }
   ],
 
-  dev: {
+  build: {
     options: {
       base: [
         config.build + '/' + config.src + '/htdocs',
         'node_modules'
       ],
-      livereload: true,
-      middleware: function (connect, options) {
-        var middlewares,
-            paths = options.base,
-            path,
-            rewriteMiddleware;
-
-        rewriteMiddleware = rewriteModule.getMiddleware(rewrites);
-        middlewares = [proxyMiddleware, rewriteMiddleware, corsMiddleware];
-
-        for (var i = 0; i < paths.length; i++) {
-          path = paths[i];
-          middlewares.push(mountPHP(path));
-          middlewares.push(connect.static(path));
-        }
-
-        return middlewares;
-      },
+      livereload: config.livereloadPort,
+      middleware: addMiddleware,
       open: 'http://localhost:' + config.buildPort + '/index.php',
       port: config.buildPort
-    }
-  },
-
-  test: {
-    options: {
-      base: [
-        config.build + '/' + config.test,
-        config.build + '/' + config.src + '/htdocs',
-        'node_modules'
-      ],
-      middleware: function (connect, options) {
-        var middlewares = [],
-            paths = options.base,
-            path;
-
-        for (var i = 0; i < paths.length; i++) {
-          path = paths[i];
-          middlewares.push(mountPHP(path));
-          middlewares.push(connect.static(path));
-        }
-
-        return middlewares;
-      },
-      open: 'http://localhost:' + config.testPort + '/test.html',
-      port: config.testPort
     }
   },
 
@@ -127,36 +88,33 @@ var connect = {
         'node_modules'
       ],
       keepalive: true,
-      livereload: true,
-      middleware: function (connect, options) {
-        var middlewares,
-            paths = options.base,
-            path,
-            rewriteMiddleware;
-
-        rewriteMiddleware = rewriteModule.getMiddleware(rewrites);
-        middlewares = [proxyMiddleware, rewriteMiddleware, corsMiddleware];
-
-        for (var i = 0; i < paths.length; i++) {
-          path = paths[i];
-          middlewares.push(mountPHP(path));
-          middlewares.push(connect.static(path));
-        }
-
-        return middlewares;
-      },
+      livereload: config.livereloadPort,
+      middleware: addMiddleware,
       open: 'http://localhost:' + config.distPort + '/index.php',
       port: config.distPort
     }
   },
 
+  test: {
+    options: {
+      base: [
+        config.build + '/' + config.src + '/htdocs',
+        config.build + '/' + config.test,
+        'node_modules'
+      ],
+      middleware: addMiddleware,
+      open: 'http://localhost:' + config.testPort + '/test.html',
+      port: config.testPort
+    }
+  },
+
+
   template: {
     options: {
-      base: ['node_modules/hazdev-template/dist/htdocs'],
-      middleware: function (connect, options, middlewares) {
-        middlewares.unshift(mountPHP(options.base[0]));
-        return middlewares;
-      },
+      base: [
+        'node_modules/hazdev-template/dist/htdocs'
+      ],
+      middleware: addMiddleware,
       port: config.templatePort
     }
   }
