@@ -47,7 +47,7 @@ var watch = {
 
   scss: {
     files: [
-      config.src + '/htdocs/css/**/*.scss'
+      config.src + '/**/*.scss'
     ],
     tasks: [
       'postcss'
@@ -68,7 +68,9 @@ var watch = {
       'Gruntfile.js',
       'gruntconfig/**/*.js'
     ],
-    tasks: ['jshint:gruntfile']
+    tasks: [
+      'jshint:gruntfile'
+    ]
   }
 };
 
