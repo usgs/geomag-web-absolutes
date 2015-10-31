@@ -2,15 +2,17 @@
 
 
 var config = {
+  config: require('./config'),
+
   browserify: require('./browserify'),
   clean: require('./clean'),
   connect: require('./connect'),
   copy: require('./copy'),
   jshint: require('./jshint'),
+  mocha_phantomjs: require('./mocha_phantomjs'),
   postcss: require('./postcss'),
   uglify: require('./uglify'),
   watch: require('./watch'),
-  mocha_phantomjs: require('./mocha_phantomjs'),
 
   tasks: [
     'grunt-browserify',
