@@ -14,7 +14,7 @@ var jshint = {
   ],
 
   dev: [
-    config.src + '/**/*.js',
+    config.src + '/htdocs/**/*.js',
   ],
 
   test: [
