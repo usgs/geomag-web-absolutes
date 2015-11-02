@@ -70,7 +70,7 @@ if (!Function.prototype.bind) {
   require('./spec/ObservationSummaryViewTest');
 
   if (window.mochaPhantomJS) {
-      window.initiMochaPhantomJS();
+      window.initMochaPhantomJS();
       window.mochaPhantomJS.run();
   } else {
     mocha.run();
