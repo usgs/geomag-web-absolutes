@@ -35,10 +35,6 @@ if (!Function.prototype.bind) {
 (function () {
   'use strict';
 
-  if (typeof window.initMochaPhantomJS === 'function') {
-    window.initMochaPhantomJS();
-  }
-
   mocha.setup('bdd');
   mocha.reporter('html');
 
@@ -74,7 +70,7 @@ if (!Function.prototype.bind) {
   require('./spec/ObservationSummaryViewTest');
 
   if (window.mochaPhantomJS) {
-      // window.initMochaPhantomJS();
+      window.initMochaPhantomJS();
       window.mochaPhantomJS.run();
   } else {
     mocha.run();
