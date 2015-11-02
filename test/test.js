@@ -35,7 +35,7 @@ if (!Function.prototype.bind) {
 (function () {
   'use strict';
 
-  mocha.ui('bdd');
+  mocha.setup('bdd');
   mocha.reporter('html');
 
   // Add each test class here as they are implemented
