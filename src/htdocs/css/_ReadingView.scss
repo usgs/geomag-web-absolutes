@@ -28,8 +28,8 @@
 
 .declination-input,
 .inclination-input {
-  float: left;
   margin: 0 1em 1em 0;
+  padding-left: 0;
 
   table {
     .units {
@@ -70,12 +70,16 @@
   background: #f8f8f8;
   border: 1px solid #d8d8d8;
   float: left;
-  margin-bottom: 1em;
   padding: 1em;
+  width: auto;
 }
 
 .magnetometer-ordinates-output {
   table {
     margin: 0;
   }
+}
+
+.column, .mobile-one-of-one {
+  width: auto;
 }
