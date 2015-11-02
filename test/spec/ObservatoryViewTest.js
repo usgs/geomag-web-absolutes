@@ -46,6 +46,7 @@ describe('ObservatoryView Unit Tests', function () {
   });
 
   after(function() {
+    observatoryView.destroy();
     window.location.hash = '';
     stub.restore();
   });
