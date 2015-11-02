@@ -1,10 +1,11 @@
-/* global chai, describe, it, sinon */
+/* global after, before, chai, describe, it, sinon */
 'use strict';
 
 var ObservationBaselineCalculator =
         require('geomag/ObservationBaselineCalculator'),
     Observation = require('geomag/Observation'),
-    ObservationMetaView = require('geomag/ObservationMetaView');
+    ObservationMetaView = require('geomag/ObservationMetaView'),
+    Xhr = require('util/Xhr');
 
 
 var expect = chai.expect;
@@ -12,15 +13,27 @@ var expect = chai.expect;
 
 describe('Unit tests for ObservationMetaView', function () {
   var calculator,
-      observation = Observation(),
+      observation,
       view;
 
-  calculator = ObservationBaselineCalculator();
-  observation = Observation();
+  before(function () {
+    calculator = ObservationBaselineCalculator();
+    observation = Observation();
 
-  view = ObservationMetaView({
-    calculator: calculator,
-    observation: observation,
+    sinon.stub(Xhr, 'ajax', function (options) {
+      options.success([]);
+    });
+
+    view = ObservationMetaView({
+      calculator: calculator,
+      observation: observation,
+    });
+  });
+
+  after(function () {
+    if (typeof Xhr.ajax.restore === 'function') {
+      Xhr.ajax.restore();
+    }
   });
 
 
