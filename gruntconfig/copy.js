@@ -8,6 +8,9 @@ var copy = {
     cwd: config.src,
     dest: config.build + '/' + config.src,
     expand: true,
+    options: {
+      mode: true
+    },
     src: [
       'conf/**/*',
 
@@ -33,6 +36,9 @@ var copy = {
     cwd: config.build + '/' + config.src,
     dest: config.dist,
     expand: true,
+    options: {
+      mode: true
+    },
     src: [
       'conf/**/*',
 
