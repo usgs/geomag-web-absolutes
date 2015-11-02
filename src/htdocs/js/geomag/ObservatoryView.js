@@ -79,9 +79,7 @@ var ObservatoryView = function (options) {
       _getObservatories();
 
       // on a URL change, update the observatory
-      Events.on('hashchange', function() {
-        _this.render();
-      });
+      Events.on('hashchange', 'render', _this);
     }
   };
 
@@ -196,6 +194,7 @@ var ObservatoryView = function (options) {
       // sub class destroy method
       function () {
         // Remove event listeners
+        Events.off('hashchange', 'render', _this);
         _observatorySelect.removeEventListener('change', _onObservatoryChange);
 
         // Clean up private methods
