@@ -21,8 +21,8 @@
       }
 
       &.review-status-y:after {
-        content: '\2713';
         color: #090;
+        content: '\2713';
       }
 
       &.review-status-n:after {
@@ -30,8 +30,8 @@
       }
 
       > a {
-        padding: 10px 15px 10px 0;
         display: block;
+        padding: 10px 15px 10px 0;
       }
 
       > a:hover {
