@@ -35,9 +35,9 @@ if (!Function.prototype.bind) {
 (function () {
   'use strict';
 
-  if (typeof window.initMochaPhantomJS === 'function') {
+  // if (typeof window.initMochaPhantomJS === 'function') {
     window.initMochaPhantomJS();
-  }
+  // }
 
   mocha.setup('bdd');
   mocha.reporter('html');
