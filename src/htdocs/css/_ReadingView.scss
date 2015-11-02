@@ -1,7 +1,5 @@
-.reading-view {
-  > .row {
-    border-bottom: 1px solid #aaa;
-  }
+.reading-view > h2 {
+  clear: left;
 }
 
 .declination-input {
@@ -30,7 +28,8 @@
 
 .declination-input,
 .inclination-input {
-  margin: 1em;
+  float: left;
+  margin: 0 1em 1em 0;
 
   table {
     .units {
@@ -71,6 +70,12 @@
   background: #f8f8f8;
   border: 1px solid #d8d8d8;
   float: left;
-  margin: 1em 0;
+  margin-bottom: 1em;
   padding: 1em;
+}
+
+.magnetometer-ordinates-output {
+  table {
+    margin: 0;
+  }
 }

@@ -2,12 +2,10 @@
   .declination-summary,
   .horizontal-summary,
   .vertical-summary {
-    > tfoot {
-      > tr {
-        > th,
-        > td {
-          text-align: right;
-        }
+    > tfoot > tr {
+      > th,
+      > td {
+        text-align: right;
       }
     }
   }
@@ -20,8 +18,8 @@
     margin-bottom: 4px;
 
 		th {
-			width: 7em;
 			text-align: left;
+			width: 7em;
 		}
 	}
 
@@ -48,17 +46,15 @@
     .declination-summary,
     .horizontal-summary,
     .vertical-summary {
-      > tfoot {
-        > tr {
-          &:first-child {
-            > th,
-            > td {
-              padding-top: 0;
-            }
+      > tfoot > tr {
+        &:first-child {
+          > th,
+          > td {
+            padding-top: 0;
           }
         }
       }
-     }
+    }
   }
 
   .tablist-panel,
@@ -83,11 +79,8 @@
     }
   }
 
-  .declination-summary
-    > thead
-      > tr
-        > th.shift{
-          display: none;
-        }
+  .declination-summary > thead > tr > th.shift{
+    display: none;
+  }
 
 }
