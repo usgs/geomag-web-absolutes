@@ -1,85 +1,87 @@
-.reading-view > h2 {
-  clear: left;
-}
+.reading-view {
+  .column {
+    width: auto;
+  }
 
-.declination-input {
-  .first-mark-up,
-  .first-mark-down,
-  .second-mark-up,
-  .second-mark-down {
-    > .measurement-time > input,
-    > .measurement-e {
+  .declination-input {
+    .first-mark-up,
+    .first-mark-down,
+    .second-mark-up,
+    .second-mark-down {
+      > .measurement-time > input,
+      > .measurement-e {
+        display: none;
+      }
+    }
+
+    .measurement-h,
+    .measurement-z,
+    .measurement-f {
       display: none;
     }
   }
 
-  .measurement-h,
-  .measurement-z,
-  .measurement-f {
-    display: none;
-  }
-}
-
-.inclination-input {
-  .measurement-e {
-    display: none;
-  }
-}
-
-.declination-input,
-.inclination-input {
-  margin: 0 1em 1em 0;
-  padding-left: 0;
-
-  table {
-    .units {
+  .inclination-input {
+    .measurement-e {
       display: none;
     }
   }
 
-  input {
-    width: 4em;
-  }
-  .measurement-time > input {
-    width: 6em;
-  }
+  .declination-input,
+  .inclination-input {
+    margin: 0 1em 1em 0;
+    padding-left: 0;
 
-  .measurement-degrees,
-  .measurement-minutes,
-  .measurement-seconds {
-    > input {
-      text-align: center;
+    table {
+      .units {
+        display: none;
+      }
+    }
+
+    input {
+      width: 4em;
+    }
+    .measurement-time > input {
+      width: 6em;
+    }
+
+    .measurement-degrees,
+    .measurement-minutes,
+    .measurement-seconds {
+      > input {
+        text-align: center;
+      }
+    }
+
+    td.measurement-h,
+    td.measurement-e,
+    td.measurement-z,
+    td.measurement-f {
+      font-size: smaller;
+    }
+
+    td.next-reading {
+      padding-right: 1em;
+      text-align: right;
     }
   }
 
-  td.measurement-h,
-  td.measurement-e,
-  td.measurement-z,
-  td.measurement-f {
-    font-size: smaller;
+  .declination-output,
+  .inclination-output {
+    background: #f8f8f8;
+    border: 1px solid #d8d8d8;
+    float: left;
+    padding: 1em;
+    width: auto;
   }
 
-  td.next-reading {
-    padding-right: 1em;
-    text-align: right;
+  .magnetometer-ordinates-output {
+    table {
+      margin: 0;
+    }
   }
-}
 
-.declination-output,
-.inclination-output {
-  background: #f8f8f8;
-  border: 1px solid #d8d8d8;
-  float: left;
-  padding: 1em;
-  width: auto;
-}
-
-.magnetometer-ordinates-output {
-  table {
-    margin: 0;
+  > h2 {
+    clear: left;
   }
-}
-
-.column, .mobile-one-of-one {
-  width: auto;
 }
