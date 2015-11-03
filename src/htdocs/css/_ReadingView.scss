@@ -32,7 +32,7 @@
     margin: 0 1em 1em 0;
     padding-left: 0;
 
-    table {
+    > table {
       .units {
         display: none;
       }
@@ -53,14 +53,14 @@
       }
     }
 
-    td.measurement-h,
-    td.measurement-e,
-    td.measurement-z,
-    td.measurement-f {
+    .measurement-h,
+    .measurement-e,
+    .measurement-z,
+    .measurement-f {
       font-size: smaller;
     }
 
-    td.next-reading {
+    .next-reading {
       padding-right: 1em;
       text-align: right;
     }
