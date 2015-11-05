@@ -1,6 +1,8 @@
 'use strict';
 
 var config = require('./config');
+var iniConfig = require('ini').parse(require('fs')
+    .readFileSync(config.src + '/conf/config.ini', 'utf-8'));
 
 var gateway = require('gateway'),
     proxyMiddleware = require('grunt-connect-proxy/lib/utils').proxyRequest,
@@ -13,7 +15,7 @@ var rewrites = [
     to: '/hazdev-template/dist/htdocs/$1'
   },
   {
-    from: '^/webabsolutes/(.*)$',
+    from: '^' + iniConfig.MOUNT_PATH + '/(.*)$',
     to: '/$1'
   },
   {
