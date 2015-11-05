@@ -9,7 +9,14 @@ var gateway = require('gateway'),
     rewriteModule = require('http-rewrite-middleware');
 
 var rewrites = [
-  // Template
+  {
+    from: '^' + iniConfig.MOUNT_PATH + '/observation/(.*)$',
+    to: '/observation.php?id=$1'
+  },
+  {
+    from: '^' + iniConfig.MOUNT_PATH + '/observatory/(.*)$',
+    to: '/index.php?id=$1'
+  },
   {
     from: '^/theme/(.*)$',
     to: '/hazdev-template/dist/htdocs/$1'
@@ -17,14 +24,6 @@ var rewrites = [
   {
     from: '^' + iniConfig.MOUNT_PATH + '/(.*)$',
     to: '/$1'
-  },
-  {
-    from: '^/observation/(.*)$',
-    to: '/observation.php?id=$1'
-  },
-  {
-    from: '^/observatory/(.*)$',
-    to: '/index.php?id=$1'
   }
 ];
 
