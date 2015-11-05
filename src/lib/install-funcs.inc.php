@@ -19,8 +19,15 @@
    * @return {String}
    *      The configured value for the requested option.
    */
-  function configure ($option, $default=null, $comment='', $secure=false,
-      $unknown=false) {
+  function configure ($option, $default = '', $comment = '', $secure = false,
+      $unknown = false) {
+
+    global $NO_PROMPT;
+
+    if ($NO_PROMPT) {
+      return $default;
+    }
+
     // check if windows
     static $isWindows = null;
     if ($isWindows === null) {
@@ -38,12 +45,20 @@
 
     // Prompt for and read the configuration option value
     printf("%s [%s]: ", $help, ($default === null ? '<none>' : $default));
-    if ($secure && !$isWindows) {system('stty -echo');}
+
+    if ($secure && !$isWindows) {
+      system('stty -echo');
+    }
+
     $value = trim(fgets(STDIN));
-    if ($secure && !$isWindows) {system('stty echo'); print "\n";}
+
+    if ($secure && !$isWindows) {
+      system('stty echo');
+      print "\n";
+    }
 
     // Check the input
-    if ($value === '' && $default !== null) {
+    if ($value === '' && $default !== '<none>') {
       $value = $default;
     }
 
@@ -67,6 +82,16 @@
   //     an otherwise already very time-consuming process, so a few milliseconds
   //     won't matter here.
 
+  /**
+   * Globs directories from a parent directory. Non-recursive.
+   *
+   * @param directory {String}
+   *      The parent directory in which to glob.
+   *
+   * @return {Array}
+   *      A unique list of directories that are direct-descendents of the
+   *      parent $directory.
+   */
   function globDirs ($directory) {
     $dirs = glob($directory . DIRECTORY_SEPARATOR . '*',
         GLOB_ONLYDIR | GLOB_NOSORT);
@@ -80,6 +105,24 @@
     return array_unique($alldirs);
   }
 
+  /**
+   * Recursively finds files matching the input pattern.
+   *
+   * @param basedir {String}
+   *      The directory from which to start the search.
+   * @param pattern {String}
+   *      The file pattern to match. Wildcards accepted, but can be modified
+   *      based on any $flags given in third argument.
+   * @param flags {Integer}
+   *      Flags to modify how the glob will proceed.
+   *
+   * @return {Array}
+   *      A unique list of files that match the given $pattern (modified by
+   *      $flags). Files can be anywhere in the directory tree contained by
+   *      the given $basedir.
+   *
+   * @see http://php.net/manual/en/function.glob.php
+   */
   function recursiveGlob ($basedir, $pattern, $flags = 0) {
     $dirs = globDirs($basedir);
     $files = array();
@@ -92,6 +135,15 @@
     return array_unique($files);
   }
 
+  /**
+   * Tries to cast the input $value to a float, but does not modify null input.
+   *
+   * @param $value {Numeric|Null}
+   *      The value to convert to a float.
+   *
+   * @return {Float|Null}
+   *      The input value as converted to a float data type.
+   */
   function safefloatval($value=null) {
     if ($value === null) {
       return null;
@@ -100,6 +152,16 @@
     }
   }
 
+  /**
+   * Tries to cast the input $value to an integer, but does not modify null
+   * input.
+   *
+   * @param $value {Numeric|Null}
+   *      The value to convert to an integer.
+   *
+   * @return {Integer|Null}
+   *      The input value as converted to an integer data type.
+   */
   function safeintval($value=null) {
     if ($value === null) {
       return null;
