@@ -1,5 +1,13 @@
 <?php
 
+// ----------------------------------------------------------------------
+// PREAMBLE
+//
+// Sets up some well-known values for the configuration environment.
+//
+// Most likely do not need to edit anything in this section.
+// ----------------------------------------------------------------------
+
 include_once 'install-funcs.inc.php';
 
 // set default timezone
@@ -18,14 +26,32 @@ if ($argv[0] === './pre-install.php' || $_SERVER['PWD'] !== $OLD_PWD) {
   $LIB_DIR = getcwd();
 }
 
+// Use all of the defaults for automated builds.
+if (count($argv) > 1 && $argv[1] === '--non-interactive') {
+  $NO_PROMPT = true;
+} else {
+  $NO_PROMPT = false;
+}
+
 $APP_DIR = dirname($LIB_DIR);
 $CONF_DIR = $APP_DIR . DIRECTORY_SEPARATOR . 'conf';
+
 $CONFIG_FILE = $CONF_DIR . DIRECTORY_SEPARATOR . 'config.ini';
 $APACHE_CONFIG_FILE = $CONF_DIR . DIRECTORY_SEPARATOR . 'httpd.conf';
 
 
-// setup configuration defaults and help
+// ----------------------------------------------------------------------
+// CONFIGURATION
+//
+// Define the configuration parameters necessary in order
+// to install/run this application. Some basic parameters are provided
+// by default. Ensure that you add matching keys to both the $DEFAULTS
+// and $HELP_TEXT arrays so the install process goes smoothly.
+//
+// This is the most common section to edit.
+// ----------------------------------------------------------------------
 
+// setup configuration defaults and help
 $DEFAULTS = array(
   'APP_DIR' => $APP_DIR,
   'DATA_DIR' => str_replace('/apps/', '/data/', $APP_DIR),
@@ -54,6 +80,18 @@ $HELP_TEXT = array(
   'REALTIME_DATA_URL' => 'Base URL for Realtime Data Factory'
 );
 
+
+// ----------------------------------------------------------------------
+// MAIN
+//
+// Run the interactive configuration and write configuration files to
+// to file system (httpd.conf and config.ini).
+//
+// Edit this section if this application requires additional installation
+// steps such as setting up a database schema etc... When editing this
+// section, note the helpful install-funcs.inc.php functions that are
+// available to you.
+// ----------------------------------------------------------------------
 
 include_once 'configure.php';
 
@@ -84,8 +122,10 @@ file_put_contents($APACHE_CONFIG_FILE, '
       $CONFIG['MOUNT_PATH'] . '/index.php?id=$1 [L,PT]
 ');
 
-$answer = configure('DO_DB_SETUP', 'N',
-    'Would you like to set up the absolutes database at this time');
-if (responseIsAffirmative($answer)) {
-  include_once 'setup_database.php';
+if (!$NO_PROMPT) {
+  $answer = configure('DO_DB_SETUP', 'N',
+      'Would you like to set up the absolutes database at this time');
+  if (responseIsAffirmative($answer)) {
+    include_once 'setup_database.php';
+  }
 }
