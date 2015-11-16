@@ -1,4 +1,44 @@
 .observation-view {
+  
+  .observation-view-controls {
+    > .left-aligned > label {
+      clear: left;
+      float: left;
+      padding: 0 5px 0 0;
+    }
+
+    > .left-aligned,
+    > span {
+      font-weight: bold;
+      display: block;
+      line-height: 1.9;
+      margin: 0;
+      position: relative;
+
+      &.review-status-y:after,
+      &.review-status-n:after {
+        background: rgba(0,0,0,0.05);
+        border-radius: 2em;
+        height: 2em;
+        line-height: 2;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        top: 0;
+        width: 2em;
+      }
+
+      &.review-status-y:after {
+        content: '\2713';
+        color: #090;
+      }
+
+      &.review-status-n:after {
+        content: '?'
+      }
+    }
+  }
+
   .tablist {
     .row {
       margin: 0;
