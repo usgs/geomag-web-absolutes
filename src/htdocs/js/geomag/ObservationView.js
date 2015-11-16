@@ -360,7 +360,6 @@ var ObservationView = function (options) {
           reviewed: observation.get('reviewed'),
           reviewer_user_id: observation.get('reviewer_user_id')
         });
-        _removeControls();
         callback();
       },
       error: function (status, xhr) {
@@ -452,12 +451,7 @@ var ObservationView = function (options) {
     _annotation.innerHTML = _observation.get('annotation');
     _annotation.addEventListener('change', _onChange);
 
-    // Add save/publish buttons based on roles
-    if (_observation.get('reviewed') === 'N') {
-      _createControls();
-    } else {
-      _removeControls();
-    }
+    _createControls();
   };
 
   /**
