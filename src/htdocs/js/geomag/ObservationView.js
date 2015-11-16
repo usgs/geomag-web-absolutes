@@ -128,7 +128,6 @@ var ObservationView = function (options) {
       _onPublishClick,
       _onSaveClick,
       _publishObservation,
-      _removeControls,
       _removeEventListeners,
       _saveObservation,
       _setObservation,
@@ -516,21 +515,6 @@ var ObservationView = function (options) {
     });
   };
 
-  /**
-   * Removes the save and publish buttons after an observation
-   * is successfully published.
-   */
-  _removeControls = function () {
-    var controls;
-
-    controls = _this.el.querySelector('.observation-view-controls');
-
-    controls.innerHTML =
-        '<div class="alert success">Observation has been finalized.</div>';
-
-    _removeEventListeners();
-  };
-
   // Remove all event listeners
   _removeEventListeners = function () {
     // unbind calibration update to measurement change
@@ -683,7 +667,6 @@ var ObservationView = function (options) {
       _onPublishClick = null;
       _onSaveClick = null;
       _publishObservation = null;
-      _removeControls = null;
       _removeEventListeners = null;
       _saveObservation = null;
       _setObservation = null;
