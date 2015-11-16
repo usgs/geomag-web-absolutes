@@ -65,9 +65,9 @@ var __saveError = function (status, xhr) {
  */
 var __publishSuccess = function () {
   (ModalView(
-    '<h3>Success!</h3><p>Your observation has been finalized.</p>',
+    '<h3>Success!</h3><p>Observation marked as reviewed.</p>',
     {
-      title: 'Baselines successfully finalized',
+      title: 'Observation successfully marked as reviewed',
       classes: ['modal-success'],
       closable: true
     }
@@ -86,7 +86,7 @@ var __publishError = function (status, xhr) {
   (ModalView(
     '<h3>Error</h3><p>' + xhr.response + '</p>',
     {
-      title: 'Failed to finalize baselines',
+      title: 'Failed to mark observation as reviewed',
       classes: ['modal-error'],
       closable: true
     }
