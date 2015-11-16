@@ -177,9 +177,32 @@ var ObservationView = function (options) {
    *
    */
   _createControls = function () {
-    var controls;
+    var controls,
+        reviewed,
+        status,
+        statusLabel,
+        tooltip;
 
     controls = _this.el.querySelector('.observation-view-controls');
+    reviewed = _observation.get('reviewed').toLowerCase();
+
+    statusLabel = document.createElement('span');
+    statusLabel.className = 'review-status-' + reviewed;
+
+    if (reviewed ==='y') {
+      status = 'Status: Reviewed';
+      tooltip = 'Observation Reviewed';
+    } else if (reviewed ==='n') {
+      status = 'Status: Pending Review';
+      tooltip = 'Observation Pending Review';
+    } else {
+      status = 'Status: Unknown';
+      tooltip = 'Observation in unknown review status!';
+    }
+
+    statusLabel.innerHTML = status;
+    statusLabel.title = tooltip;
+    controls.appendChild(statusLabel);
 
     _saveButton = document.createElement('button');
     _saveButton.id = 'saveButton';
@@ -192,7 +215,7 @@ var ObservationView = function (options) {
     // Add publish button for admin users
     if (_user.get('admin') === 'Y') {
       _publishButton = document.createElement('button');
-      _publishButton.innerHTML = 'Finalize';
+      _publishButton.innerHTML = 'Mark as Reviewed';
       controls.appendChild(_publishButton);
 
       _publishButton.addEventListener('click', _onPublishClick);
