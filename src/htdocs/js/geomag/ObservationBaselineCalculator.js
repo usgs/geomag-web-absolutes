@@ -59,7 +59,7 @@ var ObservationBaselineCalculator = function (options) {
   _this.dComputed = function (reading) {
     return _calculator.dComputed(
         _this.meanE(reading),
-        _this.scaleValue(reading)
+        _this.horizontalComponent(reading)
     );
   };
 
@@ -89,7 +89,7 @@ var ObservationBaselineCalculator = function (options) {
   _this.eBaseline = function (reading) {
     return _calculator.eBaseline(
         _this.dBaseline(reading),
-        _this.scaleValue(reading)
+        _this.horizontalComponent(reading)
     ); //
   };
 
