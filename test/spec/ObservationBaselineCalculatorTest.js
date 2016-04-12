@@ -347,7 +347,7 @@ describe('Unit tests for ObservationBaselineCalculator', function () {
 
     it('computes correctly with data from BOU20132861836.bns', function () {
       var expected = 3557.5945472773902;   // 3556.6245477416474
-      expect(calc.eBaseline(READING)).to.be.closeTo(expected, 0.1);
+      expect(calc.eBaseline(READING) * 60.0).to.be.closeTo(expected, 0.1);
     });
 
   }); // END :: eBaseline

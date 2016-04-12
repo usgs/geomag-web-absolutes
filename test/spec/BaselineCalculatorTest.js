@@ -780,7 +780,8 @@ describe('Unit tests for BaselineCalculator', function () {
           scaleValue = calcSAA.scaleValue(10.0),
           expected = 60.0;
 
-      expect(calcSAA.eBaseline(dBaseline, scaleValue)).to.equal(expected);
+      expect(calcSAA.eBaseline(dBaseline, scaleValue) * 60.0).to.equal(
+          expected);
     });
 
     it('computes correctly with data from BDT20131651602.bns', function () {
@@ -789,7 +790,7 @@ describe('Unit tests for BaselineCalculator', function () {
           expected = 3453.819528;   // 3453.78
 
       expect(calcSAA.eBaseline(dBaseline,
-          scaleValue)).to.be.closeTo(expected, 0.0001);
+          scaleValue) * 60.0).to.be.closeTo(expected, 0.0001);
     });
 
     it('computes correctly with data from CMO20131651602.bns', function () {
@@ -798,7 +799,7 @@ describe('Unit tests for BaselineCalculator', function () {
           expected = 4260.963249;    // 4260.95
 
       expect(calcSAA.eBaseline(dBaseline,
-          scaleValue)).to.be.closeTo(expected, 0.0001);
+          scaleValue) * 60.0).to.be.closeTo(expected, 0.0001);
     });
 
     it('computes correctly with data from FRN20130311611.bns', function () {
@@ -807,7 +808,7 @@ describe('Unit tests for BaselineCalculator', function () {
           expected = 5780.730377;   // 5780.73
 
       expect(calcSAA.eBaseline(dBaseline,
-          scaleValue)).to.be.closeTo(expected, 0.0001);
+          scaleValue) * 60.0).to.be.closeTo(expected, 0.0001);
     });
 
   });
