@@ -9,6 +9,7 @@ var BaselineCalculator = require('geomag/BaselineCalculator'),
 var _DEFAULTS = {
   // model options
   pierCorrection: 0,
+  smallAngleApproximation: false,
   trueAzimuthOfMark: 0
 };
 
@@ -33,6 +34,7 @@ var ObservationBaselineCalculator = function (options) {
     _initialize = function (options) {
       // keep calculator outside model
       _calculator = options.calculator || BaselineCalculator();
+      _calculator.setSmallAngleApproximation(_this.smallAngleApproximation);
     };
 
   /**
@@ -396,6 +398,11 @@ var ObservationBaselineCalculator = function (options) {
     return _calculator.scaleValue(
         _this.horizontalComponent(reading)
     );
+  };
+
+  _this.setSmallAngleApproximation = function(smallAngleApproximation) {
+    _this.smallAngleApproximation = smallAngleApproximation;
+    _calculator.setSmallAngleApproximation(_this.smallAngleApproximation);
   };
 
   /**
