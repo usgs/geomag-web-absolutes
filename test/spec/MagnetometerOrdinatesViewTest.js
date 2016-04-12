@@ -158,7 +158,7 @@ describe('Unit tests for MagnetometerOrdinatesView', function () {
       expect(view._hBaseline.innerHTML).to.equal(Format.nanoteslas(9));
     });
     it('updates view elements for eBaseline', function () {
-      expect(view._eBaseline.innerHTML).to.equal(Format.nanoteslas(10));
+      expect(view._eBaseline.innerHTML).to.equal(Format.nanoteslas(10 * 60.0));
     });
     it('updates view elements for dBaseline', function () {
       expect(view._dBaseline.innerHTML).to.equal(Format.minutes(11*60));

@@ -638,41 +638,66 @@ describe('Unit tests for BaselineCalculator', function () {
 
 
   describe('dComputed()', function () {
+    var calcSAA,
+        calcTan;
+    calcSAA = BaselineCalculator({smallAngleApproximation:true});
+    calcTan = BaselineCalculator({smallAngleApproximation:false});
 
     it('computes correctly', function () {
       var eAbsolute = 1.0,
-          scaleValue = 1.0,
+          scaleValue = calcSAA.scaleValue(1.0),
           expected = 1.0/60.0;
 
-      expect(calc.dComputed(eAbsolute, scaleValue)).to.equal(expected);
+      expect(calcSAA.dComputed(eAbsolute, scaleValue)).to.be.closeTo(expected,
+          0.000001);
     });
 
     it('computes correctly with data from BDT20131651602.bns', function () {
       var meanE = -155.48,          // -155.48
-          scaleValue = 0.164946633, // 0.1649
+          scaleValue = calcSAA.scaleValue(0.164946633), // 0.1649
           expected = -0.427431709;  // -25.65 converted to degrees
 
-      expect(calc.dComputed(
+      expect(calcSAA.dComputed(
           meanE, scaleValue)).to.be.closeTo(expected, 0.000001);
     });
 
     it('computes correctly with data from CMO20131651602.bns', function () {
       var meanE = -48.66,           // -48.66
-          scaleValue = 0.274863402, // 0.2749
+          scaleValue = calcSAA.scaleValue(0.274863402), // 0.2749
           expected = -0.222914219;  // -13.37 converted to degrees
 
-      expect(calc.dComputed(
+      expect(calcSAA.dComputed(
           meanE, scaleValue)).to.be.closeTo(expected, 0.000001);
     });
 
     it('computes correctly with data from FRN20130311611.bns', function () {
       var meanE = -311.22,          // -311.22
-          scaleValue = 0.146384584, // 0.1464
+          scaleValue = calcSAA.scaleValue(0.146384584), // 0.1464
           expected = -0.759296836;  // -45.56 converted to degrees
 
-      expect(calc.dComputed(
+      expect(calcSAA.dComputed(
           meanE, scaleValue)).to.be.closeTo(expected, 0.000001);
     });
+
+    it('computes correctly using tangeant', function () {
+      var eAbsolute = 1.0,
+          horizontalComponent = 1.0,
+          expected = 45.0;
+
+      expect(calcTan.dComputed(eAbsolute, horizontalComponent)).to.be.closeTo(
+        expected, 0.000001);
+    });
+
+    it('computes correctly with data from FRN20130311611.bns using tangeant',
+      function () {
+        var meanE = -311.22,          // -311.22
+            scaleValue = calcSAA.scaleValue(0.146384584), // 0.1464
+            expected = -0.759296836;  // -45.56 converted to degrees
+
+        expect(calcTan.dComputed(
+            meanE, scaleValue)).to.be.closeTo(expected, 0.0001);
+    });
+
 
   }); // END :: computedE
 
@@ -745,40 +770,45 @@ describe('Unit tests for BaselineCalculator', function () {
   }); // END :: baselineZ
 
   describe('eBaseline()', function () {
+    var calcSAA,
+        calcTan;
+    calcSAA = BaselineCalculator({smallAngleApproximation:true});
+    calcTan = BaselineCalculator({smallAngleApproximation:false});
 
     it('computes correctly', function () {
       var dBaseline = 10.0,
-          scaleValue = 10.0,
+          scaleValue = calcSAA.scaleValue(10.0),
           expected = 60.0;
 
-      expect(calc.eBaseline(dBaseline, scaleValue)).to.equal(expected);
+      expect(calcSAA.eBaseline(dBaseline, scaleValue) * 60.0).to.equal(
+          expected);
     });
 
     it('computes correctly with data from BDT20131651602.bns', function () {
       var dBaseline = 9.494931709,  // 569.69 converted to degrees
-          scaleValue = 0.164946633, // 0.1649
+          scaleValue = calcSAA.scaleValue(0.164946633), // 0.1649
           expected = 3453.819528;   // 3453.78
 
-      expect(calc.eBaseline(dBaseline,
-          scaleValue)).to.be.closeTo(expected, 0.0001);
+      expect(calcSAA.eBaseline(dBaseline,
+          scaleValue) * 60.0).to.be.closeTo(expected, 0.0001);
     });
 
     it('computes correctly with data from CMO20131651602.bns', function () {
       var dBaseline = 19.51971422,   // 1171.18 converted to degrees
-          scaleValue = 0.274863402,  // 0.2749
+          scaleValue = calcSAA.scaleValue(0.274863402),  // 0.2749
           expected = 4260.963249;    // 4260.95
 
-      expect(calc.eBaseline(dBaseline,
-          scaleValue)).to.be.closeTo(expected, 0.0001);
+      expect(calcSAA.eBaseline(dBaseline,
+          scaleValue) * 60.0).to.be.closeTo(expected, 0.0001);
     });
 
     it('computes correctly with data from FRN20130311611.bns', function () {
       var dBaseline = 14.10349684,  // 846.21 converted to degrees
-          scaleValue = 0.146384584, // 0.1464
+          scaleValue = calcSAA.scaleValue(0.146384584), // 0.1464
           expected = 5780.730377;   // 5780.73
 
-      expect(calc.eBaseline(dBaseline,
-          scaleValue)).to.be.closeTo(expected, 0.0001);
+      expect(calcSAA.eBaseline(dBaseline,
+          scaleValue) * 60.0).to.be.closeTo(expected, 0.0001);
     });
 
   });

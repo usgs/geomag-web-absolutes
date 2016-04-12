@@ -319,7 +319,7 @@ describe('Unit tests for ObservationBaselineCalculator', function () {
 
     it('computes correctly with data from BOU20132861836.bns', function () {
       var expected = 9.780333333333335;  // 586.66 min, converted to degrees
-      expect(calc.dBaseline(READING)).to.be.closeTo(expected, 0.0001);
+      expect(calc.dBaseline(READING)).to.be.closeTo(expected, 0.001);
     });
 
   }); // END :: dBaseline
@@ -347,7 +347,7 @@ describe('Unit tests for ObservationBaselineCalculator', function () {
 
     it('computes correctly with data from BOU20132861836.bns', function () {
       var expected = 3557.5945472773902;   // 3556.6245477416474
-      expect(calc.eBaseline(READING)).to.be.closeTo(expected, 0.1);
+      expect(calc.eBaseline(READING) * 60.0).to.be.closeTo(expected, 0.1);
     });
 
   }); // END :: eBaseline

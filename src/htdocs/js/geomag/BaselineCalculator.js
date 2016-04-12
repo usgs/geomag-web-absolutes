@@ -1,5 +1,11 @@
 'use strict';
 
+var Util = require('util/Util');
+
+var _DEFAULTS = {
+  smallAngleApproximation: false
+};
+
 var getScaleValueCoefficient = function () {
   return 3437.7468;
 };
@@ -7,10 +13,10 @@ var getScaleValueCoefficient = function () {
 var _SCALE_VALUE_COEFFICIENT = getScaleValueCoefficient();
 
 
-var BaselineCalculator = function () {
+var BaselineCalculator = function (options) {
   var _this;
 
-  _this = {};
+  _this = Util.extend({}, _DEFAULTS, options);
 
   /**
    * D Baseline
@@ -28,12 +34,44 @@ var BaselineCalculator = function () {
    * Computed D
    *
    * @param meanE {Number} nT
-   * @param scaleValue {Number} No units
+   * @param horizontalComponent {Number} nT
    *
    * @return {Number} Decimal degrees
    */
-  _this.dComputed = function (eMean, scaleValue) {
+  _this.dComputed = function (eMean, horizontalComponent) {
+    if (_this.smallAngleApproximation) {
+      return _this.dComputedSmallAngle(eMean, horizontalComponent);
+    } else {
+      return _this.dComputedTan(eMean, horizontalComponent);
+    }
+  };
+
+  /**
+   * Computed D Small Angle
+   *    Computed D using the small angle approximation
+   *
+   * @param meanE {Number} nT
+   * @param horizontalComponent {Number} nT
+   *
+   * @return {Number} Decimal degrees
+   */
+  _this.dComputedSmallAngle = function (eMean, horizontalComponent) {
+    var scaleValue;
+    scaleValue = _this.scaleValue(horizontalComponent);
     return (eMean * scaleValue / 60.0);
+  };
+
+  /**
+   * Computed D Tangent
+   *    Computed D using trig.
+   *
+   * @param meanE {Number} nT
+   * @param horizontalComponent {Number} nT
+   *
+   * @return {Number} Decimal degrees
+   */
+  _this.dComputedTan = function (eMean, horizontalComponent) {
+    return Math.atan2(eMean, horizontalComponent) * 180 / Math.PI;
   };
 
   /**
@@ -52,12 +90,47 @@ var BaselineCalculator = function () {
    * E Baseline
    *
    * @param dBaseline {Number} Decimal degrees
-   * @param scaleValue {Number}
+   * @param horizontalComponent {Number} nT
    *
    * @return {Number} nT
    */
-  _this.eBaseline = function (dBaseline, scaleValue) {
-    return (dBaseline * 60.0 / scaleValue);
+  _this.eBaseline = function (dBaseline, horizontalComponent) {
+    if (_this.smallAngleApproximation) {
+      return _this.eBaselineSmallAngle(dBaseline,
+          horizontalComponent);
+    } else {
+      return _this.eBaselineTan(dBaseline, horizontalComponent);
+    }
+  };
+
+  /**
+   * E Baseline Small Angle Approximation.
+   *    Calculates E Baseline using the Small Angle Approximation.
+   *
+   * @param dBaseline {Number} Decimal degrees
+   * @param horizontalComponent {Number} nT
+   *
+   * @return {Number} nT
+   */
+  _this.eBaselineSmallAngle = function (dBaseline, horizontalComponent) {
+    return (dBaseline / _this.scaleValue(horizontalComponent));
+  };
+
+    /**
+   * E Baseline Tangent
+   *  Calculates the E Baseline using trig.
+   *
+   * @param dBaseline {Number} Decimal degrees
+   * @param horizontalComponent {Number} nT
+   *
+   * @return {Number} nT
+   */
+  _this.eBaselineTan = function (dBaseline, horizontalComponent) {
+    var dBaselineRadian;
+
+    dBaselineRadian = _this.toRadians(dBaseline / 60.0);
+    return (Math.tan(dBaselineRadian) *
+        horizontalComponent);
   };
 
   /**
@@ -83,6 +156,15 @@ var BaselineCalculator = function () {
    */
   _this.geographicMeridian = function (markUp1, markUp2, trueAzimuthMark) {
     return (_this.mean(markUp1, markUp2) - trueAzimuthMark);
+  };
+
+  /**
+   * Get Small Angle Approximation
+   *
+   * @return {binary} Whether we are using the small angle approximation.
+   */
+  _this.getSmallAngleApproximation = function () {
+    return _this.smallAngleApproximation;
   };
 
   /**
@@ -229,6 +311,10 @@ var BaselineCalculator = function () {
     }
 
     return (_SCALE_VALUE_COEFFICIENT / absoluteH);
+  };
+
+  _this.setSmallAngleApproximation = function(smallAngleApproximation) {
+    _this.smallAngleApproximation = smallAngleApproximation;
   };
 
   /**
