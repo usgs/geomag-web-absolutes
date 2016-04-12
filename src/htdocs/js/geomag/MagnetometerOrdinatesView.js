@@ -2,6 +2,7 @@
 
 var Format = require('geomag/Formatter'),
     Measurement = require('geomag/Measurement'),
+    User = require('geomag/User'),
     Util = require('util/Util'),
     View = require('mvc/View');
 
@@ -35,13 +36,38 @@ var MagnetometerOrdinatesView = function (options) {
    * @param options {Object} same as constructor.
    */
   _initialize = function (options) {
-    var el;
+    var el,
+        dSmallAngle,
+        eSmallAngle;
 
     el = _this.el;
 
     _measurements = options.reading.getMeasurements();
     _this._reading = options.reading;
     _this._calculator = options.calculator;
+    _this._user = User.getCurrentUser();
+
+
+    dSmallAngle = ' ';
+    eSmallAngle = ' ';
+    if (_this._user.get('admin') === 'Y') {
+      dSmallAngle = [
+        '<tr>',
+          '<th class="channel dSAA">D (SA)</th>',
+          '<td class="mean dMeanSAA"></td>',
+          '<td class="absolute dAbsoluteSAA"></td>',
+          '<td class="baseline dBaselineSAA"></td>',
+        '</tr>'
+      ].join('');
+      eSmallAngle = [
+        '<tr>',
+          '<th class="channel e saa">E(SA)</th>',
+          '<td class="mean eMeanSAA"></td>',
+          '<td class="absolute eAbsoluteSAA"></td>',
+          '<td class="baseline eBaselineSAA"></td>',
+        '</tr>'
+      ].join('');
+    }
 
     el.innerHTML = [
       '<div class="horizontal-scrolling">',
@@ -67,12 +93,14 @@ var MagnetometerOrdinatesView = function (options) {
               '<td class="absolute eAbsolute"></td>',
               '<td class="baseline eBaseline"></td>',
             '</tr>',
+            eSmallAngle,
             '<tr>',
               '<th class="channel d">D</th>',
               '<td class="mean dMean"></td>',
               '<td class="absolute dAbsolute"></td>',
               '<td class="baseline dBaseline"></td>',
             '</tr>',
+            dSmallAngle,
             '<tr>',
               '<th class="channel z">Z</th>',
               '<td class="mean zMean"></td>',
@@ -112,10 +140,17 @@ var MagnetometerOrdinatesView = function (options) {
     _this._absoluteZ = el.querySelector('.zAbsolute');
     _this._absoluteF = el.querySelector('.fAbsolute');
 
+
     _this._hBaseline = el.querySelector('.hBaseline');
     _this._eBaseline = el.querySelector('.eBaseline');
     _this._dBaseline = el.querySelector('.dBaseline');
     _this._zBaseline = el.querySelector('.zBaseline');
+
+    // Small Angle Approximation.
+    _this._dMeanSAA = el.querySelector('.dMeanSAA');
+    _this._absoluteDSAA = el.querySelector('.dAbsoluteSAA');
+    _this._eBaselineSAA = el.querySelector('.eBaselineSAA');
+    _this._dBaselineSAA = el.querySelector('.dBaselineSAA');
 
     _this._pierCorrection = el.querySelector('.pier-correction-value');
     _this._scaleValue = el.querySelector('.scaleValue');
@@ -200,11 +235,25 @@ var MagnetometerOrdinatesView = function (options) {
     _this._hBaseline.innerHTML =
       Format.nanoteslas(calculator.hBaseline(reading));
     _this._eBaseline.innerHTML =
-      Format.nanoteslas(calculator.eBaseline(reading));
+      Format.nanoteslas(calculator.eBaseline(reading) * 60);
     _this._dBaseline.innerHTML =
       Format.minutes(calculator.dBaseline(reading) * 60);
     _this._zBaseline.innerHTML =
       Format.nanoteslas(calculator.zBaseline(reading));
+
+    // Set small angle
+    if (_this._user.get('admin') === 'Y') {
+     calculator.setSmallAngleApproximation(true);
+     _this._dMeanSAA.innerHTML =
+         Format.minutes(calculator.dComputed(reading)*60);
+     _this._absoluteDSAA.innerHTML =
+         Format.minutes((calculator.magneticDeclination(reading) * 60));
+     _this._eBaselineSAA.innerHTML =
+       Format.nanoteslas(calculator.eBaseline(reading) * 60);
+     _this._dBaselineSAA.innerHTML =
+       Format.minutes(calculator.dBaseline(reading) * 60);
+     calculator.setSmallAngleApproximation(false);
+    }
 
     _this._pierCorrection.innerHTML =
         Format.rawNanoteslas(calculator.pierCorrection());
