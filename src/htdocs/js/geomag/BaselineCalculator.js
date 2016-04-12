@@ -113,7 +113,7 @@ var BaselineCalculator = function (options) {
    * @return {Number} nT
    */
   _this.eBaselineSmallAngle = function (dBaseline, horizontalComponent) {
-    return (dBaseline * 60.0 / _this.scaleValue(horizontalComponent));
+    return (dBaseline / _this.scaleValue(horizontalComponent));
   };
 
     /**
@@ -130,7 +130,7 @@ var BaselineCalculator = function (options) {
 
     dBaselineRadian = _this.toRadians(dBaseline / 60.0);
     return (Math.tan(dBaselineRadian) *
-        horizontalComponent) * 60.0;
+        horizontalComponent);
   };
 
   /**
