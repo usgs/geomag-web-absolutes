@@ -122,8 +122,14 @@ var ObservationBaselineCalculator = function (options) {
     var measurements = reading.getMeasurements();
 
     return _calculator.geographicMeridian(
-        measurements[Measurement.FIRST_MARK_UP][0].get('angle'),
-        measurements[Measurement.SECOND_MARK_UP][0].get('angle'),
+        (
+          measurements[Measurement.FIRST_MARK_UP][0].get('angle') +
+          measurements[Measurement.FIRST_MARK_DOWN][0].get('angle') - 180
+        )/2,
+        (
+          measurements[Measurement.SECOND_MARK_UP][0].get('angle') +
+          measurements[Measurement.SECOND_MARK_DOWN][0].get('angle') - 180
+        )/2,
         _this.trueAzimuthOfMark()
     );
   };

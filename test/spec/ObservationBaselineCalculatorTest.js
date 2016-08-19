@@ -10,10 +10,18 @@ var BaselineCalculator = require('geomag/BaselineCalculator'),
 
 var expect = chai.expect;
 
+// data from BOU, at the time of BOU20132861836.bns
 var calc = Calculator({
     calculator: BaselineCalculator(),
     pierCorrection: -23.1,
     trueAzimuthOfMark: 199.1383
+});
+
+// data from BSL, at the time of BSL2016106142821.bns
+var calc2 = Calculator({
+    calculator: BaselineCalculator(),
+    pierCorrection: -4.2,
+    trueAzimuthOfMark: 176.6458
 });
 
 // data from BOU20132861836.bns
@@ -28,6 +36,18 @@ var meas1 = Measurement({
     'f': 55000.6
 });
 
+// data from BSL2016106142821.bns
+var meas10 = Measurement({
+    'id': 1,
+    'type': Measurement.FIRST_MARK_UP,
+    'time': null,
+    'angle': 18.8,// 18.8, // 18,48,00
+    'h': 0,
+    'e': 0,
+    'z': 0,
+    'f': 0
+});
+
 // data from BOU20132861836.bns
 var meas2 = Measurement({
     'id': 2,
@@ -38,6 +58,18 @@ var meas2 = Measurement({
     'e': -300.7,
     'z': 45000.7,
     'f': 55000.5
+});
+
+// data from BSL2016106142821.bns
+var meas20 = Measurement({
+    'id': 1,
+    'type': Measurement.FIRST_MARK_DOWN,
+    'time': null,
+    'angle': 198.81,// 198.81, // 18,48,36
+    'h': 0,
+    'e': 0,
+    'z': 0,
+    'f': 0
 });
 
 // data from BOU20132861836.bns
@@ -209,7 +241,7 @@ describe('Unit tests for ObservationBaselineCalculator', function () {
 
     it('computes correctly with data from BOU20132861836.bns', function () {
       expect(calc.geographicMeridian(READING))
-          .to.be.closeTo(-188.8069, 0.001);
+          .to.be.closeTo(-188.8036, 0.001);   // -188.8069
     });
 
   }); // END :: geographicMeridian
@@ -318,7 +350,8 @@ describe('Unit tests for ObservationBaselineCalculator', function () {
   describe('dBaseline()', function () {
 
     it('computes correctly with data from BOU20132861836.bns', function () {
-      var expected = 9.780333333333335;  // 586.66 min, converted to degrees
+      // 9.780333333333335
+      var expected = 9.7769;  // 586.66 min, converted to degrees
       expect(calc.dBaseline(READING)).to.be.closeTo(expected, 0.0001);
     });
 
@@ -346,7 +379,7 @@ describe('Unit tests for ObservationBaselineCalculator', function () {
   describe('eBaseline()', function () {
 
     it('computes correctly with data from BOU20132861836.bns', function () {
-      var expected = 3557.5945472773902;   // 3556.6245477416474
+      var expected = 3556.3593;   // 3556.6245477416474
       expect(calc.eBaseline(READING)).to.be.closeTo(expected, 0.1);
     });
 
