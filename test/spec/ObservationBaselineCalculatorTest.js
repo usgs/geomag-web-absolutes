@@ -36,7 +36,7 @@ var meas1 = Measurement({
     'f': 55000.6
 });
 
-// data from BSL2016106142821.bns
+// data from BSL20161061428.bns
 var meas10 = Measurement({
     'id': 1,
     'type': Measurement.FIRST_MARK_UP,
@@ -60,9 +60,9 @@ var meas2 = Measurement({
     'f': 55000.5
 });
 
-// data from BSL2016106142821.bns
+// data from BSL20161061428.bns
 var meas20 = Measurement({
-    'id': 1,
+    'id': 2,
     'type': Measurement.FIRST_MARK_DOWN,
     'time': null,
     'angle': 198.81,// 198.81, // 18,48,36
@@ -83,6 +83,17 @@ var meas3 = Measurement({'id': 3,
     'f': 55000.4
 });
 
+// data from BSL20161061428.bns
+var meas30 = Measurement({'id': 3,
+    'type': Measurement.WEST_DOWN,
+    'time': 142821,
+    'angle': 291.22666666666667,// 291.2267, // 291 13.6
+    'h': 23288.46,
+    'e': -61.85,
+    'z': 41030.67,
+    'f': 47581.70
+});
+
 // data from BOU20132861836.bns
 var meas4 = Measurement({
     'id': 4,
@@ -94,6 +105,19 @@ var meas4 = Measurement({
     'z': 45000.5,
     'f': 55000.3
 });
+
+// data from BSL20161061428.bns
+var meas40 = Measurement({
+    'id': 4,
+    'type': Measurement.EAST_DOWN,
+    'time': 142947,
+    'angle': 111.4,// 111.4, // 111 24 0
+    'h': 23288.94,
+    'e': -62.14,
+    'z': 41030.09,
+    'f': 47581.43
+});
+
 
 // data from BOU20132861836.bns
 var meas5 = Measurement({
