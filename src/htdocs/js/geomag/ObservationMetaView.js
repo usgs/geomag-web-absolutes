@@ -423,7 +423,16 @@ var ObservationMetaView = function (options) {
    * @return {String} content for option element.
    */
   _formatPier = function (pier) {
-    return pier.get('name') + ' (' + pier.get('correction') + ' nT)';
+    var begin;
+
+    begin = pier.get('begin');
+    if (begin) {
+      begin = Format.date(new Date(begin));
+    } else {
+      begin = 'No start specified';
+    }
+    return pier.get('name') + ' (' + pier.get('correction') + ' nT) ' +
+        begin;
   };
 
   /**
