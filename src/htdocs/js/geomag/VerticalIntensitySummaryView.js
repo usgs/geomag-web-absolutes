@@ -133,6 +133,7 @@ var VerticalIntensitySummaryView = function (options) {
   _this.render = function () {
     var endTime,
         inclinations,
+        isValid,
         measurements,
         startTime,
         times;
@@ -144,7 +145,13 @@ var VerticalIntensitySummaryView = function (options) {
 
     _name.innerHTML = _reading.get('set_number');
 
-    _valid.checked = (_reading.get('vertical_intensity_valid') === 'Y');
+    isValid = (_reading.get('vertical_intensity_valid') === 'Y');
+    _valid.checked = isValid;
+    if (isValid) {
+      _this.el.classList.remove('rejected');
+    } else {
+      _this.el.classList.add('rejected');
+    }
 
     times = _factory.getMeasurementValues(inclinations, 'time');
     if (times.length > 0) {
