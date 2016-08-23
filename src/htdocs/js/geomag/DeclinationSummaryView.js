@@ -153,6 +153,7 @@ var DeclinationSummaryView = function (options) {
   _this.render = function () {
     var declinations,
         endTime,
+        isValid,
         measurements,
         startTime,
         times;
@@ -164,7 +165,13 @@ var DeclinationSummaryView = function (options) {
 
     _name.innerHTML = _reading.get('set_number');
 
-    _valid.checked = (_reading.get('declination_valid') === 'Y');
+    isValid = (_reading.get('declination_valid') === 'Y');
+    _valid.checked = isValid;
+    if (isValid) {
+      _this.el.classList.remove('rejected');
+    } else {
+      _this.el.classList.add('rejected');
+    }
 
     times = _factory.getMeasurementValues(declinations, 'time');
     if (times.length > 0) {
