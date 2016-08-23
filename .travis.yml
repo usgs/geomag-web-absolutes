@@ -9,9 +9,9 @@ before_install:
   - npm install -g grunt-cli
   - npm --version
   - node --version
+  - npm list -g
 install:
-  - npm install caniuse-db
-  - npm install phantomjs
+  - npm install phantomjs-prebuilt
   - npm install
 script:
   - npm test
