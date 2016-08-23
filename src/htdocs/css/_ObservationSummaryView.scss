@@ -1,4 +1,20 @@
 .observation-summary-view {
+
+  .rejected {
+    > td {
+      text-decoration: line-through;
+    }
+
+    &:after {
+      content: 'REJECTED';
+      display: block;
+      line-height: 1.5;
+      padding: .666em .75em;
+      /* center vertically */
+      vertical-align: inherit;
+    }
+  }
+
   .declination-summary,
   .horizontal-summary,
   .vertical-summary {
