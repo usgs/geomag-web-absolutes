@@ -1,5 +1,9 @@
 .observation-view {
-  
+
+  .annotation > div {
+    white-space: pre;
+  }
+
   .observation-view-controls {
     > .left-aligned > label {
       clear: left;
@@ -46,7 +50,21 @@
   }
 }
 
+
+.printonly {
+  display: none;
+}
+
 @media print {
+
+  .noprint {
+    display: none;
+  }
+
+  .printonly {
+    display: block;
+  }
+
   .observation-view > .observation-view-controls{
     display: none;
   }

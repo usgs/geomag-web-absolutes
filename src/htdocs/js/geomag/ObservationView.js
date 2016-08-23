@@ -109,6 +109,7 @@ var ObservationView = function (options) {
       _initialize,
 
       _annotation,
+      _annotationPrint,
       _calculator,
       _factory,
       _observation,
@@ -158,7 +159,8 @@ var ObservationView = function (options) {
         '<section class="reading-group-view-wrapper"></section>',
         '<section class="annotation">',
           '<h4>Comments</h4>',
-          '<textarea id="observation-remarks"></textarea>',
+          '<textarea id="observation-remarks" class="noprint"></textarea>',
+          '<div id="observation-remarks-print" class="printonly"></div>',
         '</section>',
         '<section class="observation-view-controls"></section>',
       '</section>'
@@ -323,6 +325,7 @@ var ObservationView = function (options) {
     _observation.set({
       annotation: _annotation.value
     });
+    _annotationPrint.innerHTML = _annotation.value;
   };
 
   /**
@@ -472,6 +475,9 @@ var ObservationView = function (options) {
     _annotation = el.querySelector('.annotation > textarea');
     _annotation.innerHTML = _observation.get('annotation');
     _annotation.addEventListener('change', _onChange);
+
+    _annotationPrint = el.querySelector('.annotation > div');
+    _annotationPrint.innerHTML = _observation.get('annotation');
 
     _createControls();
   };
