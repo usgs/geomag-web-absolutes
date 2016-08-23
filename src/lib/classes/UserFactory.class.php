@@ -163,6 +163,7 @@ class UserFactory {
         ':username', $username, PDO::PARAM_STR);
     $this->selectUserByCredentials->bindValue(
         ':password', md5($password), PDO::PARAM_STR);
+
     try {
       $this->selectUserByCredentials->execute();
       $user = $this->selectUserByCredentials->fetchAll(PDO::FETCH_ASSOC);
@@ -171,8 +172,12 @@ class UserFactory {
         $user = $user[0];
 
         // Update last login time for this user
-        $user['last_login'] = time();
-        $user = $this->updateUser($user);
+        try {
+          $user['last_login'] = time();
+          $user = $this->updateUser($user);
+        } catch (Exception $e) {
+          // try to set last login, but don't let errors prevent login.
+        }
       } else {
         $user = null;
       }
