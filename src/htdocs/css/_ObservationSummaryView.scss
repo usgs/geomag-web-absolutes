@@ -99,4 +99,16 @@
     display: none;
   }
 
+  /*
+    Fix checkbox printing styles in IE.
+    TODO: move this to the template
+  */
+  input[type=checkbox]+label:before {
+    content: '';
+  }
+
+  input[type=checkbox]:checked+label:before {
+    content: '\0e5ca';
+  }
+
 }
