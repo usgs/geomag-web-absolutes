@@ -304,7 +304,7 @@ var measC0 = Measurement({
     'id': 12,
     'type': Measurement.NORTH_DOWN,
     'time': 143938,
-    'angle': 300.08,// 300.08, // 300 14 48
+    'angle': 300.24666666666667,// 300.2467, // 300 14 48
     'h': 23289.9,
     'e': -64.28,
     'z': 41026.81,
@@ -407,7 +407,7 @@ describe('Unit tests for ObservationBaselineCalculator', function () {
 
     it('computes correctly with data from BSL20161061428.bns', function () {
       expect(calc2.geographicMeridian(READING0))
-          .to.be.closeTo(-18.8036, 0.001);   // -188.8069
+          .to.be.closeTo(-157.8408, 0.001);   // -18.8036?
     });
 
   }); // END :: geographicMeridian
