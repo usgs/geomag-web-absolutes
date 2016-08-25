@@ -140,4 +140,9 @@ SET @mark_id = LAST_INSERT_ID();
 UPDATE pier
 SET default_mark_id = @mark_id
 WHERE id = @pier_id;
+
+-- set new pier as default for observatory
+UPDATE observatory
+SET default_pier_id = @pier_id
+WHERE id = @observatory_id;
 ```
