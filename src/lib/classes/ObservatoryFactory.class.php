@@ -289,7 +289,7 @@ class ObservatoryFactory {
   public function getPiers ($id) {
     $piers = array();
     $statement = $this->db->prepare('SELECT * FROM pier WHERE ' .
-        'observatory_id=:id ORDER BY name');
+        'observatory_id=:id ORDER BY name, begin');
     $statement->bindParam(':id', $id, PDO::PARAM_INT);
 
     try {
