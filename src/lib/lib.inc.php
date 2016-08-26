@@ -39,4 +39,7 @@ include_once $classDir . 'Pier.class.php';
 include_once $classDir . 'Reading.class.php';
 include_once $classDir . 'UserFactory.class.php';
 
-include_once $classDir . 'PdoSessionHandler.php';
+if (PHP_VERSION_ID >= 50400) {
+  // depends on session handler interface, which was added in php 5.4
+  include_once $classDir . 'PdoSessionHandler.php';
+}
