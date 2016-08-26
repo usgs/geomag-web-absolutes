@@ -44,9 +44,13 @@ $observationStatement = $DB->prepare('
     o.mark_id,
     o.electronics_id,
     o.theodolite_id,
-    o.reviewed
+    o.reviewed,
+    m.azimuth,
+    p.correction
   FROM observation o
-  JOIN observatory obs on (obs.id = o.observatory_id)
+  JOIN observatory obs ON (obs.id = o.observatory_id)
+  LEFT JOIN mark m ON (m.id = o.mark_id)
+  LEFT JOIN pier p ON (p.id = m.pier_id)
   WHERE obs.code = :observatory
   AND o.begin >= :startTime
   AND o.begin <= :endTime
@@ -69,6 +73,8 @@ while ($row = $observationStatement->fetch(PDO::FETCH_ASSOC)) {
     'flux_temperature' => safefloatval($row['flux_temperature']),
     'proton_temperature' => safefloatval($row['proton_temperature']),
     'outside_temperature' => safefloatval($row['outside_temperature']),
+    'mark_azimuth' => safefloatval($row['azimuth']),
+    'pier_correction' => safefloatval($row['correction']),
     'mark_id' => safeintval($row['mark_id']),
     'electronics_id' => safeintval($row['electronics_id']),
     'theodolite_id' => safeintval($row['theodolite_id']),
@@ -101,8 +107,8 @@ $readingStatement = $DB->prepare('
     r.absD,
     r.baseD
   FROM reading r
-  JOIN observation o on (o.id = r.observation_id)
-  JOIN observatory obs on (obs.id = o.observatory_id)
+  JOIN observation o ON (o.id = r.observation_id)
+  JOIN observatory obs ON (obs.id = o.observatory_id)
   WHERE obs.code = :observatory
   AND o.begin >= :startTime
   AND o.begin <= :endTime
