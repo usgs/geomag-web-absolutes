@@ -28,5 +28,9 @@ $USER_FACTORY = new UserFactory($DB);
 // set up database backed sessions
 if (isset($CONFIG['USE_DATABASE_SESSIONS']) &&
 		$CONFIG['USE_DATABASE_SESSIONS'] === 'true') {
+	if (PHP_VERSION_ID < 50400) {
+		echo 'Database sessions require php version 5.4+';
+		exit();
+	}
 	session_set_save_handler(new PdoSessionHandler($DB), true);
 }
