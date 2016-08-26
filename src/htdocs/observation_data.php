@@ -137,7 +137,7 @@ try {
       // make sure not published
       if ($existingObservation->reviewed === 'Y' && !$isAdmin) {
         header('HTTP/1.1 403 Forbidden');
-        echo 'cannot update an observation that has already been published';
+        echo 'only admin users can update an observation that is reviewed';
         exit();
       }
       // check user permissions
