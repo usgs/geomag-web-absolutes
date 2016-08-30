@@ -292,7 +292,7 @@ class BaselinesWebService {
       'metadata' => array(
         'date' => safeISO8601(time()),
         'request' => $_SERVER['REQUEST_URI'],
-        'error' => $status
+        'error' => $error
       ),
       'data' => null
     ));
