@@ -18,7 +18,8 @@ var copy = {
       '!htdocs/**/*.scss', // Migrated using postcss
       '!htdocs/**/*.js',   // Migrated using browserify
 
-      'lib/**/*'
+      'lib/**/*',
+      'htdocs/js/example-url.js'
     ]
   },
 

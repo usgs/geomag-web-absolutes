@@ -50,12 +50,23 @@ class BaselinesWebService {
         o.electronics_id,
         o.theodolite_id,
         o.reviewed,
-        m.azimuth,
-        p.correction
+        ei.serial_number as electronics_serial,
+        ti.serial_number as theodolite_serial,
+        m.azimuth as mark_azimuth,
+        m.name as mark_name,
+        p.id as pier_id,
+        p.correction as pier_correction,
+        p.name as pier_name,
+        ou.name as observer_name,
+        ru.name as reviewer_name
       FROM observation o
       JOIN observatory obs ON (obs.id = o.observatory_id)
+      LEFT JOIN instrument ei ON (ei.id = o.electronics_id)
+      LEFT JOIN instrument ti ON (ti.id = o.theodolite_id)
       LEFT JOIN mark m ON (m.id = o.mark_id)
       LEFT JOIN pier p ON (p.id = m.pier_id)
+      LEFT JOIN user ou ON (ou.id = o.observer_user_id)
+      LEFT JOIN user ru ON (ru.id = o.reviewer_user_id)
       WHERE obs.code = :observatory
       AND o.begin >= :startTime
       AND o.begin <= :endTime
@@ -79,12 +90,27 @@ class BaselinesWebService {
               'flux_temperature' => safefloatval($row['flux_temperature']),
               'proton_temperature' => safefloatval($row['proton_temperature']),
               'outside_temperature' => safefloatval($row['outside_temperature']),
-              'mark_azimuth' => safefloatval($row['azimuth']),
-              'pier_correction' => safefloatval($row['correction']),
-              'mark_id' => safeintval($row['mark_id']),
-              'electronics_id' => safeintval($row['electronics_id']),
-              'theodolite_id' => safeintval($row['theodolite_id']),
-              'reviewed' => ($row['reviewed'] === 'Y')
+              'reviewed' => ($row['reviewed'] === 'Y'),
+              'electronics' => array(
+                'id' => safeintval($row['electronics_id']),
+                'serial' => $row['electronics_serial']
+              ),
+              'theodolite' => array(
+                'id' => safeintval($row['theodolite_id']),
+                'serial' => $row['theodolite_serial']
+              ),
+              'mark' => array(
+                'id' => safeintval($row['mark_id']),
+                'azimuth' => safefloatval($row['mark_azimuth']),
+                'name' => $row['mark_name']
+              ),
+              'pier' => array(
+                'id' => safeintval($row['pier_id']),
+                'correction' => safefloatval($row['pier_correction']),
+                'name' => $row['pier_name']
+              ),
+              'observer' => $row['observer_name'],
+              'reviewer' => $row['reviewer_name']
             );
       }
     } finally {

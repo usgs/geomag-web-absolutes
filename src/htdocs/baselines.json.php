@@ -56,33 +56,33 @@ if (!isset($TEMPLATE)) {
 </dl>
 
 
-<h2 id="example">Examples</h2>
+<h2 id="example">Example URLs</h2>
 
 <ul>
   <li>
-    Observations at the <code>BOU</code> observatory between
-        <code>2016-01-29</code> and <code>2016-01-29</code>
-        without measurements.
+    <a class="example-url"
+        href="baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30"
+    >
+      baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30
+    </a>
     <p>
-      <a class="example-url"
-          href="baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30"
-      >
-        baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30
-      </a>
+      Observations at the <code>BOU</code> observatory between
+          <code>2016-01-29</code> and <code>2016-01-29</code>
+          without measurements.
     </p>
   </li>
 
 
   <li>
-    Observations at the <code>BOU</code> observatory between
-        <code>2016-01-29</code> and <code>2016-01-29</code>
-        with measurements.
+    <a class="example-url"
+        href="baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30&amp;includemeasurements=true"
+    >
+      baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30&amp;includemeasurements=true
+    </a>
     <p>
-      <a class="example-url"
-          href="baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30"
-      >
-        baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30
-      </a>
+      Observations at the <code>BOU</code> observatory between
+          <code>2016-01-29</code> and <code>2016-01-29</code>
+          with measurements.
     </p>
   </li>
 </ul>
@@ -93,6 +93,31 @@ if (!isset($TEMPLATE)) {
   Responses uses JSON format.
 </p>
 
+
+<h3>Example Error Response<h3>
+<p>
+  Note that
+    <code>metadata.error</code> is a string containing the error message
+    and <code>data</code> is null.
+</p>
+
+<p>
+  A HTTP response status code will also be set to indicate whether the error
+  is a bad request (400) or a server error (503).
+</p>
+
+<pre>
+{
+  metadata: {
+    date: "2016-08-30T17:47:28Z",
+    request: "/baselines.json.php?observatory=BOU&amp;unknown",
+    error: "Message describing error"
+  },
+  data: null
+}
+</pre>
+
+
 <h3>Example Success Response</h3>
 <p>
   Note that
@@ -102,8 +127,8 @@ if (!isset($TEMPLATE)) {
 
 <pre>{
   "metadata": {
-    "date": "2016-08-30T17:49:31Z",
-    "request": "/baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30",
+    "date": "2016-08-30T19:28:16Z",
+    "request": "/baselines.json.php?observatory=BOU&starttime=2016-01-29&endtime=2016-01-30",
     "error": false
   },
   "data": [
@@ -115,12 +140,27 @@ if (!isset($TEMPLATE)) {
       "flux_temperature": null,
       "proton_temperature": null,
       "outside_temperature": null,
-      "mark_azimuth": 199.1383,
-      "pier_correction": -23.1,
-      "mark_id": 1,
-      "electronics_id": 1,
-      "theodolite_id": 2,
       "reviewed": true,
+      "electronics": {
+        "id": 1,
+        "serial": "0110"
+      },
+      "theodolite": {
+        "id": 2,
+        "serial": "109648"
+      },
+      "mark": {
+        "id": 1,
+        "azimuth": 199.1383,
+        "name": "AZ"
+      },
+      "pier": {
+        "id": 20,
+        "correction": -23.1,
+        "name": "MainPCDCP"
+      },
+      "observer": "Teresa",
+      "reviewer": "Jake Morris",
       "readings": [
         {
           "id": 23804,
@@ -254,20 +294,3 @@ if (!isset($TEMPLATE)) {
     <code>valid</code> indicated whether reviewers believe these are usable measurements.
   </li>
 </ul>
-
-
-<h3>Example Error Response<h3>
-<p>Note that
-    <code>metadata.error</code> is a string containing the error message
-    and <code>data</code> is null.
-</p>
-<pre>
-{
-  metadata: {
-    date: "2016-08-30T17:47:28Z",
-    request: "/baselines.json.php?observatory=BOU&amp;unknown",
-    error: "Message describing error"
-  },
-  data: null
-}
-</pre>
