@@ -1,7 +1,7 @@
 <?php
 
 
-class BaselinesWebService {
+class ObservationWebService {
 
   private $db;
 

@@ -1,18 +1,19 @@
 <?php
 
 include_once '../conf/config.inc.php';
-include_once '../lib/classes/BaselinesWebService.class.php';
+include_once '../lib/classes/ObservationWebService.class.php';
 
 
 if (!isset($TEMPLATE)) {
   if (count($_GET) > 0) {
     // any parameters = run service
-    $service = new BaselinesWebService($DB);
+    $service = new ObservationWebService($DB);
     $service->run($_GET);
     exit();
   }
 
-  $TITLE = 'Geomag Web Absolutes Observation Web Service documentation';
+  $TITLE = 'Observation Web Service Documentation';
+  $NAVIGATION = true;
   $FOOT = '<script src="js/example-url.js"></script>';
   include 'template.inc.php';
 }
@@ -61,9 +62,9 @@ if (!isset($TEMPLATE)) {
 <ul>
   <li>
     <a class="example-url"
-        href="baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30"
+        href="observation.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30"
     >
-      baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30
+      observation.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30
     </a>
     <p>
       Observations at the <code>BOU</code> observatory between
@@ -75,9 +76,9 @@ if (!isset($TEMPLATE)) {
 
   <li>
     <a class="example-url"
-        href="baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30&amp;includemeasurements=true"
+        href="observation.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30&amp;includemeasurements=true"
     >
-      baselines.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30&amp;includemeasurements=true
+      observation.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30&amp;includemeasurements=true
     </a>
     <p>
       Observations at the <code>BOU</code> observatory between
@@ -110,7 +111,7 @@ if (!isset($TEMPLATE)) {
 {
   metadata: {
     date: "2016-08-30T17:47:28Z",
-    request: "/baselines.json.php?observatory=BOU&amp;unknown",
+    request: "/observation.json.php?observatory=BOU&amp;unknown",
     error: "Message describing error"
   },
   data: null
@@ -128,7 +129,7 @@ if (!isset($TEMPLATE)) {
 <pre>{
   "metadata": {
     "date": "2016-08-30T19:28:16Z",
-    "request": "/baselines.json.php?observatory=BOU&starttime=2016-01-29&endtime=2016-01-30",
+    "request": "/observation.json.php?observatory=BOU&amp;starttime=2016-01-29&amp;endtime=2016-01-30",
     "error": false
   },
   "data": [
@@ -291,6 +292,7 @@ if (!isset($TEMPLATE)) {
     and do not include leap seconds.
   </li>
   <li>
-    <code>valid</code> indicated whether reviewers believe these are usable measurements.
+    <code>valid</code> indicates whether reviewers believe these are
+    usable measurements.
   </li>
 </ul>
