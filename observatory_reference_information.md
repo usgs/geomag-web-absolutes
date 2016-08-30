@@ -20,8 +20,12 @@ information, and multiple records may refer to the same physical instrument,
 pier, or mark.
 
 All reference tables (`pier`, `mark`, and `instrument`) use
-`begin` and `end` unix epoch timestamps to identify the time range for which
+`begin` and `end` unix epoch timestamps to identify the time interval for which
 information is considered valid.
+
+The interval is closed for `begin` (includes the begin time)
+and open for `end` (excludes the end time),
+which can be written as `[begin, end)`.
 
 - `begin` - (int) unix epoch timestamp.
 
