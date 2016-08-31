@@ -8,7 +8,7 @@ if (!isset($TEMPLATE)) {
     $id = intval($id, 10);
   }
 
-  $TITLE = 'Observation Input';
+  $TITLE = 'Observation Input' . ' ' . $VERSION;
 
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="'.$MOUNT_PATH.'/css/observation.css"/>';
