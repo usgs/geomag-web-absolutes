@@ -25,4 +25,8 @@ if (isset($CURRENT_USER)) {
   $navItems .= navItem($MOUNT_PATH . '/login.php', 'Login');
 }
 
-print navGroup('Web Absolutes', $navItems);
+echo navGroup('Web Absolutes', $navItems);
+
+
+echo navItem($MOUNT_PATH . '/observation.json.php',
+    'Observation Web Service');

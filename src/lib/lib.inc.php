@@ -20,6 +20,23 @@ if (!function_exists("safeintval")) {
   }
 }
 
+if (!function_exists("safeISO8601")) {
+  /**
+   * Convert a  non-null date to ISO8601.
+   *
+   * @param $time {Number}
+   *     time to format.
+   * @return {String}
+   *     null if $date is null, otherwise ISO8601 formatted time.
+   */
+  function safeISO8601 ($time) {
+    $time = safefloatval($time);
+    if ($time === null) {
+      return $time;
+    }
+    return gmdate('Y-m-d\TH:i:s\Z', $time);
+  }
+}
 
 // PHP Classes
 $classDir = $APP_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR .
