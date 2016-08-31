@@ -47,3 +47,8 @@ command line interface globally
     `npm install -g grunt-cli`
 
 [Dependency install details](readme_dependency_install.md)
+
+
+More information
+----------------
+[Observatory Reference Information](./observatory_reference_information.md)
