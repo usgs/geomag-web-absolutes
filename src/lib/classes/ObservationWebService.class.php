@@ -318,6 +318,7 @@ class ObservationWebService {
       'metadata' => array(
         'date' => safeISO8601(time()),
         'request' => $_SERVER['REQUEST_URI'],
+        'version' => $VERSION,
         'error' => $error
       ),
       'data' => null
@@ -333,6 +334,7 @@ class ObservationWebService {
       'metadata' => array(
         'date' => safeISO8601(time()),
         'request' => $_SERVER['REQUEST_URI'],
+        'version' => $VERSION,
         'error' => false
       ),
       'data' => $data
