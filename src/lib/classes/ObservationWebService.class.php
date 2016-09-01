@@ -307,6 +307,7 @@ class ObservationWebService {
    * Send error response.
    */
   public static function sendError ($error, $status = 400) {
+    global $VERSION;
     if ($status === 400) {
       header('HTTP/1.1 400 Bad Request');
     } else {
@@ -318,6 +319,7 @@ class ObservationWebService {
       'metadata' => array(
         'date' => safeISO8601(time()),
         'request' => $_SERVER['REQUEST_URI'],
+        'version' => $VERSION,
         'error' => $error
       ),
       'data' => null
@@ -327,12 +329,14 @@ class ObservationWebService {
 
 
   public static function sendJson ($data, $status = 200) {
+    global $VERSION;
     header('Content-type: application/json');
 
     echo json_encode(array(
       'metadata' => array(
         'date' => safeISO8601(time()),
         'request' => $_SERVER['REQUEST_URI'],
+        'version' => $VERSION,
         'error' => false
       ),
       'data' => $data

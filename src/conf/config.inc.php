@@ -34,3 +34,6 @@ if (isset($CONFIG['USE_DATABASE_SESSIONS']) &&
 	}
 	session_set_save_handler(new PdoSessionHandler($DB), true);
 }
+
+// set version number string
+$VERSION = 'v1.1.1';
