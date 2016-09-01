@@ -21,18 +21,11 @@ try {
   $reviewer = $CURRENT_USER;
 
   if ($reviewer['admin'] === 'Y') {
-    if ($observation->reviewed !== 'Y') {
-      $MAGPROC_FACTORY->publish($observation, $observatory,
-          $observer['username'], $reviewer['username']);
-      $observation->reviewer_user_id = $reviewer['id'];
-      $observation->reviewed = 'Y';
-      $OBSERVATION_FACTORY->updateObservation($observation);
-      header('Content-Type: application/json');
-      echo str_replace('\"', '"',json_encode($observation));
-    } else {
-      header('HTTP/1.1 409 Conflict');
-      echo 'Current observation has already been published. Can not republish.';
-    }
+    $observation->reviewer_user_id = $reviewer['id'];
+    $observation->reviewed = 'Y';
+    $OBSERVATION_FACTORY->updateObservation($observation);
+    header('Content-Type: application/json');
+    echo str_replace('\"', '"',json_encode($observation));
   } else {
     header('HTTP/1.1 401 Unauthorized');
     echo 'Current user is not allowed to publish calibration data.';

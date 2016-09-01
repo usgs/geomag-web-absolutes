@@ -351,7 +351,10 @@ var ObservationView = function (options) {
   _onPublishClick = function () {
     try {
       _saveObservation(function () {
-        __publishSuccess();
+        _publishObservation(function () {
+          __publishSuccess();
+        }
+      );
       });
     } catch (e) {
       __publishError('Failed to finalize baselines', e.message);
