@@ -25,4 +25,4 @@ if (isset($CURRENT_USER)) {
   $navItems .= navItem($MOUNT_PATH . '/login.php', 'Login');
 }
 
-print navGroup('Web Absolutes', $navItems);
+print navGroup('Web Absolutes' . ' ' . $VERSION, $navItems);
