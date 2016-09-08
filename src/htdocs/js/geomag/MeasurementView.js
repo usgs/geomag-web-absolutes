@@ -145,19 +145,21 @@ var MeasurementView = function (options) {
     // check the time
     time_epoch = Format.parseRelativeTime(time,
       _this._observation.get('begin'));
-    // check to see if the time is in the future
-    if (time_epoch > (new Date())) {
-      error = 'Time is in the future.  Check your dates.';
-    }
 
     if (error === null) {
-      // no errors on measurement, set measurement values
-      _this._measurement.set({
-        // TODO, add offset
-        'time': Format.parseRelativeTime(time,
-            _this._observation.get('begin')),
-        'time_error': null
-      });
+      // check to see if the time is in the future
+      if (time_epoch > (new Date())) {
+        error = 'Time is in the future.  Check your dates.';
+        _this._measurement.set({'time_error': error});
+      } else {
+        // no errors on measurement, set measurement values
+        _this._measurement.set({
+          // TODO, add offset
+          'time': Format.parseRelativeTime(time,
+              _this._observation.get('begin')),
+          'time_error': null
+        });
+      }
     } else {
       _this._measurement.set({'time_error': error});
     }
