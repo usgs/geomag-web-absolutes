@@ -135,12 +135,20 @@ var MeasurementView = function (options) {
 
   _onTimeChange = function (/*evt*/) {
     var error,
-        time;
+        time,
+        time_epoch;
 
     time = _this._timeInput.value;
     error = null;
     // validate time change
     error = _validateTime(time);
+    // check the time
+    time_epoch = Format.parseRelativeTime(time,
+      _this._observation.get('begin'));
+    // check to see if the time is in the future
+    if (time_epoch > (new Date())) {
+      error = 'Time is in the future.  Check your dates.';
+    }
 
     if (error === null) {
       // no errors on measurement, set measurement values
