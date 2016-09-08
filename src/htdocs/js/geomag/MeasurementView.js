@@ -151,6 +151,7 @@ var MeasurementView = function (options) {
       if (time_epoch > (new Date())) {
         error = 'Time is in the future.  Check your dates.';
         _this._measurement.set({'time_error': error});
+        _updateErrorState(_this._timeInput, false, error);
       } else {
         // no errors on measurement, set measurement values
         _this._measurement.set({
