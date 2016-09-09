@@ -153,8 +153,7 @@ var MeasurementView = function (options) {
     if (error === null) {
       // absolute time is valid
       _this._measurement.set({
-        'time': Format.parseRelativeTime(time,
-            _this._observation.get('begin')),
+        'time': time,
         'time_error': null
       });
     } else {
