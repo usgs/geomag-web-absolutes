@@ -46,6 +46,7 @@ var MeasurementView = function (options) {
       _onTimeChange,
       _updateErrorState,
       _validateAngle,
+      _validateRelativeTime,
       _validateTime;
 
 
@@ -138,20 +139,27 @@ var MeasurementView = function (options) {
         time;
 
     time = _this._timeInput.value;
-    error = null;
-    // validate time change
-    error = _validateTime(time);
+
+    // validate relative time
+    error = _validateRelativeTime(time);
 
     if (error === null) {
-      // no errors on measurement, set measurement values
+      // convert relative time to epoch time
+      time = Format.parseRelativeTime(time,
+          _this._observation.get('begin'));
+      error = _validateTime(time);
+    }
+
+    if (error === null) {
+      // absolute time is valid
       _this._measurement.set({
-        // TODO, add offset
-        'time': Format.parseRelativeTime(time,
-            _this._observation.get('begin')),
+        'time': time,
         'time_error': null
       });
     } else {
-      _this._measurement.set({'time_error': error});
+      _this._measurement.set({
+        'time_error': error
+      });
     }
   };
 
@@ -202,7 +210,16 @@ var MeasurementView = function (options) {
     return helpText;
   };
 
-  _validateTime = function (time) {
+  /**
+   * Validate a relative time.
+   *
+   * @param time {String}
+   *     relative time.
+   * @return {String}
+   *     error message if there are validation problems.
+   *     null if time is valid.
+   */
+  _validateRelativeTime = function (time) {
     var helpText,
         validTime;
 
@@ -218,6 +235,33 @@ var MeasurementView = function (options) {
     return helpText;
   };
 
+  /**
+   * Validate an absolute time.
+   *
+   * @param time {Number}
+   *     epoch timestamp.
+   * @return {String}
+   *     error message if there are validation problems.
+   *     null if time is valid.
+   */
+  _validateTime = function (time) {
+    var error,
+        now,
+        validTime;
+
+    error = null;
+    now = new Date();
+    validTime = true;
+
+    // check to see if the time is in the future
+    if (time > now) {
+      error = 'Time is in the future.  Check your dates.';
+      validTime = false;
+    }
+    _updateErrorState(_this._timeInput, validTime, error);
+
+    return error;
+  };
 
   _this.destroy = Util.compose(
       // sub class destroy method
