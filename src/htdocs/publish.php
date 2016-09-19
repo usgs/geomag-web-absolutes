@@ -1,7 +1,6 @@
 <?php
 
 include_once '../conf/config.inc.php';
-include_once '../conf/publish.inc.php';
 include_once 'functions.inc.php';
 
 include_once '../lib/login.inc.php';
