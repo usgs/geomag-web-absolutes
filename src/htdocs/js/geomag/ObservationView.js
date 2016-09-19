@@ -119,6 +119,7 @@ var ObservationView = function (options) {
       _readingGroupView,
       _realtimeDataFactory,
       _saveButton,
+      _updateRealtimeDataButton,
       _user,
 
       _createControls,
@@ -209,9 +210,7 @@ var ObservationView = function (options) {
     _saveButton = document.createElement('button');
     _saveButton.id = 'saveButton';
     _saveButton.innerHTML = 'Save Observation';
-
     _saveButton.addEventListener('click', _onSaveClick);
-
     controls.appendChild(_saveButton);
 
     // Add publish button for admin users
@@ -222,6 +221,12 @@ var ObservationView = function (options) {
 
       _publishButton.addEventListener('click', _onPublishClick);
     }
+
+    _updateRealtimeDataButton = document.createElement('button');
+    _updateRealtimeDataButton.id = 'updateRealtimeDataButton';
+    _updateRealtimeDataButton.innerHTML = 'Update Realtime Data';
+    _updateRealtimeDataButton.addEventListener('click', _getRealtimeData);
+    controls.appendChild(_updateRealtimeDataButton);
   };
 
   _formatMeasurementErrors = function (measurement) {
@@ -574,6 +579,9 @@ var ObservationView = function (options) {
     if (_saveButton) {
       _saveButton.removeEventListener('click', _onSaveClick);
     }
+    if (_updateRealtimeDataButton) {
+      _updateRealtimeDataButton.removeEventListener('click', _getRealtimeData);
+    }
   };
 
   _updateErrorCount = function () {
@@ -648,11 +656,17 @@ var ObservationView = function (options) {
         if (_saveButton) {
           _saveButton.setAttribute('disabled', 'disabled');
         }
+        if (_updateRealtimeDataButton) {
+          _updateRealtimeDataButton.setAttribute('disabled', 'disabled');
+        }
       }
     } else {
         // enable the save button
         if (_saveButton) {
           _saveButton.removeAttribute('disabled');
+        }
+        if (_updateRealtimeDataButton) {
+          _updateRealtimeDataButton.removeAttribute('disabled');
         }
 
         if (errorDiv) {
@@ -709,8 +723,11 @@ var ObservationView = function (options) {
       _observation = null;
       _observatories = null;
       _observationMetaView = null;
+      _publishButton = null;
       _readingGroupView = null;
       _realtimeDataFactory = null;
+      _saveButton = null;
+      _updateRealtimeDataButton = null;
       _user = null;
     },
     // parent class destroy method
