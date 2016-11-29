@@ -35,6 +35,30 @@ var date = function (time) {
   return [y, (m<10?'-0':'-'), m, (d<10?'-0':'-'), d].join('');
 };
 
+
+/**
+ * Time to String
+ *
+ * @param time {Date|Integer}
+ *      Date or millisecond epoch timestamp.
+ *
+ * @return {String}
+ *      A string formatted as UTC "HH:MM:SS".
+ */
+var time = function (time) {
+  var h, m, s;
+
+  if (!(time instanceof Date)) {
+    time = new Date(time);
+  }
+
+  h = time.getUTCHours();
+  m = time.getUTCMinutes();
+  s = time.getUTCSeconds();
+
+  return [(h<10?'0':''), h, (m<10?':0':':'), m, (s<10?':0':':'), s].join('');
+};
+
 /**
  * Date Time to String
  *
@@ -51,6 +75,24 @@ var dateTime = function (time) {
 
   return date(time) + ' ' + time(time);
 };
+
+var dateTimeIso = function (millisecond) {
+  var dt = new Date(millisecond);
+
+  return date(dt) + 'T' + time(dt) + 'Z';
+};
+
+var samplingPeriod = function (period) {
+  if (period === 'hours') {
+    return 3600;
+  } else if (period === 'minutes') {
+    return 60;
+  } else if (period === 'seconds') {
+    return 1;
+  }
+
+  return 60;
+}
 
 /**
  * Round a value to the closest even Number
@@ -518,34 +560,12 @@ var parseRelativeTime = function (relativeTime, offset) {
   return calculatedTime;
 };
 
-/**
- * Time to String
- *
- * @param time {Date|Integer}
- *      Date or millisecond epoch timestamp.
- *
- * @return {String}
- *      A string formatted as UTC "HH:MM:SS".
- */
-var time = function (time) {
-  var h, m, s;
-
-  if (!(time instanceof Date)) {
-    time = new Date(time);
-  }
-
-  h = time.getUTCHours();
-  m = time.getUTCMinutes();
-  s = time.getUTCSeconds();
-
-  return [(h<10?'0':''), h, (m<10?':0':':'), m, (s<10?':0':':'), s].join('');
-};
-
 var Formatter = {
   _units: _units,
   celsius: celsius,
   date: date,
   dateTime: dateTime,
+  dateTimeIso: dateTimeIso,
   decimalToDms: decimalToDms,
   degrees: degrees,
   degreesAndDegreesMinutes: degreesAndDegreesMinutes,
@@ -563,6 +583,7 @@ var Formatter = {
   rawNanoteslas: rawNanoteslas,
   roundHalfToEven: roundHalfToEven,
   roundToEven: roundToEven,
+  samplingPeriod: samplingPeriod,
   time: time,
   truncate: truncate
 };

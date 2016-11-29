@@ -1,6 +1,7 @@
 'use strict';
 
-var Model = require('mvc/Model'),
+var Formatter = require('geomag/Formatter'),
+    Model = require('mvc/Model'),
     RealtimeData = require('geomag/RealtimeData'),
     Util = require('util/Util'),
     Xhr = require('util/Xhr');
@@ -61,19 +62,26 @@ var RealtimeDataFactory = function (options) {
     }
     _lastcall = new Date().getTime();
 
-    Xhr.jsonp({
-      url: _options.url,
-      data: {
-        'starttime': _options.starttime,
-        'endtime': _options.endtime,
-        'obs[]': _options.observatory,
-        'chan[]': _options.channels,
-        'freq': _options.freq
-      },
+    Xhr.ajax({
+      url: _this.buildRealtimeDataUrl(_options),
       success: function (data) {
         _options.success(RealtimeData(data));
       }
     });
+  };
+
+  _this.buildRealtimeDataUrl = function (options) {
+    var url;
+
+    url = options.url + '?' +
+        'starttime=' + Formatter.dateTimeIso(options.starttime * 1000) + '&' +
+        'endtime=' + Formatter.dateTimeIso(options.endtime * 1000) + '&' +
+        'id=' + options.observatory + '&' +
+        'elements=' + options.channels.join(',') + '&' +
+        'sampling_period=' + Formatter.samplingPeriod(options.freq) + '&' +
+        'format=json';
+
+    return url;
   };
 
   _this.getRealtimeTemperatureData = function (options) {
