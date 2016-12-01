@@ -1,6 +1,7 @@
 'use strict';
 
-var Collection = require('mvc/Collection');
+var Collection = require('mvc/Collection'),
+    Formatter = require('geomag/Formatter');
 
 
 /**
@@ -20,7 +21,7 @@ var RealtimeData = function (options) {
 
   _initialize = function (options) {
     _times = options.times;
-    _data = Collection(options.data);
+    _data = Collection(options.values);
   };
 
   _this.getStarttime = function () {
@@ -42,7 +43,7 @@ var RealtimeData = function (options) {
    * @return {Object} keys are channels, values are channel values at
    *         the second nearest to timeMs.  If time not in range, returns null.
    */
-  _this.getValues = function (timeMs, observatory) {
+  _this.getValues = function (timeMs) {
     var time,
         timeIndex,
         obj,
@@ -50,25 +51,13 @@ var RealtimeData = function (options) {
         channel,
         r = null;
 
-    time = Math.round(timeMs / 1000);
+    time = Formatter.dateTimeIso(timeMs);
     timeIndex = _times.indexOf(time);
     if (timeIndex !== -1) {
-      // find correct observatory
-      if (observatory) {
-        obj = _data.get(observatory);
-        if (obj === null) {
-          return null;
-        } else {
-          channels = obj.values;
-        }
-      } else {
-        // default to first observatory
-        channels = _data.data()[0].values;
-      }
-      // extract values for time
       r = {};
-      for (channel in channels) {
-        r[channel] = channels[channel][timeIndex];
+      channels = _data.data();
+      for (var i = 0, len = channels.length; i < len; i++) {
+        r[channels[i].id] = channels[i].values[timeIndex];
       }
     }
 
