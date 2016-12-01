@@ -42,11 +42,16 @@ var date = function (time) {
  * @param time {Date|Integer}
  *      Date or millisecond epoch timestamp.
  *
+ * @param includeMs {Boolean}
+ *      whether or not to return milliseconds for the iso8601 value,
+ *        - true, include milliseconds (HH:MM:SS.FFF)
+ *        - flase, omit milliseconds (HH:MM:SS)
+ *
  * @return {String}
- *      A string formatted as UTC "HH:MM:SS".
+ *      A string formatted as UTC "HH:MM:SS" or "HH:MM:SS.FFF".
  */
-var time = function (time) {
-  var h, m, s;
+var time = function (time, includeMs) {
+  var h, m, ms, s;
 
   if (!(time instanceof Date)) {
     time = new Date(time);
@@ -55,8 +60,15 @@ var time = function (time) {
   h = time.getUTCHours();
   m = time.getUTCMinutes();
   s = time.getUTCSeconds();
+  ms = '00' + time.getUTCMilliseconds(); // left pad milliseconds
+  ms = ms.substring(ms.length - 3);
 
-  return [(h<10?'0':''), h, (m<10?':0':':'), m, (s<10?':0':':'), s].join('');
+  return [
+    (h<10?'0':''), h,
+    (m<10?':0':':'), m,
+    (s<10?':0':':'), s,
+    (includeMs ? '.' + ms : '')
+  ].join('');
 };
 
 /**
@@ -76,12 +88,30 @@ var dateTime = function (time) {
   return date(time) + ' ' + time(time);
 };
 
+/**
+ * Date Time to String, in ISO8601 format
+ *
+ * @param date time {Date|Integer}
+ *      Date or millisecond epoch timestamp.
+ *
+ * @return {String}
+ *      A string formatted as UTC "yyyy-mm-ddThh:mm:ss.fffZ".
+ */
 var dateTimeIso = function (millisecond) {
   var dt = new Date(millisecond);
 
-  return date(dt) + 'T' + time(dt) + 'Z';
+  return date(dt) + 'T' + time(dt, true) + 'Z';
 };
 
+/**
+ * Converts sampling period string to its numerical representation
+ *
+ * @param period {String}
+ *        "hours", "minutes", or "seconds"
+ *
+ * @return {Number}
+ *         The sampling frequency in seconds
+ */
 var samplingPeriod = function (period) {
   if (period === 'hours') {
     return 3600;
@@ -92,7 +122,7 @@ var samplingPeriod = function (period) {
   }
 
   return 60;
-}
+};
 
 /**
  * Round a value to the closest even Number
