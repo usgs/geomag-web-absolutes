@@ -46,9 +46,7 @@ var RealtimeData = function (options) {
   _this.getValues = function (timeMs) {
     var time,
         timeIndex,
-        obj,
         channels,
-        channel,
         r = null;
 
     time = Formatter.dateTimeIso(timeMs);

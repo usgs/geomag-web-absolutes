@@ -6,49 +6,113 @@ var RealtimeData = require('geomag/RealtimeData');
 
 var expect = chai.expect;
 
-// /map/observatories_data.json.php?starttime=1392826001&endtime=1392826005&chan[]=H&chan[]=E&chan[]=Z&chan[]=F&freq=seconds&obs[]=BOU&obs[]=BRW
+// http://geomag.usgs.gov/ws/edge/?starttime=2016-11-14T16:44:20Z&endtime=2016-11-14T17:24:09Z&id=BOU&elements=H,E,Z,F&sampling_period=1&format=json
 var TESTDATA = {
-  'request':{
-    'starttime':1392826001,
-    'endtime':1392826005
-  },
-  'times':[
-    1392826001,1392826002,1392826003,1392826004,1392826005
-  ],
-  'data':[
-    {
-      'id':'BOU',
-      'nominals':{
-        'H':20870,
-        'E':55.91,
-        'Z':47800,
-        'F':52799
+  'type': 'Timeseries',
+  'metadata': {
+    'intermagnet': {
+      'imo': {
+        'iaga_code': 'BOU',
+        'name': 'Boulder',
+        'coordinates': [
+          254.763,
+          40.137,
+          1682
+        ]
       },
-      'values':{
-        'H':[20859.1,20859.1,20859.2,20859.2,20859.2],
-        'E':[10.328,10.282,10.252,10.238,10.205],
-        'Z':[47546.6,47546.6,47546.6,47546.6,47546.6],
-        'F':[52456.4,52456.5,52456.5,52456.4,52456.5]
-      }
+      'reported_orientation': 'HEZF',
+      'sensor_orientation': 'HDZF',
+      'data_type': 'variation',
+      'sampling_period': 1,
+      'digital_sampling_rate': 0.01
+    },
+    'status': 200,
+    'generated': '2016-11-30T22:09:59Z',
+    'url': 'http://geomag.usgs.gov/ws/edge/?starttime=2016-11-14T16:44:20Z&endtime=2016-11-14T17:24:09Z&id=BOU&elements=H,E,Z,F&sampling_period=1&format=json',
+    'api': '0.1.3'
+  },
+  'times': [
+    '2016-11-14T16:44:20.000Z',
+    '2016-11-14T16:44:21.000Z',
+    '2016-11-14T16:44:22.000Z',
+    '2016-11-14T16:44:23.000Z',
+    '2016-11-14T16:44:24.000Z'
+  ],
+  'values': [
+    {
+      'id': 'H',
+      'metadata': {
+        'element': 'H',
+        'network': 'NT',
+        'station': 'BOU',
+        'channel': 'SVH',
+        'location': 'R0',
+        'flag': 'F'
+      },
+      'values': [
+        20821.514,
+        20821.497,
+        20821.52,
+        20821.545,
+        20821.545
+      ]
     },
     {
-      'id':'BRW',
-      'nominals':{
-        'H':9200,
-        'E':48.24,
-        'Z':56900,
-        'F':57461
+      'id': 'E',
+      'metadata': {
+        'element': 'E',
+        'network': 'NT',
+        'station': 'BOU',
+        'channel': 'SVE',
+        'location': 'R0',
+        'flag': 'F'
       },
-      'values':{
-        'H':[9204.86,9204.77,9204.66,9204.53,9204.37],
-        'E':[-256.197,-256.113,-256.003,-255.876,-255.74],
-        'Z':[56937.2,56937.2,56937.2,56937.2,56937.2],
-        'F':[57525,57525,57525,57524.9,57524.9]
-      }
+      'values': [
+        -119.722,
+        -119.689,
+        -119.653,
+        -119.631,
+        -119.608
+      ]
+    },
+    {
+      'id': 'Z',
+      'metadata': {
+        'element': 'Z',
+        'network': 'NT',
+        'station': 'BOU',
+        'channel': 'SVZ',
+        'location': 'R0',
+        'flag': 'F'
+      },
+      'values': [
+        47228.849,
+        47228.824,
+        47228.83,
+        47228.807,
+        47228.793
+      ]
+    },
+    {
+      'id': 'F',
+      'metadata': {
+        'element': 'F',
+        'network': 'NT',
+        'station': 'BOU',
+        'channel': 'SSF',
+        'location': 'R0',
+        'flag': 'F'
+      },
+      'values': [
+        52150.69,
+        52150.63,
+        52150.66,
+        52150.62,
+        52150.6
+      ]
     }
   ]
 };
-
 
 describe('Unit tests for the "RealtimeData" class', function () {
 
@@ -56,34 +120,34 @@ describe('Unit tests for the "RealtimeData" class', function () {
 
   describe('getStarttime()', function () {
     it('returns the first time', function () {
-      expect(realtimeData.getStarttime()).to.equal(1392826001);
+      expect(realtimeData.getStarttime()).to.equal('2016-11-14T16:44:20.000Z');
     });
   });
 
   describe('getEndtime()', function () {
     it('returns the last time', function () {
-      expect(realtimeData.getEndtime()).to.equal(1392826005);
+      expect(realtimeData.getEndtime()).to.equal('2016-11-14T16:44:24.000Z');
     });
   });
 
   describe('getValues()', function () {
     it('retrieves data from the specified observatory', function () {
-      var values = realtimeData.getValues(1392826002345, 'BRW');
+      var values = realtimeData.getValues('2016-11-14T16:44:21.000Z');
       expect(values).to.deep.equal({
-        H:9204.77,
-        E:-256.113,
-        Z:56937.2,
-        F:57525
+        H:20821.497,
+        E:-119.689,
+        Z:47228.824,
+        F:52150.63
       });
     });
 
     it('defaults to the first observatory', function () {
-      var values = realtimeData.getValues(1392826002345);
+      var values = realtimeData.getValues('2016-11-14T16:44:22.000Z');
       expect(values).to.deep.equal({
-        H:20859.1,
-        E:10.282,
-        Z:47546.6,
-        F:52456.5
+        H:20821.52,
+        E:-119.653,
+        Z:47228.83,
+        F:52150.66
       });
     });
 

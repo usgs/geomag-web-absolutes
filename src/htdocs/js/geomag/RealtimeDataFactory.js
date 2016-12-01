@@ -7,7 +7,7 @@ var Formatter = require('geomag/Formatter'),
     Xhr = require('util/Xhr');
 
 
-var _DEFAULT_URL = '/map/observatories_data.json.php';
+var _DEFAULT_URL = 'http://geomag.usgs.gov/ws/edge/';
 
 var _DEFAULTS = {
   'url': _DEFAULT_URL,
@@ -74,8 +74,8 @@ var RealtimeDataFactory = function (options) {
     var url;
 
     url = options.url + '?' +
-        'starttime=' + Formatter.dateTimeIso(options.starttime * 1000) + '&' +
-        'endtime=' + Formatter.dateTimeIso(options.endtime * 1000) + '&' +
+        'starttime=' + options.starttime + '&' +
+        'endtime=' + options.endtime + '&' +
         'id=' + options.observatory + '&' +
         'elements=' + options.channels.join(',') + '&' +
         'sampling_period=' + Formatter.samplingPeriod(options.freq) + '&' +
