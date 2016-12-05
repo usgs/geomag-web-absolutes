@@ -35,7 +35,6 @@ var date = function (time) {
   return [y, (m<10?'-0':'-'), m, (d<10?'-0':'-'), d].join('');
 };
 
-
 /**
  * Time to String
  *
