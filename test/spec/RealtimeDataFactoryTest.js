@@ -132,23 +132,6 @@ describe('Unit tests for the "RealtimeDataFactory" class', function () {
       stub.restore();
     });
 
-    it('builds a realtime data url', function () {
-      var factory,
-          url;
-
-      factory = RealtimeDataFactory();
-      url = factory.buildRealtimeDataUrl({
-        starttime: '2016-11-14T16:44:20.000Z',
-        endtime: '2016-11-14T16:44:24.000Z',
-        observatory: 'BOU',
-        channels: ['H','E','Z','F'],
-        freq: 1,
-        url: '/ws/edge'
-      });
-
-      expect(url).to.equal('/ws/edge?starttime=2016-11-14T16:44:20.000Z&endtime=2016-11-14T16:44:24.000Z&id=BOU&elements=H,E,Z,F&sampling_period=60&format=json');
-    });
-
     it('Uses RealtimeData class for returned data', function (done) {
       var realtimeDataFactory = RealtimeDataFactory();
 
@@ -157,13 +140,24 @@ describe('Unit tests for the "RealtimeDataFactory" class', function () {
         endtime: '2016-11-14T16:44:24.000Z',
         observatory: 'BOU',
         channels: ['H','E','Z','F'],
-        freq: 1,
+        freq: 'seconds',
         success: function (/*data*/) {
           // check returned data
-          //expect(data).to.deep.equal(new RealtimeData(TESTDATA));
+          // expect(data).to.deep.equal(new RealtimeData(TESTDATA));
 
           // check stub was called
           expect(stub.callCount).to.equal(1);
+
+          // check data args present as expected
+          expect(stub.getCall(0).args[0].data).to.deep.equal({
+            starttime: '2016-11-14T16:44:20.000Z',
+            endtime: '2016-11-14T16:44:24.000Z',
+            id: 'BOU',
+            elements: 'H,E,Z,F',
+            sampling_period: 1,
+            format: 'json'
+          });
+
 
           done();
         },

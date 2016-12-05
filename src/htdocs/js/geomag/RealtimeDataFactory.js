@@ -63,25 +63,20 @@ var RealtimeDataFactory = function (options) {
     _lastcall = new Date().getTime();
 
     Xhr.ajax({
-      url: _this.buildRealtimeDataUrl(_options),
+      url: _options.url,
+      data: {
+        'starttime': _options.starttime,
+        'endtime': _options.endtime,
+        'id': _options.observatory,
+        'elements': _options.channels.join(','),
+        'sampling_period': Formatter.samplingPeriod(_options.freq),
+        'format': 'json'
+      },
+      //url: _this.buildRealtimeDataUrl(_options),
       success: function (data) {
         _options.success(RealtimeData(data));
       }
     });
-  };
-
-  _this.buildRealtimeDataUrl = function (options) {
-    var url;
-
-    url = options.url + '?' +
-        'starttime=' + options.starttime + '&' +
-        'endtime=' + options.endtime + '&' +
-        'id=' + options.observatory + '&' +
-        'elements=' + options.channels.join(',') + '&' +
-        'sampling_period=' + Formatter.samplingPeriod(options.freq) + '&' +
-        'format=json';
-
-    return url;
   };
 
   _this.getRealtimeTemperatureData = function (options) {
