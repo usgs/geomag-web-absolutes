@@ -45,7 +45,7 @@ var date = function (time) {
  * @param includeMs {Boolean}
  *      whether or not to return milliseconds for the iso8601 value,
  *        - true, include milliseconds (HH:MM:SS.FFF)
- *        - flase, omit milliseconds (HH:MM:SS)
+ *        - false, omit milliseconds (HH:MM:SS)
  *
  * @return {String}
  *      A string formatted as UTC "HH:MM:SS" or "HH:MM:SS.FFF".
