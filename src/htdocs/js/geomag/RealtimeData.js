@@ -33,13 +33,10 @@ var RealtimeData = function (options) {
   };
 
   /**
-   * Get realtime data values.
+   * Get realtime data values for one observatory.
    *
    * @param timeMs {Number}
    *        millisecond epoch timestamp (as in Date.getTime()).
-   * @param observatory {String}
-   *        observatory code.
-   *        optional, default is first observatory in list.
    * @return {Object} keys are channels, values are channel values at
    *         the second nearest to timeMs.  If time not in range, returns null.
    */
