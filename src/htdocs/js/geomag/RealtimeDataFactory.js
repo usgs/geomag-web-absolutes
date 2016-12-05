@@ -7,7 +7,7 @@ var Formatter = require('geomag/Formatter'),
     Xhr = require('util/Xhr');
 
 
-var _DEFAULT_URL = 'http://geomag.usgs.gov/ws/edge/';
+var _DEFAULT_URL = '/ws/edge/';
 
 var _DEFAULTS = {
   'url': _DEFAULT_URL,

@@ -30,7 +30,7 @@ var TESTDATA = {
     },
     'status': 200,
     'generated': '2016-11-30T22:09:59Z',
-    'url': 'http://geomag.usgs.gov/ws/edge/?starttime=2016-11-14T16:44:20Z&endtime=2016-11-14T17:24:09Z&id=BOU&elements=H,E,Z,F&sampling_period=1&format=json',
+    'url': '/ws/edge/?starttime=2016-11-14T16:44:20Z&endtime=2016-11-14T17:24:09Z&id=BOU&elements=H,E,Z,F&sampling_period=1&format=json',
     'api': '0.1.3'
   },
   'times': [
@@ -143,10 +143,10 @@ describe('Unit tests for the "RealtimeDataFactory" class', function () {
         observatory: 'BOU',
         channels: ['H','E','Z','F'],
         freq: 1,
-        url: 'http://geomag.cr.usgs.gov/ws/edge'
+        url: '/ws/edge'
       });
 
-      expect(url).to.equal('http://geomag.cr.usgs.gov/ws/edge?starttime=2016-11-14T16:44:20.000Z&endtime=2016-11-14T16:44:24.000Z&id=BOU&elements=H,E,Z,F&sampling_period=60&format=json');
+      expect(url).to.equal('/ws/edge?starttime=2016-11-14T16:44:20.000Z&endtime=2016-11-14T16:44:24.000Z&id=BOU&elements=H,E,Z,F&sampling_period=60&format=json');
     });
 
     it('Uses RealtimeData class for returned data', function (done) {
