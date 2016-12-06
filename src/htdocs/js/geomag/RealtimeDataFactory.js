@@ -72,7 +72,6 @@ var RealtimeDataFactory = function (options) {
         'sampling_period': Formatter.samplingPeriod(_options.freq),
         'format': 'json'
       },
-      //url: _this.buildRealtimeDataUrl(_options),
       success: function (data) {
         _options.success(RealtimeData(data));
       }
