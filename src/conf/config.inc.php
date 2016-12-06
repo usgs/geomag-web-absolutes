@@ -36,4 +36,4 @@ if (isset($CONFIG['USE_DATABASE_SESSIONS']) &&
 }
 
 // set version number string
-$VERSION = 'v1.1.1';
+$VERSION = 'v{{VERSION}}';
