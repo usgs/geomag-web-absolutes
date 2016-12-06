@@ -1,12 +1,13 @@
 'use strict';
 
-var Model = require('mvc/Model'),
+var Formatter = require('geomag/Formatter'),
+    Model = require('mvc/Model'),
     RealtimeData = require('geomag/RealtimeData'),
     Util = require('util/Util'),
     Xhr = require('util/Xhr');
 
 
-var _DEFAULT_URL = '/map/observatories_data.json.php';
+var _DEFAULT_URL = '/ws/edge/';
 
 var _DEFAULTS = {
   'url': _DEFAULT_URL,
@@ -61,14 +62,15 @@ var RealtimeDataFactory = function (options) {
     }
     _lastcall = new Date().getTime();
 
-    Xhr.jsonp({
+    Xhr.ajax({
       url: _options.url,
       data: {
         'starttime': _options.starttime,
         'endtime': _options.endtime,
-        'obs[]': _options.observatory,
-        'chan[]': _options.channels,
-        'freq': _options.freq
+        'id': _options.observatory,
+        'elements': _options.channels.join(','),
+        'sampling_period': Formatter.samplingPeriod(_options.freq),
+        'format': 'json'
       },
       success: function (data) {
         _options.success(RealtimeData(data));

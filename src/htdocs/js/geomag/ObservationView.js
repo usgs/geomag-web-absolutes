@@ -6,6 +6,7 @@ var Collection = require('mvc/Collection'),
     View = require('mvc/View'),
 
     Calculator = require('geomag/ObservationBaselineCalculator'),
+    Formatter = require('geomag/Formatter'),
     ObservationMetaView = require('geomag/ObservationMetaView'),
     ObservatoryFactory = require('geomag/ObservatoryFactory'),
     ReadingGroupView = require('geomag/ReadingGroupView'),
@@ -285,8 +286,8 @@ var ObservationView = function (options) {
     endtime = Math.round(endtime / 1000);
 
     _realtimeDataFactory.getRealtimeData({
-      starttime: starttime,
-      endtime: endtime,
+      starttime: Formatter.dateTimeIso(starttime * 1000),
+      endtime: Formatter.dateTimeIso(endtime * 1000),
       success: function (realtimeData) {
         // update measurement data
         _observation.eachMeasurement(function (measurement) {
@@ -297,8 +298,8 @@ var ObservationView = function (options) {
 
     // request realtime temperature data
     _realtimeDataFactory.getRealtimeTemperatureData({
-      starttime: starttime,
-      endtime: endtime,
+      starttime: Formatter.dateTimeIso(starttime * 1000),
+      endtime: Formatter.dateTimeIso(endtime * 1000),
       success: function (realtimeData) {
         var averageTime,
             minuteTime,

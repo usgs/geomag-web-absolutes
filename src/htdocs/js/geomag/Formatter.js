@@ -36,6 +36,41 @@ var date = function (time) {
 };
 
 /**
+ * Time to String
+ *
+ * @param time {Date|Integer}
+ *      Date or millisecond epoch timestamp.
+ *
+ * @param includeMs {Boolean}
+ *      whether or not to return milliseconds for the iso8601 value,
+ *        - true, include milliseconds (HH:MM:SS.FFF)
+ *        - false, omit milliseconds (HH:MM:SS)
+ *
+ * @return {String}
+ *      A string formatted as UTC "HH:MM:SS" or "HH:MM:SS.FFF".
+ */
+var time = function (time, includeMs) {
+  var h, m, ms, s;
+
+  if (!(time instanceof Date)) {
+    time = new Date(time);
+  }
+
+  h = time.getUTCHours();
+  m = time.getUTCMinutes();
+  s = time.getUTCSeconds();
+  ms = '00' + time.getUTCMilliseconds(); // left pad milliseconds
+  ms = ms.substring(ms.length - 3);
+
+  return [
+    (h<10?'0':''), h,
+    (m<10?':0':':'), m,
+    (s<10?':0':':'), s,
+    (includeMs ? '.' + ms : '')
+  ].join('');
+};
+
+/**
  * Date Time to String
  *
  * @param date time {Date|Integer}
@@ -50,6 +85,42 @@ var dateTime = function (time) {
   }
 
   return date(time) + ' ' + time(time);
+};
+
+/**
+ * Date Time to String, in ISO8601 format
+ *
+ * @param date time {Date|Integer}
+ *      Date or millisecond epoch timestamp.
+ *
+ * @return {String}
+ *      A string formatted as UTC "yyyy-mm-ddThh:mm:ss.fffZ".
+ */
+var dateTimeIso = function (millisecond) {
+  var dt = new Date(millisecond);
+
+  return date(dt) + 'T' + time(dt, true) + 'Z';
+};
+
+/**
+ * Converts sampling period string to its numerical representation
+ *
+ * @param period {String}
+ *        "hours", "minutes", or "seconds"
+ *
+ * @return {Number}
+ *         The sampling frequency in seconds
+ */
+var samplingPeriod = function (period) {
+  if (period === 'hours') {
+    return 3600;
+  } else if (period === 'minutes') {
+    return 60;
+  } else if (period === 'seconds') {
+    return 1;
+  }
+
+  return 60;
 };
 
 /**
@@ -518,34 +589,12 @@ var parseRelativeTime = function (relativeTime, offset) {
   return calculatedTime;
 };
 
-/**
- * Time to String
- *
- * @param time {Date|Integer}
- *      Date or millisecond epoch timestamp.
- *
- * @return {String}
- *      A string formatted as UTC "HH:MM:SS".
- */
-var time = function (time) {
-  var h, m, s;
-
-  if (!(time instanceof Date)) {
-    time = new Date(time);
-  }
-
-  h = time.getUTCHours();
-  m = time.getUTCMinutes();
-  s = time.getUTCSeconds();
-
-  return [(h<10?'0':''), h, (m<10?':0':':'), m, (s<10?':0':':'), s].join('');
-};
-
 var Formatter = {
   _units: _units,
   celsius: celsius,
   date: date,
   dateTime: dateTime,
+  dateTimeIso: dateTimeIso,
   decimalToDms: decimalToDms,
   degrees: degrees,
   degreesAndDegreesMinutes: degreesAndDegreesMinutes,
@@ -563,6 +612,7 @@ var Formatter = {
   rawNanoteslas: rawNanoteslas,
   roundHalfToEven: roundHalfToEven,
   roundToEven: roundToEven,
+  samplingPeriod: samplingPeriod,
   time: time,
   truncate: truncate
 };
