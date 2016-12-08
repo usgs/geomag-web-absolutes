@@ -107,6 +107,7 @@ file_put_contents($APACHE_CONFIG_FILE, '
   RewriteEngine on
 
   RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^' . $CONFIG['MOUNT_PATH'] . '/(.*)$ ' .
       'https://%{SERVER_NAME}' . $CONFIG['MOUNT_PATH'] . '/$1 [R,L]
 
