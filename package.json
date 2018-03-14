@@ -1,6 +1,6 @@
 {
   "name": "geomag-baseline-calculator",
-  "version": "1.2.2",
+  "version": "1.2.4",
   "description": "Web application for computing geomagnetic baseline values",
   "homepage": "http://geomag.usgs.gov/",
   "repository": {
