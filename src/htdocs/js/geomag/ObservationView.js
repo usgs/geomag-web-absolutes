@@ -415,6 +415,8 @@ var ObservationView = function (options) {
     // update observation reading model with calibrations before saving
     _this.updateCalibrations();
 
+    _this.updateObservationBegin();
+
     _factory.saveObservation({
       observation: _observation,
       success: function (observation) {
@@ -695,6 +697,44 @@ var ObservationView = function (options) {
       _factory.setCalibrationH(reading);
       _factory.setCalibrationZ(reading);
     }
+  };
+
+  /**
+   * Calculate observation begin time based on reading times.
+   *
+   * Should be called after updateCalibrations, which set reading times.
+   */
+  _this.updateObservationBegin = function () {
+    var begin,
+        end,
+        i,
+        len,
+        reading,
+        readings;
+
+    // start with unreasonable defaults
+    begin = Number.MAX_VALUE;
+    end = Number.MIN_VALUE;
+
+    // set reading times
+    readings = _observation.get('readings').data();
+    for (i = 0, len = readings.length; i < len; i++) {
+      reading = readings[i];
+      begin = Math.min(begin,
+          reading.get('startH') || Number.MAX_VALUE,
+          reading.get('startD') || Number.MAX_VALUE,
+          reading.get('startZ') || Number.MAX_VALUE);
+      end = Math.max(end,
+          reading.get('endH') || Number.MIN_VALUE,
+          reading.get('endD') || Number.MIN_VALUE,
+          reading.get('endZ') || Number.MIN_VALUE);
+    }
+
+    // update based on actual measurement times
+    _observation.set({
+      begin: begin,
+      end: end
+    });
   };
 
   _this.destroy = Util.compose(
