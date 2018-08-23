@@ -43,46 +43,46 @@ class ObservationFactory {
         ':elect_temperature, :flux_temperature, :proton_temperature, ' .
         ':outside_temperature, :reviewed, :annotation)');
 
-    $statement->bindParam(':observatory_id',
-        $object->observatory_id, PDO::PARAM_INT);
-    $statement->bindParam(':begin', $object->begin, PDO::PARAM_INT);
-    $statement->bindParam(':end', $object->end, PDO::PARAM_INT);
-    $statement->bindParam(':reviewer_user_id',
-        $object->reviewer_user_id, PDO::PARAM_INT);
-    $statement->bindParam(':observer_user_id',
-        $object->observer_user_id, PDO::PARAM_INT);
-    $statement->bindParam(':mark_id', $object->mark_id, PDO::PARAM_INT);
-    $statement->bindParam(':electronics_id',
-        $object->electronics_id, PDO::PARAM_INT);
-    $statement->bindParam(':theodolite_id',
-        $object->theodolite_id, PDO::PARAM_INT);
-    $statement->bindParam(':pier_temperature',
-        $object->pier_temperature, PDO::PARAM_STR);
-    $statement->bindParam(':elect_temperature',
-        $object->elect_temperature, PDO::PARAM_STR);
-    $statement->bindParam(':flux_temperature',
-        $object->flux_temperature, PDO::PARAM_STR);
-    $statement->bindParam(':proton_temperature',
-        $object->proton_temperature, PDO::PARAM_STR);
-    $statement->bindParam(':outside_temperature',
-        $object->outside_temperature, PDO::PARAM_STR);
-    $statement->bindParam(':reviewed',
-        $object->reviewed, PDO::PARAM_STR);
-    $statement->bindParam(':annotation',
-        $object->annotation, PDO::PARAM_STR);
-
     try {
+      $statement->bindParam(':observatory_id',
+          $object->observatory_id, PDO::PARAM_INT);
+      $statement->bindParam(':begin', $object->begin, PDO::PARAM_INT);
+      $statement->bindParam(':end', $object->end, PDO::PARAM_INT);
+      $statement->bindParam(':reviewer_user_id',
+          $object->reviewer_user_id, PDO::PARAM_INT);
+      $statement->bindParam(':observer_user_id',
+          $object->observer_user_id, PDO::PARAM_INT);
+      $statement->bindParam(':mark_id', $object->mark_id, PDO::PARAM_INT);
+      $statement->bindParam(':electronics_id',
+          $object->electronics_id, PDO::PARAM_INT);
+      $statement->bindParam(':theodolite_id',
+          $object->theodolite_id, PDO::PARAM_INT);
+      $statement->bindParam(':pier_temperature',
+          $object->pier_temperature, PDO::PARAM_STR);
+      $statement->bindParam(':elect_temperature',
+          $object->elect_temperature, PDO::PARAM_STR);
+      $statement->bindParam(':flux_temperature',
+          $object->flux_temperature, PDO::PARAM_STR);
+      $statement->bindParam(':proton_temperature',
+          $object->proton_temperature, PDO::PARAM_STR);
+      $statement->bindParam(':outside_temperature',
+          $object->outside_temperature, PDO::PARAM_STR);
+      $statement->bindParam(':reviewed',
+          $object->reviewed, PDO::PARAM_STR);
+      $statement->bindParam(':annotation',
+          $object->annotation, PDO::PARAM_STR);
+
       $statement->execute();
+      $statement->closeCursor();
+
+      $observation_id = intval($this->db->lastInsertId());
+      $this->createReadings($object->readings, $observation_id);
+      $this->db->commit();
     } catch (Exception $ex) {
       $this->db->rollback();
       $this->triggerError($statement);
     }
 
-    $statement->closeCursor();
-
-    $observation_id = intval($this->db->lastInsertId());
-    $this->createReadings($object->readings, $observation_id);
-    $this->db->commit();
     return $this->getObservation($observation_id);
   }
 
@@ -100,19 +100,20 @@ class ObservationFactory {
    */
   public function deleteObservation($object) {
     $this->db->beginTransaction();
-    $this->deleteReadings($object->id);
     $statement = $this->db->prepare('DELETE FROM observation WHERE id=:id');
-    $statement->bindParam(':id', $object->id, PDO::PARAM_INT);
 
     try {
+      $this->deleteReadings($object->id);
+
+      $statement->bindParam(':id', $object->id, PDO::PARAM_INT);
       $statement->execute();
+      $statement->closeCursor();
+      $this->db->commit();
     } catch (Exception $ex) {
       $this->db->rollback();
       $this->triggerError($statement);
     }
 
-    $statement->closeCursor();
-    $this->db->commit();
     return true;
   }
 
@@ -129,13 +130,14 @@ class ObservationFactory {
    */
   public function getObservation ($id) {
     $observation = null;
-    $statement = $this->db->prepare('SELECT * FROM observation WHERE ' .
-        'id = :id');
-    $statement->bindParam(':id', $id, PDO::PARAM_INT);
+    $statement = $this->db->prepare(
+        'SELECT * FROM observation WHERE id = :id');
 
     try {
+      $statement->bindParam(':id', $id, PDO::PARAM_INT);
       $statement->execute();
       $row = $statement->fetch(PDO::FETCH_ASSOC);
+      $statement->closeCursor();
       if($row) {
         $readings = $this->getReadings($id);
         $observation = new ObservationDetail(intval($row['ID']),
@@ -154,7 +156,6 @@ class ObservationFactory {
     } catch (Exception $ex) {
       $this->triggerError($statement);
     }
-    $statement->closeCursor();
 
     return $observation;
   }
@@ -187,47 +188,47 @@ class ObservationFactory {
         'reviewed=:reviewed, '.
         'annotation=:annotation WHERE id=:id');
 
-    $statement->bindParam(':observatory_id',
-        $object->observatory_id, PDO::PARAM_INT);
-    $statement->bindParam(':begin', $object->begin, PDO::PARAM_INT);
-    $statement->bindParam(':end', $object->end, PDO::PARAM_INT);
-    $statement->bindParam(':reviewer_user_id',
-        $object->reviewer_user_id, PDO::PARAM_INT);
-    $statement->bindParam(':observer_user_id',
-        $object->observer_user_id, PDO::PARAM_INT);
-    $statement->bindParam(':mark_id', $object->mark_id, PDO::PARAM_INT);
-    $statement->bindParam(':electronics_id',
-        $object->electronics_id, PDO::PARAM_INT);
-    $statement->bindParam(':theodolite_id',
-        $object->theodolite_id, PDO::PARAM_INT);
-    $statement->bindParam(':pier_temperature',
-        $object->pier_temperature, PDO::PARAM_STR);
-    $statement->bindParam(':elect_temperature',
-        $object->elect_temperature, PDO::PARAM_STR);
-    $statement->bindParam(':flux_temperature',
-        $object->flux_temperature, PDO::PARAM_STR);
-    $statement->bindParam(':proton_temperature',
-        $object->proton_temperature, PDO::PARAM_STR);
-    $statement->bindParam(':outside_temperature',
-        $object->outside_temperature, PDO::PARAM_STR);
-    $statement->bindParam(':reviewed',
-        $object->reviewed, PDO::PARAM_STR);
-    $statement->bindParam(':annotation',
-        $object->annotation, PDO::PARAM_STR);
-    $statement->bindParam(':id', $object->id, PDO::PARAM_INT);
-
     try {
+      $statement->bindParam(':observatory_id',
+          $object->observatory_id, PDO::PARAM_INT);
+      $statement->bindParam(':begin', $object->begin, PDO::PARAM_INT);
+      $statement->bindParam(':end', $object->end, PDO::PARAM_INT);
+      $statement->bindParam(':reviewer_user_id',
+          $object->reviewer_user_id, PDO::PARAM_INT);
+      $statement->bindParam(':observer_user_id',
+          $object->observer_user_id, PDO::PARAM_INT);
+      $statement->bindParam(':mark_id', $object->mark_id, PDO::PARAM_INT);
+      $statement->bindParam(':electronics_id',
+          $object->electronics_id, PDO::PARAM_INT);
+      $statement->bindParam(':theodolite_id',
+          $object->theodolite_id, PDO::PARAM_INT);
+      $statement->bindParam(':pier_temperature',
+          $object->pier_temperature, PDO::PARAM_STR);
+      $statement->bindParam(':elect_temperature',
+          $object->elect_temperature, PDO::PARAM_STR);
+      $statement->bindParam(':flux_temperature',
+          $object->flux_temperature, PDO::PARAM_STR);
+      $statement->bindParam(':proton_temperature',
+          $object->proton_temperature, PDO::PARAM_STR);
+      $statement->bindParam(':outside_temperature',
+          $object->outside_temperature, PDO::PARAM_STR);
+      $statement->bindParam(':reviewed',
+          $object->reviewed, PDO::PARAM_STR);
+      $statement->bindParam(':annotation',
+          $object->annotation, PDO::PARAM_STR);
+      $statement->bindParam(':id', $object->id, PDO::PARAM_INT);
+
       $statement->execute();
+      $statement->closeCursor();
+
+      $this->deleteReadings($object->id);
+      $this->createReadings($object->readings, $object->id);
+      $this->db->commit();
     } catch (Exception $ex) {
       $this->db->rollback();
       $this->triggerError($statement);
     }
 
-    $statement->closeCursor();
-
-    $this->deleteReadings($object->id);
-    $this->createReadings($object->readings, $object->id);
-    $this->db->commit();
     return $this->getObservation($object->id);
   }
 
@@ -237,7 +238,7 @@ class ObservationFactory {
    * @param measurements {Array{Object}}
    *      The new objects to create.
    *
-   * @param id {Integer}
+   * @param reading_id {Integer}
    *      The id of the parent reading.
    *
    * @return {Boolean}
@@ -246,27 +247,23 @@ class ObservationFactory {
    * @throws {Exception}
    *      Can throw an exception if an SQL error occurs. See "triggerError"
    */
-  protected function createMeasurements($measurements, $id) {
+  protected function createMeasurements($measurements, $reading_id) {
     $statement = $this->db->prepare('INSERT INTO measurement (' .
         'reading_id, type, time, angle, h, e, z, f) VALUES (' .
         ':reading_id, :type, :time, :angle, :h, :e, :z, :f)');
-    foreach ($measurements as $object) {
-      $statement->bindParam(':reading_id', $id, PDO::PARAM_INT);
-      $statement->bindParam(':type', $object->type, PDO::PARAM_STR);
-      $statement->bindParam(':time', $object->time, PDO::PARAM_INT);
-      $statement->bindParam(':angle', $object->angle, PDO::PARAM_STR);
-      $statement->bindParam(':h', $object->h, PDO::PARAM_STR);
-      $statement->bindParam(':e', $object->e, PDO::PARAM_STR);
-      $statement->bindParam(':z', $object->z, PDO::PARAM_STR);
-      $statement->bindParam(':f', $object->f, PDO::PARAM_STR);
-
-      try {
+    try {
+      foreach ($measurements as $object) {
+        $statement->bindParam(':reading_id', $reading_id, PDO::PARAM_INT);
+        $statement->bindParam(':type', $object->type, PDO::PARAM_STR);
+        $statement->bindParam(':time', $object->time, PDO::PARAM_INT);
+        $statement->bindParam(':angle', $object->angle, PDO::PARAM_STR);
+        $statement->bindParam(':h', $object->h, PDO::PARAM_STR);
+        $statement->bindParam(':e', $object->e, PDO::PARAM_STR);
+        $statement->bindParam(':z', $object->z, PDO::PARAM_STR);
+        $statement->bindParam(':f', $object->f, PDO::PARAM_STR);
         $statement->execute();
-      } catch (Exception $ex) {
-        $this->db->rollback();
-        $this->triggerError($statement);
       }
-
+    } finally {
       $statement->closeCursor();
     }
     return true;
@@ -287,7 +284,7 @@ class ObservationFactory {
    * @throws {Exception}
    *      Can throw an exception if an SQL error occurs. See "triggerError"
    */
-  protected function createReadings($readings, $id) {
+  protected function createReadings($readings, $observation_id) {
     $statement = $this->db->prepare('INSERT INTO reading (' .
         'observation_id, set_number, ' .
         'declination_valid, declination_shift, horizontal_intensity_valid, ' .
@@ -307,44 +304,43 @@ class ObservationFactory {
       ')');
 
     foreach ($readings as $object) {
-      $statement->bindParam(':observation_id', $id, PDO::PARAM_INT);
-      $statement->bindParam(':set_number',
-          $object->set_number, PDO::PARAM_INT);
-      $statement->bindParam(':declination_valid',
-          $object->declination_valid, PDO::PARAM_STR);
-      $statement->bindParam(':declination_shift',
-          $object->declination_shift, PDO::PARAM_INT);
-      $statement->bindParam(':horizontal_intensity_valid',
-          $object->horizontal_intensity_valid, PDO::PARAM_STR);
-      $statement->bindParam(':vertical_intensity_valid',
-          $object->vertical_intensity_valid, PDO::PARAM_STR);
-
-      $statement->bindParam(':startH', $object->startH, PDO::PARAM_INT);
-      $statement->bindParam(':endH', $object->endH, PDO::PARAM_INT);
-      $statement->bindParam(':absH', $object->absH, PDO::PARAM_STR);
-      $statement->bindParam(':baseH', $object->baseH, PDO::PARAM_STR);
-
-      $statement->bindParam(':startZ', $object->startZ, PDO::PARAM_INT);
-      $statement->bindParam(':endZ', $object->endZ, PDO::PARAM_INT);
-      $statement->bindParam(':absZ', $object->absZ, PDO::PARAM_STR);
-      $statement->bindParam(':baseZ', $object->baseZ, PDO::PARAM_STR);
-
-      $statement->bindParam(':startD', $object->startD, PDO::PARAM_INT);
-      $statement->bindParam(':endD', $object->endD, PDO::PARAM_INT);
-      $statement->bindParam(':absD', $object->absD, PDO::PARAM_STR);
-      $statement->bindParam(':baseD', $object->baseD, PDO::PARAM_STR);
-
-      $statement->bindParam(':annotation',
-          $object->annotation, PDO::PARAM_STR);
-
       try {
+        $statement->bindParam(':observation_id',
+            $observation_id, PDO::PARAM_INT);
+        $statement->bindParam(':set_number',
+            $object->set_number, PDO::PARAM_INT);
+        $statement->bindParam(':declination_valid',
+            $object->declination_valid, PDO::PARAM_STR);
+        $statement->bindParam(':declination_shift',
+            $object->declination_shift, PDO::PARAM_INT);
+        $statement->bindParam(':horizontal_intensity_valid',
+            $object->horizontal_intensity_valid, PDO::PARAM_STR);
+        $statement->bindParam(':vertical_intensity_valid',
+            $object->vertical_intensity_valid, PDO::PARAM_STR);
+
+        $statement->bindParam(':startH', $object->startH, PDO::PARAM_INT);
+        $statement->bindParam(':endH', $object->endH, PDO::PARAM_INT);
+        $statement->bindParam(':absH', $object->absH, PDO::PARAM_STR);
+        $statement->bindParam(':baseH', $object->baseH, PDO::PARAM_STR);
+
+        $statement->bindParam(':startZ', $object->startZ, PDO::PARAM_INT);
+        $statement->bindParam(':endZ', $object->endZ, PDO::PARAM_INT);
+        $statement->bindParam(':absZ', $object->absZ, PDO::PARAM_STR);
+        $statement->bindParam(':baseZ', $object->baseZ, PDO::PARAM_STR);
+
+        $statement->bindParam(':startD', $object->startD, PDO::PARAM_INT);
+        $statement->bindParam(':endD', $object->endD, PDO::PARAM_INT);
+        $statement->bindParam(':absD', $object->absD, PDO::PARAM_STR);
+        $statement->bindParam(':baseD', $object->baseD, PDO::PARAM_STR);
+
+        $statement->bindParam(':annotation',
+            $object->annotation, PDO::PARAM_STR);
+
         $statement->execute();
-      } catch (Exception $ex) {
-        $this->db->rollback();
-        $this->triggerError($statement);
+      } finally {
+        $statement->closeCursor();
       }
 
-      $statement->closeCursor();
       $reading_id = intval($this->db->lastInsertId());
       $this->createMeasurements($object->measurements, $reading_id);
     }
@@ -354,7 +350,7 @@ class ObservationFactory {
   /**
    * Deletes measurment records for a reading.
    *
-   * @param id {Integer}
+   * @param reading_id {Integer}
    *      The database Id of the reading.
    *
    * @return {Boolean}
@@ -363,19 +359,12 @@ class ObservationFactory {
    * @throws {Exception}
    *      Can throw an exception if an SQL error occurs. See "triggerError"
    */
-  protected function deleteMeasurements($id) {
-    $statement = $this->db->prepare('DELETE FROM measurement WHERE id=:id');
-    $measurements = $this->getMeasurements($id);
-    foreach ($measurements as $object) {
-      $statement->bindParam(':id', $object->id, PDO::PARAM_INT);
-
-      try {
-        $statement->execute();
-      } catch (Exception $ex) {
-        $this->db->rollback();
-        $this->triggerError($statement);
-      }
-
+  protected function deleteMeasurements($reading_id) {
+    $statement = $this->db->prepare('DELETE FROM measurement WHERE reading_id=:id');
+    try {
+      $statement->bindParam(':id', $reading_id, PDO::PARAM_INT);
+      $statement->execute();
+    } finally {
       $statement->closeCursor();
     }
     return true;
@@ -384,7 +373,7 @@ class ObservationFactory {
   /**
    * Deletes reading records for an observation.
    *
-   * @param id {Integer}
+   * @param observation_id {Integer}
    *      The database Id of the observation.
    *
    * @return {Boolean}
@@ -393,21 +382,20 @@ class ObservationFactory {
    * @throws {Exception}
    *      Can throw an exception if an SQL error occurs. See "triggerError"
    */
-  protected function deleteReadings($id) {
+  protected function deleteReadings($observation_id) {
     $statement = $this->db->prepare('DELETE FROM reading WHERE id=:id');
-    $readings = $this->getReadings($id);
+    $readings = $this->getReadings($observation_id);
     foreach ($readings as $object) {
-      $this->deleteMeasurements($object->id);
-      $statement->bindParam(':id', $object->id, PDO::PARAM_INT);
-
+      $reading_id = $object->id;
+      // first delete measurements
+      $this->deleteMeasurements($reading_id);
+      // then delete reading
       try {
+        $statement->bindParam(':id', $reading_id, PDO::PARAM_INT);
         $statement->execute();
-      } catch (Exception $ex) {
-        $this->db->rollback();
-        $this->triggerError($statement);
+      } finally {
+        $statement->closeCursor();
       }
-
-      $statement->closeCursor();
     }
     return true;
   }
@@ -415,7 +403,7 @@ class ObservationFactory {
   /**
    * Reads all the Measurements for a specific observation.
    *
-   * @param id {Integer}
+   * @param reading_id {Integer}
    *      The database Id of the reading.
    *
    * @return {Array{Object}}
@@ -423,13 +411,13 @@ class ObservationFactory {
    * @throws {Exception}
    *      Can throw an exception if an SQL error occurs. See "triggerError"
    */
-  protected function getMeasurements ($id) {
+  protected function getMeasurements ($reading_id) {
     $measurements = array();
     $statement = $this->db->prepare('SELECT * FROM measurement WHERE ' .
         'reading_id = :id ORDER BY type');
-    $statement->bindParam(':id', $id, PDO::PARAM_INT);
 
     try {
+      $statement->bindParam(':id', $reading_id, PDO::PARAM_INT);
       $statement->execute();
       while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
         $measurement = new Measurement(intval($row['ID']),
@@ -439,18 +427,17 @@ class ObservationFactory {
             safefloatval($row['z']), safefloatval($row['f']));
         $measurements[] = $measurement;
       }
-    } catch (Exception $ex) {
-      $this->triggerError($statement);
+    } finally {
+      $statement->closeCursor();
     }
 
-    $statement->closeCursor();
     return $measurements;
   }
 
   /**
    * Reads all the Readings for a specific observation.
    *
-   * @param id {Integer}
+   * @param observation_id {Integer}
    *      The database Id of the observation.
    *
    * @return {Array{Object}}
@@ -458,13 +445,13 @@ class ObservationFactory {
    * @throws {Exception}
    *      Can throw an exception if an SQL error occurs. See "triggerError"
    */
-  protected function getReadings ($id) {
+  protected function getReadings ($observation_id) {
     $readings = array();
     $statement = $this->db->prepare('SELECT * FROM reading WHERE ' .
         'observation_id = :id ORDER by set_number');
-    $statement->bindParam(':id', $id, PDO::PARAM_INT);
 
     try {
+      $statement->bindParam(':id', $observation_id, PDO::PARAM_INT);
       $statement->execute();
       while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
         $reading_id = intval($row['ID']);
@@ -482,11 +469,10 @@ class ObservationFactory {
             $row['annotation'], $measurements );
         $readings[] = $reading;
       }
-    } catch (Exception $ex) {
-      $this->triggerError($statement);
+    } finally {
+      $statement->closeCursor();
     }
 
-    $statement->closeCursor();
     return $readings;
   }
 
