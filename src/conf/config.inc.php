@@ -6,6 +6,14 @@ date_default_timezone_set('UTC');
 
 // read configuration
 $CONFIG = parse_ini_file('config.ini');
+
+if (isset($CONFIG['MAINTENANCE']) && $CONFIG['MAINTENANCE'] === 'true') {
+  echo '<h1>Web Absolutes Maintenance</h1>';
+  echo '<p>The application is down for maintenance, please try again later.</p>';
+  exit();
+}
+
+
 $APP_DIR = $CONFIG['APP_DIR'];
 $DATA_DIR = $CONFIG['DATA_DIR'];
 $MOUNT_PATH = $CONFIG['MOUNT_PATH'];
