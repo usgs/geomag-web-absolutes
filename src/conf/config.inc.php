@@ -8,6 +8,8 @@ date_default_timezone_set('UTC');
 $CONFIG = parse_ini_file('config.ini');
 
 if (isset($CONFIG['MAINTENANCE']) && $CONFIG['MAINTENANCE'] === 'true') {
+  header('Cache-Control:no-cache, no-store');
+
   echo '<h1>Web Absolutes Maintenance</h1>';
   echo '<p>The application is down for maintenance, please try again later.</p>';
   exit();
