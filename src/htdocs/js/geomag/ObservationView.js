@@ -310,17 +310,17 @@ var ObservationView = function (options) {
         minuteTime = averageTime - averageTime % 60;
         // realtimeData values are in milliseconds, convert seconds to ms.
         values = realtimeData.getValues(minuteTime*1000);
-        if (values.TO !== undefined) {
-          _observation.set({'outside_temperature':values.TO});
+        if (values.UK4 !== undefined) {
+          _observation.set({'outside_temperature':values.UK4});
         }
-        if (values.TP !== undefined) {
-          _observation.set({'proton_temperature':values.TP});
+        if (values.UK2 !== undefined) {
+          _observation.set({'proton_temperature':values.UK2});
         }
-        if (values.TE !== undefined) {
-          _observation.set({'elect_temperature':values.TE});
+        if (values.UK1 !== undefined) {
+          _observation.set({'elect_temperature':values.UK1});
         }
-        if (values.TF !== undefined) {
-          _observation.set({'flux_temperature':values.TF});
+        if (values.UK3 !== undefined) {
+          _observation.set({'flux_temperature':values.UK3});
         }
       }
     });

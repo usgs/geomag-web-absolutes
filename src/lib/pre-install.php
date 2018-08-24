@@ -64,7 +64,7 @@ $DEFAULTS = array(
   'MAGPROC_USER' => '',
   'MAGPROC_PASS' => '',
   'MAINTENANCE' => 'false',
-  'REALTIME_DATA_URL' => '/map/observatories_data.json.php'
+  'REALTIME_DATA_URL' => '/ws/edge'
 );
 
 $HELP_TEXT = array(
