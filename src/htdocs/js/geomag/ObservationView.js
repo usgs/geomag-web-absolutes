@@ -96,6 +96,45 @@ var __publishError = function (status, xhr) {
 
 
 /**
+ * Callback to show publish success in modal dialog.
+ *
+ * @param status {Integer}
+ *        http error status code.
+ * @param xhr {XMLHttpRequest}
+ *        XHR object with error information.
+ */
+var __getRealtimeDataSuccess = function () {
+  (ModalView(
+    '<h3>Success!</h3><p>Realtime data updated.</p>',
+    {
+      title: 'Realtime Data Update Successful',
+      classes: ['modal-success'],
+      closable: true
+    }
+  )).show();
+};
+
+/**
+ * Callback to show publish erros in modal dialog.
+ *
+ * @param status {Integer}
+ *        http error status code.
+ * @param xhr {XMLHttpRequest}
+ *        XHR object with error information.
+ */
+var __getRealtimeDataError = function (status, xhr) {
+  (ModalView(
+    '<h3>Error</h3><p>' + xhr.response + '</p>',
+    {
+      title: 'Realtime Data Update Failed',
+      classes: ['modal-error'],
+      closable: true
+    }
+  )).show();
+};
+
+
+/**
  * Construct a new ObservationView.
  *
  * @param options {Object}
@@ -253,14 +292,19 @@ var ObservationView = function (options) {
   /**
    * Get realtime data for all measurements.
    */
-  _getRealtimeData = function () {
+  _getRealtimeData = function (e) {
     var observatory = _realtimeDataFactory.get('observatory'),
         starttime = null,
-        endtime = null;
+        endtime = null,
+        fromButton = false;
 
     if (observatory === null) {
       // need more information
       return;
+    }
+
+    if (e && typeof(e.preventDefault) === 'function') {
+      fromButton = true;
     }
 
     // find times to request
@@ -285,14 +329,25 @@ var ObservationView = function (options) {
     starttime = Math.round(starttime / 1000);
     endtime = Math.round(endtime / 1000);
 
+    _updateRealtimeDataButton.disabled = true;
     _realtimeDataFactory.getRealtimeData({
       starttime: Formatter.dateTimeIso(starttime * 1000),
       endtime: Formatter.dateTimeIso(endtime * 1000),
       success: function (realtimeData) {
+        _updateRealtimeDataButton.disabled = false;
         // update measurement data
         _observation.eachMeasurement(function (measurement) {
           measurement.setRealtimeData(realtimeData);
         });
+        if (fromButton) {
+          __getRealtimeDataSuccess();
+        }
+      },
+      error: function (status, xhr) {
+        _updateRealtimeDataButton.disabled = false;
+        if (fromButton) {
+          __getRealtimeDataError(status, xhr);
+        }
       }
     });
 
@@ -357,11 +412,8 @@ var ObservationView = function (options) {
   _onPublishClick = function () {
     try {
       _saveObservation(function () {
-        _publishObservation(function () {
-          __publishSuccess();
-        }
-      );
-      });
+        _publishObservation(__publishSuccess, __publishError);
+      }, __saveError);
     } catch (e) {
       __publishError('Failed to finalize baselines', e.message);
     }
@@ -383,10 +435,12 @@ var ObservationView = function (options) {
    *        called after publish fails.
    */
   _publishObservation = function (callback, errback) {
+    _publishButton.disabled = true;
     _factory.publishObservation({
       observation: _observation,
       user: _observation.get('reviewer_user_id'),
       success: function (observation) {
+        _publishButton.disabled = false;
         _observation.set({
           reviewed: observation.get('reviewed'),
           reviewer_user_id: observation.get('reviewer_user_id')
@@ -394,6 +448,7 @@ var ObservationView = function (options) {
         callback();
       },
       error: function (status, xhr) {
+        _publishButton.disabled = false;
         if (typeof errback === 'function') {
           errback(status, xhr);
         } else {
@@ -417,13 +472,16 @@ var ObservationView = function (options) {
 
     _this.updateObservationBegin();
 
+    _saveButton.disabled = true;
     _factory.saveObservation({
       observation: _observation,
       success: function (observation) {
+        _saveButton.disabled = false;
         _observation.set({id: observation.get('id')}, {silent: true});
         callback();
       },
       error: function (status, xhr) {
+        _saveButton.disabled = false;
         if (typeof errback === 'function') {
           errback(status, xhr);
         } else {
