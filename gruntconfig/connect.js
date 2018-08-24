@@ -60,7 +60,7 @@ var connect = {
 
   proxies: [
     {
-      context: '/map',
+      context: '/ws/edge',
       headers: {
         host: 'geomag.usgs.gov'
       },

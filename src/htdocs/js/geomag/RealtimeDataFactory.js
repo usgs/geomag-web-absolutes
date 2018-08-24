@@ -15,7 +15,15 @@ var _DEFAULTS = {
   'endtime': null,
   'channels': ['H','E','Z','F'],
   'freq': 'seconds',
-  'temperatureChannels': ['TO', 'TP', 'TE', 'TF']
+  'temperatureChannels': [
+    // TO => UK4
+    'UK4',
+    // TP => UK2
+    'UK2',
+    // TE => UK1
+    'UK1',
+    // TF => UK3
+    'UK3']
 };
 
 
@@ -74,7 +82,8 @@ var RealtimeDataFactory = function (options) {
       },
       success: function (data) {
         _options.success(RealtimeData(data));
-      }
+      },
+      error: _options.error
     });
   };
 
