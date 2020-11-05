@@ -1,3 +1,8 @@
+> **THIS PROJECT HAS BEEN ARCHIVED**
+> 
+> Please see [https://code.usgs.gov/ghsc/geomag/geomag-web-absolutes](https://code.usgs.gov/ghsc/geomag/geomag-web-absolutes)
+
+
 geomag-baseline-calculator
 ==========================
 
